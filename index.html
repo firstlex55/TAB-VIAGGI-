@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Planning Viaggi v16 - Settimana 8/2026</title>
+    <title>Planning Viaggi v17 - Settimana 8/2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -45,11 +45,11 @@
         }
 
         .top-bar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #0f1117 0%, #1a1d29 40%, #2d3142 100%);
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid var(--accent);
-            box-shadow: 0 4px 20px var(--shadow);
+            box-shadow: 0 4px 30px rgba(255, 107, 53, 0.2), 0 2px 8px rgba(0,0,0,0.4);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -487,13 +487,13 @@
 
         /* Today's Trips Banner */
         .today-banner {
-            background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(6, 214, 160, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(6, 214, 160, 0.12) 100%);
             border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 16px 20px;
+            border-radius: 14px;
+            padding: 16px;
             margin-bottom: 20px;
-            display: none;
             animation: slideIn 0.5s ease;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.1), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         .today-banner.visible {
@@ -504,19 +504,42 @@
             font-size: 16px;
             font-weight: 700;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .today-banner-subtitle {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-dim);
         }
 
         .today-banner-count {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 700;
             color: var(--accent);
             font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+
+        .today-trip-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .today-trip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .today-no-trips {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 13px;
+            padding: 8px;
         }
 
         .highlight {
@@ -814,6 +837,17 @@
             animation: slideIn 0.4s ease-out;
             position: relative;
         }
+
+        /* Bordo sinistro colorato per trasportatore */
+        .trip-card[data-transporter="cevolo"]  { border-left-color: #FFD700; }
+        .trip-card[data-transporter="coap"]    { border-left-color: #90EE90; }
+        .trip-card[data-transporter="coneco"]  { border-left-color: #87CEEB; }
+        .trip-card[data-transporter="consar"]  { border-left-color: #FFA07A; }
+        .trip-card[data-transporter="avio"]    { border-left-color: #98FB98; }
+        .trip-card[data-transporter="alb"]     { border-left-color: #FFEB3B; }
+        .trip-card[data-transporter="lino"]    { border-left-color: #FFAB91; }
+        .trip-card[data-transporter="stegagno"]{ border-left-color: #81D4FA; }
+        .trip-card[data-transporter="cirioni"] { border-left-color: #B39DDB; }
 
         .trip-card:hover {
             transform: translateY(-2px) scale(1.01);
@@ -1279,11 +1313,17 @@
         }
 
         .stat-card {
-            background: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary) 0%, rgba(45, 49, 66, 0.8) 100%);
             padding: 16px;
             border-radius: 10px;
             text-align: center;
             border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.08);
         }
 
         .stat-number {
@@ -1817,18 +1857,13 @@
 </head>
 <body>
     <div class="top-bar">
-        <div class="logo">📦 Planning Viaggi</div>
+        <div class="logo">🚛 Planning Viaggi</div>
         <div class="week-info" id="weekInfo" onclick="editWeekTitle()" style="cursor: pointer;" title="Clicca per modificare">
             Settimana 8/2026 (Lun. 16/02 - Ven. 21/02)
         </div>
     </div>
 
     <div class="container">
-        <div class="info-banner">
-            <strong>✅ Dati Caricati!</strong><br>
-            Ho caricato i 23 viaggi della settimana corrente. Puoi aggiungerne di nuovi, modificarli o eliminarli.
-        </div>
-
         <div id="statusMessage"></div>
 
         <!-- Statistics -->
@@ -1848,6 +1883,18 @@
                 </div>
                 <div style="font-size:10px;color:var(--warning);margin-top:4px;opacity:0.8;">Clicca per gestire</div>
             </div>
+        </div>
+
+        <!-- Banner Viaggi di Oggi -->
+        <div id="todayBanner" class="today-banner">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                    <div class="today-banner-title">📅 Viaggi di Oggi</div>
+                    <div class="today-banner-subtitle" id="todayDate"></div>
+                </div>
+                <div class="today-banner-count" id="todayCount">0</div>
+            </div>
+            <div id="todayTripsList"></div>
         </div>
 
         <!-- Add Trip Form -->
@@ -2245,6 +2292,20 @@
         let partenzaList = ["Bientina (INCONTRATO)", "S.Felice (CAI-BF)", "Dosolo (ARDENGHI)", "Grezzana (TACCHELLA)", "Mercatino (COVI)", "Tirano (ILT)", "Jolanda (Bonifiche)", "Mezzocorona (VENDER)", "Castel S. Nicolò (Tosco imballaggi)"];
         let arrivoList = ["Ponzano Romano (SICEM)", "Verolavecchia (AGROGI)", "Mezzano RA (SICEM Srl)", "Tarmassia (TRUCIOLI)"];
 
+        function getTransporterKey(trasportatore) {
+            const name = trasportatore.toUpperCase();
+            if (name.includes('CEVOLO')) return 'cevolo';
+            if (name.includes('COAP')) return 'coap';
+            if (name.includes('CONECO') || name.includes('CON ECO')) return 'coneco';
+            if (name.includes('CONSAR')) return 'consar';
+            if (name.includes('AVIO')) return 'avio';
+            if (name.includes('ALB')) return 'alb';
+            if (name.includes('LINO')) return 'lino';
+            if (name.includes('STEGAGNO')) return 'stegagno';
+            if (name.includes('CIRIONI')) return 'cirioni';
+            return 'default';
+        }
+
         function getTransporterColorClass(trasportatore) {
             const name = trasportatore.toUpperCase();
             if (name.includes('CEVOLO')) return 'transporter-cevolo';
@@ -2324,10 +2385,6 @@
                 weekTitle = saved;
                 document.getElementById('weekInfo').textContent = weekTitle;
             }
-        }
-
-        function saveWeekTitle() {
-            localStorage.setItem('weekTitle', weekTitle);
         }
 
         function editWeekTitle() {
@@ -2701,6 +2758,38 @@
             return `${days[date.getDay()]} ${day}/${month}`;
         }
 
+        function renderTodayBanner() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTrips = trips.filter(t => t.data === today);
+            
+            const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+            const months = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+            const now = new Date();
+            const dayName = days[now.getDay()];
+            const dateStr = `${dayName} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            
+            document.getElementById('todayDate').textContent = dateStr;
+            document.getElementById('todayCount').textContent = todayTrips.length;
+
+            const list = document.getElementById('todayTripsList');
+
+            if (todayTrips.length === 0) {
+                list.innerHTML = `<div class="today-no-trips">Nessun viaggio programmato per oggi 🎉</div>`;
+            } else {
+                list.innerHTML = todayTrips.map(trip => {
+                    const colorClass = getTransporterColorClass(trip.trasportatore);
+                    return `
+                    <div class="today-trip-item">
+                        <span class="dc-trip-transporter ${colorClass}" style="font-size:11px;padding:2px 6px;">${shortTransporter(trip.trasportatore)}</span>
+                        <span style="font-size:12px;color:var(--text-dim);">
+                            ${shortLocation(trip.partenza)} <span style="color:var(--accent);">→</span> ${shortLocation(trip.arrivo)}
+                        </span>
+                        ${trip.daConfermare ? '<span style="font-size:10px;background:var(--warning);color:#000;padding:1px 5px;border-radius:4px;font-weight:700;">⚠️</span>' : ''}
+                    </div>`;
+                }).join('');
+            }
+        }
+
         function updateStats() {
             const displayTrips = searchQuery ? filteredTrips : trips;
             document.getElementById('totalTrips').textContent = trips.length;
@@ -2709,6 +2798,9 @@
             document.getElementById('tripCount').textContent = searchQuery 
                 ? `${displayTrips.length} di ${trips.length} viaggi`
                 : `${trips.length} viaggi`;
+
+            // Aggiorna banner oggi
+            renderTodayBanner();
 
             // Da Confermare badge
             const daConfermarCount = trips.filter(t => t.daConfermare).length;
@@ -2807,8 +2899,9 @@
             container.innerHTML = displayTrips.map((trip, index) => {
                 const actualIndex = trips.indexOf(trip);
                 const colorClass = getTransporterColorClass(trip.trasportatore);
+                const transporterKey = getTransporterKey(trip.trasportatore);
                 return `
-                <div class="trip-card">
+                <div class="trip-card" data-transporter="${transporterKey}">
                     <div class="trip-header">
                         <div class="trip-date">${formatDateDisplay(trip.data)}</div>
                     </div>
