@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Planning Viaggi v17 - Settimana 8/2026</title>
+    <title>Planning Viaggi v18 - Settimana 8/2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -255,13 +255,10 @@
         }
 
         .compact-table td {
-            padding: 8px 4px;
+            padding: 10px 6px;
             border-bottom: 1px solid var(--border);
             color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 120px;
+            vertical-align: top;
         }
 
         .compact-table tbody tr {
@@ -269,11 +266,11 @@
         }
 
         .compact-table tbody tr:nth-child(odd) {
-            background: rgba(255, 107, 53, 0.08);
+            background: rgba(255, 107, 53, 0.05);
         }
 
         .compact-table tbody tr:nth-child(even) {
-            background: rgba(6, 214, 160, 0.08);
+            background: rgba(6, 214, 160, 0.05);
         }
 
         .compact-table tbody tr:active {
@@ -1919,7 +1916,7 @@
                             <option value="ALB">
                             <option value="LINO BRA">
                             <option value="Stegagno">
-                            <option value="Cirioni Trasp.">
+                            <option value="Cirioni">
                         </datalist>
                         <button type="button" class="add-transporter-btn" onclick="addTransporterToList()">
                             ➕ Aggiungi trasportatore alla lista
@@ -2032,9 +2029,9 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <div style="font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">🔍 Filtri Rapidi</div>
                     <div class="view-toggle">
-                        <button class="view-btn active" onclick="switchView('card')">📱</button>
-                        <button class="view-btn" onclick="switchView('table')">📊</button>
-                        <button class="view-btn" onclick="switchView('compact')">📲</button>
+                        <button class="view-btn active" onclick="switchView('card')" title="Vista card">📋</button>
+                        <button class="view-btn" onclick="switchView('table')" title="Vista tabella">📊</button>
+                        <button class="view-btn" onclick="switchView('compact')" title="Vista compatta">📱</button>
                     </div>
                 </div>
                 <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -2078,12 +2075,9 @@
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>📅</th>
-                                <th>🚚</th>
-                                <th>📍 Da</th>
-                                <th>📍 A</th>
-                                <th>📦</th>
-                                <th>⚙️</th>
+                                <th style="width:90px;">Data / Trasp.</th>
+                                <th>📍 Partenza</th>
+                                <th>🎯 Arrivo</th>
                             </tr>
                         </thead>
                         <tbody id="compactBody"></tbody>
@@ -2247,7 +2241,7 @@
             {data: "2026-02-16", trasportatore: "ConEco", partenza: "S.Felice (CAI-BF)", arrivo: "Mezzano RA (SICEM Srl)", note: "", prodotto: "", daConfermare: false},
             {data: "2026-02-17", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
             {data: "2026-02-17", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "Cirioni Trasp.", partenza: "Mercatino (COVI)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
+            {data: "2026-02-18", trasportatore: "Cirioni", partenza: "Mercatino (COVI)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
             {data: "2026-02-18", trasportatore: "CONSAR", partenza: "Grezzana (TACCHELLA)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
             {data: "2026-02-18", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
             {data: "2026-02-18", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
@@ -2266,7 +2260,7 @@
             {data: "2026-02-20", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false}
         ];
 
-        let transportersList = ["CEVOLO", "COAP", "ConEco", "CONSAR", "AVIO", "ALB", "LINO BRA", "Stegagno", "Cirioni Trasp."];
+        let transportersList = ["CEVOLO", "COAP", "ConEco", "CONSAR", "AVIO", "ALB", "LINO BRA", "Stegagno", "Cirioni"];
         let currentView = 'card';
         let searchQuery = '';
         let filteredTrips = [];
@@ -2316,7 +2310,7 @@
             if (name.includes('A.L.B') || name.includes('ALB')) return 'transporter-alb';
             if (name.includes('LINO') || name.includes('BRANCHINI')) return 'transporter-lino';
             if (name.includes('STEGAGNO')) return 'transporter-stegagno';
-            if (name.includes('Cirioni Trasp.')) return 'transporter-cirioni';
+            if (name.includes('Cirioni')) return 'transporter-cirioni';
             return 'transporter-default';
         }
 
@@ -2980,19 +2974,31 @@
                 const date = new Date(trip.data);
                 const days = ['D', 'L', 'MA', 'ME', 'G', 'V', 'S'];
                 const shortDate = `${days[date.getDay()]} ${date.getDate()}/${(date.getMonth() + 1)}`;
-                
+
+                // Partenza: prendi solo la parte prima della parentesi, max 18 char
+                const fromRaw = trip.partenza.split('(')[0].trim();
+                const toRaw = trip.arrivo.split('(')[0].trim();
+                const from = fromRaw.length > 18 ? fromRaw.substring(0, 17) + '…' : fromRaw;
+                const to = toRaw.length > 18 ? toRaw.substring(0, 17) + '…' : toRaw;
+
+                // Codice tra parentesi (es. "SICEM", "AGROGI")
+                const fromCode = (trip.partenza.match(/\(([^)]+)\)/) || [])[1] || '';
+                const toCode = (trip.arrivo.match(/\(([^)]+)\)/) || [])[1] || '';
+
                 return `
-                <tr>
-                    <td class="compact-date">${shortDate}</td>
-                    <td><span class="compact-transporter ${colorClass}" title="${trip.trasportatore}">${shortTransporter(trip.trasportatore)}</span></td>
-                    <td title="${trip.partenza}">${shortLocation(trip.partenza)}</td>
-                    <td title="${trip.arrivo}">${shortLocation(trip.arrivo)}</td>
-                    <td title="${trip.note || ''}">${trip.prodotto || '-'}${trip.note ? '💬' : ''}</td>
+                <tr onclick="editTrip(${actualIndex})" style="cursor:pointer;">
+                    <td style="white-space:nowrap;">
+                        <div class="compact-date">${shortDate}</div>
+                        <div style="margin-top:2px;"><span class="compact-transporter ${colorClass}">${trip.trasportatore}</span></div>
+                        ${trip.daConfermare ? '<div style="font-size:9px;color:var(--warning);font-weight:700;margin-top:2px;">⚠️ da conf.</div>' : ''}
+                    </td>
                     <td>
-                        <div class="compact-actions">
-                            <button class="btn btn-edit" onclick="editTrip(${actualIndex})">✏️</button>
-                            <button class="btn btn-danger" onclick="deleteTrip(${actualIndex})">🗑️</button>
-                        </div>
+                        <div style="font-size:12px;font-weight:600;color:var(--text);" title="${trip.partenza}">${from}</div>
+                        ${fromCode ? `<div style="font-size:10px;color:var(--accent);font-weight:700;">${fromCode}</div>` : ''}
+                    </td>
+                    <td>
+                        <div style="font-size:12px;font-weight:600;color:var(--text);" title="${trip.arrivo}">${to}</div>
+                        ${toCode ? `<div style="font-size:10px;color:var(--success);font-weight:700;">${toCode}</div>` : ''}
                     </td>
                 </tr>
             `}).join('');
@@ -3319,7 +3325,7 @@
                 let shortTrasportatore = trasportatore
                     .replace(/LINO BRANCHINI/gi, 'LINO BRA')
                     .replace(/A\.L\.B\.\s*Srl/gi, 'ALB')
-                    .replace(/Cirioni Trasporti/gi, 'Cirioni Trasp.');
+                    .replace(/Cirioni/gi, 'Cirioni');
                 
                 let shortPartenza = partenza
                     .replace(/San Felice Panaro/gi, 'S.Felice')
@@ -3807,9 +3813,9 @@
 
     <div class="mobile-bottom-nav">
         <div class="view-toggle">
-            <button class="view-btn active" onclick="switchView('card')">📱</button>
-            <button class="view-btn" onclick="switchView('table')">📊</button>
-            <button class="view-btn" onclick="switchView('compact')">📲</button>
+            <button class="view-btn active" onclick="switchView('card')" title="Vista card">📋</button>
+            <button class="view-btn" onclick="switchView('table')" title="Vista tabella">📊</button>
+            <button class="view-btn" onclick="switchView('compact')" title="Vista compatta">📱</button>
         </div>
     </div>
 
