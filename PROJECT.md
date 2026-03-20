@@ -3,199 +3,203 @@
 ## Cos'è questa app
 Web app single-file HTML per la **pianificazione logistica settimanale dei viaggi** di un'azienda di trasporti (Pro Trasporti). Hosted su GitHub Pages: `firstlex55.github.io/TAB-VIAGGI-`
 
-Il file principale è **un unico `index.html`** (~7700 righe) che contiene tutto: HTML, CSS inline, JavaScript vanilla. Non usa framework, non ha build step, non ha dipendenze locali.
+Il file principale è **un unico `index.html`** (~8300 righe) che contiene tutto: HTML, CSS inline, JavaScript vanilla. Non usa framework, non ha build step, non ha dipendenze locali.
+
+File aggiuntivi nel repo: `manifest.json`, `sw.js` (Service Worker PWA), `logo.png`.
 
 ---
 
 ## Stack tecnico
 - **HTML/CSS/JS vanilla** — nessun framework
-- **ExcelJS 4.4.0** — export Excel con stili reali (colori trasportatori, orientamento landscape A4)
+- **ExcelJS 4.4.0** — export Excel con stili reali (2 fogli: Viaggi + Riepilogo, landscape A4)
 - **XLSX 0.18.5** — import Excel
 - **Google Drive API** — sync dati via OAuth2 + fetch diretto (no gapi library)
 - **Google Fonts** — Outfit + JetBrains Mono
-- **PWA** — manifest.json + logo.png nel repo GitHub
+- **PWA** — manifest.json + sw.js (Service Worker) + logo.png
 
 ---
 
 ## Struttura dati
-Ogni viaggio è un oggetto JS:
 ```js
 {
-  data: "2026-03-17",          // formato ISO YYYY-MM-DD
-  trasportatore: "COAP",       // stringa libera, lista suggerimenti
+  data: "2026-03-17",          // ISO YYYY-MM-DD
+  trasportatore: "COAP",
   partenza: "Bientina (INCONTRATO)",
   arrivo: "Verolavecchia (AGROGI)",
   prodotto: "Cippato",         // opzionale
   note: "",                    // opzionale
-  daConfermare: false          // boolean
+  daConfermare: false,
+  confermato: false            // confermato al trasportatore
 }
 ```
-
-Salvato in `localStorage` come `JSON.stringify(trips)` con chiave `viaggiLogistica`.
+Salvato in localStorage chiave `viaggiLogistica`. **Sempre in ordine cronologico.**
 
 ---
 
 ## Trasportatori principali
-CEVOLO, COAP, CONSAR, AVIO, ALB (A.L.B. SRL), LINO BRA (Lino Branchini), ConEco, Stegagno, Cirioni, CLP
-
-Colori CSS per ogni trasportatore tramite variabili `--t-{key}` e `--t-{key}-bg`.
+CEVOLO, COAP, CONSAR, AVIO, ALB, LINO BRA, ConEco, Stegagno, Cirioni, CLP
+Colori CSS: variabili `--t-{key}` e `--t-{key}-bg`.
 
 ---
 
 ## Viste disponibili (bottom nav mobile)
-| Vista | ID elemento | Descrizione |
-|-------|-------------|-------------|
-| CARD | `#cardView` | Card espandibili con dettagli viaggio |
-| LISTA | `#compactBody` | Vista compatta a righe |
-| RAPIDA | `#compactView` | Come LISTA ma ultra-compatta |
-| PC | `#desktopView` | Tabella editabile inline + sidebar rotte rapide |
+| Vista | ID | Descrizione |
+|-------|----|-------------|
+| OGGI | `#cardView` | Viaggi oggi + domani + prossimi |
+| TRASP. | `#mediumView` | Raggruppa per trasportatore |
+| RAPIDA | `#compactView` | Righe compatte per giorno — vista principale |
+| PC | `#desktopView` | Tabella editabile inline |
 
-`currentView` è la variabile globale che traccia la vista attiva. Salvata in `localStorage` come `preferredView`.
-
----
-
-## Vista PC — funzionalità chiave
-- **Tabella editabile inline** — ogni cella è un input/select modificabile direttamente
-- **Sidebar rotte rapide** — impara dalle rotte esistenti, click → apre modal aggiungi
-- **Modal aggiungi viaggio** — picker multi-giorno con contatori (Lun ×2, Mer ×1 ecc.)
-- **Filtri giorno** — Tutti / Lun / Mar / Mer / Gio / Ven / Sab con contatori
-- **Pulsante "Sett. prossima"** — crea 5 righe vuote Lun→Ven con date automatiche
-- **Ctrl+D** — duplica riga selezionata
-- **Export Excel filtrato** — solo i viaggi del filtro attivo
-- **Stampa** — finestra print ottimizzata con totali per trasportatore
-- **Drive sync** — salva/carica da Google Drive appDataFolder
+La vecchia LISTA è ora TRASPORTATORE. La vecchia CARD è ora OGGI.
+`currentView` salvato in localStorage come `preferredView`. Default: `compact`.
 
 ---
 
-## Form mobile aggiungi viaggio
-- **Picker multi-giorno** — bottoni Lun/Mar/Mer/Gio/Ven/Sab con − e + per selezionare più giorni e/o più copie dello stesso giorno
-- **Data specifica** — campo date tradizionale per date precise
-- Submit crea automaticamente N viaggi (uno per ogni giorno/copia selezionata)
-- `desktopGetNextWeekday(d)` ricava la data corretta dal giorno settimana
+## Vista OGGI (ex-Card)
+- Viaggi di oggi in primo piano, domani in secondo, prossimi sotto
+- Se nessun viaggio nei 3 giorni → mostra prossimi della settimana
+- Helper: `_renderTodayCard(trip, isToday)`
+
+---
+
+## Vista TRASPORTATORE (ex-Lista)
+- Raggruppa per trasportatore, ordine alfabetico
+- Righe viaggio ordinate per data dentro ogni gruppo
+- Funzione: `renderMediumView()`
+
+---
+
+## Vista PC
+- Tabella editabile inline, popup data per nuova riga (→ focus su trasportatore)
+- Sidebar rotte rapide, filtri giorno Lun-Ven (Sab rimosso)
+- Pulsante "Sett. prossima" → 5 righe vuote Lun→Ven
+- Ctrl+D duplica riga, Export Excel filtrato, Stampa
+
+---
+
+## Form mobile — Opzione A
+Flusso: Trasportatore → Rotta → Prodotto+Note → Quando
+
+**Picker giorni:**
+- Campo data primo viaggio → chip Lun/Mar/Mer/Gio/Ven mostrano date reali della settimana
+- Logica "sempre avanti": chip già passati vanno alla settimana successiva
+- Sabato rimosso ovunque
+- Tap = seleziona, ritap = +1 copia, long press = azzera
+
+---
+
+## Top bar
+- Logo 48px, glow arancio
+- **VIAGGI** — gradiente arancio puro `#ff7a40→#ff5520`, letter-spacing 4px
+- **Settimana** — formato `Lun 23/03 — Ven 27/03`, JetBrains Mono 12px bold
+- Banner "Viaggi di oggi" **rimosso** (CSS + renderTodayBanner commentata)
+
+---
+
+## Export Excel
+- Foglio Viaggi: separatori giorno colorati, zebra, totale per giorno, data `LUN 16/03`, freeze header
+- Foglio Riepilogo: totali per trasportatore + per giorno
+- Costanti: `_DAY_COLORS = {1:{bg,border,txt,label}, ...}`
 
 ---
 
 ## Funzioni JS critiche
 ```
-renderTrips()           → dispatcha a renderCardView/CompactView/MediumView/DesktopView
-filterApply()           → filtra trips → filteredTrips, chiama renderTrips()
-saveToLocalStorage()    → salva + chiama autoSaveDrive()
-importaExcel(file)      → legge .xlsx con XLSX.js, crea viaggi, salva
-_buildAndDownloadExcel()→ genera .xlsx con ExcelJS (landscape A4, colori trasportatori)
-switchView(view, el)    → cambia vista, aggiorna classi, chiama renderTrips()
-desktopSetNextWeek()    → crea 5 righe vuote per settimana prossima
-setText(id, value)      → helper safe per textContent (con null-check)
+renderTrips()              → dispatcha alle viste
+renderCardView()           → vista OGGI
+_renderTodayCard(t,today)  → helper card oggi
+renderMediumView()         → vista per trasportatore
+renderCompactView()        → vista rapida
+renderDesktopView()        → vista PC
+filterApply()              → filtra + ordina + renderTrips()
+saveToLocalStorage()       → ordina + salva + autoSaveDrive()
+loadTripsFromLocalStorage()→ carica + ordina
+_buildAndDownloadExcel()   → xlsx 2 fogli landscape A4
+_getVisibleTrips()         → rispetta filtri desktop
+switchView(view, el)       → cambia vista
+desktopAddEmpty()          → popup data → nuova riga → focus trasportatore
+desktopAddEmptyConfirm()   → conferma popup
+desktopCloseDatePopup()    → chiude popup
+desktopSetNextWeek()       → 5 righe vuote Lun→Ven
+_setSyncBtnState(state)    → aggiorna sync buttons
+mdpkUpdateFromDate()       → chip con date reali (logica sempre-avanti)
+mobileDayTap(d)            → tap chip: 0→1→2...
+_applyDriveData(data,s)    → applica dati Drive + ordina
+fixSortOrder()             → riordina e salva
+setText(id, value)         → helper safe textContent
 ```
 
 ---
 
 ## Variabili globali principali
 ```js
-let trips = []              // array viaggi correnti
-let filteredTrips = []      // dopo filterApply()
-let weekTitle = "..."       // titolo settimana corrente
-let currentView = 'card'   // vista attiva
-let searchQuery = ''        // testo ricerca
-let importMode = 'add'      // 'add' | 'replace' per import Excel
+let trips = []              // sempre ordine cronologico
+let filteredTrips = []
+let weekTitle = "Lun 23/03 — Ven 27/03"
+let currentView = 'compact'
 let filterState = { today, date, transporter, partenza, arrivo, giorno }
-let driveAccessToken = null // Google OAuth token
-let driveFileId = null      // ID file su Drive
-const _mobileDayCounts = {lun:0, mar:0, mer:0, gio:0, ven:0, sab:0}
-const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0, sab:0}
+let driveAccessToken = null
+let driveFileId = null
+const _mobileDayCounts = {lun:0, mar:0, mer:0, gio:0, ven:0}  // NO sab
+const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0}  // NO sab
+const _mdayColors = {lun:'rgba(96,165,250,', ...}
+const _DAY_COLORS = {1:{bg,border,txt,label}, ...}
 ```
 
 ---
 
 ## Elementi HTML critici
-`#cardView`, `#compactView`, `#compactBody`, `#mediumView`, `#desktopView`, `#desktopBody`, `#addTripSection`, `#tripForm`, `#newWeekModal`, `#newWeekModalV2`, `#fileInput`, `#weekInfo`, `#syncBtn`, `#loadBtn`, `#archiveSection`, `#mobileDayPicker`, `#desktopDayPicker`
+`#cardView`, `#compactView`, `#compactBody`, `#mediumView`, `#desktopView`, `#desktopBody`, `#addTripSection`, `#tripForm`, `#weekInfo`, `#syncBtn`, `#loadBtn`, `#desktopSyncBtn`, `#desktopLoadBtn`, `#mobileDayPicker`, `#mdpk-btn-{lun|mar|mer|gio|ven}`, `#mdpk-date-{lun|mar|mer|gio|ven}`, `#mobileDaySummary`, `#pcViewSwitcher`, `#desktopDatePopup`, `#todayBanner` (nascosto)
 
 ---
 
-## Import Excel — formato supportato
-Il file Excel esportato dall'app e da quello che riceve ha questa struttura:
-- Riga 1: `PLANNING VIAGGI`
-- Riga 2: `Settimana 12/2026 (Lun.16/03 - Ven. 20/03)`
-- Riga 3: header → `| Data | Trasportatore | Partenza da | Arrivo a | Eseguito/DDT |`
-- Righe dati: `| LUN. 16/03/2026 | COAP | Bientina (INCONTRATO) | Verolavecchia (AGROGI) | |`
+## Tema visivo
+- Sfondo: `#070a10`, pannelli: `#0f1220` / `#161b2e`
+- Accento: `#ff6b35`, successo: `#06d6a0`, warning: `#ffd23f`
+- Card con glow colorato per trasportatore
+- Separatori giorno: pill colorata (blu lun, verde mar, viola mer, giallo gio, rosa ven)
+- Animazione card: fade+slide a cascata
 
-Il parser (`importaExcel()`) cerca la riga header con "Data" + "Trasportatore", poi mappa le colonne e parsa le date con regex `(\d{1,2})/(\d{1,2})/(\d{2,4})`.
+---
+
+## PWA
+- `manifest.json` — display standalone, theme `#070a10`
+- `sw.js` — network-first, cache offline, ignora Google API
+- Installabile su Android/iOS
 
 ---
 
 ## Google Drive
-- Scope: `https://www.googleapis.com/auth/drive.appdata` (appDataFolder — invisibile all'utente)
-- File: `planning-viaggi-data.json`
-- Conflict check: confronto `savedAt` timestamp locale vs Drive
-- Auto-save: debounce 2s dopo ogni modifica da vista PC
-- Token refresh: silenzioso ogni 50min
-
----
-
-## Archivio settimane
-Stored in `localStorage` chiave `weekArchive` come array di `{title, trips, archivedAt}`. Visibile nella sezione Archivio. Può essere esportato in Excel.
+- Scope: `drive.appdata`, file: `planning-viaggi-data.json`
+- Conflict check su `savedAt`, auto-save debounce 2s, token refresh 50min
 
 ---
 
 ## Cosa NON fare
-- **Non toccare** il sistema Drive/reminder senza istruzioni esplicite
-- **Non usare framework** — deve rimanere single-file HTML vanilla
-- **Non aggiungere dipendenze** non già presenti (ExcelJS, XLSX, Google fonts)
-- **Non usare template literals annidati** (backtick dentro backtick) — causa SyntaxError su Chrome mobile
-- **Non usare** `getElementById(...).textContent =` senza null-check — usare `setText(id, value)`
-- **Non mettere** `if (!container) return` dentro `switchView()` — blocca il render
+- Non usare framework — single-file HTML vanilla
+- Non aggiungere dipendenze esterne
+- Non usare template literals annidati (backtick in backtick)
+- Non mettere apici singoli annidati in stringhe JS con apici singoli
+- Non usare `getElementById().textContent=` senza null-check → usare `setText()`
+- **Non aggiungere Sabato** ai picker — rimosso intenzionalmente
+- **Non re-aggiungere** banner "Viaggi di oggi" — rimosso intenzionalmente
+- **Non ri-abilitare** `renderTodayBanner()` — commentata intenzionalmente
+- Non usare `ontouchstart` con apici annidati in stringhe JS
+- Verificare ordine cronologico dopo ogni operazione che modifica `trips`
 
 ---
 
-## Convenzioni file output
-- Ogni versione salvata come `app_viaggi_vN.html` (underscore, no spazi)
-- File di lavoro locale: `/home/claude/tab-viaggi/TAB-VIAGGI--main/index.html`
-- Output per GitHub: `/mnt/user-data/outputs/app_viaggi_vN.html`
-- Versione corrente: **v36**
+## File output
+- Lavoro: `/home/claude/tab-viaggi/TAB-VIAGGI--main/index.html`
+- GitHub: `/mnt/user-data/outputs/index.html`
+- Versione corrente: **v41**
 
 ---
 
-## Storico versioni rilevanti
-| Versione | Cosa contiene |
-|----------|---------------|
-| v22 | Base stabile con import Excel funzionante e tutti i null-check |
-| v23 | Separatori giorno a pill colorata (Lun/Mar/Mer/Gio/Ven con colori) |
-| v31 | Export Excel con orientamento landscape A4 |
-| v33 | Toolbar PC a 2 righe + filtri giorno con contatori |
-| v34 | Data in formato `LUN 17/03` nella tabella PC |
-| v35 | Desktop picker multi-giorno con contatori ×N |
-| v36 | Mobile picker multi-giorno identico al desktop |
-
----
-
-## Regola aggiornamento PROJECT.md
-
-**Questa regola è obbligatoria per Claude in ogni conversazione.**
-
-Ogni volta che viene apportata una modifica significativa all'app, il PROJECT.md deve essere aggiornato **nella stessa sessione**, prima di consegnare il file finale.
-
-### Cosa aggiornare obbligatoriamente
-
-| Tipo modifica | Sezione da aggiornare |
-|---|---|
-| Nuova funzionalità | Sezione specifica (es. "Vista PC", "Form mobile") + Storico versioni |
-| Nuova variabile globale | "Variabili globali principali" |
-| Nuova funzione critica | "Funzioni JS critiche" |
-| Nuovo elemento HTML | "Elementi HTML critici" |
-| Bug fix che cambia comportamento | "Cosa NON fare" |
-| Nuovo pattern pericoloso scoperto | "Cosa NON fare" |
-| Cambio struttura dati | "Struttura dati" |
-| Nuova dipendenza esterna | "Stack tecnico" |
-| Nuova versione rilasciata | "Storico versioni" + "Versione corrente" |
-
-### Cosa NON aggiornare
-- Fix CSS estetici o cambi di colori
-- Modifiche grafiche minori
-- Aggiustamenti di spaziatura o font
-
-### Procedura
-1. Apporta la modifica all'app → salva come `app_viaggi_vN.html`
-2. Aggiorna il PROJECT.md con le sezioni rilevanti
-3. Consegna entrambi i file insieme
-
-### Perché è importante
-Il PROJECT.md è il documento di contesto che permette a Claude di capire l'app in una nuova conversazione senza dover rileggere 7700 righe di codice. Se non viene aggiornato, le conversazioni future partiranno con informazioni obsolete e rischiano di reintrodurre bug già risolti o rompere funzionalità esistenti.
+## Storico versioni
+| v | Contenuto |
+|---|-----------|
+| v39 | Excel 2 fogli, stampa, ordinamento fix |
+| v39_backup | Backup pre-abbellimenti |
+| v40 | Tema scuro, glow card, badge trasportatori |
+| v41 | Form Opzione A, date reali chip, Sab rimosso, vista Oggi, vista Trasportatore, banner rimosso, top bar, PWA sw.js |
