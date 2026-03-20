@@ -1,12 +1,12 @@
 {
   "name": "Planning Viaggi",
   "short_name": "Viaggi",
-  "description": "Planning Logistica Viaggi",
-  "start_url": "./",
+  "description": "App logistica planning viaggi settimanale",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0d1122",
-  "theme_color": "#0d1122",
   "orientation": "portrait",
+  "background_color": "#070a10",
+  "theme_color": "#070a10",
   "icons": [
     {
       "src": "logo.png",
@@ -20,5 +20,7 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "categories": ["productivity", "business"],
+  "lang": "it"
 }

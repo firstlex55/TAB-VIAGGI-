@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Viaggi">
     <meta name="application-name" content="Viaggi">
-    <meta name="theme-color" content="#0d1122">
+    <meta name="theme-color" content="#070a10">
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,16 +30,16 @@
         }
 
         :root {
-            --primary: #181c2a;
-            --secondary: #252b42;
+            --primary: #0f1220;
+            --secondary: #161b2e;
             --accent: #ff6b35;
             --accent-dim: rgba(255, 107, 53, 0.13);
             --success: #06d6a0;
             --warning: #ffd23f;
-            --bg: #0d1018;
+            --bg: #070a10;
             --text: #dde3ed;
             --text-dim: #9aa3b2;
-            --border: rgba(255, 255, 255, 0.14);
+            --border: rgba(255, 255, 255, 0.10);
             --border-warm: rgba(255, 107, 53, 0.12);
             --shadow: rgba(0, 0, 0, 0.45);
         }
@@ -51,18 +51,18 @@
             line-height: 1.6;
             padding-bottom: 80px;
             background-image:
-                radial-gradient(ellipse at 0% 0%,   rgba(255, 107, 53, 0.07) 0%, transparent 55%),
-                radial-gradient(ellipse at 100% 100%, rgba(30,  60, 140, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 0% 0%,   rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(20,  40, 110, 0.14) 0%, transparent 50%),
                 radial-gradient(ellipse at 60% 40%,  rgba(15,  30,  80, 0.25) 0%, transparent 60%),
                 linear-gradient(160deg, #0d1018 0%, #101522 50%, #111a2e 100%);
             background-attachment: fixed;
         }
 
         .top-bar {
-            background: linear-gradient(180deg, #10142a 0%, #141828 100%);
+            background: #080b14;
             padding: 14px 18px 12px;
-            border-bottom: 2px solid rgba(255,107,53,0.5);
-            box-shadow: 0 4px 28px rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -88,13 +88,13 @@
             justify-content: center;
         }
         .top-bar-logo-img {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             object-fit: cover;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            border: 2px solid rgba(255,107,53,0.55);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
+            border: 1.5px solid rgba(255,107,53,0.5);
+            box-shadow: 0 0 14px rgba(255,107,53,0.12);
         }
 
         .top-bar-titles {
@@ -113,10 +113,10 @@
         .logo-planning-line { display: none; }
         .logo-planning-text {
             display: inline-block;
-            color: rgba(255,255,255,0.45);
+            color: rgba(255,255,255,0.35);
             font-weight: 700;
-            letter-spacing: 5px;
-            font-size: 9px;
+            letter-spacing: 4px;
+            font-size: 8px;
             text-transform: uppercase;
             font-family: 'JetBrains Mono', monospace;
             line-height: 1;
@@ -145,15 +145,15 @@
             display: block;
             font-weight: 900;
             letter-spacing: 3px;
-            font-size: 28px;
-            background: linear-gradient(90deg, #ff7a40 0%, #ffb347 60%, #ff6b35 100%);
+            font-size: 30px;
+            background: linear-gradient(90deg, #ff9060 0%, #ffcc88 45%, #ff6b35 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-transform: uppercase;
             line-height: 1;
             text-shadow: none;
-            filter: drop-shadow(0 0 8px rgba(255,107,53,0.35));
+            filter: drop-shadow(0 0 12px rgba(255,107,53,0.45));
         }
 
         /* Riepilogo compatto nell'header */
@@ -175,8 +175,8 @@
         .header-summary-total {
             font-family: "JetBrains Mono", monospace;
             font-size: 9px;
-            color: rgba(255,255,255,0.4);
-            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            font-weight: 700;
             margin-right: 2px;
         }
 
@@ -184,13 +184,14 @@
         .week-info {
             font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
-            color: rgba(255,255,255,0.6);
-            letter-spacing: 0.2px;
-            margin-top: 4px;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 0.3px;
+            margin-top: 5px;
             display: block;
-            white-space: normal;
-            overflow: visible;
-            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1;
         }
 
 
@@ -391,7 +392,7 @@
         .compact-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 3px;
+            border-spacing: 0 4px;
             font-size: 11px;
             table-layout: fixed;
         }
@@ -415,7 +416,7 @@
         }
 
         .compact-table td {
-            padding: 9px 6px;
+            padding: 10px 7px;
             color: var(--text);
             vertical-align: middle;
             background: var(--secondary);
@@ -437,19 +438,21 @@
         .compact-transporter {
             padding: 4px 10px;
             border-radius: 8px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 10px;
             display: inline-block;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         }
 
         .compact-date {
             font-family: 'JetBrains Mono', monospace;
             font-size: 9px;
             font-weight: 700;
-            color: var(--text-dim);
+            color: var(--accent);
+            opacity: 0.75;
             white-space: nowrap;
         }
 
@@ -666,7 +669,7 @@
         }
 
         .filter-select option {
-            background: #1a1d2e;
+            background: #111422;
             color: var(--text);
         }
 
@@ -1383,17 +1386,34 @@
             transform: rotate(90deg);
         }
 
+        /* Animazione entrata card */
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
         .trip-card {
-            background: linear-gradient(135deg, var(--secondary) 0%, rgba(45,49,66,0.95) 100%);
+            background: linear-gradient(135deg, var(--secondary) 0%, rgba(20,24,38,0.97) 100%);
             border-radius: 14px;
             padding: 14px 14px 14px 18px;
-            margin-bottom: 8px;
-            border-left: 5px solid var(--accent);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            margin-bottom: 9px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
             position: relative;
             cursor: pointer;
             overflow: hidden;
+            animation: cardFadeIn 0.22s ease both;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
         }
+        .trip-card:nth-child(1) { animation-delay: 0.02s; }
+        .trip-card:nth-child(2) { animation-delay: 0.05s; }
+        .trip-card:nth-child(3) { animation-delay: 0.08s; }
+        .trip-card:nth-child(4) { animation-delay: 0.11s; }
+        .trip-card:nth-child(5) { animation-delay: 0.14s; }
+        .trip-card:nth-child(n+6) { animation-delay: 0.16s; }
 
         .trip-card::before {
             content: '';
@@ -1416,19 +1436,12 @@
             animation: rippleAnim 0.45s linear;
             pointer-events: none;
         }
-        @keyframes rippleAnim {
-            to { transform: scale(4); opacity: 0; }
-        }
 
-        /* Bordo sinistro colorato per trasportatore — gestito dalla palette :root sopra */
-
-        .trip-card:active {
-            transform: scale(0.98);
-        }
+        .trip-card:active { transform: scale(0.985); }
 
         .trip-card.expanded {
-            box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-            transform: translateY(-1px);
+            box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
         }
 
         .trip-header {
@@ -1459,21 +1472,22 @@
             display: inline-block;
             letter-spacing: 0.8px;
             text-transform: uppercase;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
 
         /* ── Palette trasportatori — colori massimamente distinti ── */
         :root {
-            --t-cevolo:   #ff6b35; --t-cevolo-bg:   rgba(255,107,53,0.12);
-            --t-coap:     #5b8dd9; --t-coap-bg:     rgba(91,141,217,0.12);
-            --t-coneco:   #e05c5c; --t-coneco-bg:   rgba(224,92,92,0.12);
-            --t-consar:   #06d6a0; --t-consar-bg:   rgba(6,214,160,0.12);
-            --t-avio:     #38bdf8; --t-avio-bg:     rgba(56,189,248,0.12);
-            --t-alb:      #f5a623; --t-alb-bg:      rgba(245,166,35,0.12);
-            --t-lino:     #c084fc; --t-lino-bg:     rgba(192,132,252,0.12);
-            --t-stegagno: #94a3b8; --t-stegagno-bg: rgba(148,163,184,0.12);
-            --t-cirioni:  #34d399; --t-cirioni-bg:  rgba(52,211,153,0.12);
-            --t-clp:      #CA8A04; --t-clp-bg:      rgba(202,138,4,0.15);
-            --t-default:  #6B7280; --t-default-bg:  rgba(107,114,128,0.15);
+            --t-cevolo:   #ff6b35; --t-cevolo-bg:   rgba(255,107,53,0.16);
+            --t-coap:     #5b8dd9; --t-coap-bg:     rgba(91,141,217,0.16);
+            --t-coneco:   #e05c5c; --t-coneco-bg:   rgba(224,92,92,0.16);
+            --t-consar:   #06d6a0; --t-consar-bg:   rgba(6,214,160,0.16);
+            --t-avio:     #38bdf8; --t-avio-bg:     rgba(56,189,248,0.16);
+            --t-alb:      #f5a623; --t-alb-bg:      rgba(245,166,35,0.16);
+            --t-lino:     #c084fc; --t-lino-bg:     rgba(192,132,252,0.16);
+            --t-stegagno: #94a3b8; --t-stegagno-bg: rgba(148,163,184,0.16);
+            --t-cirioni:  #34d399; --t-cirioni-bg:  rgba(52,211,153,0.16);
+            --t-clp:      #CA8A04; --t-clp-bg:      rgba(202,138,4,0.18);
+            --t-default:  #6B7280; --t-default-bg:  rgba(107,114,128,0.18);
         }
 
         /* Badge trasportatore (card + compact + medium) */
@@ -1500,14 +1514,22 @@
         .trip-card[data-transporter="stegagno"] { border-left-color: var(--t-stegagno);background: rgba(148,163,184,0.05); }
         .trip-card[data-transporter="cirioni"]  { border-left-color: var(--t-cirioni); background: rgba(52,211,153,0.06); }
 
-        /* Sfondo leggero card per trasportatore */
-        .trip-card[data-transporter="cevolo"]   { background: linear-gradient(135deg, var(--t-cevolo-bg) 0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="coap"]     { background: linear-gradient(135deg, var(--t-coap-bg)   0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="coneco"]   { background: linear-gradient(135deg, var(--t-coneco-bg) 0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="consar"]   { background: linear-gradient(135deg, var(--t-consar-bg) 0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="avio"]     { background: linear-gradient(135deg, var(--t-avio-bg)   0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="alb"]      { background: linear-gradient(135deg, var(--t-alb-bg)    0%, var(--secondary) 60%); }
-        .trip-card[data-transporter="lino"]     { background: linear-gradient(135deg, var(--t-lino-bg)   0%, var(--secondary) 60%); }
+        /* Sfondo + glow colorato per trasportatore */
+        .trip-card[data-transporter="cevolo"]   { background: linear-gradient(135deg, rgba(255,107,53,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 14px rgba(255,107,53,0.16), inset 0 0 0 1px rgba(255,107,53,0.10); }
+        .trip-card[data-transporter="coap"]     { background: linear-gradient(135deg, rgba(91,141,217,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 14px rgba(91,141,217,0.16), inset 0 0 0 1px rgba(91,141,217,0.10); }
+        .trip-card[data-transporter="coneco"]   { background: linear-gradient(135deg, rgba(224,92,92,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 12px rgba(224,92,92,0.12), inset 0 0 0 1px rgba(224,92,92,0.08); }
+        .trip-card[data-transporter="consar"]   { background: linear-gradient(135deg, rgba(6,214,160,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 14px rgba(6,214,160,0.16), inset 0 0 0 1px rgba(6,214,160,0.10); }
+        .trip-card[data-transporter="avio"]     { background: linear-gradient(135deg, rgba(56,189,248,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 14px rgba(56,189,248,0.16), inset 0 0 0 1px rgba(56,189,248,0.10); }
+        .trip-card[data-transporter="alb"]      { background: linear-gradient(135deg, rgba(245,166,35,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 12px rgba(245,166,35,0.12), inset 0 0 0 1px rgba(245,166,35,0.08); }
+        .trip-card[data-transporter="lino"]     { background: linear-gradient(135deg, rgba(192,132,252,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 14px rgba(192,132,252,0.16), inset 0 0 0 1px rgba(192,132,252,0.10); }
+        .trip-card[data-transporter="stegagno"] { background: linear-gradient(135deg, rgba(148,163,184,0.08) 0%, var(--secondary) 55%); box-shadow: 0 2px 8px rgba(148,163,184,0.10); }
+        .trip-card[data-transporter="cirioni"]  { background: linear-gradient(135deg, rgba(52,211,153,0.09) 0%, var(--secondary) 55%); box-shadow: 0 2px 12px rgba(52,211,153,0.12), inset 0 0 0 1px rgba(52,211,153,0.08); }
+        /* Glow al hover/expanded per ogni trasportatore */
+        .trip-card[data-transporter="cevolo"].expanded   { box-shadow: 0 8px 28px rgba(255,107,53,0.25); }
+        .trip-card[data-transporter="coap"].expanded     { box-shadow: 0 8px 28px rgba(91,141,217,0.25); }
+        .trip-card[data-transporter="consar"].expanded   { box-shadow: 0 8px 28px rgba(6,214,160,0.25); }
+        .trip-card[data-transporter="avio"].expanded     { box-shadow: 0 8px 28px rgba(56,189,248,0.25); }
+        .trip-card[data-transporter="lino"].expanded     { box-shadow: 0 8px 28px rgba(192,132,252,0.25); }
         .trip-card[data-transporter="stegagno"] { background: linear-gradient(135deg, var(--t-stegagno-bg) 0%, var(--secondary) 60%); }
         .trip-card[data-transporter="cirioni"]  { background: linear-gradient(135deg, var(--t-cirioni-bg) 0%, var(--secondary) 60%); }
 
@@ -2140,7 +2162,7 @@
                 align-items: center;
                 gap: 5px;
                 padding: 7px 14px;
-                background: #0e111c;
+                background: #080b13;
                 border-bottom: 1px solid rgba(255,255,255,0.07);
             }
             .pc-view-switcher .pcvs-btn {
@@ -2188,13 +2210,13 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(13,16,24,0.97);
-            border-top: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(6,8,14,0.99);
+            border-top: 1px solid rgba(255,255,255,0.09);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             padding: 0 0 max(6px, env(safe-area-inset-bottom));
             z-index: 1000;
-            box-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 -1px 0 rgba(255,255,255,0.05), 0 -12px 32px rgba(0,0,0,0.55);
         }
 
         .mobile-bottom-nav .view-toggle {
@@ -3049,16 +3071,17 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 5px 12px 5px 10px;
+            padding: 5px 13px 5px 10px;
             border-radius: 20px;
             flex-shrink: 0;
             background: rgba(255,255,255,0.07);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
-        .day-group-header.lun .day-badge { background: rgba(96,165,250,0.15);  border: 1px solid rgba(96,165,250,0.3); }
-        .day-group-header.mar .day-badge { background: rgba(52,211,153,0.15);  border: 1px solid rgba(52,211,153,0.3); }
-        .day-group-header.mer .day-badge { background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.3); }
-        .day-group-header.gio .day-badge { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.3); }
-        .day-group-header.ven .day-badge { background: rgba(244,114,182,0.15); border: 1px solid rgba(244,114,182,0.3); }
+        .day-group-header.lun .day-badge { background: rgba(96,165,250,0.18);  border: 1px solid rgba(96,165,250,0.4); box-shadow: 0 0 10px rgba(96,165,250,0.12); }
+        .day-group-header.mar .day-badge { background: rgba(52,211,153,0.18);  border: 1px solid rgba(52,211,153,0.4); box-shadow: 0 0 10px rgba(52,211,153,0.12); }
+        .day-group-header.mer .day-badge { background: rgba(167,139,250,0.18); border: 1px solid rgba(167,139,250,0.4); box-shadow: 0 0 10px rgba(167,139,250,0.12); }
+        .day-group-header.gio .day-badge { background: rgba(251,191,36,0.18);  border: 1px solid rgba(251,191,36,0.4); box-shadow: 0 0 10px rgba(251,191,36,0.12); }
+        .day-group-header.ven .day-badge { background: rgba(244,114,182,0.18); border: 1px solid rgba(244,114,182,0.4); box-shadow: 0 0 10px rgba(244,114,182,0.12); }
         .day-group-header.sab .day-badge,
         .day-group-header.dom .day-badge { background: rgba(148,163,184,0.1);  border: 1px solid rgba(148,163,184,0.2); }
 
@@ -3148,53 +3171,71 @@
 
         /* ===== BARRA GIORNI SETTIMANA ===== */
         .week-progress-bar {
-            height: 10px;
-            background: rgba(16,20,42,0.98);
-            border-bottom: 1px solid rgba(255,107,53,0.10);
+            height: 34px;
+            background: rgba(6,8,14,0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             width: 100%;
             position: sticky;
             top: 62px;
             z-index: 99;
             display: flex;
-            align-items: center;
-            padding: 0 8px;
-            gap: 3px;
+            align-items: stretch;
+            gap: 0;
         }
 
         .week-seg {
             flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 6px;
-            border-radius: 2px;
-            transition: all 0.25s ease;
-            background: rgba(255,255,255,0.06);
+            gap: 2px;
             cursor: pointer;
             position: relative;
+            border-bottom: 2px solid transparent;
+            transition: background 0.15s;
         }
-        .week-seg:hover { opacity: 0.8; transform: scaleY(1.4); }
+        .week-seg:active { background: rgba(255,255,255,0.04); }
         .week-seg.day-filtered {
-            outline: 2px solid rgba(255,255,255,0.6);
-            outline-offset: 1px;
+            background: rgba(255,255,255,0.04);
+            border-bottom-color: rgba(255,255,255,0.5) !important;
         }
-
-        .week-seg-label { display: none; }
+        .week-seg-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1;
+        }
+        .week-seg-count {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 1;
+        }
         .week-seg-pct    { display: none; }
         .week-seg-top-bar{ display: none; }
 
-        /* ── Passati: verde ── */
-        .week-seg.done { background: rgba(61,232,176,0.5); }
+        /* Passati: verde */
+        .week-seg.done { border-bottom-color: rgba(6,214,160,0.55); }
+        .week-seg.done .week-seg-label { color: rgba(6,214,160,0.7); }
+        .week-seg.done .week-seg-count { color: rgba(6,214,160,0.45); }
 
-        /* ── Oggi: arancio pieno ── */
+        /* Oggi: arancio */
         .week-seg.active {
-            background: #ff7a40;
-            flex: 1.4;
-            box-shadow: 0 0 6px rgba(255,107,53,0.5);
+            background: rgba(255,107,53,0.06);
+            border-bottom-color: #ff6b35;
         }
+        .week-seg.active .week-seg-label { color: #ff6b35; }
+        .week-seg.active .week-seg-count { color: rgba(255,107,53,0.65); }
 
-        /* ── Futuri: grigio scuro ── */
-        .week-seg.future { background: rgba(255,255,255,0.06); }
+        /* Futuri: grigio */
+        .week-seg.future { border-bottom-color: rgba(255,255,255,0.07); }
+        .week-seg.future .week-seg-label { color: rgba(255,255,255,0.22); }
+        .week-seg.future .week-seg-count { color: rgba(255,255,255,0.12); }
 
         .week-progress-fill  { display: none; }
         .week-progress-label { display: none; }
@@ -3223,7 +3264,7 @@
             background: var(--secondary);
         }
         select option {
-            background: #1a1d2e;
+            background: #111422;
             color: var(--text);
         }
 
@@ -3457,9 +3498,11 @@
                 <div class="header-summary" id="headerSummary"></div>
             </div>
         </div>
-        <div id="driveStatus" style="font-size:11px; color:rgba(255,255,255,0.6); display:none; flex-shrink:0; text-align:right;">
-            <span id="driveStatusDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#555;margin-right:5px;vertical-align:middle;"></span>
-            <span id="driveStatusText">Drive</span>
+        <div id="driveStatus" style="display:none;flex-shrink:0;text-align:right;">
+            <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
+                <span id="driveStatusDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#555;box-shadow:0 0 5px rgba(6,214,160,0.4);"></span>
+                <span id="driveStatusText" style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.3px;">Drive</span>
+            </div>
         </div>
     </div>
 
@@ -3577,144 +3620,140 @@
             </div>
         </div>
 
-        <!-- Banner Viaggi di Oggi -->
         <!-- Aggiungi Viaggio -->
-        <div class="section" id="addTripSection" style="display:none;">
-            <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
-                <span>➕ Nuovo Viaggio</span>
-                <button onclick="toggleAddForm()" style="background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;padding:0;">✕</button>
+        <div class="section" id="addTripSection" style="display:none;padding:0;overflow:hidden;border-radius:16px;">
+            <!-- Header -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;">➕</span>
+                    <span style="font-size:16px;font-weight:800;color:var(--accent);">Nuovo Viaggio</span>
+                </div>
+                <button onclick="toggleAddForm()" style="background:rgba(255,255,255,0.07);border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:6px 10px;border-radius:8px;line-height:1;">✕</button>
             </div>
-            <form id="tripForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label style="margin-bottom:8px;display:block;">Giorni — tocca + per aggiungere, tocca di nuovo per più copie</label>
-                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;" id="mobileDayPicker">
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-lun">
-                                    <button type="button" onclick="mobileDayDec('lun')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-lun" onclick="mobileDayInc('lun')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Lun</button>
-                                    <button type="button" onclick="mobileDayInc('lun')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-lun" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-mar">
-                                    <button type="button" onclick="mobileDayDec('mar')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-mar" onclick="mobileDayInc('mar')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Mar</button>
-                                    <button type="button" onclick="mobileDayInc('mar')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-mar" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-mer">
-                                    <button type="button" onclick="mobileDayDec('mer')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-mer" onclick="mobileDayInc('mer')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Mer</button>
-                                    <button type="button" onclick="mobileDayInc('mer')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-mer" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-gio">
-                                    <button type="button" onclick="mobileDayDec('gio')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-gio" onclick="mobileDayInc('gio')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Gio</button>
-                                    <button type="button" onclick="mobileDayInc('gio')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-gio" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-ven">
-                                    <button type="button" onclick="mobileDayDec('ven')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-ven" onclick="mobileDayInc('ven')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Ven</button>
-                                    <button type="button" onclick="mobileDayInc('ven')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-ven" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                                <div style="display:flex;align-items:center;border:2px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;" id="mdpk-sab">
-                                    <button type="button" onclick="mobileDayDec('sab')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">−</button>
-                                    <button type="button" id="mdpk-btn-sab" onclick="mobileDayInc('sab')" style="padding:9px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:46px;">Sab</button>
-                                    <button type="button" onclick="mobileDayInc('sab')" style="padding:9px 11px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;">+</button>
-                                </div>
-                                <span id="mdpk-cnt-sab" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0x</span>
-                            </div>
-                        </div>
-                        <div style="font-size:11px;color:var(--text-dim);">
-                            oppure data specifica: <input type="date" id="data" style="background:var(--secondary);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);padding:3px 7px;font-family:'Outfit',sans-serif;outline:none;margin-left:4px;" onchange="mobileDayUpdateSummary()">
-                        </div>
-                        <div id="mobileDaySummary" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:8px;font-size:12px;color:var(--success);font-weight:600;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="trasportatore">Trasportatore</label>
-                        <input type="text" id="trasportatore" placeholder="Scrivi o scegli dalla lista" required list="transporterList">
-                        <datalist id="transporterList">
-                            <option value="CEVOLO">
-                            <option value="COAP">
-                            <option value="ConEco">
-                            <option value="CONSAR">
-                            <option value="AVIO">
-                            <option value="ALB">
-                            <option value="LINO BRA">
-                            <option value="Stegagno">
-                            <option value="Cirioni">
-                        </datalist>
-                        <button type="button" class="add-transporter-btn" onclick="addTransporterToList()">
-                            ➕ Aggiungi trasportatore alla lista
-                        </button>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                        <div class="form-group">
-                            <label for="partenza">Partenza da</label>
-                            <input type="text" id="partenza" placeholder="Inizia a scrivere..." required list="partenzaList">
+
+            <form id="tripForm" style="padding:18px;">
+
+                <!-- STEP 1: Trasportatore -->
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">1 — Trasportatore</div>
+                    <input type="text" id="trasportatore" placeholder="Es. COAP, CEVOLO..." required list="transporterList" autocomplete="off"
+                        style="width:100%;padding:12px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                    <datalist id="transporterList">
+                        <option value="CEVOLO"><option value="COAP"><option value="ConEco">
+                        <option value="CONSAR"><option value="AVIO"><option value="ALB">
+                        <option value="LINO BRA"><option value="Stegagno"><option value="Cirioni">
+                    </datalist>
+                    <button type="button" class="add-transporter-btn" onclick="addTransporterToList()">➕ Aggiungi alla lista</button>
+                </div>
+
+                <!-- STEP 2: Rotta -->
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">2 — Rotta</div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="position:relative;">
+                            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--accent);font-weight:700;pointer-events:none;">DA</span>
+                            <input type="text" id="partenza" placeholder="Partenza..." required list="partenzaList" autocomplete="off"
+                                style="width:100%;padding:11px 14px 11px 36px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                             <datalist id="partenzaList">
-                                <option value="Bientina (INCONTRATO)">
-                                <option value="S.Felice (CAI-BF)">
-                                <option value="Dosolo (ARDENGHI)">
-                                <option value="Grezzana (TACCHELLA)">
-                                <option value="Mercatino (COVI)">
-                                <option value="Tirano (ILT)">
-                                <option value="Jolanda (Bonifiche)">
-                                <option value="Mezzocorona (VENDER)">
+                                <option value="Bientina (INCONTRATO)"><option value="S.Felice (CAI-BF)">
+                                <option value="Dosolo (ARDENGHI)"><option value="Grezzana (TACCHELLA)">
+                                <option value="Mercatino (COVI)"><option value="Tirano (ILT)">
+                                <option value="Jolanda (Bonifiche)"><option value="Mezzocorona (VENDER)">
                                 <option value="Castel S. Nicolò (Tosco imballaggi)">
                             </datalist>
                         </div>
-                        <div class="form-group">
-                            <label for="arrivo">Arrivo a</label>
-                            <input type="text" id="arrivo" placeholder="Inizia a scrivere..." required list="arrivoList">
+                        <div style="display:flex;align-items:center;justify-content:center;">
+                            <span style="color:var(--accent);font-size:18px;font-weight:900;">↓</span>
+                        </div>
+                        <div style="position:relative;">
+                            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--success);font-weight:700;pointer-events:none;">A</span>
+                            <input type="text" id="arrivo" placeholder="Arrivo..." required list="arrivoList" autocomplete="off"
+                                style="width:100%;padding:11px 14px 11px 28px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                                onfocus="this.style.borderColor='var(--success)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                             <datalist id="arrivoList">
-                                <option value="Ponzano Romano (SICEM)">
-                                <option value="Verolavecchia (AGROGI)">
-                                <option value="Mezzano RA (SICEM Srl)">
-                                <option value="Tarmassia (TRUCIOLI)">
+                                <option value="Ponzano Romano (SICEM)"><option value="Verolavecchia (AGROGI)">
+                                <option value="Mezzano RA (SICEM Srl)"><option value="Tarmassia (TRUCIOLI)">
                             </datalist>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="prodotto">Prodotto</label>
-                        <input type="text" id="prodotto" placeholder="Cippato, Sfarinato... o scrivi" list="prodottoList" autocomplete="off">
+                </div>
+
+                <!-- STEP 3: Prodotto + Note (collassati in una riga) -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+                    <div>
+                        <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Prodotto</div>
+                        <input type="text" id="prodotto" placeholder="Cippato..." list="prodottoList" autocomplete="off"
+                            style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                         <datalist id="prodottoList">
-                            <option value="Cippato">
-                            <option value="Sfarinato">
-                            <option value="Segatura">
-                            <option value="Pula">
-                            </datalist>
+                            <option value="Cippato"><option value="Sfarinato">
+                            <option value="Segatura"><option value="Pula">
+                        </datalist>
                     </div>
-                    <div class="form-group">
-                        <label for="note">Note interne (opzionale)</label>
-                        <textarea id="note" placeholder="Note interne per uso personale..." style="min-height:60px;resize:vertical;"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="daConfermare" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                            <input type="checkbox" id="daConfermare" style="width:auto;cursor:pointer;">
-                            <span>⚠️ Da confermare</span>
-                        </label>
+                    <div>
+                        <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Note</div>
+                        <input type="text" id="note" placeholder="Facoltative..."
+                            style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top:16px;padding:12px 24px;font-size:14px;">
-                    💾 Aggiungi Viaggio
+
+                <!-- STEP 3: Data + chip giorni settimana -->
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">3 — Quando</div>
+
+                    <!-- Data primo viaggio -->
+                    <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:6px;">Data del primo viaggio</label>
+                    <input type="date" id="data" onchange="mdpkUpdateFromDate()"
+                        style="width:100%;padding:11px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color 0.15s;margin-bottom:12px;"
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+
+                    <!-- Chip altri giorni con date reali -->
+                    <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;opacity:0.7;">Aggiungi altri giorni della stessa settimana</div>
+                    <div style="display:flex;gap:5px;" id="mobileDayPicker">
+                        <button type="button" id="mdpk-btn-lun" data-mday="lun" onclick="mobileDayTap('lun')"
+                            style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
+                            <div style="font-size:11px;font-weight:800;line-height:1;">Lun</div>
+                            <div id="mdpk-date-lun" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                        </button>
+                        <button type="button" id="mdpk-btn-mar" data-mday="mar" onclick="mobileDayTap('mar')"
+                            style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
+                            <div style="font-size:11px;font-weight:800;line-height:1;">Mar</div>
+                            <div id="mdpk-date-mar" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                        </button>
+                        <button type="button" id="mdpk-btn-mer" data-mday="mer" onclick="mobileDayTap('mer')"
+                            style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
+                            <div style="font-size:11px;font-weight:800;line-height:1;">Mer</div>
+                            <div id="mdpk-date-mer" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                        </button>
+                        <button type="button" id="mdpk-btn-gio" data-mday="gio" onclick="mobileDayTap('gio')"
+                            style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
+                            <div style="font-size:11px;font-weight:800;line-height:1;">Gio</div>
+                            <div id="mdpk-date-gio" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                        </button>
+                        <button type="button" id="mdpk-btn-ven" data-mday="ven" onclick="mobileDayTap('ven')"
+                            style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
+                            <div style="font-size:11px;font-weight:800;line-height:1;">Ven</div>
+                            <div id="mdpk-date-ven" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                        </button>
+                    </div>
+                    <div id="mobileDaySummary" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:8px;font-size:12px;color:var(--success);font-weight:600;"></div>
+                </div>
+
+                <!-- Da confermare -->
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.15);border-radius:8px;cursor:pointer;margin-bottom:16px;" onclick="document.getElementById('daConfermare').click()">
+                    <input type="checkbox" id="daConfermare" style="width:auto;cursor:pointer;accent-color:var(--warning);">
+                    <label for="daConfermare" style="font-size:13px;cursor:pointer;color:var(--warning);font-weight:600;">⚠️ Da confermare</label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:12px;color:white;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);letter-spacing:0.3px;">
+                    ✅ Aggiungi Viaggio
                 </button>
             </form>
         </div>
-
         <!-- Actions -->
         <div class="section">
             <div class="section-title">⚙️ Azioni</div>
@@ -4100,8 +4139,14 @@
                     });
                     if (fixedCount > 0) {
                         console.log(`🔧 Ripristinati ${fixedCount} flag daConfermare dalle note`);
-                        saveToLocalStorage();
                     }
+
+                    // Ordine cronologico sempre garantito al caricamento
+                    trips.sort((a,b) => {
+                        const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                        const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                        return da - db;
+                    });
 
                 } catch (e) {
                     console.error('❌ Errore caricamento localStorage:', e);
@@ -4478,13 +4523,28 @@
             }
 
             var newTrips = [];
+            // Viaggio principale — data del campo
+            if (specificDate) newTrips.push(Object.assign({}, base, {data: specificDate}));
+            // Viaggi extra — giorni selezionati dai chip, stessa settimana della data principale
             Object.keys(_mobileDayCounts).forEach(function(d) {
                 var cnt = _mobileDayCounts[d] || 0;
+                if (cnt === 0) return;
+                var chipDate = '';
+                if (specificDate) {
+                    var ref2  = new Date(specificDate + 'T12:00:00');
+                    var dow2  = ref2.getDay();
+                    var dnums = {lun:1, mar:2, mer:3, gio:4, ven:5};
+                    var diff2 = (dnums[d] - dow2 + 7) % 7; // sempre avanti
+                    var target = new Date(ref2);
+                    target.setDate(ref2.getDate() + diff2);
+                    chipDate = target.toISOString().split('T')[0];
+                } else {
+                    chipDate = desktopGetNextWeekday(d);
+                }
                 for (var i = 0; i < cnt; i++) {
-                    newTrips.push(Object.assign({}, base, {data: desktopGetNextWeekday(d)}));
+                    newTrips.push(Object.assign({}, base, {data: chipDate}));
                 }
             });
-            if (specificDate) newTrips.push(Object.assign({}, base, {data: specificDate}));
 
             newTrips.forEach(function(t) {
                 addLocationToList(t.partenza, 'partenza');
@@ -5087,7 +5147,7 @@
                 const tc = (r.arrivo.match(/\(([^)]+)\)/) || [])[1] || '';
                 const colorClass = getTransporterColorClass(r.trasportatore);
                 return `
-                <div style="background:#1a1d2e;border:1px solid rgba(255,255,255,0.08);border-left:3px solid var(--accent);border-radius:10px;padding:10px 11px;margin-bottom:6px;transition:all 0.18s;" onmouseover="this.style.background='#1f2236'" onmouseout="this.style.background='#1a1d2e'">
+                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-left:3px solid var(--accent);border-radius:10px;padding:10px 11px;margin-bottom:6px;transition:all 0.18s;" onmouseover="this.style.background='#1f2236'" onmouseout="this.style.background='#1a1d2e'">
                     <span class="${colorClass}" style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;">${r.trasportatore}</span>
                     <div style="display:flex;align-items:center;gap:5px;margin:5px 0 4px;font-size:12px;flex-wrap:wrap;">
                         <strong style="color:var(--text);">${fp}</strong>
@@ -5204,11 +5264,11 @@
             <div style="display:grid;grid-template-columns:270px 1fr;height:100%;overflow:hidden;">
 
                 <!-- SIDEBAR ROTTE RAPIDE -->
-                <div style="background:#13151f;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;overflow:hidden;">
+                <div style="background:#0c0f1a;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;overflow:hidden;">
                     <div style="padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
                         <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">⚡ Rotte rapide <span style="background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:10px;font-weight:800;">${allRoutes.length}</span></div>
                         <input id="desktopRouteSearch" type="text" placeholder="🔍 Filtra..." oninput="desktopFilterRoutes()"
-                            style="width:100%;padding:7px 10px;background:#1a1d2e;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
+                            style="width:100%;padding:7px 10px;background:#111422;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
                     </div>
                     <div id="desktopRoutesList" style="flex:1;overflow-y:auto;padding:8px;">
                         ${allRoutes.map((r,i) => routeCard(r,i)).join('')}
@@ -5222,7 +5282,7 @@
                 <!-- TABELLA VIAGGI -->
                 <div style="display:flex;flex-direction:column;overflow:hidden;">
                     <!-- ── TOOLBAR ── -->
-                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:#0e111c;flex-shrink:0;">
+                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:#080b13;flex-shrink:0;">
 
                         <!-- Riga 1: navigazione + stato + azioni principali -->
                         <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;">
@@ -5298,7 +5358,7 @@
                             <div style="display:flex;gap:4px;flex-wrap:wrap;" id="desktopDayFilters">
                                 ${(function() {
                                     const dayNums = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
-                                    return ['Tutti','Lun','Mar','Mer','Gio','Ven','Sab'].map(function(d,i) {
+                                    return ['Tutti','Lun','Mar','Mer','Gio','Ven'].map(function(d,i) {
                                         const dayNum = dayNums[d];
                                         const cnt = d === 'Tutti' ? trips.length : trips.filter(function(t) { const dt = new Date((t.data||'')+'T12:00:00'); return dt.getDay() === dayNum; }).length;
                                         const isActive = (i === 0 && (!_desktopDayFilter || _desktopDayFilter === 'Tutti')) || _desktopDayFilter === d;
@@ -5317,7 +5377,7 @@
                             <span id="desktopFilterCount" style="display:none;font-size:11px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#4fc3f7;padding:3px 10px;border-radius:6px;font-weight:700;margin-left:4px;"></span>
                         </div>
                     </div>
-                    <div id="desktopTotalsPanel" style="display:none;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);background:#0f1117;flex-shrink:0;">
+                    <div id="desktopTotalsPanel" style="display:none;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);background:#090c14;flex-shrink:0;">
                         <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px;">📊 Totali per trasportatore — settimana corrente</div>
                         <div style="display:flex;flex-wrap:wrap;gap:8px;">
                             ${(() => {
@@ -5340,7 +5400,7 @@
                     </div>
                     <div style="flex:1;overflow-y:auto;overflow-x:auto;" id="desktopTableScroll">
                         <table style="width:100%;border-collapse:collapse;min-width:800px;">
-                            <thead style="position:sticky;top:0;z-index:10;background:#13151f;">
+                            <thead style="position:sticky;top:0;z-index:10;background:#0c0f1a;">
                                 <tr style="border-bottom:2px solid rgba(255,255,255,0.08);">
                                     <th style="width:22px;padding:9px 4px;"></th>
                                     ${['data','trasportatore','partenza','arrivo','prodotto','note'].map((f,i) => {
@@ -5366,22 +5426,22 @@
 
             <!-- MODAL aggiungi da rotta (desktop) -->
             <div id="desktopAddModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#1a1d2e;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
                     <div style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:18px;">➕ Aggiungi alla settimana</div>
                     <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;">Seleziona giorni — clicca più volte per aggiungere più copie</div>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="desktopDayPicker">
-                        ${['lun','mar','mer','gio','ven','sab'].map(d => {
+                        ${['lun','mar','mer','gio','ven'].map(d => {
                             const label = d.charAt(0).toUpperCase()+d.slice(1);
                             return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">'
                                 + '<div style="display:flex;align-items:center;gap:0;border:2px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;" id="dpk-' + d + '">'
                                 + '<button type="button" onclick="desktopDayDec(\'' + d + '\')"'
-                                + ' style="padding:8px 9px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
+                                + ' style="padding:8px 9px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
                                 + '>−</button>'
                                 + '<button type="button" data-day="' + d + '" onclick="desktopDayInc(\'' + d + '\')"'
-                                + ' style="padding:8px 12px;background:#13151f;border:none;border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);color:var(--text-dim);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:52px;transition:all 0.15s;">'
+                                + ' style="padding:8px 12px;background:#0c0f1a;border:none;border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);color:var(--text-dim);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:52px;transition:all 0.15s;">'
                                 + label + '</button>'
                                 + '<button type="button" onclick="desktopDayInc(\'' + d + '\')"'
-                                + ' style="padding:8px 9px;background:#13151f;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
+                                + ' style="padding:8px 9px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
                                 + '>+</button>'
                                 + '</div>'
                                 + '<span id="dpk-cnt-' + d + '" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0×</span>'
@@ -5390,18 +5450,18 @@
                     </div>
                     <div style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">
                         oppure data specifica: <input type="date" id="dmDate" oninput="desktopUpdateSummary()"
-                            style="background:#13151f;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);padding:4px 8px;font-family:'Outfit',sans-serif;outline:none;margin-left:4px;">
+                            style="background:#0c0f1a;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);padding:4px 8px;font-family:'Outfit',sans-serif;outline:none;margin-left:4px;">
                     </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Trasportatore</div>
                             <input id="dmTransp" type="text" list="dtransp" placeholder="es. CEVOLO"
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Prodotto</div>
                             <input type="text" id="dmProd" placeholder="Cippato, Sfarinato... o scrivi" list="dmProdList" autocomplete="off"
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                             <datalist id="dmProdList">
                                 <option value="Cippato">
                                 <option value="Sfarinato">
@@ -5412,17 +5472,17 @@
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Partenza da</div>
                             <input id="dmFrom" type="text" list="dfrom" placeholder="es. Bientina..."
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Arrivo a</div>
                             <input id="dmTo" type="text" list="dto" placeholder="es. Ponzano..."
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div style="grid-column:1/-1;">
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Note</div>
                             <input id="dmNote" type="text" placeholder="note interne..."
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.2);border-radius:8px;cursor:pointer;" onclick="document.getElementById('dmDaConf').click()">
                             <input type="checkbox" id="dmDaConf" style="width:auto;cursor:pointer;accent-color:var(--warning);">
@@ -5431,7 +5491,7 @@
                     </div>
                     <div id="dmSummary" style="display:none;margin-bottom:12px;padding:10px 14px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:8px;font-size:13px;color:var(--success);font-weight:600;"></div>
                     <div style="display:flex;gap:10px;">
-                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
+                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
                         <button onclick="desktopConfirmAdd()" style="flex:2;padding:11px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:8px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);">✅ Aggiungi viaggi</button>
                     </div>
                 </div>
@@ -5439,27 +5499,27 @@
 
             <!-- MODAL nuova rotta manuale (desktop) -->
             <div id="desktopRouteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#1a1d2e;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:440px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:440px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
                     <div style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:18px;">⚡ Nuova rotta manuale</div>
                     <div style="display:grid;gap:12px;margin-bottom:16px;">
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Trasportatore</div>
                             <input id="drTransp" type="text" list="dtransp" placeholder="es. CEVOLO"
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Partenza da</div>
                             <input id="drFrom" type="text" list="dfrom" placeholder="es. Bientina (INCONTRATO)"
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Arrivo a</div>
                             <input id="drTo" type="text" list="dto" placeholder="es. Ponzano Romano (SICEM)"
-                                style="width:100%;padding:9px 11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                     </div>
                     <div style="display:flex;gap:10px;">
-                        <button onclick="desktopCloseRouteModal()" style="flex:1;padding:11px;background:#13151f;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
+                        <button onclick="desktopCloseRouteModal()" style="flex:1;padding:11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
                         <button onclick="desktopSaveRoute()" style="flex:2;padding:11px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:8px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💾 Salva rotta</button>
                     </div>
                 </div>
@@ -5691,20 +5751,73 @@
         };
 
         function desktopAddEmpty() {
-            // Usa la data dell'ultimo viaggio se esiste, altrimenti oggi
+            // Popup leggero per scegliere la data
             const lastTrip = trips.length > 0 ? trips[trips.length - 1] : null;
             const todayStr = new Date().toISOString().split('T')[0];
             const defaultDate = lastTrip ? lastTrip.data : todayStr;
-            trips.push({ data:defaultDate, trasportatore:'', partenza:'', arrivo:'', prodotto:'', note:'', daConfermare:false, confermato:false });
+
+            // Crea popup inline
+            var existing = document.getElementById('desktopDatePopup');
+            if (existing) existing.remove();
+
+            var popup = document.createElement('div');
+            popup.id = 'desktopDatePopup';
+            popup.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:3000;display:flex;align-items:center;justify-content:center;';
+            popup.innerHTML = '<div style="background:#111422;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--accent);border-radius:14px;padding:24px;width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">'
+                + '<div style="font-size:14px;font-weight:800;color:var(--accent);margin-bottom:16px;">📅 Data del viaggio</div>'
+                + '<input type="date" id="desktopDatePopupInput" value="' + defaultDate + '"'
+                + ' style="width:100%;padding:11px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--text);font-family:Outfit,sans-serif;font-size:15px;font-weight:700;outline:none;margin-bottom:16px;">'
+                + '<div style="display:flex;gap:10px;">'
+                + '<button onclick="desktopCloseDatePopup()" style="flex:1;padding:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:var(--text-dim);font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>'
+                + '<button onclick="desktopAddEmptyConfirm()" style="flex:2;padding:11px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:9px;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✅ Aggiungi riga</button>'
+                + '</div>'
+                + '</div>';
+            document.body.appendChild(popup);
+            popup.addEventListener('click', function(e) { if (e.target === popup) popup.remove(); });
+
+            // Focus sull'input data
+            setTimeout(function() {
+                var inp = document.getElementById('desktopDatePopupInput');
+                if (inp) inp.focus();
+            }, 50);
+        }
+
+        function desktopCloseDatePopup() {
+            var p = document.getElementById('desktopDatePopup');
+            if (p) p.remove();
+        }
+
+        function desktopAddEmptyConfirm() {
+            var inp = document.getElementById('desktopDatePopupInput');
+            var chosenDate = inp ? inp.value : new Date().toISOString().split('T')[0];
+            var popup = document.getElementById('desktopDatePopup');
+            if (popup) popup.remove();
+
+            trips.push({ data:chosenDate, trasportatore:'', partenza:'', arrivo:'', prodotto:'', note:'', daConfermare:false, confermato:false });
             saveToLocalStorage();
             renderDesktopView();
-            setTimeout(() => {
-                const tbody = document.querySelector('#desktopBody tbody');
-                if (tbody) {
-                    const last = tbody.lastElementChild;
-                    if (last) { last.scrollIntoView({behavior:'smooth',block:'center'}); last.querySelector('input')?.focus(); }
+
+            // Scrolla alla riga appena inserita e mette il focus sul campo trasportatore
+            setTimeout(function() {
+                // Trova la riga con la data scelta
+                var rows = document.querySelectorAll('#desktopBody tbody tr');
+                var targetRow = null;
+                rows.forEach(function(row) {
+                    var inp = row.querySelector('input[type="date"]');
+                    if (inp && inp.value === chosenDate && !targetRow) {
+                        // Prendi l'ultima riga con quella data (appena inserita)
+                        targetRow = row;
+                    }
+                });
+                // Prendi l'ultima riga (quella appena aggiunta)
+                if (!targetRow && rows.length) targetRow = rows[rows.length - 1];
+                if (targetRow) {
+                    targetRow.scrollIntoView({behavior:'smooth', block:'center'});
+                    // Focus sul campo trasportatore (secondo input)
+                    var inputs = targetRow.querySelectorAll('input');
+                    if (inputs.length >= 2) inputs[1].focus();
                 }
-            }, 60);
+            }, 80);
         }
 
         // ── Imposta settimana prossima: aggiunge 5 righe vuote Lun→Ven ──
@@ -5817,65 +5930,176 @@
             modal.style.display = 'flex';
         }
 
-        // ======= PICKER MOBILE =======
-        const _mobileDayCounts = {lun:0, mar:0, mer:0, gio:0, ven:0, sab:0};
+        // ======= PICKER MOBILE — chip tap =======
+        const _mobileDayCounts = {lun:0, mar:0, mer:0, gio:0, ven:0};
+        const _mdayColors = {
+            lun:'rgba(96,165,250,', mar:'rgba(52,211,153,', mer:'rgba(167,139,250,',
+            gio:'rgba(251,191,36,', ven:'rgba(244,114,182,'
+        };
 
         function _mdpkUpdate(d) {
-            var cnt  = _mobileDayCounts[d] || 0;
-            var wrap = document.getElementById('mdpk-' + d);
-            var btn  = document.getElementById('mdpk-btn-' + d);
-            var lbl  = document.getElementById('mdpk-cnt-' + d);
-            if (wrap) wrap.style.borderColor = cnt > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.1)';
-            if (btn) {
-                btn.style.background = cnt > 0 ? 'rgba(255,107,53,0.18)' : '#13151f';
-                btn.style.color      = cnt > 0 ? 'var(--accent)' : 'var(--text-dim)';
-                var labels = {lun:'Lun', mar:'Mar', mer:'Mer', gio:'Gio', ven:'Ven', sab:'Sab'};
-                btn.textContent = labels[d] + (cnt > 1 ? ' x' + cnt : '');
-            }
-            if (lbl) {
-                lbl.textContent = cnt > 0 ? cnt + 'x' : '0x';
-                lbl.style.color = cnt > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.25)';
+            var cnt = _mobileDayCounts[d] || 0;
+            var btn = document.getElementById('mdpk-btn-' + d);
+            var col = _mdayColors[d] || 'rgba(255,107,53,';
+            if (!btn) return;
+            if (cnt === 0) {
+                btn.style.background   = 'rgba(255,255,255,0.05)';
+                btn.style.borderColor  = 'rgba(255,255,255,0.1)';
+                btn.style.color        = 'var(--text-dim)';
+                btn.style.boxShadow    = 'none';
+                var labels = {lun:'Lun',mar:'Mar',mer:'Mer',gio:'Gio',ven:'Ven',sab:'Sab'};
+                btn.textContent = labels[d];
+            } else {
+                btn.style.background   = col + '0.18)';
+                btn.style.borderColor  = col + '0.6)';
+                btn.style.color        = col + '1)';
+                btn.style.boxShadow    = '0 0 10px ' + col + '0.2)';
+                var labels = {lun:'Lun',mar:'Mar',mer:'Mer',gio:'Gio',ven:'Ven',sab:'Sab'};
+                btn.textContent = cnt > 1 ? labels[d] + ' x' + cnt : labels[d];
             }
             mobileDayUpdateSummary();
         }
 
-        function mobileDayInc(d) {
+        // Aggiorna le date reali sui chip quando cambia la data principale
+        function mdpkUpdateFromDate() {
+            var dataInput = document.getElementById('data');
+            var val = dataInput ? dataInput.value : '';
+            if (!val) {
+                ['lun','mar','mer','gio','ven'].forEach(function(d) {
+                    var el = document.getElementById('mdpk-date-' + d);
+                    if (el) el.textContent = '—';
+                    var btn = document.getElementById('mdpk-btn-' + d);
+                    if (btn && !(_mobileDayCounts[d] > 0)) {
+                        btn.style.borderColor = 'rgba(255,255,255,0.08)';
+                        btn.style.background  = 'rgba(255,255,255,0.04)';
+                        btn.style.color       = 'rgba(255,255,255,0.3)';
+                        btn.removeAttribute('data-primary');
+                    }
+                });
+                mobileDayUpdateSummary();
+                return;
+            }
+
+            var ref = new Date(val + 'T12:00:00');
+            var refDayNum = ref.getDay(); // 0=dom,1=lun,...
+            var dayNums   = {lun:1, mar:2, mer:3, gio:4, ven:5};
+            var dayNames  = ['dom','lun','mar','mer','gio','ven','sab'];
+            var refDayKey = dayNames[refDayNum];
+
+            Object.keys(dayNums).forEach(function(d) {
+                var targetDow = dayNums[d];
+
+                // Calcola la data del giorno target
+                // Partendo dalla data di riferimento, trova il giorno target
+                // Se il giorno è PRIMA del ref nella settimana → settimana SUCCESSIVA
+                var diff = targetDow - refDayNum;
+                if (diff < 0) diff += 7; // sempre in avanti
+
+                var dt = new Date(ref);
+                dt.setDate(ref.getDate() + diff);
+
+                var dd = String(dt.getDate()).padStart(2,'0');
+                var mm = String(dt.getMonth()+1).padStart(2,'0');
+
+                var el = document.getElementById('mdpk-date-' + d);
+                if (el) el.textContent = dd + '/' + mm;
+
+                var btn = document.getElementById('mdpk-btn-' + d);
+                if (!btn) return;
+
+                if (d === refDayKey && diff === 0) {
+                    // Giorno principale — già inserito come data, evidenziato
+                    btn.style.borderColor = 'rgba(255,107,53,0.3)';
+                    btn.style.background  = 'rgba(255,107,53,0.06)';
+                    btn.style.color       = 'rgba(255,107,53,0.45)';
+                    btn.style.cursor      = 'default';
+                    btn.setAttribute('data-primary', '1');
+                } else {
+                    btn.removeAttribute('data-primary');
+                    btn.style.cursor = 'pointer';
+                    if (!(_mobileDayCounts[d] > 0)) {
+                        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+                        btn.style.background  = 'rgba(255,255,255,0.04)';
+                        btn.style.color       = 'rgba(255,255,255,0.55)';
+                    }
+                }
+            });
+            mobileDayUpdateSummary();
+        }
+
+        // Tap: 0→1, 1→2, 2→3...
+        function mobileDayTap(d) {
             _mobileDayCounts[d] = (_mobileDayCounts[d] || 0) + 1;
             _mdpkUpdate(d);
         }
-
+        function mobileDayInc(d) { mobileDayTap(d); }
         function mobileDayDec(d) {
             _mobileDayCounts[d] = Math.max(0, (_mobileDayCounts[d] || 0) - 1);
             _mdpkUpdate(d);
         }
+        // Long press per azzerare un giorno
+        var _mdpkLongPress = {};
+        document.addEventListener('DOMContentLoaded', function() {
+            ['lun','mar','mer','gio','ven','sab'].forEach(function(d) {
+                var btn = document.getElementById('mdpk-btn-' + d);
+                if (!btn) return;
+                btn.addEventListener('touchstart', function() {
+                    _mdpkLongPress[d] = setTimeout(function() {
+                        _mobileDayCounts[d] = 0;
+                        _mdpkUpdate(d);
+                    }, 600);
+                }, {passive:true});
+                btn.addEventListener('touchend', function() { clearTimeout(_mdpkLongPress[d]); }, {passive:true});
+            });
+        });
 
         function mobileDayUpdateSummary() {
             var specificDate = document.getElementById('data') ? document.getElementById('data').value : '';
-            var labels = {lun:'Lun', mar:'Mar', mer:'Mer', gio:'Gio', ven:'Ven', sab:'Sab'};
+            var labels = {lun:'Lun',mar:'Mar',mer:'Mer',gio:'Gio',ven:'Ven'};
             var parts = []; var total = 0;
+
+            // Giorno principale (data campo)
+            if (specificDate) {
+                var dt0 = new Date(specificDate+'T12:00:00');
+                var dd0 = String(dt0.getDate()).padStart(2,'0');
+                var mm0 = String(dt0.getMonth()+1).padStart(2,'0');
+                parts.push(dd0+'/'+mm0);
+                total += 1;
+            }
+
+            // Giorni extra selezionati dai chip
             Object.keys(_mobileDayCounts).forEach(function(d) {
                 var cnt = _mobileDayCounts[d];
-                if (cnt > 0) { parts.push(labels[d] + (cnt > 1 ? ' x' + cnt : '')); total += cnt; }
+                if (cnt > 0) {
+                    var dateEl = document.getElementById('mdpk-date-' + d);
+                    var dateStr = (dateEl && dateEl.textContent !== '—') ? dateEl.textContent : labels[d];
+                    parts.push(dateStr + (cnt > 1 ? ' x'+cnt : ''));
+                    total += cnt;
+                }
             });
-            if (specificDate) { total += 1; var dt = new Date(specificDate + 'T12:00:00'); parts.push(dt.toLocaleDateString('it-IT')); }
+
             var s = document.getElementById('mobileDaySummary');
             if (!s) return;
-            if (total === 0) { s.style.display = 'none'; return; }
+            if (total === 0) { s.style.display='none'; return; }
             s.style.display = 'block';
-            s.textContent = 'Verranno aggiunti ' + total + ' viaggio' + (total > 1 ? 'i' : '') + ': ' + parts.join(', ');
+            s.textContent = total + ' viaggio' + (total>1?'i':'') + ': ' + parts.join(', ');
         }
 
         function _mdpkReset() {
             Object.keys(_mobileDayCounts).forEach(function(d) {
                 _mobileDayCounts[d] = 0;
                 _mdpkUpdate(d);
+                var dateEl = document.getElementById('mdpk-date-' + d);
+                if (dateEl) dateEl.textContent = '—';
+                var btn = document.getElementById('mdpk-btn-' + d);
+                if (btn) { btn.style.borderColor='rgba(255,255,255,0.08)'; btn.style.background='rgba(255,255,255,0.04)'; btn.style.color='rgba(255,255,255,0.2)'; btn.removeAttribute('data-primary'); }
             });
             var dataInput = document.getElementById('data');
             if (dataInput) dataInput.value = '';
         }
 
         // Contatori per ogni giorno nel picker
-        const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0, sab:0};
+        const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0};
 
         function _dpkUpdate(d) {
             const cnt = _dayPickerCounts[d] || 0;
@@ -6625,6 +6849,7 @@
                     // 7. Sostituisci o aggiungi i viaggi
                     if (importMode === 'replace') {
                         trips = nuoviViaggi;
+                        trips.sort((a,b) => { const da=a.data?new Date(a.data+'T12:00:00'):new Date(0); const db=b.data?new Date(b.data+'T12:00:00'):new Date(0); return da-db; });
                         if (titolo) {
                             weekTitle = titolo;
                             localStorage.setItem('weekTitle', titolo);
@@ -6633,6 +6858,7 @@
                         }
                     } else {
                         trips = trips.concat(nuoviViaggi);
+                        trips.sort((a,b) => { const da=a.data?new Date(a.data+'T12:00:00'):new Date(0); const db=b.data?new Date(b.data+'T12:00:00'):new Date(0); return da-db; });
                     }
 
                     // 8. Salva e aggiorna UI
@@ -7419,6 +7645,11 @@
         async function _applyDriveData(data, silent) {
             if (data.trips && data.trips.length > 0) {
                 trips = data.trips;
+                trips.sort((a,b) => {
+                    const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                    const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                    return da - db;
+                });
             }
             if (data.weekTitle) {
                 weekTitle = data.weekTitle;
@@ -7605,6 +7836,7 @@
             }
             // Ripristina la settimana selezionata
             trips = JSON.parse(JSON.stringify(week.trips));
+            trips.sort((a,b) => { const da=a.data?new Date(a.data+'T12:00:00'):new Date(0); const db=b.data?new Date(b.data+'T12:00:00'):new Date(0); return da-db; });
             weekTitle = week.title;
             // Rimuovi dall'archivio quella ripristinata
             archive.splice(idx, 1);
@@ -7904,7 +8136,7 @@
         background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);
         z-index:9000;align-items:center;justify-content:center;">
         <div style="
-            background:#1a1d2e;border:1px solid rgba(255,255,255,0.1);
+            background:#111422;border:1px solid rgba(255,255,255,0.1);
             border-top:3px solid #ffd23f;border-radius:16px;
             padding:28px 26px;width:520px;max-width:95vw;
             box-shadow:0 24px 64px rgba(0,0,0,0.7);font-family:'Outfit',sans-serif;">
@@ -7975,5 +8207,19 @@
         </div>
     </div>
 
+    <script>
+        // Registrazione Service Worker per PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(function(reg) {
+                        console.log('✅ SW registrato:', reg.scope);
+                    })
+                    .catch(function(err) {
+                        console.log('SW errore:', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
