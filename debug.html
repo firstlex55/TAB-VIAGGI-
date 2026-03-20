@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debug Ordine Viaggi</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #070a10; font-family: monospace; color: #dde3ed; padding: 16px; font-size: 13px; }
+h2 { color: #ff6b35; margin-bottom: 12px; font-size: 14px; }
+.row { padding: 6px 10px; margin-bottom: 4px; border-radius: 6px; background: #161b2e; }
+.row.ok { border-left: 3px solid #06d6a0; }
+.row.err { border-left: 3px solid #ff4444; background: rgba(255,68,68,0.1); }
+.date { color: #60a5fa; font-weight: 700; }
+.name { color: #dde3ed; }
+.idx { color: rgba(255,255,255,0.3); margin-right: 8px; }
+button { margin: 8px 4px; padding: 10px 16px; border-radius: 8px; border: none; font-family: monospace; font-size: 13px; font-weight: 700; cursor: pointer; }
+.btn-fix { background: #ff6b35; color: white; }
+.btn-reload { background: #06d6a0; color: #070a10; }
+#status { margin-top: 12px; padding: 10px; border-radius: 8px; font-weight: 700; display: none; }
+.ok-status { background: rgba(6,214,160,0.15); color: #06d6a0; border: 1px solid rgba(6,214,160,0.3); }
+.err-status { background: rgba(255,68,68,0.15); color: #ff6666; border: 1px solid rgba(255,68,68,0.3); }
+</style>
+</head>
+<body>
+
+<h2>🔍 Debug ordine viaggi in localStorage</h2>
+
+<div id="output">Caricamento...</div>
+
+<div>
+    <button class="btn-fix" onclick="fixAndSave()">🔃 FIX — Riordina e salva</button>
+    <button class="btn-reload" onclick="location.reload()">↺ Ricarica</button>
+</div>
+<div id="status"></div>
+
+<script>
+function load() {
+    const raw = localStorage.getItem('viaggiLogistica');
+    const out = document.getElementById('output');
+
+    if (!raw) {
+        out.innerHTML = '<div class="row err">❌ Nessun dato in localStorage (chiave: viaggiLogistica)</div>';
+        return;
+    }
+
+    let trips;
+    try { trips = JSON.parse(raw); } catch(e) {
+        out.innerHTML = '<div class="row err">❌ JSON non valido: ' + e.message + '</div>';
+        return;
+    }
+
+    let html = '<div style="color:rgba(255,255,255,0.4);margin-bottom:8px;">' + trips.length + ' viaggi trovati</div>';
+    let prevDate = null;
+    let hasErrors = false;
+
+    trips.forEach((t, i) => {
+        const dateOk = !prevDate || t.data >= prevDate;
+        if (!dateOk) hasErrors = true;
+        const cls = dateOk ? 'ok' : 'err';
+        const warn = dateOk ? '' : ' ⚠️ FUORI ORDINE';
+        html += '<div class="row ' + cls + '">'
+            + '<span class="idx">' + (i+1) + '.</span>'
+            + '<span class="date">' + (t.data || '??') + '</span>'
+            + ' <span class="name">' + (t.trasportatore || '—') + '</span>'
+            + ' → ' + (t.arrivo || '—')
+            + '<span style="color:#ff4444;">' + warn + '</span>'
+            + '</div>';
+        prevDate = t.data;
+    });
+
+    if (!hasErrors) {
+        html += '<div style="color:#06d6a0;margin-top:8px;font-weight:700;">✅ Già in ordine cronologico corretto!</div>';
+    } else {
+        html += '<div style="color:#ff6b35;margin-top:8px;font-weight:700;">❌ Trovati viaggi fuori ordine — premi FIX</div>';
+    }
+
+    out.innerHTML = html;
+}
+
+function fixAndSave() {
+    const raw = localStorage.getItem('viaggiLogistica');
+    if (!raw) return;
+    const trips = JSON.parse(raw);
+    trips.sort((a,b) => {
+        const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+        const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+        return da - db;
+    });
+    localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
+    // Resetta anche appVersion per forzare il re-sort al prossimo avvio
+    localStorage.removeItem('appVersion');
+    const s = document.getElementById('status');
+    s.style.display = 'block';
+    s.className = 'ok-status';
+    s.textContent = '✅ Riordinato e salvato! Torna all\'app e ricarica.';
+    setTimeout(load, 300);
+}
+
+load();
+</script>
+</body>
+</html>
