@@ -88,13 +88,13 @@
             justify-content: center;
         }
         .top-bar-logo-img {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
             object-fit: cover;
             filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
             border: 1.5px solid rgba(255,107,53,0.5);
-            box-shadow: 0 0 14px rgba(255,107,53,0.12);
+            box-shadow: 0 0 16px rgba(255,107,53,0.15);
         }
 
         .top-bar-titles {
@@ -144,16 +144,15 @@
         .logo-viaggi {
             display: block;
             font-weight: 900;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             font-size: 30px;
-            background: linear-gradient(90deg, #ff9060 0%, #ffcc88 45%, #ff6b35 100%);
+            background: linear-gradient(90deg, #ff7a40 0%, #ff6b35 50%, #ff5520 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-transform: uppercase;
             line-height: 1;
-            text-shadow: none;
-            filter: drop-shadow(0 0 12px rgba(255,107,53,0.45));
+            filter: drop-shadow(0 0 14px rgba(255,107,53,0.5));
         }
 
         /* Riepilogo compatto nell'header */
@@ -183,9 +182,10 @@
         /* Data — completa, ben visibile */
         .week-info {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: rgba(255,255,255,0.75);
-            letter-spacing: 0.3px;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.82);
+            letter-spacing: 0.5px;
             margin-top: 5px;
             display: block;
             white-space: nowrap;
@@ -1023,7 +1023,8 @@
         }
 
         /* Today's Trips Banner */
-        .today-banner {
+        .today-banner { display: none !important; }
+        ._today-banner-orig {
             background: linear-gradient(135deg, #1e1a14 0%, #1a1c28 100%);
             border: 1px solid rgba(255,107,53,0.35);
             border-left: 3px solid var(--accent);
@@ -3486,33 +3487,25 @@
             <div class="top-bar-truck"><img src="logo.png" class="top-bar-logo-img" alt="Pro Trasporti"></div>
             <div class="top-bar-titles">
                 <div class="logo">
-                    <div style="line-height:1; margin-bottom:3px;">
+                    <div style="line-height:1; margin-bottom:2px;">
                         <span class="logo-planning-text">Planning</span>
                         <span class="logo-badge">Logistica</span>
                     </div>
                     <span class="logo-viaggi">Viaggi</span>
                 </div>
                 <div class="week-info" id="weekInfo" onclick="editWeekTitle()" style="cursor:pointer;" title="Clicca per modificare">
-                    Settimana 8/2026 (Lun. 16/02 - Ven. 21/02)
+                    Lun 16/03 &mdash; Ven 20/03
                 </div>
-                <div class="header-summary" id="headerSummary"></div>
             </div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-            <button onclick="fixSortOrder()" title="Riordina cronologicamente"
-                style="padding:5px 10px;background:rgba(96,165,250,0.10);border:1px solid rgba(96,165,250,0.3);border-radius:8px;color:#60a5fa;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;">
-                🔃 Ordina
-            </button>
-            <div id="driveStatus" style="display:none;text-align:right;">
-                <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
-                    <span id="driveStatusDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#555;box-shadow:0 0 5px rgba(6,214,160,0.4);"></span>
-                    <span id="driveStatusText" style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.3px;">Drive</span>
-                </div>
+        <div id="driveStatus" style="display:none;flex-shrink:0;text-align:right;">
+            <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
+                <span id="driveStatusDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#555;box-shadow:0 0 5px rgba(6,214,160,0.4);"></span>
+                <span id="driveStatusText" style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.3px;">Drive</span>
             </div>
         </div>
     </div>
 
-    <div id="_debugOrder" style="background:#ff0;color:#000;font-size:10px;padding:4px 8px;font-family:monospace;word-break:break-all;display:block;z-index:999;position:relative;"></div>
     <div class="week-progress-bar" id="weekProgressBar">
         <div class="week-seg future" id="wseg-1" onclick="filterByWeekDay('lun')" title="Filtra Lun"><div class="week-seg-top-bar"></div><span class="week-seg-label">Lun</span><span class="week-seg-count" id="wseg-cnt-1"></span><span class="week-seg-pct" id="wseg-pct-1"></span></div>
         <div class="week-seg future" id="wseg-2" onclick="filterByWeekDay('mar')" title="Filtra Mar"><div class="week-seg-top-bar"></div><span class="week-seg-label">Mar</span><span class="week-seg-count" id="wseg-cnt-2"></span><span class="week-seg-pct" id="wseg-pct-2"></span></div>
@@ -3524,8 +3517,8 @@
     <!-- Barra navigazione viste per PC -->
     <div class="pc-view-switcher" id="pcViewSwitcher">
         <span style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;margin-right:4px;">VISTA</span>
-        <button class="pcvs-btn" onclick="switchView('card',this)" data-pcview="card">🃏 Card</button>
-        <button class="pcvs-btn" onclick="switchView('medium',this)" data-pcview="medium">☰ Lista</button>
+        <button class="pcvs-btn" onclick="switchView('card',this)" data-pcview="card">📅 Oggi</button>
+        <button class="pcvs-btn" onclick="switchView('medium',this)" data-pcview="medium">👤 Trasp.</button>
         <button class="pcvs-btn active" onclick="switchView('compact',this)" data-pcview="compact">▤ Rapida</button>
         <button class="pcvs-btn" onclick="switchView('desktop',this)" data-pcview="desktop">🖥 PC</button>
         <button class="pcvs-add" onclick="toggleAddForm()">＋ Aggiungi</button>
@@ -3535,15 +3528,10 @@
         <div id="statusMessage" style="display:none;"></div>
 
         <!-- Today Banner — subito dopo il riepilogo -->
-        <div id="todayBanner" class="today-banner">
-            <div class="today-banner-top">
-                <div>
-                    <div class="today-banner-title">📅 Viaggi di Oggi</div>
-                    <div class="today-banner-subtitle" id="todayDate"></div>
-                </div>
-                <div class="today-banner-count" id="todayCount">0</div>
-            </div>
-            <div id="todayTripsList"></div>
+        <div id="todayBanner" style="display:none!important;">
+            <div id="todayDate" style="display:none;"></div>
+            <div id="todayCount" style="display:none;"></div>
+            <div id="todayTripsList" style="display:none;"></div>
         </div>
 
         <!-- Filtri + Ricerca -->
@@ -3796,9 +3784,6 @@
                 <button class="btn btn-secondary" onclick="clearData()" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;">
                     🗑️ Cancella tutto
                 </button>
-                <button onclick="fixSortOrder()" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;border-radius:12px;border:1px solid rgba(96,165,250,0.4);background:rgba(96,165,250,0.08);color:#60a5fa;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-                    🔃 Riordina cronologicamente
-                </button>
             </div>
         </div>
 
@@ -3974,7 +3959,7 @@
                 <button class="modal-close" onclick="closeWeekTitleModal()">×</button>
             </div>
             
-            <input type="text" id="weekTitleInput" class="week-title-input" placeholder="Es. Settimana 8/2026 (Lun. 16/02 - Ven. 21/02)">
+            <input type="text" id="weekTitleInput" class="week-title-input" placeholder="Es. Lun 23/03 — Ven 27/03">
             
             <div class="week-title-suggestions">
                 <div class="week-title-suggestions-label">Suggerimenti rapidi:</div>
@@ -4037,7 +4022,7 @@
         let importMode = 'add';
         // Helper sicuro: imposta textContent solo se l'elemento esiste
         function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
-        let weekTitle = 'Settimana 8/2026 (Lun. 16/02 - Ven. 21/02)';
+        let weekTitle = 'Lun 23/03 — Ven 27/03';
         
         
         let partenzaList = ["Bientina (INCONTRATO)", "S.Felice (CAI-BF)", "Dosolo (ARDENGHI)", "Grezzana (TACCHELLA)", "Mercatino (COVI)", "Tirano (ILT)", "Jolanda (Bonifiche)", "Mezzocorona (VENDER)", "Castel S. Nicolò (Tosco imballaggi)"];
@@ -4124,7 +4109,7 @@
             filterApply();
             updateStats();
             updateWeekProgress();
-            renderTodayBanner();
+            // // renderTodayBanner(); // rimosso — vista Oggi nel nav
             updateWeekSummary();
             updateHeaderSummary();
             setTimeout(markTodayCards, 300);
@@ -4133,7 +4118,9 @@
                 filterPopulateDropdowns();
             }, 100);
             // Ripristina vista preferita (default: compact)
-            const savedView = localStorage.getItem('preferredView') || 'compact';
+            var _sv = localStorage.getItem('preferredView') || 'compact';
+            // Se era salvata 'card' (vecchia vista), passa a 'compact'
+            var savedView = _sv === 'card_old_unused' ? 'compact' : _sv;
             switchView(savedView);
             // Auto-riconnessione Drive silenziosa se già connesso in precedenza
             if (localStorage.getItem('driveConnected')) {
@@ -4783,7 +4770,7 @@
             if (_badge) _badge.textContent = _tripCountText;
 
             // Aggiorna banner oggi
-            renderTodayBanner();
+            // renderTodayBanner();
             updateWeekSummary();
 
             // Da Confermare badge
@@ -4880,88 +4867,139 @@
         }
 
         function renderCardView() {
-            const container = document.getElementById('cardView');
+            var container = document.getElementById('cardView');
             if (!container) return;
-            const hasFilters = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
-            const displayTrips = hasFilters ? filteredTrips : trips;
-            
-            if (displayTrips.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">${searchQuery ? '🔍' : '📭'}</div>
-                        <div>${searchQuery ? 'Nessun viaggio trovato' : 'Nessun viaggio programmato'}</div>
-                    </div>
-                `;
-                return;
+
+            var today = new Date().toISOString().split('T')[0];
+            var tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            var dayAfter  = new Date(Date.now() + 2*86400000).toISOString().split('T')[0];
+
+            var todayTrips    = trips.filter(function(t){ return t.data === today; });
+            var tomorrowTrips = trips.filter(function(t){ return t.data === tomorrow; });
+            var laterTrips    = trips.filter(function(t){ return t.data > tomorrow && t.data <= dayAfter; });
+
+            var dayNames = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+            var d = new Date();
+            var todayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+
+            var html = '';
+
+            // ── OGGI ──
+            html += '<div style="margin-bottom:16px;">';
+            html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+            html += '<div style="background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:800;color:#ff6b35;">';
+            html += '📅 ' + todayLabel + '</div>';
+            html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,53,0.3),transparent);"></div>';
+            html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.3);">' + todayTrips.length + ' viaggio' + (todayTrips.length!==1?'i':'') + '</div>';
+            html += '</div>';
+
+            if (todayTrips.length === 0) {
+                html += '<div style="text-align:center;padding:28px 16px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px dashed rgba(255,255,255,0.08);">';
+                html += '<div style="font-size:32px;margin-bottom:8px;">🎉</div>';
+                html += '<div style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.5);">Nessun viaggio oggi</div>';
+                html += '</div>';
+            } else {
+                todayTrips.forEach(function(trip) {
+                    html += _renderTodayCard(trip, true);
+                });
+            }
+            html += '</div>';
+
+            // ── DOMANI ──
+            if (tomorrowTrips.length > 0) {
+                var dtom = new Date(tomorrow + 'T12:00:00');
+                var tomLabel = dayNames[dtom.getDay()] + ' ' + String(dtom.getDate()).padStart(2,'0') + '/' + String(dtom.getMonth()+1).padStart(2,'0');
+                html += '<div style="margin-bottom:16px;">';
+                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+                html += '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);">';
+                html += 'Domani · ' + tomLabel + '</div>';
+                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
+                html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);">' + tomorrowTrips.length + ' viaggio' + (tomorrowTrips.length!==1?'i':'') + '</div>';
+                html += '</div>';
+                tomorrowTrips.forEach(function(trip) {
+                    html += _renderTodayCard(trip, false);
+                });
+                html += '</div>';
             }
 
-            container.innerHTML = (() => {
-                // Raggruppa per giorno — forza ordine cronologico
-                const dayKeys  = ['dom','lun','mar','mer','gio','ven','sab'];
-                const dayFull  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-                const grouped  = {};
-                const sortedDisplay = [...displayTrips].sort((a,b) => {
-                    const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
-                    const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
-                    return da - db;
+            // ── PROSSIMI (dopodomani) ──
+            if (laterTrips.length > 0) {
+                html += '<div>';
+                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+                html += '<div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;">Prossimi</div>';
+                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.05),transparent);"></div>';
+                html += '</div>';
+                laterTrips.forEach(function(trip) {
+                    html += _renderTodayCard(trip, false);
                 });
-                sortedDisplay.forEach(trip => {
-                    if (!grouped[trip.data]) grouped[trip.data] = [];
-                    grouped[trip.data].push(trip);
-                });
-                return Object.keys(grouped).sort().map(date => {
-                    const dayTrips = grouped[date];
-                    const d = new Date(date + 'T12:00:00');
-                    const dk = dayKeys[d.getDay()];
-                    const dl = dayFull[d.getDay()];
-                    const dt = d.getDate() + '/' + (d.getMonth()+1);
-                    const header = `<div class="day-group-header ${dk}">
-                        <div class="day-group-left">
-                            <div class="day-badge">
-                                <span class="day-badge-num">${d.getDate()}</span>
-                                <span class="day-badge-name">${dk}</span>
-                            </div>
-                            <div class="day-group-info">
-                                <div class="day-group-name-full">${dl}</div>
-                                <div class="day-group-separator"></div>
-                                <div class="day-group-count">${dayTrips.length} viaggio${dayTrips.length !== 1 ? 'i' : ''}</div>
-                            </div>
-                        </div>
-                    </div>`;
-                    const cards = dayTrips.map(trip => {
-                        const actualIndex = trips.indexOf(trip);
-                        const colorClass = getTransporterColorClass(trip.trasportatore);
-                        const transporterKey = getTransporterKey(trip.trasportatore);
-                        return `
-                        <div class="trip-card" data-transporter="${transporterKey}" data-date="${trip.data}" onclick="toggleCard(this, event)">
-                            <div class="trip-header">
-                                <div class="trip-date">${formatDateDisplay(trip.data)}</div>
-                            </div>
-                            <div class="trip-transporter ${colorClass}" title="${trip.trasportatore}">${highlightText(shortTransporter(trip.trasportatore), searchQuery)}</div>
-                            ${trip.prodotto ? `<div style="font-size: 12px; color: #aaa; margin-top: 4px;">📦 ${trip.prodotto}</div>` : ''}
-                            <div class="trip-route">
-                                <div class="trip-route-row">
-                                    <span class="trip-route-icon">📍</span>
-                                    <span class="trip-route-text" title="${trip.partenza}">${highlightText(shortLocation(trip.partenza), searchQuery)}</span>
-                                </div>
-                                <div class="trip-route-sep"></div>
-                                <div class="trip-route-row">
-                                    <span class="trip-route-icon" style="color:var(--success);opacity:0.8;">🎯</span>
-                                    <span class="trip-route-text" title="${trip.arrivo}" style="color:var(--success);">${highlightText(shortLocation(trip.arrivo), searchQuery)}</span>
-                                </div>
-                            </div>
-                            ${trip.note ? `<div style="font-size: 11px; color: #888; margin-top: 6px; font-style: italic;">💬 ${trip.note}</div>` : ''}
-                            ${trip.daConfermare ? `<div class="trip-status">⚠️ Da confermare</div>` : ''}
-                            <div class="trip-actions">
-                                <button class="btn btn-duplicate" onclick="duplicateTrip(${actualIndex})">📋 Duplica</button>
-                                <button class="btn btn-edit" onclick="editTrip(${actualIndex})">✏️ Modifica</button>
-                                <button class="btn btn-danger" onclick="deleteTrip(${actualIndex})">🗑️ Elimina</button>
-                            </div>
-                        </div>`;
-                    }).join('');
-                    return header + cards;
-                }).join('');
-            })();
+                html += '</div>';
+            }
+
+            // Se non c'è nessun viaggio nei prossimi 3 giorni mostra settimana corrente
+            if (todayTrips.length === 0 && tomorrowTrips.length === 0 && laterTrips.length === 0) {
+                var weekTrips = trips.filter(function(t){ return t.data >= today; }).slice(0, 8);
+                if (weekTrips.length > 0) {
+                    html += '<div style="margin-top:8px;">';
+                    html += '<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Prossimi in settimana</div>';
+                    weekTrips.forEach(function(trip) {
+                        html += _renderTodayCard(trip, false);
+                    });
+                    html += '</div>';
+                }
+            }
+
+            container.innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">📭</div><div>Nessun viaggio programmato</div></div>';
+        }
+
+        function _renderTodayCard(trip, isToday) {
+            var idx = trips.indexOf(trip);
+            var colorClass = getTransporterColorClass(trip.trasportatore);
+            var tKey = getTransporterKey(trip.trasportatore);
+            var fromName = (trip.partenza||'').split('(')[0].trim();
+            var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+            var toName   = (trip.arrivo||'').split('(')[0].trim();
+            var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+
+            var opacity = isToday ? '1' : '0.65';
+            var scale   = isToday ? 'scale(1)' : 'scale(0.98)';
+
+            var card = '<div onclick="editTrip(' + idx + ')" '
+                + 'style="background:var(--secondary);border-radius:14px;padding:14px 16px;'
+                + 'margin-bottom:8px;cursor:pointer;opacity:' + opacity + ';transform:' + scale + ';'
+                + 'border-left:4px solid;transition:opacity 0.15s;" '
+                + 'class="trip-card" data-transporter="' + tKey + '">';
+
+            // Riga 1: trasportatore + badge stato + data
+            card += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
+            card += '<span class="trip-transporter ' + colorClass + '" style="font-size:11px;">' + (trip.trasportatore||'—') + '</span>';
+            if (trip.daConfermare) card += '<span style="font-size:9px;background:var(--warning);color:#000;padding:2px 7px;border-radius:4px;font-weight:800;">⚠️ DA CONF.</span>';
+            if (trip.confermato)   card += '<span style="font-size:11px;color:var(--success);font-weight:800;">✓</span>';
+            card += '<div style="flex:1;"></div>';
+            card += '</div>';
+
+            // Riga 2: rotta compatta su una riga
+            card += '<div style="display:flex;align-items:center;gap:8px;">';
+            card += '<div style="flex:1;min-width:0;">';
+            card += '<div style="font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + fromName + '</div>';
+            if (fromCode) card += '<div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:0.3px;">' + fromCode + '</div>';
+            card += '</div>';
+            card += '<div style="font-size:20px;color:var(--accent);font-weight:900;flex-shrink:0;">→</div>';
+            card += '<div style="flex:1;min-width:0;text-align:right;">';
+            card += '<div style="font-size:14px;font-weight:700;color:var(--success);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + toName + '</div>';
+            if (toCode) card += '<div style="font-size:10px;font-weight:700;color:rgba(6,214,160,0.6);letter-spacing:0.3px;">' + toCode + '</div>';
+            card += '</div>';
+            card += '</div>';
+
+            // Riga 3: prodotto + note (se presenti)
+            if (trip.prodotto || trip.note) {
+                card += '<div style="margin-top:8px;display:flex;gap:8px;align-items:center;">';
+                if (trip.prodotto) card += '<span style="font-size:11px;color:var(--text-dim);">📦 ' + trip.prodotto + '</span>';
+                if (trip.note)     card += '<span style="font-size:11px;color:var(--text-dim);opacity:0.7;">💬 ' + trip.note + '</span>';
+                card += '</div>';
+            }
+
+            card += '</div>';
+            return card;
         }
 
         function renderCompactView() {
@@ -4988,11 +5026,6 @@
                 if (!grouped[trip.data]) grouped[trip.data] = [];
                 grouped[trip.data].push(trip);
             });
-
-            // DEBUG — mostra ordine chiavi
-            var debugKeys = Object.keys(grouped).sort();
-            var debugEl = document.getElementById('_debugOrder');
-            if (debugEl) debugEl.textContent = 'Ordine render: ' + debugKeys.join(', ');
 
             let html = '';
             Object.keys(grouped).sort().forEach(date => {
@@ -5066,55 +5099,81 @@
             container.innerHTML = html;
         }
 
-                function renderMediumView() {
-            const container = document.getElementById('mediumBody');
-            const hasFilters = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
-            const displayTrips = hasFilters ? filteredTrips : trips;
+        function renderMediumView() {
+            var container = document.getElementById('mediumBody');
+            var hasFilters = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
+            var displayTrips = hasFilters ? filteredTrips : trips;
 
             if (displayTrips.length === 0) {
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📭</div><div>Nessun viaggio trovato</div></div>`;
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><div>Nessun viaggio trovato</div></div>';
                 return;
             }
 
-            container.innerHTML = displayTrips.map(trip => {
-                const actualIndex = trips.indexOf(trip);
-                const colorClass = getTransporterColorClass(trip.trasportatore);
-                const transporterKey = getTransporterKey(trip.trasportatore);
-                const date = new Date(trip.data);
-                const days = ['D', 'L', 'MA', 'ME', 'G', 'V', 'S'];
-                const shortDate = `${days[date.getDay()]} ${date.getDate()}/${date.getMonth()+1}`;
+            var dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+            var byTransporter = {};
+            [...displayTrips].sort(function(a,b) {
+                var ta = (a.trasportatore||'').toUpperCase();
+                var tb = (b.trasportatore||'').toUpperCase();
+                return ta < tb ? -1 : ta > tb ? 1 : 0;
+            }).forEach(function(trip) {
+                var k = trip.trasportatore || '(senza nome)';
+                if (!byTransporter[k]) byTransporter[k] = [];
+                byTransporter[k].push(trip);
+            });
 
-                const fromName = trip.partenza.split('(')[0].trim();
-                const fromCode = (trip.partenza.match(/\(([^)]+)\)/) || [])[1] || '';
-                const toName = trip.arrivo.split('(')[0].trim();
-                const toCode = (trip.arrivo.match(/\(([^)]+)\)/) || [])[1] || '';
+            var html = '';
+            Object.keys(byTransporter).sort().forEach(function(tName) {
+                var tTrips = byTransporter[tName];
+                var colorClass = getTransporterColorClass(tName);
+                var tKey = getTransporterKey(tName);
 
-                const from = fromName.length > 20 ? fromName.substring(0, 19) + '…' : fromName;
-                const to = toName.length > 20 ? toName.substring(0, 19) + '…' : toName;
+                // Header trasportatore
+                html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (html===''?'4px':'22px') + ' 0 8px;">';
+                html += '<span class="compact-transporter ' + colorClass + '" style="font-size:13px;padding:6px 14px;">' + tName + '</span>';
+                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-dim);">' + tTrips.length + ' viaggio' + (tTrips.length!==1?'i':'') + '</span>';
+                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
+                html += '</div>';
 
-                return `
-                <div class="medium-row" data-transporter="${transporterKey}" onclick="editTrip(${actualIndex})">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <div class="medium-date">${shortDate}</div>
-                        <span class="medium-transporter ${colorClass}">${trip.trasportatore}</span>
-                        <div class="medium-badges">
-                            ${trip.daConfermare ? '<span style="font-size:10px;background:var(--warning);color:#000;padding:1px 6px;border-radius:4px;font-weight:700;">⚠️</span>' : ''}
-                            ${trip.note ? '<span title="' + trip.note + '" style="font-size:12px;">💬</span>' : ''}
-                        </div>
-                    </div>
-                    <div class="medium-route">
-                        <div class="medium-route-from">
-                            <div class="medium-route-place" title="${trip.partenza}">${from}</div>
-                            ${fromCode ? `<div class="medium-route-code">${fromCode}</div>` : ''}
-                        </div>
-                        <div class="medium-arrow">→</div>
-                        <div class="medium-route-to">
-                            <div class="medium-route-place" title="${trip.arrivo}">${to}</div>
-                            ${toCode ? `<div class="medium-route-code" style="color:var(--success);">${toCode}</div>` : ''}
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
+                // Righe viaggio ordinate per data
+                [...tTrips].sort(function(a,b){ return (a.data||'') < (b.data||'') ? -1 : 1; })
+                .forEach(function(trip) {
+                    var actualIndex = trips.indexOf(trip);
+                    var d = new Date((trip.data||'') + 'T12:00:00');
+                    var dd = String(d.getDate()).padStart(2,'0');
+                    var mm = String(d.getMonth()+1).padStart(2,'0');
+                    var dayLabel = dayNames[d.getDay()] + ' ' + dd + '/' + mm;
+                    var fromName = (trip.partenza||'').split('(')[0].trim();
+                    var toName   = (trip.arrivo||'').split('(')[0].trim();
+                    var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+                    var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+
+                    html += '<div onclick="editTrip(' + actualIndex + ')" '
+                        + 'style="display:flex;align-items:center;gap:10px;background:var(--secondary);border-radius:10px;'
+                        + 'padding:10px 12px;margin-bottom:6px;cursor:pointer;'
+                        + 'border-left:3px solid;transition:opacity 0.15s;" '
+                        + 'class="medium-row" data-transporter="' + tKey + '"'
+                        + '>';
+
+                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:var(--accent);opacity:0.8;flex-shrink:0;min-width:58px;">' + dayLabel + '</div>';
+
+                    html += '<div style="flex:1;min-width:0;">';
+                    html += '<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">';
+                    html += '<span style="font-size:12px;font-weight:700;color:var(--text);">' + fromName + '</span>';
+                    if (fromCode) html += '<span style="font-size:9px;color:var(--text-dim);">(' + fromCode + ')</span>';
+                    html += '<span style="color:var(--accent);font-weight:900;">→</span>';
+                    html += '<span style="font-size:12px;font-weight:700;color:var(--success);">' + toName + '</span>';
+                    if (toCode) html += '<span style="font-size:9px;color:var(--text-dim);">(' + toCode + ')</span>';
+                    html += '</div>';
+                    if (trip.prodotto) html += '<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">📦 ' + trip.prodotto + '</div>';
+                    html += '</div>';
+
+                    html += '<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">';
+                    if (trip.daConfermare) html += '<span style="font-size:9px;background:var(--warning);color:#000;padding:1px 5px;border-radius:3px;font-weight:700;">⚠️</span>';
+                    if (trip.confermato)   html += '<span style="font-size:12px;color:var(--success);font-weight:800;">✓</span>';
+                    html += '</div></div>';
+                });
+            });
+            container.innerHTML = html;
         }
 
         function renderDesktopView() {
@@ -5394,9 +5453,6 @@
                                 <button onclick="desktopToggleTotals()" id="btnTotals" title="Totali per trasportatore"
                                     style="padding:5px 10px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);border-radius:7px;color:#a78bfa;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
                                     >📊</button>
-                                <button onclick="fixSortOrder()" title="Riordina cronologicamente"
-                                    style="padding:5px 10px;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.25);border-radius:7px;color:#60a5fa;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    >🔃</button>
                             </div>
                         </div>
 
@@ -5456,14 +5512,6 @@
                                         const widths = {data:'120px',trasportatore:'175px',partenza:'',arrivo:'',prodotto:'95px',note:'130px'};
                                         const isActive = _desktopSort.field === f;
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
-                                        if (f === 'data') {
-                                            return `<th style="padding:9px 8px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;width:120px;white-space:nowrap;">
-                                                <div style="display:flex;align-items:center;gap:6px;">
-                                                    <span onclick="desktopSortBy('data')" style="color:${isActive?'white':'var(--accent)'};cursor:pointer;user-select:none;background:${isActive?'rgba(255,107,53,0.18)':'transparent'};padding:2px 4px;border-radius:4px;transition:background 0.15s;" title="Ordina per Data">Data<span style="font-size:9px;opacity:0.7;">${arrow}</span></span>
-                                                    <button onclick="fixSortOrder()" title="Riordina cronologicamente" style="padding:2px 6px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.3);border-radius:5px;color:#60a5fa;font-size:10px;font-weight:700;cursor:pointer;line-height:1.4;white-space:nowrap;">🔃</button>
-                                                </div>
-                                            </th>`;
-                                        }
                                         return `<th onclick="desktopSortBy('${f}')" style="padding:9px 8px;text-align:left;font-size:10px;font-weight:700;color:${isActive?'white':'var(--accent)'};background:${isActive?'rgba(255,107,53,0.18)':'transparent'};letter-spacing:1px;text-transform:uppercase;${widths[f]?'width:'+widths[f]+';':''}cursor:pointer;user-select:none;white-space:nowrap;transition:background 0.15s;" title="Ordina per ${labels[f]}">${labels[f]}<span style="font-size:9px;opacity:0.7;">${arrow}</span></th>`;
                                     }).join('')}
                                     <th style="padding:9px 8px;text-align:center;font-size:10px;font-weight:700;color:var(--accent);width:32px;" title="Da confermare">⚠️</th>
@@ -8116,15 +8164,18 @@
     <div class="mobile-bottom-nav">
         <div class="view-toggle">
             <!-- Card -->
-            <button class="view-btn" onclick="switchView('card', this)" title="Vista card">
+            <button class="view-btn" onclick="switchView('card', this)" title="Viaggi di oggi">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="8" rx="2.5"/>
-                    <rect x="3" y="14" width="18" height="6" rx="2.5"/>
+                    <rect x="3" y="4" width="18" height="17" rx="2.5"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <circle cx="12" cy="15" r="2.5" fill="currentColor" stroke="none"/>
                 </svg>
-                <span class="nav-label">Card</span>
+                <span class="nav-label">Oggi</span>
             </button>
-            <!-- Lista -->
-            <button class="view-btn" onclick="switchView('medium', this)" title="Vista lista">
+            <!-- Trasportatore -->
+            <button class="view-btn" onclick="switchView('medium', this)" title="Vista per trasportatore">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
                     <line x1="9" y1="6" x2="20" y2="6"/>
                     <line x1="9" y1="12" x2="20" y2="12"/>
@@ -8133,7 +8184,7 @@
                     <rect x="3" y="10.5" width="3" height="3" rx="0.8" fill="currentColor" stroke="none"/>
                     <rect x="3" y="16.5" width="3" height="3" rx="0.8" fill="currentColor" stroke="none"/>
                 </svg>
-                <span class="nav-label">Lista</span>
+                <span class="nav-label">Trasp.</span>
             </button>
             <!-- + AGGIUNGI centrale, elevato -->
             <button class="nav-btn-add" id="navBtnAdd" onclick="toggleAddForm()" title="Aggiungi viaggio">
