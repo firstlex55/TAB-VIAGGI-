@@ -3786,8 +3786,22 @@
                         style="width:100%;padding:11px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color 0.15s;margin-bottom:12px;"
                         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
 
-                    <!-- Chip altri giorni con date reali -->
-                    <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;opacity:0.7;">Aggiungi altri giorni della stessa settimana</div>
+                    <!-- Chip altri giorni + controlli settimana -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                        <div style="font-size:10px;color:var(--text-dim);opacity:0.7;">Aggiungi altri giorni</div>
+                        <div style="display:flex;gap:6px;">
+                            <!-- +7 giorni -->
+                            <button type="button" onclick="mdpkNextWeek()"
+                                style="padding:4px 10px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:20px;color:rgba(96,165,250,0.8);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">
+                                +7gg →
+                            </button>
+                            <!-- Reset -->
+                            <button type="button" onclick="mdpkFullReset()"
+                                style="padding:4px 10px;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:20px;color:rgba(255,100,100,0.7);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">
+                                ↺ Reset
+                            </button>
+                        </div>
+                    </div>
                     <div style="display:flex;gap:5px;" id="mobileDayPicker">
                         <button type="button" id="mdpk-btn-lun" data-mday="lun" onclick="mobileDayTap('lun')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
@@ -6564,6 +6578,39 @@
             });
             var dataInput = document.getElementById('data');
             if (dataInput) dataInput.value = '';
+        }
+
+        // Reset completo — azzera data + chip + selezioni
+        function mdpkFullReset() {
+            _mdpkReset();
+            mobileDayUpdateSummary();
+        }
+
+        // Sposta data di +7 giorni (settimana prossima)
+        function mdpkNextWeek() {
+            var dataInput = document.getElementById('data');
+            if (!dataInput) return;
+            var val = dataInput.value;
+            if (!val) {
+                // Se non c'è data, imposta lunedì prossimo
+                var today = new Date();
+                var dow = today.getDay();
+                var daysToMon = (dow === 0) ? 1 : (8 - dow);
+                var nextMon = new Date(today);
+                nextMon.setDate(today.getDate() + daysToMon);
+                dataInput.value = nextMon.toISOString().split('T')[0];
+            } else {
+                // Sposta la data di +7 giorni
+                var cur = new Date(val + 'T12:00:00');
+                cur.setDate(cur.getDate() + 7);
+                dataInput.value = cur.toISOString().split('T')[0];
+            }
+            // Azzera i chip selezionati e ricalcola le date
+            Object.keys(_mobileDayCounts).forEach(function(d) {
+                _mobileDayCounts[d] = 0;
+                _mdpkUpdate(d);
+            });
+            mdpkUpdateFromDate();
         }
 
         // Contatori per ogni giorno nel picker
