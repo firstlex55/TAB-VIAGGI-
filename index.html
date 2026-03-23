@@ -3845,41 +3845,54 @@
             </form>
         </div>
         <!-- Actions -->
-        <div class="section">
-            <div class="section-title">⚙️ Azioni</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-
-                <!-- SALVA: verde pieno, grande, prominente -->
+        <div class="section" style="padding:16px 18px;">
+            <!-- Drive row -->
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
                 <button onclick="driveSync()" id="syncBtn"
-                    style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-                           padding:14px 8px;border-radius:12px;border:none;cursor:pointer;
-                           background:linear-gradient(135deg,#06d6a0,#02a676);color:#fff;
-                           font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;
-                           box-shadow:0 3px 12px rgba(6,214,160,0.4);letter-spacing:0.3px;">
-                    <span style="font-size:20px;line-height:1;">☁️</span>
-                    SALVA
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+                           padding:10px 12px;border-radius:10px;border:none;cursor:pointer;
+                           background:rgba(6,214,160,0.12);color:#06d6a0;
+                           border:1px solid rgba(6,214,160,0.3);
+                           font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;">
+                    ☁️ Salva
                 </button>
-
-                <!-- CARICA: blu outline, più sobrio -->
                 <button onclick="driveLoad()" id="loadBtn"
-                    style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-                           padding:14px 8px;border-radius:12px;border:2px solid #4fc3f7;cursor:pointer;
-                           background:rgba(79,195,247,0.08);color:#4fc3f7;
-                           font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.3px;">
-                    <span style="font-size:20px;line-height:1;">📥</span>
-                    CARICA
-                </button>
-
-                <button class="btn btn-secondary" onclick="downloadExcel()" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;">
-                    ⬇️ Excel
-                </button>
-                <button class="btn btn-primary" onclick="showNewWeekModal()" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;">
-                    📅 Nuova Sett.
-                </button>
-                <button class="btn btn-secondary" onclick="clearData()" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;">
-                    🗑️ Cancella tutto
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+                           padding:10px 12px;border-radius:10px;cursor:pointer;
+                           background:rgba(79,195,247,0.07);color:#4fc3f7;
+                           border:1px solid rgba(79,195,247,0.25);
+                           font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;">
+                    📥 Carica
                 </button>
             </div>
+            <!-- Seconda riga: Excel + Nuova sett -->
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+                <button onclick="downloadExcel()"
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+                           padding:9px 12px;border-radius:10px;cursor:pointer;
+                           background:rgba(255,255,255,0.04);color:var(--text-dim);
+                           border:1px solid rgba(255,255,255,0.08);
+                           font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;">
+                    ⬇️ Excel
+                </button>
+                <button onclick="showNewWeekModal()"
+                    style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+                           padding:9px 12px;border-radius:10px;cursor:pointer;
+                           background:rgba(255,107,53,0.08);color:var(--accent);
+                           border:1px solid rgba(255,107,53,0.25);
+                           font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;">
+                    📅 Nuova sett.
+                </button>
+            </div>
+            <!-- Cancella tutto — discreto -->
+            <button onclick="clearData()"
+                style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
+                       padding:8px;border-radius:8px;cursor:pointer;
+                       background:transparent;color:rgba(255,80,80,0.45);
+                       border:1px solid rgba(255,80,80,0.15);
+                       font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;">
+                🗑 Cancella tutti i viaggi
+            </button>
         </div>
 
         <!-- Import Excel -->
@@ -3920,9 +3933,9 @@
 
         <!-- ===== ARCHIVIO SETTIMANE ===== -->
         <div class="archive-section" id="archiveSection" style="display:none;">
-            <div class="section-title" style="margin-bottom:16px;">
-                <span>🗂️ Archivio Settimane</span>
-                <span id="archiveCount" style="font-size:13px;color:var(--text-dim);font-weight:500;">0 settimane</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:700;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">📂 Archivio</div>
+                <span id="archiveCount" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);">0 settimane</span>
             </div>
             <div id="archiveList"></div>
         </div>
@@ -4073,6 +4086,10 @@
     </div>
 
     <script>
+        // Helper plurale
+        function _pv(n) { return n === 1 ? 'viaggio' : 'viaggi'; }
+        function _pvAdded(n) { return n === 1 ? 'viaggio aggiunto' : 'viaggi aggiunti'; }
+
         // Pre-loaded trips from current week
         let trips = [
             {data: "2026-02-16", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
@@ -4425,7 +4442,7 @@
                 // Header
                 + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'
                 + '<div>'
-                + '<div style="font-size:15px;font-weight:800;color:var(--success);">✅ ' + newTrips.length + ' viaggio' + (newTrips.length!==1?'i':'') + ' aggiunto' + (newTrips.length!==1?'i':'') + '</div>'
+                + '<div style="font-size:15px;font-weight:800;color:var(--success);">✅ ' + newTrips.length + ' ' + _pvAdded(newTrips.length) + '</div>'
                 + '<div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:3px;">Controlla e chiudi</div>'
                 + '</div>'
                 + '<button onclick="closeSummaryModal()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.5);font-size:16px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>'
@@ -5094,7 +5111,7 @@
             html += '<div style="background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:800;color:#ff6b35;">';
             html += '📅 ' + todayLabel + '</div>';
             html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,53,0.3),transparent);"></div>';
-            html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.3);">' + todayTrips.length + ' viaggio' + (todayTrips.length!==1?'i':'') + '</div>';
+            html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.3);">' + todayTrips.length + ' ' + _pv(todayTrips.length) + '</div>';
             html += '</div>';
 
             if (todayTrips.length === 0) {
@@ -5118,7 +5135,7 @@
                 html += '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);">';
                 html += 'Domani · ' + tomLabel + '</div>';
                 html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
-                html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);">' + tomorrowTrips.length + ' viaggio' + (tomorrowTrips.length!==1?'i':'') + '</div>';
+                html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);">' + tomorrowTrips.length + ' ' + _pv(tomorrowTrips.length) + '</div>';
                 html += '</div>';
                 tomorrowTrips.forEach(function(trip) {
                     html += _renderTodayCard(trip, false);
@@ -5248,7 +5265,7 @@
                 html += '<div class="day-group-info">';
                 html += '<div class="day-group-name-full">' + dl + '</div>';
                 html += '<div class="day-group-separator"></div>';
-                html += '<div class="day-group-count">' + dayTrips.length + ' viaggio' + (dayTrips.length !== 1 ? 'i' : '') + '</div>';
+                html += '<div class="day-group-count">' + dayTrips.length + ' ' + _pv(dayTrips.length) + '</div>';
                 html += '</div></div></div>';
 
                 // Righe viaggi
@@ -5424,7 +5441,7 @@
                 // Header trasportatore
                 html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (html===''?'4px':'22px') + ' 0 8px;">';
                 html += '<span class="compact-transporter ' + colorClass + '" style="font-size:13px;padding:6px 14px;">' + tName + '</span>';
-                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-dim);">' + tTrips.length + ' viaggio' + (tTrips.length!==1?'i':'') + '</span>';
+                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-dim);">' + tTrips.length + ' ' + _pv(tTrips.length) + '</span>';
                 html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
                 html += '</div>';
 
@@ -5531,7 +5548,7 @@
                     if (filterCountEl) filterCountEl.textContent = sorted.length + ' su ' + trips.length;
                     filterCountEl.style.display = 'inline';
                 } else if (_desktopDayFilter && _desktopDayFilter !== 'Tutti') {
-                    if (filterCountEl) filterCountEl.textContent = sorted.length + ' viaggio' + (sorted.length !== 1 ? 'i' : '');
+                    if (filterCountEl) filterCountEl.textContent = sorted.length + ' ' + _pv(sorted.length);
                     filterCountEl.style.display = 'inline';
                 } else {
                     filterCountEl.style.display = 'none';
@@ -5787,7 +5804,7 @@
                                     return `<span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;">
                                         <span class="${cc}" style="font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;">${name}</span>
                                         <span style="font-size:13px;font-weight:700;color:var(--text);">${n}</span>
-                                        <span style="font-size:10px;color:var(--text-dim);">viaggio${n!==1?'i':''}</span>
+                                        <span style="font-size:10px;color:var(--text-dim);">${_pv(n)}</span>
                                     </span>`;
                                 }).join('');
                             })()}
@@ -6086,7 +6103,7 @@
             const rows = days.map(day => {
                 const d = new Date(day + 'T12:00:00');
                 const dayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
-                const header = '<tr class="day-header"><td colspan="8">' + dayLabel + ' &nbsp;<span style="font-weight:400;font-size:10px;opacity:0.7;">' + byDay[day].length + ' viaggio' + (byDay[day].length!==1?'i':'') + '</span></td></tr>';
+                const header = '<tr class="day-header"><td colspan="8">' + dayLabel + ' &nbsp;<span style="font-weight:400;font-size:10px;opacity:0.7;">' + byDay[day].length + ' ' + _pv(byDay[day].length) + '</span></td></tr>';
                 const tripRows = byDay[day].map(t => {
                     const c = _printColor(t.trasportatore);
                     const ddt = t.daConfermare ? '<span style="color:#c00;font-weight:700;">DA CONFERMARE</span>' : (t.note||'');
@@ -6109,7 +6126,7 @@
             const totalsRows = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([n,c]) => {
                 const col = _printColor(n);
                 return '<tr><td><span class="transp-badge" style="background:' + col.bg + ';color:' + col.txt + ';">' + n + '</span></td>'
-                    + '<td><strong>' + c + ' viaggio' + (c!==1?'i':'') + '</strong></td></tr>';
+                    + '<td><strong>' + c + ' ' + _pv(c) + '</strong></td></tr>';
             }).join('');
 
             const filterLabel = data.length < trips.length ? ' (filtrati: ' + data.length + ' su ' + trips.length + ')' : '';
@@ -6564,7 +6581,7 @@
             if (!s) return;
             if (total === 0) { s.style.display='none'; return; }
             s.style.display = 'block';
-            s.textContent = total + ' viaggio' + (total>1?'i':'') + ': ' + parts.join(', ');
+            s.textContent = total + ' ' + _pv(total) + ': ' + parts.join(', ');
         }
 
         function _mdpkReset() {
@@ -6669,7 +6686,7 @@
             summary.style.background = 'rgba(6,214,160,0.1)';
             summary.style.borderColor = 'rgba(6,214,160,0.3)';
             summary.style.color = 'var(--success)';
-            summary.textContent = '✅ Verranno aggiunti ' + total + ' viaggio' + (total > 1 ? 'i' : '') + ': ' + parts.join(', ');
+            summary.textContent = '✅ Verranno aggiunti ' + total + ' ' + _pv(total) + ': ' + parts.join(', ');
         }
 
         function desktopConfirmAdd() {
@@ -7020,7 +7037,7 @@
                     }
                     sepR.getCell(1).font      = {bold:true,size:10,color:{argb:dc.txt},name:'Arial'};
                     sepR.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:1};
-                    var cntLabel = dayTrips.length + ' viaggio' + (dayTrips.length!==1?'i':'');
+                    var cntLabel = dayTrips.length + ' ' + _pv(dayTrips.length);
                     sepR.getCell(9).value     = cntLabel;
                     sepR.getCell(9).font      = {size:8,color:{argb:dc.txt},italic:true,name:'Arial'};
                     sepR.getCell(9).alignment = {vertical:'middle',horizontal:'right'};
@@ -7073,7 +7090,7 @@
                     // Riga totale per giorno
                     var conf   = dayTrips.filter(function(t){return t.confermato;}).length;
                     var daConf = dayTrips.filter(function(t){return t.daConfermare;}).length;
-                    var totR = ws.addRow(['','Totale: '+dayTrips.length+' viaggio'+(dayTrips.length!==1?'i':''),'','','','','',
+                    var totR = ws.addRow(['','Totale: '+dayTrips.length+' '+_pv(dayTrips.length),'','','','','',
                         daConf>0?daConf+' da conf.':'', conf>0?conf+' conf.':'','']);
                     totR.height = 15;
                     for (let c=1; c<=10; c++) { totR.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFF1F5F9'}}; totR.getCell(c).border=bdr; }
@@ -7228,7 +7245,7 @@
                 '<div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #06d6a0;border-radius:16px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.8);text-align:center;">'
                 + '<div style="font-size:48px;margin-bottom:12px;">📥</div>'
                 + '<div style="font-size:16px;font-weight:800;color:#06d6a0;margin-bottom:8px;">Excel scaricato!</div>'
-                + '<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;">' + count + ' viaggio' + (count!==1?'i':'') + ' · 2 fogli</div>'
+                + '<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;">' + count + ' ' + _pv(count) + ' · 2 fogli</div>'
                 + '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:20px;word-break:break-all;">' + filename + '</div>'
                 + '<button onclick="closeExcelConfirm()" style="width:100%;padding:12px;background:rgba(6,214,160,0.12);border:1px solid rgba(6,214,160,0.3);border-radius:10px;color:#06d6a0;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">OK</button>'
                 + '</div>';
@@ -8275,26 +8292,35 @@
             count.textContent = archive.length + (archive.length === 1 ? ' settimana' : ' settimane');
 
             list.innerHTML = [...archive].reverse().map((week, ri) => {
-                const idx = archive.length - 1 - ri; // indice reale nel array
+                const idx = archive.length - 1 - ri;
                 const dc = week.trips.filter(t => t.daConfermare).length;
-                const dcBadge = dc > 0 ? `<span style="background:rgba(255,210,63,0.15);color:var(--warning);border:1px solid rgba(255,210,63,0.3);padding:1px 7px;border-radius:10px;font-size:11px;font-weight:700;">⚠️ ${dc} da conf.</span>` : '';
-                const dateStr = week.archivedAt ? new Date(week.archivedAt).toLocaleDateString('it-IT', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
-                return `
-                <div class="archive-card">
-                    <div class="archive-card-info">
-                        <div class="archive-card-title">${week.title || 'Settimana senza titolo'}</div>
-                        <div class="archive-card-meta">
-                            <span>📦 ${week.trips.length} viaggi</span>
-                            ${dcBadge}
-                            ${dateStr ? `<span style="color:var(--text-dim);">archiviata il ${dateStr}</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="archive-card-actions">
-                        <button class="btn-archive btn-archive-excel" onclick="archiveDownloadExcel(${idx})" title="Scarica Excel">⬇️ Excel</button>
-                        <button class="btn-archive btn-archive-restore" onclick="archiveRestore(${idx})" title="Ricarica questa settimana come corrente">↩️ Riapri</button>
-                        <button class="btn-archive btn-archive-delete" onclick="archiveDelete(${idx})" title="Elimina dall'archivio">🗑</button>
-                    </div>
-                </div>`;
+                const conf = week.trips.filter(t => t.confermato).length;
+                const dateStr = week.archivedAt
+                    ? new Date(week.archivedAt).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})
+                    : '';
+
+                // Titolo compatto — rimuovi il formato lungo "Settimana X/2026 (Lun. DD/MM - Ven. DD/MM)"
+                let title = week.title || 'Settimana';
+                // Prova a estrarre date formato "Lun. DD/MM - Ven. DD/MM"
+                const rangeMatch = title.match(/Lun[.\s]+(\d{2}\/\d{2})[\s\-–]+Ven[.\s]+(\d{2}\/\d{2})/i);
+                const weekNumMatch = title.match(/Settimana\s+(\d+)\/(\d{4})/i);
+                const shortTitle = rangeMatch
+                    ? rangeMatch[1] + ' — ' + rangeMatch[2]
+                    : (weekNumMatch ? 'Sett. ' + weekNumMatch[1] : title.substring(0,18));
+
+                return '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--secondary);border-radius:12px;margin-bottom:8px;border-left:3px solid rgba(255,107,53,0.3);">'
+                    + '<div style="flex:1;min-width:0;">'
+                    + '<div style="font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + shortTitle + '</div>'
+                    + '<div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap;">'
+                    + '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent);font-weight:700;">' + week.trips.length + ' ' + _pv(week.trips.length) + '</span>'
+                    + (dc > 0 ? '<span style="font-size:10px;color:var(--warning);">⚠️ ' + dc + '</span>' : '')
+                    + (dateStr ? '<span style="font-size:9px;color:rgba(255,255,255,0.28);">' + dateStr + '</span>' : '')
+                    + '</div></div>'
+                    + '<div style="display:flex;gap:5px;flex-shrink:0;">'
+                    + '<button onclick="archiveDownloadExcel(' + idx + ')" title="Excel" style="padding:6px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--text-dim);font-family:Outfit,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">⬇️</button>'
+                    + '<button onclick="archiveRestore(' + idx + ')" title="Riapri" style="padding:6px 10px;border-radius:7px;border:1px solid rgba(255,107,53,0.25);background:rgba(255,107,53,0.08);color:var(--accent);font-family:Outfit,sans-serif;font-size:11px;font-weight:700;cursor:pointer;">↩ Riapri</button>'
+                    + '<button onclick="archiveDelete(' + idx + ')" title="Elimina" style="padding:6px 8px;border-radius:7px;border:1px solid rgba(255,80,80,0.15);background:transparent;color:rgba(255,80,80,0.4);font-family:Outfit,sans-serif;font-size:12px;cursor:pointer;">🗑</button>'
+                    + '</div></div>';
             }).join('');
         }
 
