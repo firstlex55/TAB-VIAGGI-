@@ -3849,10 +3849,12 @@
                     <span style="font-size:13px;color:var(--warning);font-weight:600;">⚠️ Da confermare</span>
                 </label>
 
-                <!-- Submit -->
-                <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:12px;color:white;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);letter-spacing:0.3px;">
-                    ✅ Aggiungi Viaggio
-                </button>
+                <!-- Submit — sticky sopra la bottom nav -->
+                <div style="position:sticky;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:10;padding:10px 0 4px;background:linear-gradient(to top,#181c26 70%,transparent);">
+                    <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:12px;color:white;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);letter-spacing:0.3px;">
+                        ✅ Aggiungi Viaggio
+                    </button>
+                </div>
             </form>
         </div>
         <!-- Actions -->
@@ -4004,7 +4006,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;width:100%;">
                     💾 Salva Modifiche
                 </button>
             </form>
