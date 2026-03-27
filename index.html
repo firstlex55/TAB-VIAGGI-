@@ -269,9 +269,9 @@
         }
 
         /* Bordo sinistro colorato per trasportatore */
-        .trip-card[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(255,107,53,0.06); }
+        .trip-card[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(232,130,26,0.06); }
         .trip-card[data-transporter="coap"]     { border-left-color: var(--t-coap);    background: rgba(91,141,217,0.06); }
-        .trip-card[data-transporter="coneco"]   { border-left-color: var(--t-coneco);  background: rgba(224,92,92,0.06); }
+        .trip-card[data-transporter="coneco"]   { border-left-color: var(--t-coneco);  background: rgba(224,64,160,0.06); }
         .trip-card[data-transporter="consar"]   { border-left-color: var(--t-consar);  background: rgba(6,214,160,0.06); }
         .trip-card[data-transporter="avio"]     { border-left-color: var(--t-avio);    background: rgba(56,189,248,0.06); }
         .trip-card[data-transporter="alb"]      { border-left-color: var(--t-alb);     background: rgba(245,166,35,0.06); }
@@ -1519,9 +1519,9 @@
 
         /* ── Palette trasportatori — colori massimamente distinti ── */
         :root {
-            --t-cevolo:   #ff6b35; --t-cevolo-bg:   rgba(255,107,53,0.16);
+            --t-cevolo:   #e8821a; --t-cevolo-bg:   rgba(232,130,26,0.16);
             --t-coap:     #5b8dd9; --t-coap-bg:     rgba(91,141,217,0.16);
-            --t-coneco:   #e05c5c; --t-coneco-bg:   rgba(224,92,92,0.16);
+            --t-coneco:   #e040a0; --t-coneco-bg:   rgba(224,64,160,0.16);
             --t-consar:   #06d6a0; --t-consar-bg:   rgba(6,214,160,0.16);
             --t-avio:     #38bdf8; --t-avio-bg:     rgba(56,189,248,0.16);
             --t-alb:      #f5a623; --t-alb-bg:      rgba(245,166,35,0.16);
@@ -1533,9 +1533,9 @@
         }
 
         /* Badge trasportatore (card + compact + medium) */
-        .transporter-cevolo   { background: var(--t-cevolo-bg);   color: var(--t-cevolo);   border: 1px solid rgba(255,107,53,0.35); }
+        .transporter-cevolo   { background: var(--t-cevolo-bg);   color: var(--t-cevolo);   border: 1px solid rgba(232,130,26,0.35); }
         .transporter-coap     { background: var(--t-coap-bg);     color: var(--t-coap);     border: 1px solid rgba(91,141,217,0.35); }
-        .transporter-coneco   { background: var(--t-coneco-bg);   color: var(--t-coneco);   border: 1px solid rgba(224,92,92,0.35); }
+        .transporter-coneco   { background: var(--t-coneco-bg);   color: var(--t-coneco);   border: 1px solid rgba(224,64,160,0.35); }
         .transporter-consar   { background: var(--t-consar-bg);   color: var(--t-consar);   border: 1px solid rgba(6,214,160,0.35); }
         .transporter-avio     { background: var(--t-avio-bg);     color: var(--t-avio);     border: 1px solid rgba(56,189,248,0.35); }
         .transporter-alb      { background: var(--t-alb-bg);      color: var(--t-alb);      border: 1px solid rgba(245,166,35,0.35); }
@@ -1546,9 +1546,9 @@
         .transporter-default  { background: var(--t-default);  color: #fff; }
 
         /* Bordo sinistro card — stesso colore del badge */
-        .trip-card[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(255,107,53,0.06); }
+        .trip-card[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(232,130,26,0.06); }
         .trip-card[data-transporter="coap"]     { border-left-color: var(--t-coap);    background: rgba(91,141,217,0.06); }
-        .trip-card[data-transporter="coneco"]   { border-left-color: var(--t-coneco);  background: rgba(224,92,92,0.06); }
+        .trip-card[data-transporter="coneco"]   { border-left-color: var(--t-coneco);  background: rgba(224,64,160,0.06); }
         .trip-card[data-transporter="consar"]   { border-left-color: var(--t-consar);  background: rgba(6,214,160,0.06); }
         .trip-card[data-transporter="avio"]     { border-left-color: var(--t-avio);    background: rgba(56,189,248,0.06); }
         .trip-card[data-transporter="alb"]      { border-left-color: var(--t-alb);     background: rgba(245,166,35,0.06); }
@@ -1576,7 +1576,7 @@
         .trip-card[data-transporter="cirioni"]  { background: linear-gradient(135deg, var(--t-cirioni-bg) 0%, var(--secondary) 60%); }
 
         /* Bordo sinistro medium-row */
-        .medium-row[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(255,107,53,0.06); }
+        .medium-row[data-transporter="cevolo"]   { border-left-color: var(--t-cevolo); background: rgba(232,130,26,0.06); }
         .medium-row[data-transporter="coap"]     { border-left-color: var(--t-coap); }
         .medium-row[data-transporter="coneco"]   { border-left-color: var(--t-coneco); }
         .medium-row[data-transporter="consar"]   { border-left-color: var(--t-consar); }
@@ -2495,11 +2495,21 @@
             .new-week-content,
             .week-title-content {
                 border-radius: 20px 20px 0 0;
-                max-height: 92vh;
+                max-height: 85vh;
                 max-width: 100%;
                 border-left: none;
                 border-right: none;
                 border-bottom: none;
+                padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            }
+
+            /* Bottone salva sempre visibile in fondo al modal */
+            #editForm .btn-primary {
+                position: sticky;
+                bottom: 0;
+                z-index: 2;
+                margin-top: 16px;
+                box-shadow: 0 -8px 20px rgba(7,10,16,0.95);
             }
         }
 
@@ -3252,7 +3262,7 @@
 
         /* ===== BARRA GIORNI SETTIMANA ===== */
         .week-progress-bar {
-            height: 34px;
+            height: 38px;
             background: rgba(6,8,14,0.95);
             border-bottom: 1px solid rgba(255,255,255,0.05);
             width: 100%;
@@ -3283,9 +3293,9 @@
         }
         .week-seg-label {
             display: block;
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
             text-transform: uppercase;
             font-family: 'Outfit', sans-serif;
             line-height: 1;
@@ -3294,8 +3304,9 @@
             display: block;
             font-family: 'JetBrains Mono', monospace;
             font-size: 9px;
-            font-weight: 700;
+            font-weight: 600;
             line-height: 1;
+            opacity: 0.8;
         }
         .week-seg-pct    { display: none; }
         .week-seg-top-bar{ display: none; }
@@ -3581,7 +3592,7 @@
         <div id="driveStatus" style="display:none;flex-shrink:0;text-align:right;">
             <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
                 <span id="driveStatusDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#555;box-shadow:0 0 6px rgba(6,214,160,0.5);flex-shrink:0;"></span>
-                <span id="driveStatusText" style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.3px;">Drive</span>
+                <span id="driveStatusText" style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.3px;">Drive</span>
             </div>
         </div>
     </div>
@@ -3806,37 +3817,37 @@
                         <button type="button" id="mdpk-btn-lun" data-mday="lun" onclick="mobileDayTap('lun')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
                             <div style="font-size:11px;font-weight:800;line-height:1;">Lun</div>
-                            <div id="mdpk-date-lun" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                            <div id="mdpk-date-lun" style="font-family:JetBrains Mono,monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
                         </button>
                         <button type="button" id="mdpk-btn-mar" data-mday="mar" onclick="mobileDayTap('mar')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
                             <div style="font-size:11px;font-weight:800;line-height:1;">Mar</div>
-                            <div id="mdpk-date-mar" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                            <div id="mdpk-date-mar" style="font-family:JetBrains Mono,monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
                         </button>
                         <button type="button" id="mdpk-btn-mer" data-mday="mer" onclick="mobileDayTap('mer')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
                             <div style="font-size:11px;font-weight:800;line-height:1;">Mer</div>
-                            <div id="mdpk-date-mer" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                            <div id="mdpk-date-mer" style="font-family:JetBrains Mono,monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
                         </button>
                         <button type="button" id="mdpk-btn-gio" data-mday="gio" onclick="mobileDayTap('gio')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
                             <div style="font-size:11px;font-weight:800;line-height:1;">Gio</div>
-                            <div id="mdpk-date-gio" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                            <div id="mdpk-date-gio" style="font-family:JetBrains Mono,monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
                         </button>
                         <button type="button" id="mdpk-btn-ven" data-mday="ven" onclick="mobileDayTap('ven')"
                             style="flex:1;padding:8px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
                             <div style="font-size:11px;font-weight:800;line-height:1;">Ven</div>
-                            <div id="mdpk-date-ven" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
+                            <div id="mdpk-date-ven" style="font-family:JetBrains Mono,monospace;font-size:8px;margin-top:3px;line-height:1;opacity:0.6;">—</div>
                         </button>
                     </div>
                     <div id="mobileDaySummary" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:8px;font-size:12px;color:var(--success);font-weight:600;"></div>
                 </div>
 
                 <!-- Da confermare -->
-                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.15);border-radius:8px;cursor:pointer;margin-bottom:16px;" onclick="document.getElementById('daConfermare').click()">
-                    <input type="checkbox" id="daConfermare" style="width:auto;cursor:pointer;accent-color:var(--warning);">
-                    <label for="daConfermare" style="font-size:13px;cursor:pointer;color:var(--warning);font-weight:600;">⚠️ Da confermare</label>
-                </div>
+                <label for="daConfermare" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.15);border-radius:8px;cursor:pointer;margin-bottom:16px;user-select:none;-webkit-tap-highlight-color:transparent;">
+                    <input type="checkbox" id="daConfermare" style="width:18px;height:18px;cursor:pointer;accent-color:var(--warning);flex-shrink:0;">
+                    <span style="font-size:13px;color:var(--warning);font-weight:600;">⚠️ Da confermare</span>
+                </label>
 
                 <!-- Submit -->
                 <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:12px;color:white;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);letter-spacing:0.3px;">
@@ -3935,7 +3946,7 @@
         <div class="archive-section" id="archiveSection" style="display:none;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
                 <div style="font-size:12px;font-weight:700;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">📂 Archivio</div>
-                <span id="archiveCount" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);">0 settimane</span>
+                <span id="archiveCount" style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,255,255,0.25);">0 settimane</span>
             </div>
             <div id="archiveList"></div>
         </div>
@@ -4576,6 +4587,10 @@
             if (!isOpen) {
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 setDefaultDate();
+                setTimeout(function() {
+                    var firstField = document.getElementById('trasportatore');
+                    if (firstField) firstField.focus();
+                }, 350);
             }
         }
 
@@ -4738,10 +4753,17 @@
             });
 
             newTrips.forEach(function(t) {
+                // Auto-aggiungi trasportatore, partenza, arrivo alle liste
+                if (t.trasportatore && !transportersList.includes(t.trasportatore)) {
+                    transportersList.push(t.trasportatore);
+                    transportersList.sort();
+                    updateTransporterDatalist();
+                }
                 addLocationToList(t.partenza, 'partenza');
                 addLocationToList(t.arrivo, 'arrivo');
                 trips.push(t);
             });
+            saveTransportersList();
 
             trips.sort((a, b) => new Date(a.data) - new Date(b.data));
             saveToLocalStorage();
@@ -4906,7 +4928,7 @@
             const container = document.getElementById('weekSummaryTransporters');
             if (!container) return;
             if (sorted.length === 0) {
-                container.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.25);font-family:\'JetBrains Mono\',monospace;">nessun viaggio</span>';
+                container.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.25);font-family:JetBrains Mono,monospace;">nessun viaggio</span>';
             } else {
                 container.innerHTML = sorted.map(t => {
                     const colorVar = `var(--t-${t.key})`;
@@ -5105,24 +5127,27 @@
 
             var html = '';
 
-            // ── OGGI ──
-            html += '<div style="margin-bottom:16px;">';
-            html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
-            html += '<div style="background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:800;color:#ff6b35;">';
-            html += '📅 ' + todayLabel + '</div>';
-            html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,53,0.3),transparent);"></div>';
-            html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.3);">' + todayTrips.length + ' ' + _pv(todayTrips.length) + '</div>';
-            html += '</div>';
+            // helper separatore sezione
+            function _sectionHeader(label, count, isAccent) {
+                var col = isAccent ? '#ff6b35' : 'rgba(255,255,255,0.35)';
+                var borderCol = isAccent ? 'rgba(255,107,53,0.3)' : 'rgba(255,255,255,0.08)';
+                var h = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;margin-top:4px;">';
+                h += '<div style="font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:' + col + ';font-family:JetBrains Mono,monospace;white-space:nowrap;">' + label + '</div>';
+                h += '<div style="flex:1;height:1px;background:linear-gradient(to right,' + borderCol + ',transparent);"></div>';
+                h += '<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.2);font-family:JetBrains Mono,monospace;">' + count + ' ' + _pv(count) + '</div>';
+                h += '</div>';
+                return h;
+            }
 
+            // ── OGGI ──
+            html += '<div style="margin-bottom:18px;">';
+            html += _sectionHeader(todayLabel, todayTrips.length, true);
             if (todayTrips.length === 0) {
-                html += '<div style="text-align:center;padding:28px 16px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px dashed rgba(255,255,255,0.08);">';
-                html += '<div style="font-size:32px;margin-bottom:8px;">🎉</div>';
-                html += '<div style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.5);">Nessun viaggio oggi</div>';
+                html += '<div style="text-align:center;padding:22px 16px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px dashed rgba(255,255,255,0.06);">';
+                html += '<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.3);">✌️ Nessun viaggio oggi</div>';
                 html += '</div>';
             } else {
-                todayTrips.forEach(function(trip) {
-                    html += _renderTodayCard(trip, true);
-                });
+                todayTrips.forEach(function(trip) { html += _renderTodayCard(trip, true); });
             }
             html += '</div>';
 
@@ -5130,29 +5155,17 @@
             if (tomorrowTrips.length > 0) {
                 var dtom = new Date(tomorrow + 'T12:00:00');
                 var tomLabel = dayNames[dtom.getDay()] + ' ' + String(dtom.getDate()).padStart(2,'0') + '/' + String(dtom.getMonth()+1).padStart(2,'0');
-                html += '<div style="margin-bottom:16px;">';
-                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
-                html += '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);">';
-                html += 'Domani · ' + tomLabel + '</div>';
-                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
-                html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);">' + tomorrowTrips.length + ' ' + _pv(tomorrowTrips.length) + '</div>';
-                html += '</div>';
-                tomorrowTrips.forEach(function(trip) {
-                    html += _renderTodayCard(trip, false);
-                });
+                html += '<div style="margin-bottom:18px;">';
+                html += _sectionHeader(tomLabel, tomorrowTrips.length, false);
+                tomorrowTrips.forEach(function(trip) { html += _renderTodayCard(trip, false); });
                 html += '</div>';
             }
 
             // ── PROSSIMI (dopodomani) ──
             if (laterTrips.length > 0) {
-                html += '<div>';
-                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
-                html += '<div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;">Prossimi</div>';
-                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.05),transparent);"></div>';
-                html += '</div>';
-                laterTrips.forEach(function(trip) {
-                    html += _renderTodayCard(trip, false);
-                });
+                html += '<div style="margin-bottom:18px;">';
+                html += _sectionHeader('Prossimi', laterTrips.length, false);
+                laterTrips.forEach(function(trip) { html += _renderTodayCard(trip, false); });
                 html += '</div>';
             }
 
@@ -5160,11 +5173,9 @@
             if (todayTrips.length === 0 && tomorrowTrips.length === 0 && laterTrips.length === 0) {
                 var weekTrips = trips.filter(function(t){ return t.data >= today; }).slice(0, 8);
                 if (weekTrips.length > 0) {
-                    html += '<div style="margin-top:8px;">';
-                    html += '<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Prossimi in settimana</div>';
-                    weekTrips.forEach(function(trip) {
-                        html += _renderTodayCard(trip, false);
-                    });
+                    html += '<div>';
+                    html += _sectionHeader('Prossimi in settimana', weekTrips.length, false);
+                    weekTrips.forEach(function(trip) { html += _renderTodayCard(trip, false); });
                     html += '</div>';
                 }
             }
@@ -5174,51 +5185,57 @@
 
         function _renderTodayCard(trip, isToday) {
             var idx = trips.indexOf(trip);
-            var colorClass = getTransporterColorClass(trip.trasportatore);
             var tKey = getTransporterKey(trip.trasportatore);
+            var colorClass = getTransporterColorClass(trip.trasportatore);
             var fromName = (trip.partenza||'').split('(')[0].trim();
             var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
             var toName   = (trip.arrivo||'').split('(')[0].trim();
             var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
 
-            var opacity = isToday ? '1' : '0.65';
-            var scale   = isToday ? 'scale(1)' : 'scale(0.98)';
+            var dimmed = isToday ? '' : 'opacity:0.55;';
 
+            // Contenitore: riga compatta con bordo sinistro colorato
             var card = '<div onclick="editTrip(' + idx + ')" '
-                + 'style="background:var(--secondary);border-radius:14px;padding:14px 16px;'
-                + 'margin-bottom:8px;cursor:pointer;opacity:' + opacity + ';transform:' + scale + ';'
-                + 'border-left:4px solid;transition:opacity 0.15s;" '
+                + 'style="display:flex;align-items:center;gap:0;margin-bottom:6px;cursor:pointer;'
+                + 'border-radius:11px;overflow:hidden;background:#12161f;'
+                + dimmed
+                + 'transition:opacity 0.15s,transform 0.12s;" '
                 + 'class="trip-card" data-transporter="' + tKey + '">';
 
-            // Riga 1: trasportatore + badge stato + data
-            card += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
-            card += '<span class="trip-transporter ' + colorClass + '" style="font-size:11px;">' + (trip.trasportatore||'—') + '</span>';
-            if (trip.daConfermare) card += '<span style="font-size:9px;background:var(--warning);color:#000;padding:2px 7px;border-radius:4px;font-weight:800;">⚠️ DA CONF.</span>';
-            if (trip.confermato)   card += '<span style="font-size:11px;color:var(--success);font-weight:800;">✓</span>';
-            card += '<div style="flex:1;"></div>';
+            // Striscia sinistra colorata + nome trasportatore verticale
+            card += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;'
+                + 'padding:0 10px;min-width:54px;height:56px;border-right:1px solid rgba(255,255,255,0.06);gap:4px;">';
+            card += '<span class="trip-transporter ' + colorClass + '" '
+                + 'style="font-size:9px;padding:2px 6px;border-radius:5px;letter-spacing:0.5px;white-space:nowrap;">'
+                + (trip.trasportatore||'—') + '</span>';
+            if (trip.confermato) {
+                card += '<span style="font-size:9px;color:var(--success);font-weight:900;line-height:1;">✓</span>';
+            } else if (trip.daConfermare) {
+                card += '<span style="font-size:9px;color:var(--warning);font-weight:900;line-height:1;">!</span>';
+            }
             card += '</div>';
 
-            // Riga 2: rotta compatta su una riga
-            card += '<div style="display:flex;align-items:center;gap:8px;">';
-            card += '<div style="flex:1;min-width:0;">';
-            card += '<div style="font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + fromName + '</div>';
-            if (fromCode) card += '<div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:0.3px;">' + fromCode + '</div>';
-            card += '</div>';
-            card += '<div style="font-size:20px;color:var(--accent);font-weight:900;flex-shrink:0;">→</div>';
-            card += '<div style="flex:1;min-width:0;text-align:right;">';
-            card += '<div style="font-size:14px;font-weight:700;color:var(--success);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + toName + '</div>';
-            if (toCode) card += '<div style="font-size:10px;font-weight:700;color:rgba(6,214,160,0.6);letter-spacing:0.3px;">' + toCode + '</div>';
-            card += '</div>';
+            // Corpo centrale: rotta su una riga
+            card += '<div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;justify-content:center;height:56px;">';
+
+            // Rotta: partenza → arrivo
+            card += '<div style="display:flex;align-items:baseline;gap:6px;min-width:0;">';
+            card += '<span style="font-size:16px;font-weight:700;color:#f0f4fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%;">' + fromName + '</span>';
+            card += '<span style="font-size:13px;color:rgba(255,107,53,0.6);flex-shrink:0;font-weight:400;">→</span>';
+            card += '<span style="font-size:16px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
             card += '</div>';
 
-            // Riga 3: prodotto + note (se presenti)
-            if (trip.prodotto || trip.note) {
-                card += '<div style="margin-top:8px;display:flex;gap:8px;align-items:center;">';
-                if (trip.prodotto) card += '<span style="font-size:11px;color:var(--text-dim);">📦 ' + trip.prodotto + '</span>';
-                if (trip.note)     card += '<span style="font-size:11px;color:var(--text-dim);opacity:0.7;">💬 ' + trip.note + '</span>';
-                card += '</div>';
+            // Sottotitoli: codici + prodotto
+            var subs = [];
+            if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.75);font-weight:700;">' + fromCode + '</span>');
+            if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.6);font-weight:700;">' + toCode + '</span>');
+            if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.28);">' + trip.prodotto + '</span>');
+            if (trip.note)     subs.push('<span style="color:rgba(255,255,255,0.2);">· ' + trip.note + '</span>');
+            if (subs.length > 0) {
+                card += '<div style="font-size:11px;font-family:\'Outfit\',sans-serif;margin-top:2px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">' + subs.join('<span style="color:rgba(255,255,255,0.12);">·</span>') + '</div>';
             }
 
+            card += '</div>';
             card += '</div>';
             return card;
         }
@@ -5421,69 +5438,82 @@
             }
 
             var dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+
+            // Raggruppa per trasportatore
             var byTransporter = {};
-            [...displayTrips].sort(function(a,b) {
-                var ta = (a.trasportatore||'').toUpperCase();
-                var tb = (b.trasportatore||'').toUpperCase();
-                return ta < tb ? -1 : ta > tb ? 1 : 0;
-            }).forEach(function(trip) {
+            [...displayTrips].forEach(function(trip) {
                 var k = trip.trasportatore || '(senza nome)';
                 if (!byTransporter[k]) byTransporter[k] = [];
                 byTransporter[k].push(trip);
             });
 
             var html = '';
+            var isFirst = true;
+
             Object.keys(byTransporter).sort().forEach(function(tName) {
-                var tTrips = byTransporter[tName];
+                var tTrips = byTransporter[tName].slice().sort(function(a,b){ return (a.data||'') < (b.data||'') ? -1 : 1; });
                 var colorClass = getTransporterColorClass(tName);
                 var tKey = getTransporterKey(tName);
 
-                // Header trasportatore
-                html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (html===''?'4px':'22px') + ' 0 8px;">';
-                html += '<span class="compact-transporter ' + colorClass + '" style="font-size:13px;padding:6px 14px;">' + tName + '</span>';
-                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-dim);">' + tTrips.length + ' ' + _pv(tTrips.length) + '</span>';
-                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.08),transparent);"></div>';
+                // ── Header trasportatore ──
+                html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (isFirst ? '4px' : '22px') + ' 0 8px;">';
+                html += '<span class="compact-transporter ' + colorClass + '" style="font-size:12px;padding:4px 12px;letter-spacing:0.5px;">' + tName + '</span>';
+                html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.07),transparent);"></div>';
+                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);font-weight:700;">' + tTrips.length + ' ' + _pv(tTrips.length) + '</span>';
                 html += '</div>';
+                isFirst = false;
 
-                // Righe viaggio ordinate per data
-                [...tTrips].sort(function(a,b){ return (a.data||'') < (b.data||'') ? -1 : 1; })
-                .forEach(function(trip) {
-                    var actualIndex = trips.indexOf(trip);
+                // ── Card per ogni viaggio (stile OGGI) ──
+                tTrips.forEach(function(trip) {
+                    var idx = trips.indexOf(trip);
                     var d = new Date((trip.data||'') + 'T12:00:00');
-                    var dd = String(d.getDate()).padStart(2,'0');
-                    var mm = String(d.getMonth()+1).padStart(2,'0');
-                    var dayLabel = dayNames[d.getDay()] + ' ' + dd + '/' + mm;
+                    var dayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
                     var fromName = (trip.partenza||'').split('(')[0].trim();
                     var toName   = (trip.arrivo||'').split('(')[0].trim();
                     var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
                     var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
 
-                    html += '<div onclick="editTrip(' + actualIndex + ')" '
-                        + 'style="display:flex;align-items:center;gap:10px;background:var(--secondary);border-radius:10px;'
-                        + 'padding:10px 12px;margin-bottom:6px;cursor:pointer;'
-                        + 'border-left:3px solid;transition:opacity 0.15s;" '
-                        + 'class="medium-row" data-transporter="' + tKey + '"'
-                        + '>';
+                    // Contenitore riga
+                    html += '<div onclick="editTrip(' + idx + ')" '
+                        + 'style="display:flex;align-items:center;gap:0;margin-bottom:5px;cursor:pointer;'
+                        + 'border-radius:11px;overflow:hidden;background:#12161f;transition:opacity 0.15s;" '
+                        + 'class="trip-card" data-transporter="' + tKey + '">';
 
-                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:var(--accent);opacity:0.8;flex-shrink:0;min-width:58px;">' + dayLabel + '</div>';
-
-                    html += '<div style="flex:1;min-width:0;">';
-                    html += '<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">';
-                    html += '<span style="font-size:12px;font-weight:700;color:var(--text);">' + fromName + '</span>';
-                    if (fromCode) html += '<span style="font-size:9px;color:var(--text-dim);">(' + fromCode + ')</span>';
-                    html += '<span style="color:var(--accent);font-weight:900;">→</span>';
-                    html += '<span style="font-size:12px;font-weight:700;color:var(--success);">' + toName + '</span>';
-                    if (toCode) html += '<span style="font-size:9px;color:var(--text-dim);">(' + toCode + ')</span>';
-                    html += '</div>';
-                    if (trip.prodotto) html += '<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">📦 ' + trip.prodotto + '</div>';
+                    // Colonna sinistra: giorno grande + data piccola
+                    html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;'
+                        + 'padding:0 12px;min-width:58px;height:58px;border-right:1px solid rgba(255,255,255,0.06);gap:2px;flex-shrink:0;">';
+                    var parts = dayLabel.split(' ');
+                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:17px;font-weight:800;color:rgba(255,255,255,0.9);line-height:1;">' + (parts[0]||'') + '</div>';
+                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:600;color:rgba(255,107,53,0.6);line-height:1;margin-top:1px;">' + (parts[1]||'') + '</div>';
                     html += '</div>';
 
-                    html += '<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">';
-                    if (trip.daConfermare) html += '<span style="font-size:9px;background:var(--warning);color:#000;padding:1px 5px;border-radius:3px;font-weight:700;">⚠️</span>';
-                    if (trip.confermato)   html += '<span style="font-size:12px;color:var(--success);font-weight:800;">✓</span>';
-                    html += '</div></div>';
+                    // Corpo: rotta compatta — città più piccole, tutto leggibile
+                    html += '<div style="flex:1;min-width:0;padding:0 10px;display:flex;flex-direction:column;justify-content:center;height:58px;">';
+                    html += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
+                    html += '<span style="font-size:12px;font-weight:700;color:#d0d8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42%;">' + fromName + '</span>';
+                    html += '<span style="font-size:10px;color:rgba(255,107,53,0.45);flex-shrink:0;">→</span>';
+                    html += '<span style="font-size:12px;font-weight:700;color:rgba(6,214,160,0.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
+                    html += '</div>';
+
+                    var subs = [];
+                    if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.6);font-weight:600;">' + fromCode + '</span>');
+                    if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.5);font-weight:600;">' + toCode + '</span>');
+                    if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.2);">' + trip.prodotto + '</span>');
+                    if (subs.length) {
+                        html += '<div style="font-size:9px;margin-top:3px;display:flex;gap:4px;align-items:center;">' + subs.join('<span style="color:rgba(255,255,255,0.08);">·</span>') + '</div>';
+                    }
+                    html += '</div>';
+
+                    // Colonna destra: badge stato
+                    html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:3px;flex-shrink:0;">';
+                    if (trip.daConfermare) html += '<span style="font-size:8px;background:rgba(255,210,63,0.2);border:1px solid rgba(255,210,63,0.4);color:var(--warning);padding:2px 5px;border-radius:4px;font-weight:800;white-space:nowrap;">⚠️</span>';
+                    if (trip.confermato)   html += '<span style="font-size:12px;color:var(--success);font-weight:900;">✓</span>';
+                    html += '</div>';
+
+                    html += '</div>';
                 });
             });
+
             container.innerHTML = html;
         }
 
@@ -5595,9 +5625,9 @@
                     </td>
                     <td style="padding:7px 8px;white-space:nowrap;">
                         <div style="display:flex;align-items:center;gap:6px;">
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.5px;min-width:72px;">${_fmtDesktopDate(trip.data)}</span>
+                            <span data-dateval style="font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.5px;min-width:72px;">${_fmtDesktopDate(trip.data)}</span>
                             <input type="date" value="${trip.data||''}"
-                                onchange="desktopSetField(${realIdx},'data',this.value);renderDesktopView();"
+                                onchange="desktopSetField(${realIdx},'data',this.value);this.closest('tr').querySelector('[data-dateval]').textContent=_fmtDesktopDate(this.value);"
                                 style="width:22px;height:22px;opacity:0.35;border:1px solid rgba(255,255,255,0.15);border-radius:5px;background:rgba(255,255,255,0.05);cursor:pointer;padding:0;outline:none;"
                                 title="Cambia data"
                                 onfocus="this.style.opacity='1';this.style.borderColor='var(--accent)'"
@@ -5608,7 +5638,7 @@
                         <div style="display:flex;align-items:center;gap:6px;">
                             ${trip.trasportatore ? `<span class="${colorClass}" style="font-size:10px;font-weight:800;padding:3px 7px;border-radius:5px;flex-shrink:0;letter-spacing:0.3px;">${trip.trasportatore.substring(0,8)}</span>` : ''}
                             <input type="text" value="${trip.trasportatore||''}" list="dtransp"
-                                onchange="desktopSetField(${realIdx},'trasportatore',this.value);renderDesktopView();"
+                                onchange="desktopSetField(${realIdx},'trasportatore',this.value);"
                                 placeholder="trasportatore"
                                 style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:5px 7px;outline:none;width:115px;transition:border-color 0.15s;"
                                 onfocus="this.style.borderColor='var(--accent)';this.style.background='rgba(255,255,255,0.04)'"
@@ -5617,7 +5647,7 @@
                     </td>
                     <td style="padding:5px 6px;">
                         <input type="text" value="${trip.partenza||''}" list="dfrom"
-                            onchange="desktopSetField(${realIdx},'partenza',this.value)"
+                            onchange="desktopSetField(${realIdx},'partenza',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
                             placeholder="Partenza..."
                             style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
                             onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
@@ -5625,7 +5655,7 @@
                     </td>
                     <td style="padding:5px 6px;">
                         <input type="text" value="${trip.arrivo||''}" list="dto"
-                            onchange="desktopSetField(${realIdx},'arrivo',this.value)"
+                            onchange="desktopSetField(${realIdx},'arrivo',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
                             placeholder="Arrivo..."
                             style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
                             onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
@@ -5633,7 +5663,7 @@
                     </td>
                     <td style="padding:5px 6px;">
                         <input type="text" value="${trip.prodotto||''}" list="dprod" placeholder="—"
-                            onchange="desktopSetField(${realIdx},'prodotto',this.value)"
+                            onchange="desktopSetField(${realIdx},'prodotto',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
                             style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
                             onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
                             onblur="this.style.borderColor='transparent';this.style.background='transparent'">
@@ -5653,7 +5683,7 @@
                         </div>
                     </td>
                     <td style="padding:5px 6px;text-align:center;">
-                        <div onclick="desktopToggleConfermato(${realIdx})"
+                        <div onclick="desktopToggleConfermato(${realIdx})" data-conf-cell
                             style="width:24px;height:24px;border-radius:5px;border:2px solid ${trip.confermato?'#34d399':'rgba(52,211,153,0.3)'};background:${trip.confermato?'#34d399':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;margin:auto;font-size:13px;font-weight:900;color:#000;transition:all 0.15s;"
                             title="${trip.confermato?'Confermato al trasportatore — clicca per annullare':'Non ancora confermato — clicca per confermare'}">
                             ${trip.confermato?'✓':''}
@@ -5742,10 +5772,12 @@
                             <div style="flex:1;"></div>
 
                             <!-- Cerca -->
-                            <input id="desktopQuickSearch" type="text" placeholder="🔍 Cerca..." oninput="desktopQuickFilter()"
-                                style="padding:5px 11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text);font-family:'Outfit',sans-serif;font-size:11px;outline:none;width:150px;transition:border-color 0.15s;"
+                            <input id="desktopQuickSearch" type="text" placeholder="🔍 es: coap bientina" oninput="desktopQuickFilter()"
+                                style="padding:5px 11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text);font-family:'Outfit',sans-serif;font-size:11px;outline:none;width:190px;transition:border-color 0.15s;"
                                 onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
                                 onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
+                            <button id="desktopSortChronoBtn" onclick="desktopToggleChrono()" title="Ordine cronologico"
+                                style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;">⏱ Data</button>
 
                             <!-- Separatore -->
                             <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
@@ -5824,10 +5856,10 @@
                                         const widths = {data:'120px',trasportatore:'175px',partenza:'',arrivo:'',prodotto:'95px',note:'130px'};
                                         const isActive = _desktopSort.field === f;
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
-                                        return `<th onclick="desktopSortBy('${f}')" style="padding:9px 8px;text-align:left;font-size:10px;font-weight:700;color:${isActive?'white':'var(--accent)'};background:${isActive?'rgba(255,107,53,0.18)':'transparent'};letter-spacing:1px;text-transform:uppercase;${widths[f]?'width:'+widths[f]+';':''}cursor:pointer;user-select:none;white-space:nowrap;transition:background 0.15s;" title="Ordina per ${labels[f]}">${labels[f]}<span style="font-size:9px;opacity:0.7;">${arrow}</span></th>`;
+                                        return `<th onclick="desktopSortBy('${f}')" style="padding:10px 10px;text-align:left;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:${isActive?'#fff':'rgba(255,107,53,0.85)'};background:${isActive?'rgba(255,107,53,0.14)':'transparent'};letter-spacing:0.5px;text-transform:uppercase;${widths[f]?'width:'+widths[f]+';':''}cursor:pointer;user-select:none;white-space:nowrap;transition:background 0.15s;border-bottom:1px solid rgba(255,107,53,0.12);" title="Ordina per ${labels[f]}">${labels[f]}<span style="font-size:8px;opacity:0.5;margin-left:3px;">${arrow}</span></th>`;
                                     }).join('')}
-                                    <th style="padding:9px 8px;text-align:center;font-size:10px;font-weight:700;color:var(--accent);width:32px;" title="Da confermare">⚠️</th>
-                                    <th style="padding:9px 8px;text-align:center;font-size:10px;font-weight:700;color:#34d399;width:32px;" title="Confermato al trasportatore">✓</th>
+                                    <th style="padding:10px 8px;text-align:center;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:var(--warning);width:32px;border-bottom:1px solid rgba(255,107,53,0.12);" title="Da confermare">⚠️</th>
+                                    <th style="padding:10px 8px;text-align:center;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:#34d399;width:32px;border-bottom:1px solid rgba(255,107,53,0.12);" title="Confermato al trasportatore">✓</th>
                                     <th style="width:72px;"></th>
                                 </tr>
                             </thead>
@@ -5841,74 +5873,115 @@
             </div>
 
             <!-- MODAL aggiungi da rotta (desktop) -->
-            <div id="desktopAddModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
-                    <div style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:18px;">➕ Aggiungi alla settimana</div>
-                    <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;">Seleziona giorni — clicca più volte per aggiungere più copie</div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="desktopDayPicker">
-                        ${['lun','mar','mer','gio','ven'].map(d => {
-                            const label = d.charAt(0).toUpperCase()+d.slice(1);
-                            return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">'
-                                + '<div style="display:flex;align-items:center;gap:0;border:2px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;" id="dpk-' + d + '">'
-                                + '<button type="button" onclick="desktopDayDec(\'' + d + '\')"'
-                                + ' style="padding:8px 9px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
-                                + '>−</button>'
-                                + '<button type="button" data-day="' + d + '" onclick="desktopDayInc(\'' + d + '\')"'
-                                + ' style="padding:8px 12px;background:#0c0f1a;border:none;border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);color:var(--text-dim);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;min-width:52px;transition:all 0.15s;">'
-                                + label + '</button>'
-                                + '<button type="button" onclick="desktopDayInc(\'' + d + '\')"'
-                                + ' style="padding:8px 9px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.3);font-size:16px;font-weight:700;cursor:pointer;line-height:1;transition:all 0.1s;"'
-                                + '>+</button>'
-                                + '</div>'
-                                + '<span id="dpk-cnt-' + d + '" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);">0×</span>'
-                                + '</div>';
-                        }).join('')}
+            <div id="desktopAddModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;">
+                <div style="background:#0e1120;border:1px solid rgba(255,255,255,0.07);border-top:3px solid var(--accent);border-radius:18px;padding:0;width:580px;max-width:96vw;max-height:92vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);display:flex;flex-direction:column;">
+
+                    <!-- Header -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size:15px;font-weight:800;color:var(--accent);letter-spacing:0.3px;">➕ Nuovo viaggio</div>
+                        <button onclick="desktopCloseAddModal()" style="background:rgba(255,255,255,0.06);border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px 9px;border-radius:7px;line-height:1;">✕</button>
                     </div>
-                    <div style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">
-                        oppure data specifica: <input type="date" id="dmDate" oninput="desktopUpdateSummary()"
-                            style="background:#0c0f1a;border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);padding:4px 8px;font-family:'Outfit',sans-serif;outline:none;margin-left:4px;">
+
+                    <div style="overflow-y:auto;padding:18px 22px 20px;flex:1;">
+
+                        <!-- ROTTE RAPIDE -->
+                        <div id="dmRouteChips" style="margin-bottom:16px;"></div>
+
+                        <!-- TRATTA -->
+                        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;margin-bottom:12px;">
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Trasportatore</div>
+                                <input id="dmTransp" type="text" list="dtransp" placeholder="es. COAP" autocomplete="off"
+                                    oninput="desktopUpdateSummary()"
+                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                            </div>
+                            <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Prodotto</div>
+                                <input type="text" id="dmProd" placeholder="Cippato, Sfarinato..." list="dmProdList" autocomplete="off"
+                                    oninput="desktopUpdateSummary()"
+                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(255,255,255,0.2)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+                                <datalist id="dmProdList"><option value="Cippato"><option value="Sfarinato"><option value="Segatura"><option value="Pula"></datalist>
+                            </div>
+                        </div>
+
+                        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;margin-bottom:12px;">
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(255,107,53,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Da</div>
+                                <input id="dmFrom" type="text" list="dfrom" placeholder="Partenza..." autocomplete="off"
+                                    oninput="desktopUpdateSummary()"
+                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,107,53,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,107,53,0.2)'">
+                            </div>
+                            <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(6,214,160,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">A</div>
+                                <input id="dmTo" type="text" list="dto" placeholder="Arrivo..." autocomplete="off"
+                                    oninput="desktopUpdateSummary()"
+                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(6,214,160,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--success)'" onblur="this.style.borderColor='rgba(6,214,160,0.2)'">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom:16px;">
+                            <input id="dmNote" type="text" placeholder="Note interne (opzionale)..."
+                                style="width:100%;padding:9px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.2)'" onblur="this.style.borderColor='rgba(255,255,255,0.06)'">
+                        </div>
+
+                        <!-- SEPARATORE -->
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                            <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+                            <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:1.5px;text-transform:uppercase;">Quando</span>
+                            <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+                        </div>
+
+                        <!-- CHIP GIORNI -->
+                        <div style="display:flex;gap:6px;margin-bottom:10px;" id="desktopDayPicker">
+                            ${['lun','mar','mer','gio','ven'].map(d => {
+                                const label = d.charAt(0).toUpperCase()+d.slice(1);
+                                const cols = {lun:'96,165,250',mar:'52,211,153',mer:'167,139,250',gio:'251,191,36',ven:'244,114,182'};
+                                const col = cols[d];
+                                return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">'
+                                    + '<div style="display:flex;align-items:stretch;border:1.5px solid rgba(255,255,255,0.07);border-radius:9px;overflow:hidden;width:100%;" id="dpk-' + d + '">'
+                                    + '<button type="button" onclick="desktopDayDec(\'' + d + '\')"'
+                                    + ' style="padding:9px 8px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + '>−</button>'
+                                    + '<button type="button" data-day="' + d + '" onclick="desktopDayInc(\'' + d + '\')"'
+                                    + ' style="flex:1;padding:9px 4px;background:#0c0f1a;border:none;border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;">'
+                                    + label + '</button>'
+                                    + '<button type="button" onclick="desktopDayInc(\'' + d + '\')"'
+                                    + ' style="padding:9px 8px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + '>+</button>'
+                                    + '</div>'
+                                    + '<span id="dpk-cnt-' + d + '" style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.2);">—</span>'
+                                    + '</div>';
+                            }).join('')}
+                        </div>
+
+                        <!-- DATA SPECIFICA -->
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                            <span style="font-size:11px;color:var(--text-dim);white-space:nowrap;">o data specifica:</span>
+                            <input type="date" id="dmDate" oninput="desktopUpdateSummary()"
+                                style="flex:1;padding:7px 10px;background:#13172a;border:1.5px solid rgba(255,255,255,0.07);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
+                        </div>
+
+                        <!-- DA CONFERMARE -->
+                        <label for="dmDaConf" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(255,210,63,0.05);border:1px solid rgba(255,210,63,0.15);border-radius:9px;cursor:pointer;margin-bottom:14px;user-select:none;">
+                            <input type="checkbox" id="dmDaConf" style="width:16px;height:16px;cursor:pointer;accent-color:var(--warning);flex-shrink:0;">
+                            <span style="font-size:13px;color:var(--warning);font-weight:600;">⚠️ Da confermare</span>
+                        </label>
+
+                        <!-- ANTEPRIMA -->
+                        <div id="dmSummary" style="display:none;margin-bottom:4px;padding:10px 14px;background:rgba(6,214,160,0.08);border:1px solid rgba(6,214,160,0.25);border-radius:9px;font-size:12px;color:var(--success);font-weight:600;line-height:1.5;"></div>
                     </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-                        <div>
-                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Trasportatore</div>
-                            <input id="dmTransp" type="text" list="dtransp" placeholder="es. CEVOLO"
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
-                        </div>
-                        <div>
-                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Prodotto</div>
-                            <input type="text" id="dmProd" placeholder="Cippato, Sfarinato... o scrivi" list="dmProdList" autocomplete="off"
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
-                            <datalist id="dmProdList">
-                                <option value="Cippato">
-                                <option value="Sfarinato">
-                                <option value="Segatura">
-                                <option value="Pula">
-                            </datalist>
-                        </div>
-                        <div>
-                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Partenza da</div>
-                            <input id="dmFrom" type="text" list="dfrom" placeholder="es. Bientina..."
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
-                        </div>
-                        <div>
-                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Arrivo a</div>
-                            <input id="dmTo" type="text" list="dto" placeholder="es. Ponzano..."
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
-                        </div>
-                        <div style="grid-column:1/-1;">
-                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Note</div>
-                            <input id="dmNote" type="text" placeholder="note interne..."
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
-                        </div>
-                        <div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.2);border-radius:8px;cursor:pointer;" onclick="document.getElementById('dmDaConf').click()">
-                            <input type="checkbox" id="dmDaConf" style="width:auto;cursor:pointer;accent-color:var(--warning);">
-                            <label for="dmDaConf" style="font-size:13px;cursor:pointer;color:var(--warning);font-weight:600;">⚠️ Da confermare</label>
-                        </div>
-                    </div>
-                    <div id="dmSummary" style="display:none;margin-bottom:12px;padding:10px 14px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:8px;font-size:13px;color:var(--success);font-weight:600;"></div>
-                    <div style="display:flex;gap:10px;">
-                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
-                        <button onclick="desktopConfirmAdd()" style="flex:2;padding:11px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:8px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,53,0.3);">✅ Aggiungi viaggi</button>
+
+                    <!-- Footer -->
+                    <div style="padding:14px 22px 18px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:10px;">
+                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
+                        <button onclick="desktopConfirmAdd()" style="flex:3;padding:11px;background:linear-gradient(135deg,var(--accent),#ff8c61);border:none;border-radius:9px;color:white;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(255,107,53,0.35);letter-spacing:0.3px;">✅ Aggiungi viaggi</button>
                     </div>
                 </div>
             </div>
@@ -5965,7 +6038,7 @@
         let _driveDebounceTimer = null;
         function debouncedDriveSave() {
             clearTimeout(_driveDebounceTimer);
-            _driveDebounceTimer = setTimeout(() => { if (driveAccessToken) driveSave(); }, 2000);
+            _driveDebounceTimer = setTimeout(() => { if (driveAccessToken) driveSave(true); }, 2000);
         }
 
         function desktopSetField(idx, field, val) {
@@ -6002,7 +6075,19 @@
         function desktopToggleConfermato(idx) {
             trips[idx].confermato = !trips[idx].confermato;
             saveToLocalStorage();
-            renderDesktopView();
+            // Aggiorna solo la cella visivamente, senza re-render completo
+            const cell = document.querySelector('#drow-' + idx + ' [data-conf-cell]');
+            if (cell) {
+                const conf = trips[idx].confermato;
+                cell.style.borderColor  = conf ? '#34d399' : 'rgba(52,211,153,0.3)';
+                cell.style.background   = conf ? '#34d399' : 'transparent';
+                cell.textContent        = conf ? '✓' : '';
+                cell.title = conf ? 'Confermato al trasportatore — clicca per annullare' : 'Non ancora confermato — clicca per confermare';
+            } else {
+                renderDesktopView();
+            }
+            updateStats();
+            debouncedDriveSave();
         }
 
         function desktopDel(idx) {
@@ -6049,23 +6134,51 @@
         }
 
         let _desktopQuickQuery = '';
+        let _desktopChrono = false;
+
+        function desktopToggleChrono() {
+            _desktopChrono = !_desktopChrono;
+            const btn = document.getElementById('desktopSortChronoBtn');
+            if (btn) {
+                btn.style.background   = _desktopChrono ? 'rgba(255,107,53,0.15)' : 'rgba(255,255,255,0.04)';
+                btn.style.borderColor  = _desktopChrono ? 'var(--accent)' : 'rgba(255,255,255,0.1)';
+                btn.style.color        = _desktopChrono ? 'var(--accent)'  : 'var(--text-dim)';
+                btn.textContent        = _desktopChrono ? '⏱ Crono ✓' : '⏱ Data';
+            }
+            // Se attivo, forza sort per data asc prima di filtrare
+            if (_desktopChrono) {
+                _desktopSort = { field: 'data', dir: 'asc' };
+                renderDesktopView();
+            }
+            desktopQuickFilter();
+        }
+
         function desktopQuickFilter() {
             const input = document.getElementById('desktopQuickSearch');
             _desktopQuickQuery = input ? input.value.toLowerCase().trim() : '';
-            // Filtra le righe già nel DOM senza re-render completo (più veloce)
+
+            // Multi-termine: divide per spazio, ogni termine deve essere presente
+            const terms = _desktopQuickQuery ? _desktopQuickQuery.split(/\s+/).filter(Boolean) : [];
+
             const rows = document.querySelectorAll('#desktopBody tbody tr');
+            let visible = 0;
             rows.forEach(row => {
+                if (row.classList.contains('day-header')) { row.style.display = ''; return; }
                 const text = row.textContent.toLowerCase();
-                row.style.display = (!_desktopQuickQuery || text.includes(_desktopQuickQuery)) ? '' : 'none';
+                const match = terms.length === 0 || terms.every(t => text.includes(t));
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
             });
+
             // Aggiorna contatore
-            const visible = [...rows].filter(r => r.style.display !== 'none').length;
             const countEl = document.getElementById('desktopFilterCount');
-            if (countEl && _desktopQuickQuery) {
-                countEl.textContent = visible + ' risultati';
-                countEl.style.display = 'inline';
-            } else if (countEl && !_desktopQuickQuery) {
-                countEl.style.display = 'none';
+            if (countEl) {
+                if (terms.length > 0) {
+                    countEl.textContent = visible + ' risultati' + (terms.length > 1 ? ' (' + terms.length + ' filtri)' : '');
+                    countEl.style.display = 'inline';
+                } else {
+                    countEl.style.display = 'none';
+                }
             }
         }
 
@@ -6103,7 +6216,10 @@
             const rows = days.map(day => {
                 const d = new Date(day + 'T12:00:00');
                 const dayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
-                const header = '<tr class="day-header"><td colspan="8">' + dayLabel + ' &nbsp;<span style="font-weight:400;font-size:10px;opacity:0.7;">' + byDay[day].length + ' ' + _pv(byDay[day].length) + '</span></td></tr>';
+                const header = '<tr class="day-header"><td colspan="8" style="padding:10px 12px 6px;background:transparent;border-bottom:1px solid rgba(255,255,255,0.05);">'
+                    + '<span style="font-family:Outfit,sans-serif;font-size:12px;font-weight:800;color:rgba(255,107,53,0.9);letter-spacing:0.3px;text-transform:uppercase;">' + dayLabel + '</span>'
+                    + ' <span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:600;color:rgba(255,255,255,0.2);margin-left:6px;">' + byDay[day].length + ' ' + _pv(byDay[day].length) + '</span>'
+                    + '</td></tr>';
                 const tripRows = byDay[day].map(t => {
                     const c = _printColor(t.trasportatore);
                     const ddt = t.daConfermare ? '<span style="color:#c00;font-weight:700;">DA CONFERMARE</span>' : (t.note||'');
@@ -6170,7 +6286,94 @@
         var _deskPopupDays = {lun:false, mar:false, mer:false, gio:false, ven:false};
         var _deskPopupDayColors = {lun:'rgba(96,165,250,', mar:'rgba(52,211,153,', mer:'rgba(167,139,250,', gio:'rgba(251,191,36,', ven:'rgba(244,114,182,'};
 
-        function desktopAddEmpty() {
+        function desktopAddEmpty(prefill) {
+            // Reset chip giorni
+            Object.keys(_dayPickerCounts).forEach(d => { _dayPickerCounts[d] = 0; });
+
+            // Apri modal principale
+            const dam = document.getElementById('desktopAddModal');
+            if (!dam) return;
+
+            // Svuota campi
+            ['dmTransp','dmFrom','dmTo','dmProd','dmNote'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = prefill && prefill[id.replace('dm','')] ? prefill[id.replace('dm','')] : '';
+            });
+            // Precompila se passato un oggetto rotta
+            if (prefill) {
+                if (prefill.trasportatore) document.getElementById('dmTransp').value = prefill.trasportatore;
+                if (prefill.partenza)      document.getElementById('dmFrom').value   = prefill.partenza;
+                if (prefill.arrivo)        document.getElementById('dmTo').value     = prefill.arrivo;
+                if (prefill.prodotto)      document.getElementById('dmProd').value   = prefill.prodotto;
+            }
+            const dmDaConf = document.getElementById('dmDaConf');
+            if (dmDaConf) dmDaConf.checked = false;
+            const dmDate = document.getElementById('dmDate');
+            if (dmDate) dmDate.value = '';
+            const dmSum = document.getElementById('dmSummary');
+            if (dmSum) dmSum.style.display = 'none';
+
+            // Aggiorna UI chip (tutti a zero)
+            Object.keys(_dayPickerCounts).forEach(d => _dpkUpdate(d));
+
+            // Popola rotte rapide nel popup
+            _dmPopulateRoutes();
+
+            dam.style.display = 'flex';
+            setTimeout(() => { const el = document.getElementById('dmTransp'); if (el && !prefill) el.focus(); }, 80);
+        }
+
+        function _dmPopulateRoutes() {
+            const el = document.getElementById('dmRouteChips');
+            if (!el) return;
+            // Rotte dai viaggi esistenti + manuali
+            const routeMap = {};
+            trips.forEach(t => {
+                if (!t.trasportatore || !t.partenza || !t.arrivo) return;
+                const k = t.trasportatore + '||' + t.partenza + '||' + t.arrivo;
+                if (!routeMap[k]) routeMap[k] = { trasportatore:t.trasportatore, partenza:t.partenza, arrivo:t.arrivo, prodotto:t.prodotto||'', uses:0 };
+                routeMap[k].uses++;
+            });
+            const manualRoutes = JSON.parse(localStorage.getItem('pcb_routes') || '[]').filter(r => r.manual);
+            manualRoutes.forEach(r => {
+                const k = r.trasportatore + '||' + r.partenza + '||' + r.arrivo;
+                if (!routeMap[k]) routeMap[k] = { ...r, uses: r.uses || 1 };
+            });
+            const routes = Object.values(routeMap).sort((a,b) => b.uses - a.uses).slice(0, 8);
+            if (routes.length === 0) { el.style.display = 'none'; return; }
+
+            const fromName = p => (p||'').split('(')[0].trim();
+            el.style.display = 'block';
+            el.innerHTML = '<div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;">Rotte rapide</div>'
+                + '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">'
+                + routes.map((r, i) => {
+                    const colorClass = 'transporter-' + (r.trasportatore||'').toLowerCase().replace(/[^a-z]/g,'');
+                    const safeR = JSON.stringify(r).replace(/"/g, '&quot;');
+                    return '<button type="button" onclick="_dmApplyRoute(' + safeR + ')"'
+                        + ' style="display:flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;cursor:pointer;transition:all 0.15s;font-family:Outfit,sans-serif;"'
+                        + ' onmouseover="this.style.borderColor=&apos;rgba(255,107,53,0.4)&apos;;this.style.background=&apos;rgba(255,107,53,0.06)&apos;"'
+                        + ' onmouseout="this.style.borderColor=&apos;rgba(255,255,255,0.08)&apos;;this.style.background=&apos;rgba(255,255,255,0.04)&apos;">'
+                        + '<span class="compact-transporter ' + colorClass + '" style="font-size:9px;padding:1px 6px;">' + (r.trasportatore||'') + '</span>'
+                        + '<span style="font-size:11px;font-weight:600;color:#d0d8e8;">' + fromName(r.partenza) + '</span>'
+                        + '<span style="font-size:10px;color:rgba(255,107,53,0.45);">→</span>'
+                        + '<span style="font-size:11px;font-weight:600;color:rgba(6,214,160,0.85);">' + fromName(r.arrivo) + '</span>'
+                        + '</button>';
+                }).join('')
+                + '</div>';
+        }
+
+        function _dmApplyRoute(r) {
+            document.getElementById('dmTransp').value = r.trasportatore || '';
+            document.getElementById('dmFrom').value   = r.partenza || '';
+            document.getElementById('dmTo').value     = r.arrivo || '';
+            document.getElementById('dmProd').value   = r.prodotto || '';
+            desktopUpdateSummary();
+            // Focus sui giorni
+            const first = document.querySelector('#desktopDayPicker [data-day]');
+            if (first) first.focus();
+        }
+
+        function desktopAddEmpty_OLD() {
             var lastTrip = trips.length > 0 ? trips[trips.length - 1] : null;
             var todayStr = new Date().toISOString().split('T')[0];
             var defaultDate = lastTrip ? lastTrip.data : todayStr;
@@ -6415,16 +6618,7 @@
         function desktopOpenAddModal(ri) {
             const r = window._desktopRoutes[ri];
             // Reset contatori giorni
-            Object.keys(_dayPickerCounts).forEach(d => { _dayPickerCounts[d] = 0; _dpkUpdate(d); });
-            const dmDate = document.getElementById('dmDate');
-            if (dmDate) dmDate.value = '';
-            document.getElementById('dmTransp').value = r.trasportatore || '';
-            document.getElementById('dmFrom').value   = r.partenza || '';
-            document.getElementById('dmTo').value     = r.arrivo || '';
-            document.getElementById('dmProd').value   = r.prodotto || '';
-            document.getElementById('dmNote').value   = '';
-            document.getElementById('dmDaConf').checked = false;
-            const _dms = document.getElementById('dmSummary'); if (_dms) _dms.style.display = 'none';
+            desktopAddEmpty(r);
             const modal = document.getElementById('desktopAddModal');
             modal.style.display = 'flex';
         }
@@ -6633,21 +6827,27 @@
         // Contatori per ogni giorno nel picker
         const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0};
 
+        const _dpkColors = {lun:'96,165,250',mar:'52,211,153',mer:'167,139,250',gio:'251,191,36',ven:'244,114,182'};
+
         function _dpkUpdate(d) {
             const cnt = _dayPickerCounts[d] || 0;
             const wrap = document.getElementById('dpk-' + d);
             const btn  = wrap ? wrap.querySelector('[data-day]') : null;
             const lbl  = document.getElementById('dpk-cnt-' + d);
+            const col  = _dpkColors[d] || '255,107,53';
+            const active = cnt > 0;
+            if (wrap) {
+                wrap.style.borderColor = active ? 'rgba(' + col + ',0.6)' : 'rgba(255,255,255,0.07)';
+            }
             if (btn) {
-                const active = cnt > 0;
-                wrap.style.borderColor = active ? 'var(--accent)' : 'rgba(255,255,255,0.08)';
-                btn.style.background   = active ? 'rgba(255,107,53,0.18)' : '#13151f';
-                btn.style.color        = active ? 'var(--accent)' : 'var(--text-dim)';
-                btn.textContent        = btn.dataset.day.charAt(0).toUpperCase() + btn.dataset.day.slice(1) + (cnt > 1 ? ' ×' + cnt : '');
+                btn.style.background = active ? 'rgba(' + col + ',0.2)' : '#0c0f1a';
+                btn.style.color      = active ? 'rgb(' + col + ')' : 'rgba(255,255,255,0.3)';
+                const label = d.charAt(0).toUpperCase() + d.slice(1);
+                btn.textContent = active && cnt > 1 ? label + ' ×' + cnt : label;
             }
             if (lbl) {
-                lbl.textContent = cnt > 0 ? cnt + '×' : '0×';
-                lbl.style.color = cnt > 0 ? 'var(--accent)' : 'rgba(255,255,255,0.25)';
+                lbl.textContent = active ? cnt + '×' : '—';
+                lbl.style.color = active ? 'rgba(' + col + ',0.8)' : 'rgba(255,255,255,0.2)';
             }
             desktopUpdateSummary();
         }
@@ -6669,24 +6869,22 @@
 
         function desktopUpdateSummary() {
             const specificDate = document.getElementById('dmDate') ? document.getElementById('dmDate').value : '';
-            const dayNames = {lun:'Lun',mar:'Mar',mer:'Mer',gio:'Gio',ven:'Ven',sab:'Sab'};
+            const dayNames = {lun:'Lun',mar:'Mar',mer:'Mer',gio:'Gio',ven:'Ven'};
             const parts = [];
             let total = 0;
             Object.entries(_dayPickerCounts).forEach(([d, cnt]) => {
-                if (cnt > 0) {
-                    parts.push(dayNames[d] + (cnt > 1 ? ' ×' + cnt : ''));
-                    total += cnt;
-                }
+                if (cnt > 0) { parts.push(dayNames[d] + (cnt > 1 ? ' ×' + cnt : '')); total += cnt; }
             });
             if (specificDate) { total += 1; const dt = new Date(specificDate+'T12:00:00'); parts.push(dt.toLocaleDateString('it-IT')); }
             const summary = document.getElementById('dmSummary');
             if (!summary) return;
             if (total === 0) { summary.style.display = 'none'; return; }
+            const trasp = (document.getElementById('dmTransp')||{}).value || '';
+            const from  = ((document.getElementById('dmFrom')||{}).value||'').split('(')[0].trim();
+            const to    = ((document.getElementById('dmTo')||{}).value||'').split('(')[0].trim();
+            const tratta = trasp && from && to ? trasp + '  ' + from + ' \u2192 ' + to + '\n' : '';
             summary.style.display = 'block';
-            summary.style.background = 'rgba(6,214,160,0.1)';
-            summary.style.borderColor = 'rgba(6,214,160,0.3)';
-            summary.style.color = 'var(--success)';
-            summary.textContent = '✅ Verranno aggiunti ' + total + ' ' + _pv(total) + ': ' + parts.join(', ');
+            summary.textContent = (tratta ? '🚛 ' + tratta : '') + '✅ ' + total + ' ' + _pv(total) + ': ' + parts.join(', ');
         }
 
         function desktopConfirmAdd() {
@@ -6728,8 +6926,9 @@
         function desktopCloseAddModal() {
             const m = document.getElementById('desktopAddModal');
             if (m) m.style.display = 'none';
-            // Reset contatori
             Object.keys(_dayPickerCounts).forEach(d => { _dayPickerCounts[d] = 0; _dpkUpdate(d); });
+            const s = document.getElementById('dmSummary');
+            if (s) s.style.display = 'none';
         }
 
         function desktopNewRouteModal() {
@@ -6890,6 +7089,19 @@
                     daConfermare: document.getElementById('editDaConfermare').checked
                 };
                 
+                // Auto-aggiungi trasportatore, partenza, arrivo alle liste
+                var et = document.getElementById('editTrasportatore').value.trim();
+                var ep = document.getElementById('editPartenza').value.trim();
+                var ea = document.getElementById('editArrivo').value.trim();
+                if (et && !transportersList.includes(et)) {
+                    transportersList.push(et);
+                    transportersList.sort();
+                    updateTransporterDatalist();
+                    saveTransportersList();
+                }
+                addLocationToList(ep, 'partenza');
+                addLocationToList(ea, 'arrivo');
+
                 trips.sort((a, b) => new Date(a.data) - new Date(b.data));
                 saveToLocalStorage();
                 filteredTrips = [...trips];
@@ -6911,7 +7123,32 @@
         });
 
         function downloadExcel() {
-            _buildAndDownloadExcel(trips, weekTitle, '');
+            // Usa sempre i viaggi visibili nella vista corrente + filtri attivi
+            var toExport;
+            var label = weekTitle || '';
+            var suffix = '';
+
+            if (currentView === 'desktop') {
+                // Vista PC: rispetta filtro giorno e ordinamento
+                toExport = _getVisibleTrips();
+                if (_desktopDayFilter && _desktopDayFilter !== 'Tutti') {
+                    label += ' — ' + _desktopDayFilter;
+                    suffix = '_' + _desktopDayFilter;
+                }
+            } else {
+                // Altre viste: rispetta filtri attivi (ricerca, trasportatore, data, ecc.)
+                var hasFilters = searchQuery || filterState.today || filterState.date ||
+                                 filterState.transporter || filterState.partenza || filterState.arrivo || filterState.giorno;
+                toExport = hasFilters ? [...filteredTrips] : [...trips];
+                toExport.sort((a,b) => new Date(a.data||0) - new Date(b.data||0));
+                if (hasFilters) suffix = '_filtrati';
+            }
+
+            if (!toExport || toExport.length === 0) {
+                showStatus('Nessun viaggio da esportare', 'info');
+                return;
+            }
+            _buildAndDownloadExcel(toExport, label, suffix);
         }
 
         // ── Colore testo trasportatore (fedele all'originale) ──
@@ -6954,13 +7191,13 @@
 
         // Colori giorno per separatori Excel
         const _DAY_COLORS = {
-            1:{bg:'FFE8F0FE',border:'FF93C5FD',txt:'FF1D4ED8',label:'LUNEDI'},
-            2:{bg:'FFD1FAE5',border:'FF6EE7B7',txt:'FF065F46',label:'MARTEDI'},
-            3:{bg:'FFEDE9FE',border:'FFC4B5FD',txt:'FF5B21B6',label:'MERCOLEDI'},
-            4:{bg:'FFFEF9C3',border:'FFFDE047',txt:'FF92400E',label:'GIOVEDI'},
-            5:{bg:'FFFCE7F3',border:'FFF9A8D4',txt:'FF9D174D',label:'VENERDI'},
-            6:{bg:'FFF1F5F9',border:'FFCBD5E1',txt:'FF475569',label:'SABATO'},
-            0:{bg:'FFF1F5F9',border:'FFCBD5E1',txt:'FF475569',label:'DOMENICA'}
+            1:{bg:'FF0F2547',border:'FF3B82F6',txt:'FF60A5FA',label:'LUNEDI'},
+            2:{bg:'FF052E1A',border:'FF059669',txt:'FF34D399',label:'MARTEDI'},
+            3:{bg:'FF1E0A3C',border:'FF7C3AED',txt:'FFA78BFA',label:'MERCOLEDI'},
+            4:{bg:'FF2D1A00',border:'FFD97706',txt:'FFFBBF24',label:'GIOVEDI'},
+            5:{bg:'FF2D0A1E',border:'FFDB2777',txt:'FFF472B6',label:'VENERDI'},
+            6:{bg:'FF1A1F2E',border:'FF64748B',txt:'FF94A3B8',label:'SABATO'},
+            0:{bg:'FF1A1F2E',border:'FF64748B',txt:'FF94A3B8',label:'DOMENICA'}
         };
 
         async function _buildAndDownloadExcel(tripsData, title, filenameSuffix) {
@@ -6984,36 +7221,43 @@
                 ];
 
                 const thin   = {style:'thin',  color:{argb:'FFD1D5DB'}};
-                const medium = {style:'medium', color:{argb:'FF9CA3AF'}};
+                const medium = {style:'medium', color:{argb:'FF6B7280'}};
+                const thick  = {style:'medium', color:{argb:'FF1A2340'}};
                 const bdr    = {top:thin,left:thin,bottom:thin,right:thin};
                 const bdrMed = {top:medium,left:medium,bottom:medium,right:medium};
 
                 // Intestazione settimana
                 const weekRange = _xlsWeekRange(sorted);
-                const r1 = ws.addRow(['PLANNING VIAGGI','','','','','','','','','']);
-                r1.height = 36;
-                for (let c=1; c<=10; c++) { r1.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1A2340'}}; r1.getCell(c).border=bdrMed; }
-                r1.getCell(1).font      = {bold:true,size:18,color:{argb:'FFFFFFFF'},name:'Arial'};
-                r1.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:1};
+                const r1 = ws.addRow(['PLANNING VIAGGI  ·  Pro Trasporti','','','','','','','','','']);
+                r1.height = 40;
+                for (let c=1; c<=10; c++) {
+                    r1.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FF0F172A'}};
+                    r1.getCell(c).border = {top:{style:'medium',color:{argb:'FFFF6B35'}},bottom:{style:'medium',color:{argb:'FFFF6B35'}},left:thin,right:thin};
+                }
+                r1.getCell(1).font      = {bold:true,size:16,color:{argb:'FFFFFFFF'},name:'Calibri'};
+                r1.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
                 ws.mergeCells('A1:J1');
 
                 const r2 = ws.addRow([weekRange,'','','','','','','','','']);
-                r2.height = 22;
-                for (let c=1; c<=10; c++) { r2.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE4ECEF'}}; r2.getCell(c).border=bdr; }
-                r2.getCell(1).font      = {bold:true,size:11,color:{argb:'FFDC2626'},name:'Arial'};
-                r2.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:1};
+                r2.height = 20;
+                for (let c=1; c<=10; c++) {
+                    r2.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FFEFF6FF'}};
+                    r2.getCell(c).border = bdr;
+                }
+                r2.getCell(1).font      = {bold:true,size:11,color:{argb:'FF1E3A5F'},name:'Calibri'};
+                r2.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
                 ws.mergeCells('A2:J2');
 
                 // Header colonne
                 const HDRS = ['','Data','Trasportatore','Partenza da','Arrivo a','Prodotto','Note / DDT','!','OK',''];
                 const r3 = ws.addRow(HDRS);
-                r3.height = 24;
+                r3.height = 26;
                 HDRS.forEach((h,i) => {
                     const cell = r3.getCell(i+1);
-                    cell.fill      = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1A2340'}};
-                    cell.font      = {bold:true,size:9,color:{argb:'FFFFFFFF'},name:'Arial'};
+                    cell.fill      = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
+                    cell.font      = {bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
                     cell.alignment = {vertical:'middle',horizontal:(i===7||i===8)?'center':'left',indent:(i===0||i===9)?0:1};
-                    cell.border    = bdr;
+                    cell.border    = {top:{style:'medium',color:{argb:'FF1E3A5F'}},bottom:{style:'medium',color:{argb:'FF1E3A5F'}},left:thin,right:thin};
                 });
                 ws.views = [{state:'frozen',xSplit:0,ySplit:3}];
 
@@ -7030,16 +7274,22 @@
 
                     // Separatore giorno colorato
                     const sepR = ws.addRow([dayLabel,'','','','','','','','','']);
-                    sepR.height = 20;
+                    sepR.height = 24;
                     for (let c=1; c<=10; c++) {
                         sepR.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:dc.bg}};
-                        sepR.getCell(c).border = {top:{style:'medium',color:{argb:dc.border}},bottom:{style:'medium',color:{argb:dc.border}},left:bdr.left,right:bdr.right};
+                        sepR.getCell(c).border = {
+                            top:{style:'medium',color:{argb:dc.border}},
+                            bottom:{style:'medium',color:{argb:dc.border}},
+                            left:{style:'thin',color:{argb:dc.border}},
+                            right:{style:'thin',color:{argb:dc.border}}
+                        };
                     }
-                    sepR.getCell(1).font      = {bold:true,size:10,color:{argb:dc.txt},name:'Arial'};
-                    sepR.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:1};
+                    sepR.getCell(1).font      = {bold:true,size:11,color:{argb:dc.txt},name:'Calibri'};
+                    sepR.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
+                    // Testo contatore stesso colore del giorno
                     var cntLabel = dayTrips.length + ' ' + _pv(dayTrips.length);
                     sepR.getCell(9).value     = cntLabel;
-                    sepR.getCell(9).font      = {size:8,color:{argb:dc.txt},italic:true,name:'Arial'};
+                    sepR.getCell(9).font      = {bold:true,size:9,color:{argb:dc.txt},name:'Calibri'};
                     sepR.getCell(9).alignment = {vertical:'middle',horizontal:'right'};
                     ws.mergeCells('A'+sepR.number+':H'+sepR.number);
 
@@ -7063,26 +7313,33 @@
                         for (let c=1; c<=10; c++) {
                             var cell = row.getCell(c);
                             cell.fill      = {type:'pattern',pattern:'solid',fgColor:{argb:zebraFg}};
-                            cell.font      = {size:10,color:{argb:'FF111827'},name:'Arial'};
+                            cell.font      = {size:10,color:{argb:'FF1F2937'},name:'Calibri'};
                             cell.alignment = {vertical:'middle',horizontal:'left',wrapText:false,indent:1};
                             cell.border    = bdr;
                         }
-                        // B Data: monospace bold
-                        row.getCell(2).font = {bold:true,size:10,color:{argb:'FF111827'},name:'Courier New'};
-                        // C Trasportatore: colorato centrato
-                        row.getCell(3).font      = {bold:true,size:10,color:{argb:colors.bg},name:'Arial'};
+                        // B Data: bold Calibri, blu scuro premium
+                        row.getCell(2).font      = {bold:true,size:10,color:{argb:'FF1E3A5F'},name:'Calibri'};
+                        row.getCell(2).alignment = {vertical:'middle',horizontal:'left',indent:1};
+                        // C Trasportatore: bold colorato centrato
+                        row.getCell(3).font      = {bold:true,size:10,color:{argb:colors.bg},name:'Calibri'};
                         row.getCell(3).alignment = {vertical:'middle',horizontal:'center'};
+                        // D Partenza: bold
+                        row.getCell(4).font      = {bold:true,size:10,color:{argb:'FF111827'},name:'Calibri'};
+                        // E Arrivo: bold verde scuro
+                        row.getCell(5).font      = {bold:true,size:10,color:{argb:'FF065F46'},name:'Calibri'};
+                        // F Prodotto: bold grigio scuro
+                        row.getCell(6).font      = {bold:true,size:9,color:{argb:'FF374151'},name:'Calibri'};
                         // G/H da confermare: rosso su giallo
                         if (trip.daConfermare) {
-                            row.getCell(7).font = {bold:true,size:9,color:{argb:'FFDC2626'},name:'Arial'};
+                            row.getCell(7).font = {bold:true,size:9,color:{argb:'FFDC2626'},name:'Calibri'};
                             row.getCell(7).fill = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9C4'}};
-                            row.getCell(8).font = {bold:true,size:10,color:{argb:'FFDC2626'},name:'Arial'};
+                            row.getCell(8).font = {bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
                             row.getCell(8).fill = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9C4'}};
                             row.getCell(8).alignment = {vertical:'middle',horizontal:'center'};
                         }
                         // I confermato: verde
                         if (trip.confermato) {
-                            row.getCell(9).font      = {bold:true,size:10,color:{argb:'FF16A34A'},name:'Arial'};
+                            row.getCell(9).font      = {bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
                             row.getCell(9).alignment = {vertical:'middle',horizontal:'center'};
                         }
                     });
@@ -7094,11 +7351,11 @@
                         daConf>0?daConf+' da conf.':'', conf>0?conf+' conf.':'','']);
                     totR.height = 15;
                     for (let c=1; c<=10; c++) { totR.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFF1F5F9'}}; totR.getCell(c).border=bdr; }
-                    totR.getCell(2).font      = {italic:true,size:9,color:{argb:'FF6B7280'},name:'Arial'};
+                    totR.getCell(2).font      = {italic:true,size:9,color:{argb:'FF6B7280'},name:'Calibri'};
                     totR.getCell(2).alignment = {vertical:'middle',horizontal:'left',indent:1};
                     ws.mergeCells('B'+totR.number+':G'+totR.number);
-                    if (daConf>0) { totR.getCell(8).font={italic:true,size:9,color:{argb:'FFDC2626'},name:'Arial'}; totR.getCell(8).alignment={vertical:'middle',horizontal:'center'}; }
-                    if (conf>0)   { totR.getCell(9).font={italic:true,size:9,color:{argb:'FF16A34A'},name:'Arial'}; totR.getCell(9).alignment={vertical:'middle',horizontal:'center'}; }
+                    if (daConf>0) { totR.getCell(8).font={italic:true,size:9,color:{argb:'FFDC2626'},name:'Calibri'}; totR.getCell(8).alignment={vertical:'middle',horizontal:'center'}; }
+                    if (conf>0)   { totR.getCell(9).font={italic:true,size:9,color:{argb:'FF16A34A'},name:'Calibri'}; totR.getCell(9).alignment={vertical:'middle',horizontal:'center'}; }
                 });
 
                 // Riga totale generale
@@ -7110,39 +7367,86 @@
                 for (let c=1; c<=10; c++) {
                     gtRow.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1A2340'}};
                     gtRow.getCell(c).border = bdrMed;
-                    gtRow.getCell(c).font   = {bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Arial'};
+                    gtRow.getCell(c).font   = {bold:true,size:11,color:{argb:'FFFFFFFF'},name:'Calibri'};
                     gtRow.getCell(c).alignment = {vertical:'middle',horizontal:'left',indent:1};
                 }
-                gtRow.getCell(8).font = {bold:true,size:10,color:{argb:'FFFFD966'},name:'Arial'};
-                gtRow.getCell(9).font = {bold:true,size:10,color:{argb:'FF90EE90'},name:'Arial'};
+                gtRow.getCell(8).font = {bold:true,size:10,color:{argb:'FFFFD966'},name:'Calibri'};
+                gtRow.getCell(9).font = {bold:true,size:10,color:{argb:'FF90EE90'},name:'Calibri'};
                 ws.mergeCells('B'+gtRow.number+':G'+gtRow.number);
 
                 // === FOGLIO 2 — RIEPILOGO ===
                 var ws2 = wb.addWorksheet('Riepilogo');
-                ws2.columns = [{width:2},{width:22},{width:10},{width:10},{width:10},{width:2}];
+                // Colonne: margin | label(28) | n(9) | conf(9) | daConf(9) | margin
+                // + colonne extra per sezioni partenze/arrivi/prodotti (stessa larghezza)
+                ws2.columns = [
+                    {width:2},{width:28},{width:9},{width:9},{width:9},{width:2},
+                    {width:2},{width:28},{width:9},{width:2}
+                ];
 
-                function addR2Title(text) {
+                // Numero colonne totali usate per fill/border nelle intestazioni
+                var WS2_COLS = 10;
+
+                function addR2Title(text, accent) {
                     ws2.addRow([]);
-                    var r = ws2.addRow(['',text,'','','','']);
-                    r.height = 22;
-                    for (let c=1; c<=6; c++) { r.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1A2340'}}; r.getCell(c).border=bdrMed; }
-                    r.getCell(2).font={bold:true,size:11,color:{argb:'FFFFFFFF'},name:'Arial'};
+                    var r = ws2.addRow(['',text,'','','','','','','','']);
+                    r.height = 24;
+                    var bg = accent || 'FF0F172A';
+                    for (let c=1; c<=WS2_COLS; c++) {
+                        r.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:bg}};
+                        r.getCell(c).border=bdrMed;
+                    }
+                    r.getCell(2).font={bold:true,size:12,color:{argb:'FFFFFFFF'},name:'Calibri'};
                     r.getCell(2).alignment={vertical:'middle',horizontal:'left',indent:1};
-                    ws2.mergeCells('B'+r.number+':E'+r.number);
+                    ws2.mergeCells('B'+r.number+':I'+r.number);
                 }
-                function addR2Header(cols) {
-                    var r = ws2.addRow([''].concat(cols).concat(['']));
+                function addR2Header(cols, startCol) {
+                    startCol = startCol || 2;
+                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
                     r.height = 18;
                     cols.forEach(function(_,i) {
-                        var cell = r.getCell(i+2);
-                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF374151'}};
-                        cell.font={bold:true,size:9,color:{argb:'FFFFFFFF'},name:'Arial'};
-                        cell.alignment={vertical:'middle',horizontal:'left',indent:1};
+                        var cell = r.getCell(startCol+i);
+                        cell.value = cols[i];
+                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
+                        cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
+                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
                         cell.border=bdr;
                     });
+                    return r;
+                }
+                function addR2DataRow(vals, startCol, zebraEven, colorCell2Argb) {
+                    startCol = startCol || 2;
+                    var zbg = zebraEven ? 'FFF8FAFC' : 'FFFFFFFF';
+                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
+                    r.height = 17;
+                    vals.forEach(function(v,i) {
+                        var cell = r.getCell(startCol+i);
+                        cell.value = v;
+                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:zbg}};
+                        cell.border=bdr;
+                        cell.font={size:10,name:'Calibri',color:{argb:'FF1F2937'}};
+                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
+                    });
+                    if (colorCell2Argb) {
+                        r.getCell(startCol).font={bold:true,size:10,color:{argb:colorCell2Argb},name:'Calibri'};
+                    }
+                    return r;
+                }
+                function addR2TotalRow(vals, startCol) {
+                    startCol = startCol || 2;
+                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
+                    r.height = 19;
+                    vals.forEach(function(v,i) {
+                        var cell = r.getCell(startCol+i);
+                        cell.value = v;
+                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
+                        cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
+                        cell.border=bdrMed;
+                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
+                    });
+                    return r;
                 }
 
-                // Riepilogo per trasportatore
+                // ── SEZIONE 1: PER TRASPORTATORE ──
                 addR2Title('TOTALI PER TRASPORTATORE');
                 addR2Header(['Trasportatore','Viaggi','Conf.','Da conf.']);
                 var countsByT = {};
@@ -7150,63 +7454,97 @@
                     var k = t.trasportatore||'(?)';
                     if (!countsByT[k]) countsByT[k]={tot:0,conf:0,daConf:0};
                     countsByT[k].tot++;
-                    if (t.confermato) countsByT[k].conf++;
+                    if (t.confermato)   countsByT[k].conf++;
                     if (t.daConfermare) countsByT[k].daConf++;
                 });
                 var tEven = false;
                 Object.entries(countsByT).sort(function(a,b){return b[1].tot-a[1].tot;}).forEach(function(entry) {
                     var name=entry[0], v=entry[1];
                     tEven = !tEven;
-                    var zbg = tEven ? 'FFF9FAFB' : 'FFFFFFFF';
                     var colors = _xlsColors(name);
-                    var r = ws2.addRow(['',name,v.tot,v.conf,v.daConf,'']);
-                    r.height = 17;
-                    for (let c=2; c<=5; c++) {
-                        r.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:zbg}};
-                        r.getCell(c).border=bdr;
-                        r.getCell(c).font={size:10,name:'Arial'};
-                        r.getCell(c).alignment={vertical:'middle',horizontal:(c===2?'left':'center'),indent:(c===2?1:0)};
-                    }
-                    r.getCell(2).font={bold:true,size:10,color:{argb:colors.bg},name:'Arial'};
-                    if (v.conf>0)   { r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Arial'}; }
-                    if (v.daConf>0) { r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Arial'}; }
+                    var r = addR2DataRow([name, v.tot, v.conf>0?v.conf:'', v.daConf>0?v.daConf:''], 2, tEven, colors.bg);
+                    if (v.conf>0)   r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
+                    if (v.daConf>0) r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
                 });
-                var totT = ws2.addRow(['','TOTALE',sorted.length,
+                addR2TotalRow(['TOTALE', sorted.length,
                     sorted.filter(function(t){return t.confermato;}).length,
-                    sorted.filter(function(t){return t.daConfermare;}).length,'']);
-                totT.height = 19;
-                for (let c=2; c<=5; c++) { totT.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE4ECEF'}}; totT.getCell(c).font={bold:true,size:10,name:'Arial'}; totT.getCell(c).border=bdrMed; totT.getCell(c).alignment={vertical:'middle',horizontal:(c===2?'left':'center'),indent:(c===2?1:0)}; }
+                    sorted.filter(function(t){return t.daConfermare;}).length], 2);
 
-                // Riepilogo per giorno
+                // ── SEZIONE 2: PER GIORNO ──
                 addR2Title('TOTALI PER GIORNO');
                 addR2Header(['Giorno','Viaggi','Conf.','Da conf.']);
-                var gEven = false;
                 days.forEach(function(day) {
-                    gEven = !gEven;
                     var d = new Date(day+'T12:00:00');
                     var dc = _DAY_COLORS[d.getDay()]||_DAY_COLORS[0];
                     var dayTrips = byDay[day];
-                    var conf = dayTrips.filter(function(t){return t.confermato;}).length;
+                    var conf   = dayTrips.filter(function(t){return t.confermato;}).length;
                     var daConf = dayTrips.filter(function(t){return t.daConfermare;}).length;
                     var dd=String(d.getDate()).padStart(2,'0'), mm=String(d.getMonth()+1).padStart(2,'0');
-                    var label = dc.label + ' ' + dd+'/'+mm;
-                    var r = ws2.addRow(['',label,dayTrips.length,conf,daConf,'']);
-                    r.height = 17;
-                    for (let c=2; c<=5; c++) {
-                        r.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:dc.bg}};
-                        r.getCell(c).border=bdr;
-                        r.getCell(c).font={size:10,name:'Arial'};
-                        r.getCell(c).alignment={vertical:'middle',horizontal:(c===2?'left':'center'),indent:(c===2?1:0)};
-                    }
-                    r.getCell(2).font={bold:true,size:10,color:{argb:dc.txt},name:'Arial'};
-                    if (conf>0)   { r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Arial'}; }
-                    if (daConf>0) { r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Arial'}; }
+                    var label = dc.label + '  ' + dd+'/'+mm;
+                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
+                    r.height = 18;
+                    [[2,label],[3,dayTrips.length],[4,conf>0?conf:''],[5,daConf>0?daConf:'']].forEach(function(x){
+                        var cell = r.getCell(x[0]);
+                        cell.value = x[1];
+                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:dc.bg}};
+                        cell.border=bdr;
+                        cell.font={bold:(x[0]===2),size:10,color:{argb:dc.txt},name:'Calibri'};
+                        cell.alignment={vertical:'middle',horizontal:(x[0]===2?'left':'center'),indent:(x[0]===2?1:0)};
+                    });
+                    if (conf>0)   r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
+                    if (daConf>0) r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
                 });
-                var totG = ws2.addRow(['','TOTALE',sorted.length,
+                addR2TotalRow(['TOTALE', sorted.length,
                     sorted.filter(function(t){return t.confermato;}).length,
-                    sorted.filter(function(t){return t.daConfermare;}).length,'']);
-                totG.height = 19;
-                for (let c=2; c<=5; c++) { totG.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE4ECEF'}}; totG.getCell(c).font={bold:true,size:10,name:'Arial'}; totG.getCell(c).border=bdrMed; totG.getCell(c).alignment={vertical:'middle',horizontal:(c===2?'left':'center'),indent:(c===2?1:0)}; }
+                    sorted.filter(function(t){return t.daConfermare;}).length], 2);
+
+                // ── SEZIONE 3: PARTENZE ──
+                addR2Title('PARTENZE PER LUOGO');
+                addR2Header(['Luogo di partenza','N° viaggi']);
+                var countsByP = {};
+                sorted.forEach(function(t) {
+                    var k = (t.partenza||'(?)').trim();
+                    countsByP[k] = (countsByP[k]||0) + 1;
+                });
+                var pEven = false;
+                Object.entries(countsByP).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
+                    pEven = !pEven;
+                    addR2DataRow([entry[0], entry[1]], 2, pEven, null);
+                });
+                addR2TotalRow(['TOTALE PARTENZE', sorted.length], 2);
+
+                // ── SEZIONE 4: ARRIVI ──
+                addR2Title('ARRIVI PER LUOGO');
+                addR2Header(['Luogo di arrivo','N° viaggi']);
+                var countsByA = {};
+                sorted.forEach(function(t) {
+                    var k = (t.arrivo||'(?)').trim();
+                    countsByA[k] = (countsByA[k]||0) + 1;
+                });
+                var aEven = false;
+                Object.entries(countsByA).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
+                    aEven = !aEven;
+                    addR2DataRow([entry[0], entry[1]], 2, aEven, null);
+                });
+                addR2TotalRow(['TOTALE ARRIVI', sorted.length], 2);
+
+                // ── SEZIONE 5: PRODOTTI ──
+                var prodSorted = sorted.filter(function(t){return t.prodotto && t.prodotto.trim();});
+                if (prodSorted.length > 0) {
+                    addR2Title('PRODOTTI TRASPORTATI');
+                    addR2Header(['Prodotto','N° viaggi']);
+                    var countsByProd = {};
+                    prodSorted.forEach(function(t) {
+                        var k = (t.prodotto||'').trim();
+                        countsByProd[k] = (countsByProd[k]||0) + 1;
+                    });
+                    var prEven = false;
+                    Object.entries(countsByProd).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
+                        prEven = !prEven;
+                        addR2DataRow([entry[0], entry[1]], 2, prEven, null);
+                    });
+                    addR2TotalRow(['TOTALE CON PRODOTTO', prodSorted.length], 2);
+                }
 
                 // Scarica
                 var buffer = await wb.xlsx.writeBuffer();
@@ -8088,7 +8426,7 @@
             }
         }
 
-        async function driveSave() {
+        async function driveSave(silent) {
             if (!driveAccessToken) {
                 console.log('☁️ driveSave: nessun token, skip silenzioso');
                 updateDriveBtns(false);
@@ -8100,8 +8438,8 @@
                 // Assicurati di avere il fileId
                 if (!driveFileId) driveFileId = await driveFindFile();
 
-                // Conflict check (solo se il file esiste già su Drive)
-                if (driveFileId && _driveLastKnownSavedAt) {
+                // Conflict check solo se chiamata manualmente (non in auto-save)
+                if (!silent && driveFileId && _driveLastKnownSavedAt) {
                     const { conflict, driveData } = await driveCheckConflict();
                     if (conflict) {
                         _setSyncBtnState('error');
@@ -8135,9 +8473,9 @@
             }
         }
 
-        // ── Auto-save: stesso conflict check del manuale ──
+        // ── Auto-save: salva silenziosamente, nessun conflict modal ──
         function autoSaveDrive() {
-            if (driveAccessToken) driveSave();
+            if (driveAccessToken) driveSave(true);
         }
 
         // Auto-reconnect silenzioso — solo per rinnovare un token già valido (chiamato ogni 50min)
@@ -8178,7 +8516,7 @@
                 if (!fileId) {
                     // Nessun file su Drive — salva i dati locali
                     console.log('☁️ Nessun file su Drive, carico dati locali');
-                    await driveSave();
+                    await driveSave(true);
                     return;
                 }
                 driveFileId = fileId;
@@ -8209,7 +8547,7 @@
                 } else {
                     // Locale uguale o più recente → salva su Drive
                     console.log('☁️ Dati locali più recenti, salvo su Drive');
-                    await driveSave();
+                    await driveSave(true);
                 }
             } catch(e) {
                 console.warn('☁️ SmartSync fallito silenziosamente:', e.message);
@@ -8746,7 +9084,7 @@
                     <div style="font-size:10px;font-weight:700;color:var(--success);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">📱 Questo dispositivo</div>
                     <div id="conflictLocalTrips" style="font-size:24px;font-weight:800;color:var(--text);"></div>
                     <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">viaggi</div>
-                    <div id="conflictLocalTime" style="font-size:11px;color:var(--text-dim);margin-top:8px;font-family:'JetBrains Mono',monospace;"></div>
+                    <div id="conflictLocalTime" style="font-size:11px;color:var(--text-dim);margin-top:8px;font-family:JetBrains Mono,monospace;"></div>
                 </div>
                 <!-- Drive -->
                 <div id="conflictDriveCard" style="
@@ -8755,7 +9093,7 @@
                     <div style="font-size:10px;font-weight:700;color:#ffd23f;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">☁️ Google Drive</div>
                     <div id="conflictDriveTrips" style="font-size:24px;font-weight:800;color:var(--text);"></div>
                     <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">viaggi</div>
-                    <div id="conflictDriveTime" style="font-size:11px;color:var(--text-dim);margin-top:8px;font-family:'JetBrains Mono',monospace;"></div>
+                    <div id="conflictDriveTime" style="font-size:11px;color:var(--text-dim);margin-top:8px;font-family:JetBrains Mono,monospace;"></div>
                 </div>
             </div>
 
