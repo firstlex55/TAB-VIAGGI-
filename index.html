@@ -4881,7 +4881,7 @@
         }
 
         function renderTodayBanner() {
-            const today = new Date().toISOString().split('T')[0];
+            const today = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
             const todayTrips = trips.filter(t => t.data === today);
             
             const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
@@ -5115,9 +5115,17 @@
             var container = document.getElementById('cardView');
             if (!container) return;
 
-            var today = new Date().toISOString().split('T')[0];
-            var tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-            var dayAfter  = new Date(Date.now() + 2*86400000).toISOString().split('T')[0];
+            // Usa data locale (non UTC) per evitare sfasamenti di fuso orario
+            function _localDate(offsetDays) {
+                var d = new Date();
+                d.setDate(d.getDate() + (offsetDays||0));
+                return d.getFullYear() + '-'
+                    + String(d.getMonth()+1).padStart(2,'0') + '-'
+                    + String(d.getDate()).padStart(2,'0');
+            }
+            var today    = _localDate(0);
+            var tomorrow = _localDate(1);
+            var dayAfter = _localDate(2);
 
             var todayTrips    = trips.filter(function(t){ return t.data === today; });
             var tomorrowTrips = trips.filter(function(t){ return t.data === tomorrow; });
@@ -5193,51 +5201,53 @@
             var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
             var toName   = (trip.arrivo||'').split('(')[0].trim();
             var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+            var dimmed   = isToday ? '' : 'opacity:0.5;';
 
-            var dimmed = isToday ? '' : 'opacity:0.55;';
-
-            // Contenitore: riga compatta con bordo sinistro colorato
             var card = '<div onclick="editTrip(' + idx + ')" '
-                + 'style="display:flex;align-items:center;gap:0;margin-bottom:6px;cursor:pointer;'
-                + 'border-radius:11px;overflow:hidden;background:#12161f;'
-                + dimmed
-                + 'transition:opacity 0.15s,transform 0.12s;" '
+                + 'style="display:flex;align-items:stretch;margin-bottom:5px;cursor:pointer;'
+                + 'border-radius:10px;overflow:hidden;background:#12161f;' + dimmed + '" '
                 + 'class="trip-card" data-transporter="' + tKey + '">';
 
-            // Striscia sinistra colorata + nome trasportatore verticale
-            card += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;'
-                + 'padding:0 10px;min-width:54px;height:56px;border-right:1px solid rgba(255,255,255,0.06);gap:4px;">';
+            // Badge trasportatore — colonna sinistra sempre visibile
             card += '<span class="trip-transporter ' + colorClass + '" '
-                + 'style="font-size:9px;padding:2px 6px;border-radius:5px;letter-spacing:0.5px;white-space:nowrap;">'
+                + 'style="display:flex;align-items:center;justify-content:center;'
+                + 'writing-mode:vertical-rl;text-orientation:mixed;'
+                + 'font-size:8px;font-weight:900;letter-spacing:1px;padding:8px 5px;'
+                + 'border-radius:0;flex-shrink:0;min-width:22px;">'
                 + (trip.trasportatore||'—') + '</span>';
-            if (trip.confermato) {
-                card += '<span style="font-size:9px;color:var(--success);font-weight:900;line-height:1;">✓</span>';
-            } else if (trip.daConfermare) {
-                card += '<span style="font-size:9px;color:var(--warning);font-weight:900;line-height:1;">!</span>';
-            }
+
+            // Corpo centrale
+            card += '<div style="flex:1;min-width:0;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(255,255,255,0.04);">';
+
+            // Riga rotta
+            card += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
+            card += '<span style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%;">' + fromName + '</span>';
+            card += '<span style="font-size:11px;color:rgba(255,107,53,0.5);flex-shrink:0;">→</span>';
+            card += '<span style="font-size:13px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
             card += '</div>';
 
-            // Corpo centrale: rotta su una riga
-            card += '<div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;justify-content:center;height:56px;">';
-
-            // Rotta: partenza → arrivo
-            card += '<div style="display:flex;align-items:baseline;gap:6px;min-width:0;">';
-            card += '<span style="font-size:16px;font-weight:700;color:#f0f4fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%;">' + fromName + '</span>';
-            card += '<span style="font-size:13px;color:rgba(255,107,53,0.6);flex-shrink:0;font-weight:400;">→</span>';
-            card += '<span style="font-size:16px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
-            card += '</div>';
-
-            // Sottotitoli: codici + prodotto
+            // Riga sottotitolo: codici + prodotto
             var subs = [];
-            if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.75);font-weight:700;">' + fromCode + '</span>');
-            if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.6);font-weight:700;">' + toCode + '</span>');
-            if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.28);">' + trip.prodotto + '</span>');
-            if (trip.note)     subs.push('<span style="color:rgba(255,255,255,0.2);">· ' + trip.note + '</span>');
-            if (subs.length > 0) {
-                card += '<div style="font-size:11px;font-family:\'Outfit\',sans-serif;margin-top:2px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">' + subs.join('<span style="color:rgba(255,255,255,0.12);">·</span>') + '</div>';
+            if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.7);font-weight:700;">' + fromCode + '</span>');
+            if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.55);font-weight:700;">' + toCode + '</span>');
+            if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.22);">' + trip.prodotto + '</span>');
+            if (subs.length) {
+                card += '<div style="font-size:9px;margin-top:2px;display:flex;gap:4px;align-items:center;">' + subs.join('<span style="color:rgba(255,255,255,0.1);">·</span>') + '</div>';
             }
-
             card += '</div>';
+
+            // Colonna destra: giorno + stato
+            card += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:2px;flex-shrink:0;border-left:1px solid rgba(255,255,255,0.04);">';
+            // giorno
+            var d = new Date((trip.data||'') + 'T12:00:00');
+            var dayNames2 = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+            card += '<span style="font-family:JetBrains Mono,monospace;font-size:11px;font-weight:800;color:rgba(255,255,255,0.75);line-height:1;">' + dayNames2[d.getDay()] + '</span>';
+            card += '<span style="font-family:JetBrains Mono,monospace;font-size:8px;color:rgba(255,107,53,0.55);line-height:1;margin-top:1px;">' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '</span>';
+            // stato
+            if (trip.daConfermare) card += '<span style="font-size:9px;color:var(--warning);margin-top:3px;">⚠</span>';
+            if (trip.confermato)   card += '<span style="font-size:10px;color:var(--success);font-weight:900;margin-top:3px;">✓</span>';
+            card += '</div>';
+
             card += '</div>';
             return card;
         }
@@ -5441,7 +5451,7 @@
 
             var dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
 
-            // Raggruppa per trasportatore
+            // Raggruppa per trasportatore, ordine alfabetico
             var byTransporter = {};
             [...displayTrips].forEach(function(trip) {
                 var k = trip.trasportatore || '(senza nome)';
@@ -5457,59 +5467,59 @@
                 var colorClass = getTransporterColorClass(tName);
                 var tKey = getTransporterKey(tName);
 
-                // ── Header trasportatore ──
-                html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (isFirst ? '4px' : '22px') + ' 0 8px;">';
-                html += '<span class="compact-transporter ' + colorClass + '" style="font-size:12px;padding:4px 12px;letter-spacing:0.5px;">' + tName + '</span>';
+                // ── Header gruppo trasportatore ──
+                html += '<div style="display:flex;align-items:center;gap:10px;margin:' + (isFirst ? '4px' : '20px') + ' 0 6px;">';
+                html += '<span class="compact-transporter ' + colorClass + '" style="font-size:11px;padding:3px 10px;">' + tName + '</span>';
                 html += '<div style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.07),transparent);"></div>';
-                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.2);font-weight:700;">' + tTrips.length + ' ' + _pv(tTrips.length) + '</span>';
+                html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(255,255,255,0.18);font-weight:700;">' + tTrips.length + ' ' + _pv(tTrips.length) + '</span>';
                 html += '</div>';
                 isFirst = false;
 
-                // ── Card per ogni viaggio (stile OGGI) ──
+                // ── Card per ogni viaggio ──
                 tTrips.forEach(function(trip) {
                     var idx = trips.indexOf(trip);
                     var d = new Date((trip.data||'') + 'T12:00:00');
-                    var dayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
                     var fromName = (trip.partenza||'').split('(')[0].trim();
                     var toName   = (trip.arrivo||'').split('(')[0].trim();
                     var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
                     var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
 
-                    // Contenitore riga
                     html += '<div onclick="editTrip(' + idx + ')" '
-                        + 'style="display:flex;align-items:center;gap:0;margin-bottom:5px;cursor:pointer;'
-                        + 'border-radius:11px;overflow:hidden;background:#12161f;transition:opacity 0.15s;" '
+                        + 'style="display:flex;align-items:stretch;margin-bottom:4px;cursor:pointer;'
+                        + 'border-radius:10px;overflow:hidden;background:#12161f;" '
                         + 'class="trip-card" data-transporter="' + tKey + '">';
 
-                    // Colonna sinistra: giorno grande + data piccola
-                    html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;'
-                        + 'padding:0 12px;min-width:58px;height:58px;border-right:1px solid rgba(255,255,255,0.06);gap:2px;flex-shrink:0;">';
-                    var parts = dayLabel.split(' ');
-                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:17px;font-weight:800;color:rgba(255,255,255,0.9);line-height:1;">' + (parts[0]||'') + '</div>';
-                    html += '<div style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:600;color:rgba(255,107,53,0.6);line-height:1;margin-top:1px;">' + (parts[1]||'') + '</div>';
-                    html += '</div>';
+                    // Badge trasportatore verticale — sempre visibile
+                    html += '<span class="trip-transporter ' + colorClass + '" '
+                        + 'style="display:flex;align-items:center;justify-content:center;'
+                        + 'writing-mode:vertical-rl;text-orientation:mixed;'
+                        + 'font-size:8px;font-weight:900;letter-spacing:1px;padding:8px 5px;'
+                        + 'border-radius:0;flex-shrink:0;min-width:22px;">'
+                        + tName + '</span>';
 
-                    // Corpo: rotta compatta — città più piccole, tutto leggibile
-                    html += '<div style="flex:1;min-width:0;padding:0 10px;display:flex;flex-direction:column;justify-content:center;height:58px;">';
+                    // Corpo
+                    html += '<div style="flex:1;min-width:0;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(255,255,255,0.04);">';
                     html += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
-                    html += '<span style="font-size:12px;font-weight:700;color:#d0d8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42%;">' + fromName + '</span>';
-                    html += '<span style="font-size:10px;color:rgba(255,107,53,0.45);flex-shrink:0;">→</span>';
-                    html += '<span style="font-size:12px;font-weight:700;color:rgba(6,214,160,0.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%;">' + fromName + '</span>';
+                    html += '<span style="font-size:11px;color:rgba(255,107,53,0.5);flex-shrink:0;">→</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
                     html += '</div>';
 
                     var subs = [];
-                    if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.6);font-weight:600;">' + fromCode + '</span>');
-                    if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.5);font-weight:600;">' + toCode + '</span>');
-                    if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.2);">' + trip.prodotto + '</span>');
+                    if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.7);font-weight:700;">' + fromCode + '</span>');
+                    if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.55);font-weight:700;">' + toCode + '</span>');
+                    if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.22);">' + trip.prodotto + '</span>');
                     if (subs.length) {
-                        html += '<div style="font-size:9px;margin-top:3px;display:flex;gap:4px;align-items:center;">' + subs.join('<span style="color:rgba(255,255,255,0.08);">·</span>') + '</div>';
+                        html += '<div style="font-size:9px;margin-top:2px;display:flex;gap:4px;align-items:center;">' + subs.join('<span style="color:rgba(255,255,255,0.08);">·</span>') + '</div>';
                     }
                     html += '</div>';
 
-                    // Colonna destra: badge stato
-                    html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:3px;flex-shrink:0;">';
-                    if (trip.daConfermare) html += '<span style="font-size:8px;background:rgba(255,210,63,0.2);border:1px solid rgba(255,210,63,0.4);color:var(--warning);padding:2px 5px;border-radius:4px;font-weight:800;white-space:nowrap;">⚠️</span>';
-                    if (trip.confermato)   html += '<span style="font-size:12px;color:var(--success);font-weight:900;">✓</span>';
+                    // Colonna destra: giorno + stato
+                    html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:2px;flex-shrink:0;border-left:1px solid rgba(255,255,255,0.04);">';
+                    html += '<span style="font-family:JetBrains Mono,monospace;font-size:11px;font-weight:800;color:rgba(255,255,255,0.75);line-height:1;">' + dayNames[d.getDay()] + '</span>';
+                    html += '<span style="font-family:JetBrains Mono,monospace;font-size:8px;color:rgba(255,107,53,0.55);line-height:1;margin-top:1px;">' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '</span>';
+                    if (trip.daConfermare) html += '<span style="font-size:9px;color:var(--warning);margin-top:3px;">⚠</span>';
+                    if (trip.confermato)   html += '<span style="font-size:10px;color:var(--success);font-weight:900;margin-top:3px;">✓</span>';
                     html += '</div>';
 
                     html += '</div>';
@@ -5526,7 +5536,7 @@
             // Calcola stats
             const total = trips.length;
             const daConfermare = trips.filter(t => t.daConfermare).length;
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
             const todayCount = trips.filter(t => t.data === todayStr).length;
 
             // Rotte rapide: impara dai viaggi esistenti + manuali salvate
@@ -6377,7 +6387,7 @@
 
         function desktopAddEmpty_OLD() {
             var lastTrip = trips.length > 0 ? trips[trips.length - 1] : null;
-            var todayStr = new Date().toISOString().split('T')[0];
+            var todayStr = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
             var defaultDate = lastTrip ? lastTrip.data : todayStr;
 
             _deskPopupDays = {lun:false, mar:false, mer:false, gio:false, ven:false};
@@ -8941,7 +8951,7 @@
 
         // ===== MARCA CARD DI OGGI =====
         function markTodayCards() {
-            var todayStr = new Date().toISOString().split('T')[0];
+            var todayStr = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
             var cards = document.querySelectorAll('.trip-card');
             cards.forEach(function(card) {
                 card.classList.toggle('today-card', card.dataset.date === todayStr);
