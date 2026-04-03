@@ -4505,6 +4505,7 @@
                     saveToLocalStorage();
                     filteredTrips = [];
                     filterApply();
+                    renderTrips();
                     updateStats();
                     filterPopulateDropdowns();
                     closeNewWeekModal();
@@ -4516,6 +4517,7 @@
                     saveToLocalStorage();
                     filteredTrips = [];
                     filterApply();
+                    renderTrips();
                     updateStats();
                     filterPopulateDropdowns();
                     closeNewWeekModal();
@@ -8720,6 +8722,7 @@
                 localStorage.setItem('weekTitle', weekTitle);
             }
             filterApply();
+            renderTrips();
             updateStats();
             filterPopulateDropdowns();
             renderArchive();
