@@ -4104,31 +4104,7 @@
         function _pvAdded(n) { return n === 1 ? 'viaggio aggiunto' : 'viaggi aggiunti'; }
 
         // Pre-loaded trips from current week
-        let trips = [
-            {data: "2026-02-16", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-16", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-16", trasportatore: "COAP", partenza: "Dosolo (ARDENGHI)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-16", trasportatore: "ConEco", partenza: "S.Felice (CAI-BF)", arrivo: "Mezzano RA (SICEM Srl)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-17", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-17", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "Cirioni", partenza: "Mercatino (COVI)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "CONSAR", partenza: "Grezzana (TACCHELLA)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "ALB", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "ALB", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "LINO BRA", partenza: "Tirano (ILT)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-18", trasportatore: "ConEco", partenza: "Jolanda (Bonifiche)", arrivo: "Mezzano RA (SICEM Srl)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-19", trasportatore: "AVIO", partenza: "Mezzocorona (VENDER)", arrivo: "Tarmassia (TRUCIOLI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-19", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-19", trasportatore: "COAP", partenza: "Castel S. Nicolò (Tosco imballaggi)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-19", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-19", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-20", trasportatore: "ConEco", partenza: "S.Felice (CAI-BF)", arrivo: "Mezzano RA (SICEM Srl)", note: "da confermare", prodotto: "", daConfermare: true},
-            {data: "2026-02-20", trasportatore: "Stegagno", partenza: "Grezzana (TACCHELLA)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-20", trasportatore: "CEVOLO", partenza: "Bientina (INCONTRATO)", arrivo: "Ponzano Romano (SICEM)", note: "", prodotto: "", daConfermare: false},
-            {data: "2026-02-20", trasportatore: "COAP", partenza: "Bientina (INCONTRATO)", arrivo: "Verolavecchia (AGROGI)", note: "", prodotto: "", daConfermare: false}
-        ];
+        let trips = [];
 
         let transportersList = ["CEVOLO", "COAP", "ConEco", "CONSAR", "AVIO", "ALB", "LINO BRA", "Stegagno", "Cirioni"];
         let currentView = 'compact';
@@ -5771,6 +5747,13 @@
                                 style="padding:5px 12px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);border-radius:7px;color:#a78bfa;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0;transition:all 0.15s;"
                                 onmouseover="this.style.background='rgba(167,139,250,0.22)'" onmouseout="this.style.background='rgba(167,139,250,0.12)'">
                                 🗓 Sett. prossima
+                            </button>
+
+                            <!-- Archivia e nuova settimana -->
+                            <button onclick="showNewWeekModalV2()" title="Archivia settimana corrente e inizia da zero"
+                                style="padding:5px 12px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);border-radius:7px;color:var(--success);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0;transition:all 0.15s;"
+                                onmouseover="this.style.background='rgba(6,214,160,0.2)'" onmouseout="this.style.background='rgba(6,214,160,0.1)'">
+                                📦 Nuova sett.
                             </button>
 
                             <!-- ＋ Nuova riga -->
