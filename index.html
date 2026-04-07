@@ -5112,9 +5112,9 @@
 
             // ── helper: header sezione stile dashboard ──
             function _secHdr(label, count, accent) {
-                var bg  = accent ? 'rgba(255,107,53,0.1)'  : 'rgba(255,255,255,0.03)';
-                var bdr = accent ? '3px solid rgba(255,107,53,0.7)' : '3px solid rgba(255,255,255,0.12)';
-                var col = accent ? 'var(--accent)' : 'rgba(255,255,255,0.35)';
+                var bg  = accent ? 'rgba(255,107,53,0.1)'  : 'rgba(255,255,255,0.05)';
+                var bdr = accent ? '3px solid rgba(255,107,53,0.7)' : '3px solid rgba(255,255,255,0.2)';
+                var col = accent ? 'var(--accent)' : 'rgba(255,255,255,0.6)';
                 var h = '<div style="display:flex;align-items:center;justify-content:space-between;'
                     + 'padding:7px 12px;background:' + bg + ';'
                     + 'border-left:' + bdr + ';border-radius:0 8px 8px 0;margin-bottom:5px;">';
@@ -5142,7 +5142,7 @@
                     ? '<span style="font-size:9px;color:rgba(255,255,255,0.22);">' + trip.prodotto + '</span>'
                     : '';
 
-                var opacity = dimmed ? 'opacity:0.5;' : '';
+                var opacity = dimmed ? 'opacity:0.82;' : '';
 
                 var row = '<div onclick="editTrip(' + idx + ')" '
                     + 'style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;'
@@ -5194,7 +5194,7 @@
                 var tomLabel = dayNamesLong[dtom.getDay()] + ' ' + String(dtom.getDate()).padStart(2,'0') + '/' + String(dtom.getMonth()+1).padStart(2,'0');
                 html += '<div style="margin-bottom:14px;">';
                 html += _secHdr(tomLabel, tomorrowTrips.length, false);
-                tomorrowTrips.forEach(function(t) { html += _ccRow(t, true); });
+                tomorrowTrips.forEach(function(t) { html += _ccRow(t, false); });
                 html += '</div>';
             }
 
@@ -5211,7 +5211,7 @@
                     var lbl = dayNamesLong[d2.getDay()] + ' ' + String(d2.getDate()).padStart(2,'0') + '/' + String(d2.getMonth()+1).padStart(2,'0');
                     html += '<div style="margin-bottom:10px;">';
                     html += _secHdr(lbl, byDay[dateKey].length, false);
-                    byDay[dateKey].forEach(function(t) { html += _ccRow(t, true); });
+                    byDay[dateKey].forEach(function(t) { html += _ccRow(t, false); });
                     html += '</div>';
                 });
             }
@@ -5231,7 +5231,7 @@
             var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
             var toName   = (trip.arrivo||'').split('(')[0].trim();
             var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
-            var dimmed   = isToday ? '' : 'opacity:0.5;';
+            var dimmed   = isToday ? '' : 'opacity:0.82;';
 
             var card = '<div onclick="editTrip(' + idx + ')" '
                 + 'style="display:flex;align-items:stretch;margin-bottom:5px;cursor:pointer;'
