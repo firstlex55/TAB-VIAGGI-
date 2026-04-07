@@ -5124,56 +5124,54 @@
                 return h;
             }
 
-            // ── helper: riga ultra-compatta stile C ──
+            // Hover helpers per evitare apici annidati
+            function _hov(el) { el.style.background = 'rgba(255,255,255,0.04)'; }
+            function _hout(el) { el.style.background = 'transparent'; }
+
+            // ── helper: riga a due livelli — nomi completi ──
             function _ccRow(trip, dimmed) {
                 var idx = trips.indexOf(trip);
                 var colorClass = getTransporterColorClass(trip.trasportatore);
-                var tKey = getTransporterKey(trip.trasportatore);
                 var fromName = (trip.partenza||'').split('(')[0].trim();
+                var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
                 var toName   = (trip.arrivo||'').split('(')[0].trim();
+                var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
                 var d = new Date((trip.data||'') + 'T12:00:00');
                 var dayLbl = dayNamesShort[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0');
-
-                var statusHtml = '';
-                if (trip.daConfermare) statusHtml = '<span style="color:var(--warning);font-size:10px;">⚠</span> ';
-                if (trip.confermato)   statusHtml = '<span style="color:var(--success);font-size:11px;font-weight:900;">✓</span> ';
-
-                var prodHtml = trip.prodotto
-                    ? '<span style="font-size:9px;color:rgba(255,255,255,0.22);">' + trip.prodotto + '</span>'
-                    : '';
-
                 var opacity = dimmed ? 'opacity:0.82;' : '';
 
-                var row = '<div onclick="editTrip(' + idx + ')" '
-                    + 'style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;'
-                    + 'padding:8px 10px;border-radius:8px;margin-bottom:3px;cursor:pointer;'
-                    + 'transition:background 0.1s;' + opacity + '" '
-                    + 'onmouseover="this.style.background=\'rgba(255,255,255,0.04)\'" '
-                    + 'onmouseout="this.style.background=\'transparent\'">';
+                var statoHtml = '';
+                if (trip.daConfermare) statoHtml = '<span style="font-size:11px;color:var(--warning)">⚠</span>';
+                else if (trip.confermato) statoHtml = '<span style="font-size:12px;color:var(--success);font-weight:900">✓</span>';
 
-                // Badge trasportatore orizzontale
-                row += '<span class="' + colorClass + '" '
-                    + 'style="font-size:9px;font-weight:800;padding:3px 7px;border-radius:5px;'
-                    + 'white-space:nowrap;letter-spacing:0.3px;flex-shrink:0;">'
-                    + (trip.trasportatore||'—') + '</span>';
+                // Riga 2: giorno + codici + prodotto
+                var sub = [];
+                if (fromCode) sub.push('<span style="color:rgba(255,107,53,0.5)">' + fromCode + '</span>');
+                if (toCode)   sub.push('<span style="color:rgba(6,214,160,0.4)">' + toCode + '</span>');
+                if (trip.prodotto) sub.push('<span style="color:rgba(255,255,255,0.28)">' + trip.prodotto + '</span>');
+                var subHtml = sub.length
+                    ? '<span style="color:rgba(255,255,255,0.1)">·</span>' + sub.join('<span style="color:rgba(255,255,255,0.1)">·</span>')
+                    : '';
 
-                // Rotta centrale
-                row += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
-                row += '<span style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%;">' + fromName + '</span>';
-                row += '<span style="color:rgba(255,107,53,0.5);font-size:13px;flex-shrink:0;">›</span>';
-                row += '<span style="font-size:13px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
-                row += '</div>';
+                return '<div onclick="editTrip(' + idx + ')" onmouseover="_hov(this)" onmouseout="_hout(this)" '
+                    + 'style="padding:9px 10px 7px;border-radius:8px;margin-bottom:3px;cursor:pointer;transition:background 0.1s;' + opacity + '">'
 
-                // Meta destra: stato + giorno + prodotto
-                row += '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;">';
-                row += '<div style="display:flex;align-items:center;gap:3px;">' + statusHtml
-                    + '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.45);font-family:JetBrains Mono,monospace;">' + dayLbl + '</span>';
-                row += '</div>';
-                if (prodHtml) row += prodHtml;
-                row += '</div>';
+                    // Riga 1: badge + rotta + stato
+                    + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">'
+                    + '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;">' + (trip.trasportatore||'—') + '</span>'
+                    + '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (trip.partenza||'') + '">' + fromName + '</span>'
+                    + '<span style="color:rgba(255,107,53,0.5);font-size:14px;flex-shrink:0;">›</span>'
+                    + '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>'
+                    + (statoHtml ? '<span style="flex-shrink:0;margin-left:4px;">' + statoHtml + '</span>' : '')
+                    + '</div>'
 
-                row += '</div>';
-                return row;
+                    // Riga 2: giorno + codici + prodotto
+                    + '<div style="display:flex;align-items:center;gap:6px;font-size:10px;padding-left:2px;">'
+                    + '<span style="font-family:JetBrains Mono,monospace;font-weight:700;color:rgba(255,107,53,0.55);flex-shrink:0;">' + dayLbl + '</span>'
+                    + subHtml
+                    + '</div>'
+
+                    + '</div>';
             }
 
             var html = '';
@@ -5481,7 +5479,6 @@
 
             var dayNamesShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
 
-            // Raggruppa per trasportatore, ordine alfabetico
             var byTransporter = {};
             displayTrips.forEach(function(trip) {
                 var k = trip.trasportatore || '(senza nome)';
@@ -5496,30 +5493,23 @@
                 var colorClass = getTransporterColorClass(tName);
                 var tKey = getTransporterKey(tName);
                 var tColorVar = 'var(--t-' + tKey + ')';
+                var nConf   = tTrips.filter(function(t){ return t.confermato; }).length;
+                var nDaConf = tTrips.filter(function(t){ return t.daConfermare; }).length;
 
-                // ── Statistiche rapide ──
-                var nConf    = tTrips.filter(function(t){ return t.confermato; }).length;
-                var nDaConf  = tTrips.filter(function(t){ return t.daConfermare; }).length;
+                // ── Card trasportatore ──
+                html += '<div style="background:#0d1018;border-radius:12px;border:1px solid rgba(255,255,255,0.07);border-top:2px solid ' + tColorVar + ';overflow:hidden;margin-bottom:12px;">';
 
-                // ── Header card trasportatore ──
-                html += '<div style="background:#0d1018;border-radius:12px;border:1px solid rgba(255,255,255,0.07);overflow:hidden;margin-bottom:10px;">';
-
-                // Intestazione colorata
-                html += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">';
-                html += '<span class="' + colorClass + '" style="font-size:11px;font-weight:800;padding:4px 11px;border-radius:6px;letter-spacing:0.3px;">' + tName + '</span>';
-                html += '<span style="font-size:24px;font-weight:900;color:' + tColorVar + ';font-family:JetBrains Mono,monospace;line-height:1;">' + tTrips.length + '</span>';
-                html += '<span style="font-size:10px;color:rgba(255,255,255,0.25);margin-left:-4px;">' + _pv(tTrips.length) + '</span>';
+                // Header
+                html += '<div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">';
+                html += '<span class="' + colorClass + '" style="font-size:12px;font-weight:800;padding:5px 13px;border-radius:7px;letter-spacing:0.3px;">' + tName + '</span>';
+                html += '<span style="font-size:26px;font-weight:900;color:' + tColorVar + ';font-family:JetBrains Mono,monospace;line-height:1;">' + tTrips.length + '</span>';
+                html += '<span style="font-size:11px;color:rgba(255,255,255,0.25);margin-left:-4px;">' + _pv(tTrips.length) + '</span>';
                 html += '<div style="flex:1;"></div>';
-                // Badge confermati / da confermare
-                if (nConf > 0) {
-                    html += '<span style="font-size:10px;font-weight:700;color:var(--success);background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.25);padding:2px 8px;border-radius:10px;">' + nConf + ' ✓</span>';
-                }
-                if (nDaConf > 0) {
-                    html += '<span style="font-size:10px;font-weight:700;color:var(--warning);background:rgba(255,210,63,0.1);border:1px solid rgba(255,210,63,0.25);padding:2px 8px;border-radius:10px;margin-left:4px;">' + nDaConf + ' ⚠</span>';
-                }
+                if (nDaConf > 0) html += '<span style="font-size:11px;font-weight:700;color:var(--warning);background:rgba(255,210,63,0.12);border:1px solid rgba(255,210,63,0.3);padding:3px 10px;border-radius:20px;">' + nDaConf + ' ⚠</span>';
+                if (nConf > 0)   html += '<span style="font-size:11px;font-weight:700;color:var(--success);background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.25);padding:3px 10px;border-radius:20px;margin-left:5px;">' + nConf + ' ✓</span>';
                 html += '</div>';
 
-                // ── Righe viaggio ultra-compatte ──
+                // Righe viaggio — DUE RIGHE per viaggio: nomi completi
                 tTrips.forEach(function(trip) {
                     var idx = trips.indexOf(trip);
                     var d = new Date((trip.data||'') + 'T12:00:00');
@@ -5529,40 +5519,38 @@
                     var toName   = (trip.arrivo||'').split('(')[0].trim();
                     var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
 
-                    html += '<div onclick="editTrip(' + idx + ')" '
-                        + 'style="display:flex;align-items:center;gap:8px;padding:8px 14px;'
-                        + 'cursor:pointer;transition:background 0.1s;border-bottom:1px solid rgba(255,255,255,0.04);" '
-                        + 'onmouseover="this.style.background=\'rgba(255,255,255,0.03)\'" '
-                        + 'onmouseout="this.style.background=\'transparent\'">';
+                    var statoHtml = '';
+                    if (trip.daConfermare) statoHtml = '<span style="font-size:11px;color:var(--warning);">⚠</span>';
+                    else if (trip.confermato) statoHtml = '<span style="font-size:12px;color:var(--success);font-weight:900;">✓</span>';
 
-                    // Pallino colorato giorno
-                    html += '<div style="width:6px;height:6px;border-radius:50%;background:' + tColorVar + ';flex-shrink:0;opacity:0.7;"></div>';
+                    html += '<div onclick="editTrip(' + idx + ')" onmouseover="_hov(this)" onmouseout="_hout(this)" '
+                        + 'style="padding:9px 14px 7px;cursor:pointer;transition:background 0.1s;'
+                        + 'border-bottom:1px solid rgba(255,255,255,0.04);">';
 
-                    // Giorno
-                    html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:rgba(255,107,53,0.6);min-width:42px;flex-shrink:0;">' + dayLbl + '</span>';
-
-                    // Rotta
-                    html += '<div style="flex:1;min-width:0;display:flex;align-items:center;gap:4px;">';
-                    html += '<span style="font-size:12px;font-weight:700;color:#dde2ef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42%;" title="' + (trip.partenza||'') + '">' + fromName + '</span>';
-                    if (fromCode) html += '<span style="font-size:9px;color:rgba(255,107,53,0.5);flex-shrink:0;">(' + fromCode + ')</span>';
-                    html += '<span style="color:rgba(255,107,53,0.4);font-size:12px;flex-shrink:0;margin:0 2px;">›</span>';
-                    html += '<span style="font-size:12px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;" title="' + (trip.arrivo||'') + '">' + toName + '</span>';
-                    if (toCode) html += '<span style="font-size:9px;color:rgba(6,214,160,0.45);flex-shrink:0;">(' + toCode + ')</span>';
+                    // Riga 1: giorno + rotta per esteso + stato
+                    html += '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:3px;">';
+                    html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:' + tColorVar + ';opacity:0.8;flex-shrink:0;min-width:44px;">' + dayLbl + '</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (trip.partenza||'') + '">' + fromName + '</span>';
+                    html += '<span style="font-size:14px;color:rgba(255,107,53,0.5);flex-shrink:0;line-height:1;">›</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>';
+                    if (statoHtml) html += '<span style="flex-shrink:0;margin-left:6px;">' + statoHtml + '</span>';
                     html += '</div>';
 
-                    // Prodotto (se presente)
-                    if (trip.prodotto) {
-                        html += '<span style="font-size:10px;color:rgba(255,255,255,0.22);flex-shrink:0;white-space:nowrap;">' + trip.prodotto + '</span>';
+                    // Riga 2: codici + prodotto (info secondarie)
+                    var sub2 = [];
+                    if (fromCode) sub2.push('<span style="color:rgba(255,107,53,0.5);">' + fromCode + '</span>');
+                    if (toCode)   sub2.push('<span style="color:rgba(6,214,160,0.4);">' + toCode + '</span>');
+                    if (trip.prodotto) sub2.push('<span style="color:rgba(255,255,255,0.3);">' + trip.prodotto + '</span>');
+                    if (sub2.length) {
+                        html += '<div style="display:flex;gap:6px;align-items:center;padding-left:50px;font-size:10px;">'
+                            + sub2.join('<span style="color:rgba(255,255,255,0.1);">·</span>')
+                            + '</div>';
                     }
-
-                    // Stato
-                    if (trip.daConfermare) html += '<span style="font-size:11px;color:var(--warning);flex-shrink:0;">⚠</span>';
-                    else if (trip.confermato) html += '<span style="font-size:12px;color:var(--success);font-weight:900;flex-shrink:0;">✓</span>';
 
                     html += '</div>';
                 });
 
-                html += '</div>'; // fine card trasportatore
+                html += '</div>';
             });
 
             container.innerHTML = html;
