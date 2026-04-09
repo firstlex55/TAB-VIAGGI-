@@ -2331,9 +2331,9 @@
         }
 
         /* Colori accesi per ogni vista attiva */
-        .mobile-bottom-nav .view-btn[onclick*="card"].active    { color: #60a5fa; }
+        .mobile-bottom-nav .view-btn[onclick*="next"].active    { color: #a78bfa; }
         .mobile-bottom-nav .view-btn[onclick*="medium"].active  { color: #34d399; }
-        .mobile-bottom-nav .view-btn[onclick*="compact"].active { color: #a78bfa; }
+        .mobile-bottom-nav .view-btn[onclick*="compact"].active { color: #60a5fa; }
         .mobile-bottom-nav .view-btn[onclick*="desktop"].active { color: #fbbf24; }
 
         .mobile-bottom-nav .view-btn.active .nav-icon {
@@ -3608,7 +3608,7 @@
     <!-- Barra navigazione viste per PC -->
     <div class="pc-view-switcher" id="pcViewSwitcher">
         <span class="pcvs-label">Vista</span>
-        <button class="pcvs-btn" onclick="switchView('card',this)" data-pcview="card">📅 Oggi</button>
+        <button class="pcvs-btn" onclick="switchView('next',this)" data-pcview="next">📅 Prossima</button>
         <button class="pcvs-btn" onclick="switchView('medium',this)" data-pcview="medium">👤 Trasp.</button>
         <button class="pcvs-btn active" onclick="switchView('compact',this)" data-pcview="compact">⚡ Rapida</button>
         <button class="pcvs-btn" onclick="switchView('desktop',this)" data-pcview="desktop">🖥 PC</button>
@@ -3686,6 +3686,9 @@
             <div id="desktopView" style="display:none;">
                 <div id="desktopBody"></div>
             </div>
+            <div id="nextView" style="display:none;">
+                <div id="nextBody" style="padding:4px 0;"></div>
+            </div>
         </div>
 
         <!-- Statistics — sotto i viaggi -->
@@ -3716,6 +3719,11 @@
                     <span style="font-size:16px;font-weight:800;color:var(--accent);">Nuovo Viaggio</span>
                 </div>
                 <button onclick="toggleAddForm()" style="background:rgba(255,255,255,0.07);border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:6px 10px;border-radius:8px;line-height:1;">✕</button>
+            </div>
+            <!-- Banner contestuale prossima settimana -->
+            <div id="addFormContextBanner" style="display:none;align-items:center;gap:10px;padding:10px 18px;background:rgba(167,139,250,0.1);border-bottom:1px solid rgba(167,139,250,0.2);">
+                <span style="font-size:14px;">📅</span>
+                <span style="font-size:12px;font-weight:700;color:#a78bfa;">Stai aggiungendo alla <strong>settimana prossima</strong></span>
             </div>
 
             <form id="tripForm" style="padding:18px;">
@@ -4105,6 +4113,7 @@
 
         // Pre-loaded trips from current week
         let trips = [];
+        let tripsNext = []; // Viaggi settimana prossima — separati
 
         let transportersList = ["CEVOLO", "COAP", "ConEco", "CONSAR", "AVIO", "ALB", "LINO BRA", "Stegagno", "Cirioni"];
         let currentView = 'compact';
@@ -4200,6 +4209,7 @@
             loadTransportersList();
             loadWeekTitle();
             loadTripsFromLocalStorage();
+            loadNextFromLocalStorage();
             // Forza sort dopo ogni caricamento
             trips.sort(function(a,b) {
                 var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
@@ -4557,6 +4567,22 @@
             showStatus(`✅ ${newTransporter} aggiunto alla lista!`, 'success');
         }
 
+        // Precompila la data col lunedì della settimana prossima
+        function _prefillNextWeekDate() {
+            var now = new Date();
+            var dow = now.getDay();
+            var daysToMon = (dow === 0) ? 1 : (8 - dow);
+            var nextMon = new Date(now);
+            nextMon.setDate(now.getDate() + daysToMon);
+            var el = document.getElementById('data');
+            if (el) {
+                el.value = nextMon.getFullYear() + '-'
+                    + String(nextMon.getMonth()+1).padStart(2,'0') + '-'
+                    + String(nextMon.getDate()).padStart(2,'0');
+            }
+            if (typeof mdpkUpdateFromDate === 'function') mdpkUpdateFromDate();
+        }
+
         function toggleAddForm() {
             const section = document.getElementById('addTripSection');
             const btn = document.getElementById('addTripBtn');
@@ -4565,8 +4591,16 @@
             btn.textContent = isOpen ? '+' : '✕';
             btn.style.background = isOpen ? 'var(--accent)' : '#e63946';
             if (!isOpen) {
+                // Se in vista Prossima: preselezioniamo lunedì prossima sett. + banner contestuale
+                if (currentView === 'next') {
+                    _prefillNextWeekDate();
+                } else {
+                    setDefaultDate();
+                }
+                // Banner contestuale
+                var banner = document.getElementById('addFormContextBanner');
+                if (banner) banner.style.display = (currentView === 'next') ? 'flex' : 'none';
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setDefaultDate();
                 setTimeout(function() {
                     var firstField = document.getElementById('trasportatore');
                     if (firstField) firstField.focus();
@@ -4611,12 +4645,21 @@
             document.querySelectorAll('.pcvs-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-pcview') === view);
             });
+            // Reset toggle PC week quando si esce dalla vista PC
+            if (view !== 'desktop' && typeof _pcWeekMode !== 'undefined') {
+                _pcWeekMode = 'current';
+                var btnC = document.getElementById('pcToggleCurrent');
+                var btnN = document.getElementById('pcToggleNext');
+                if (btnC) { btnC.style.background='var(--accent)'; btnC.style.color='#000'; }
+                if (btnN) { btnN.style.background='transparent'; btnN.style.color='rgba(167,139,250,0.6)'; }
+            }
             
             // Nascondi tutto
             document.getElementById('cardView').classList.remove('active');
             document.getElementById('compactView').classList.remove('active');
             document.getElementById('mediumView').style.display = 'none';
             document.getElementById('desktopView').style.display = 'none';
+            document.getElementById('nextView').style.display = 'none';
 
             // Nascondi bottom nav in vista desktop
             if (view === 'desktop') {
@@ -4627,7 +4670,10 @@
                 document.querySelectorAll('.section:not(.trips-section)').forEach(s => s.style.display = '');
             }
 
-            if (view === 'card') {
+            if (view === 'next') {
+                document.getElementById('nextView').style.display = 'block';
+                renderNextView();
+            } else if (view === 'card') {
                 document.getElementById('cardView').classList.add('active');
             } else if (view === 'compact') {
                 document.getElementById('compactView').classList.add('active');
@@ -4650,6 +4696,29 @@
         function setDefaultDate() {
             const today = new Date();
             document.getElementById('data').valueAsDate = today;
+        }
+
+        function saveNextToLocalStorage() {
+            tripsNext.sort(function(a,b) {
+                var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                var db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                return da - db;
+            });
+            localStorage.setItem('viaggiLogisticaNext', JSON.stringify(tripsNext));
+        }
+
+        function loadNextFromLocalStorage() {
+            var saved = localStorage.getItem('viaggiLogisticaNext');
+            if (saved) {
+                try {
+                    tripsNext = JSON.parse(saved);
+                    tripsNext.sort(function(a,b) {
+                        var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                        var db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                        return da - db;
+                    });
+                } catch(e) { tripsNext = []; }
+            }
         }
 
         function saveToLocalStorage() {
@@ -4741,16 +4810,27 @@
                 }
                 addLocationToList(t.partenza, 'partenza');
                 addLocationToList(t.arrivo, 'arrivo');
-                trips.push(t);
+                // Routing: prossima settimana o corrente
+                if (currentView === 'next') {
+                    tripsNext.push(t);
+                } else {
+                    trips.push(t);
+                }
             });
             saveTransportersList();
 
-            trips.sort((a, b) => new Date(a.data) - new Date(b.data));
-            saveToLocalStorage();
-            filteredTrips = [...trips];
-            filterApply();
-            updateStats();
-            filterPopulateDropdowns();
+            if (currentView === 'next') {
+                tripsNext.sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
+                saveNextToLocalStorage();
+                renderNextView();
+            } else {
+                trips.sort((a, b) => new Date(a.data) - new Date(b.data));
+                saveToLocalStorage();
+                filteredTrips = [...trips];
+                filterApply();
+                updateStats();
+                filterPopulateDropdowns();
+            }
             haptic('success');
 
             showSummaryModal(newTrips);
@@ -4760,7 +4840,7 @@
             if (addSec) addSec.style.display = 'none';
             document.getElementById('tripForm').reset();
             _mdpkReset();
-            setDefaultDate();
+            if (currentView === 'next') { _prefillNextWeekDate(); } else { setDefaultDate(); }
 
             // Scrolla alla prima riga aggiunta
             if (newTrips.length > 0) {
@@ -5078,7 +5158,9 @@
         }
 
         function renderTrips() {
-            if (currentView === 'card') {
+            if (currentView === 'next') {
+                renderNextView();
+            } else if (currentView === 'card') {
                 renderCardView();
             } else if (currentView === 'compact') {
                 renderCompactView();
@@ -5087,6 +5169,157 @@
             } else if (currentView === 'desktop') {
                 renderDesktopView();
             }
+        }
+
+        // ══════════════════════════════════════════════
+        // VISTA PROSSIMA SETTIMANA
+        // ══════════════════════════════════════════════
+        function renderNextView() {
+            var container = document.getElementById('nextBody');
+            if (!container) return;
+
+            var dayNamesShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+            var dayNamesFull  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+
+            // Header banner settimana prossima
+            var now = new Date();
+            var dow = now.getDay();
+            var daysToMon = (dow === 0) ? 1 : (8 - dow);
+            var nextMon = new Date(now); nextMon.setDate(now.getDate() + daysToMon);
+            var nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
+            var fmt = function(d) { return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'); };
+            var weekNum = getWeekNumber(nextMon);
+            var weekLabel = 'Sett. ' + weekNum + '  ·  Lun ' + fmt(nextMon) + ' — Ven ' + fmt(nextFri);
+
+            if (tripsNext.length === 0) {
+                container.innerHTML =
+                    '<div style="margin:8px 0 16px;padding:14px 16px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);border-left:3px solid #a78bfa;border-radius:10px;">'
+                    + '<div style="font-size:10px;font-weight:700;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">📅 ' + weekLabel + '</div>'
+                    + '<div style="font-size:12px;color:rgba(255,255,255,0.35);">Nessun viaggio pianificato — premi + per aggiungere</div>'
+                    + '</div>';
+                return;
+            }
+
+            // Banner settimana
+            var html = '<div style="margin:8px 0 12px;padding:10px 14px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-left:3px solid #a78bfa;border-radius:10px;display:flex;align-items:center;justify-content:space-between;">'
+                + '<div>'
+                + '<div style="font-size:10px;font-weight:700;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;">📅 ' + weekLabel + '</div>'
+                + '<div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;">Pianificati: ' + tripsNext.length + ' ' + _pv(tripsNext.length) + '</div>'
+                + '</div>'
+                + '<span style="font-size:18px;font-weight:900;color:#a78bfa;font-family:JetBrains Mono,monospace;">' + tripsNext.length + '</span>'
+                + '</div>';
+
+            // Raggruppa per giorno
+            var byDay = {};
+            tripsNext.forEach(function(t) {
+                if (!byDay[t.data]) byDay[t.data] = [];
+                byDay[t.data].push(t);
+            });
+
+            // Helper sezione giorno stile dashboard
+            function _nextSecHdr(date, count) {
+                var d = new Date(date + 'T12:00:00');
+                var dayFull = dayNamesFull[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+                return '<div style="display:flex;align-items:center;justify-content:space-between;'
+                    + 'padding:7px 12px;background:rgba(167,139,250,0.06);'
+                    + 'border-left:3px solid rgba(167,139,250,0.5);border-radius:0 8px 8px 0;margin-bottom:5px;">'
+                    + '<span style="font-size:12px;font-weight:800;color:rgba(167,139,250,0.9);">' + dayFull + '</span>'
+                    + '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.22);font-family:JetBrains Mono,monospace;">' + count + ' ' + _pv(count) + '</span>'
+                    + '</div>';
+            }
+
+            Object.keys(byDay).sort().forEach(function(dateKey) {
+                var dayTrips = byDay[dateKey];
+                html += '<div style="margin-bottom:12px;">';
+                html += _nextSecHdr(dateKey, dayTrips.length);
+
+                dayTrips.forEach(function(trip) {
+                    var idx = tripsNext.indexOf(trip);
+                    var colorClass = getTransporterColorClass(trip.trasportatore);
+                    var tKey = getTransporterKey(trip.trasportatore);
+                    var fromName = (trip.partenza||'').split('(')[0].trim();
+                    var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+                    var toName   = (trip.arrivo||'').split('(')[0].trim();
+                    var toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
+                    var statoHtml = '';
+                    if (trip.daConfermare) statoHtml = '<span style="font-size:11px;color:var(--warning);">⚠</span>';
+                    else if (trip.confermato) statoHtml = '<span style="font-size:12px;color:var(--success);font-weight:900;">✓</span>';
+
+                    // Riga wrapper swipe-to-delete
+                    html += '<div class="swipe-row-wrap" style="position:relative;margin-bottom:5px;border-radius:10px;overflow:hidden;">';
+                    html += '<div class="swipe-delete-bg" style="position:absolute;inset:0;background:linear-gradient(90deg,#dc2626,#ef4444);display:flex;align-items:center;padding-left:18px;border-radius:10px;">';
+                    html += '<span style="font-size:13px;font-weight:800;color:white;">🗑 Elimina</span>';
+                    html += '</div>';
+
+                    html += '<div class="swipe-row" data-next-idx="' + idx + '" onclick="editNextTrip(' + idx + ')" '
+                        + 'style="background:rgba(22,18,42,0.9);border-radius:10px;'
+                        + 'border-left:3px solid var(--t-' + tKey + ');'
+                        + 'padding:9px 12px 7px;cursor:pointer;'
+                        + 'position:relative;z-index:1;'
+                        + 'transform:translateX(0);transition:transform 0.28s cubic-bezier(0.25,1.0,0.5,1);">';
+
+                    // Riga 1: badge + partenza → arrivo + stato
+                    html += '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">';
+                    html += '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;">' + (trip.trasportatore||'—') + '</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + fromName + '</span>';
+                    html += '<span style="color:rgba(255,107,53,0.5);font-size:14px;flex-shrink:0;">›</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">' + toName + '</span>';
+                    if (statoHtml) html += '<span style="flex-shrink:0;margin-left:4px;">' + statoHtml + '</span>';
+                    html += '</div>';
+
+                    // Riga 2: codici + prodotto
+                    var sub = [];
+                    if (fromCode) sub.push('<span style="color:rgba(255,107,53,0.5);">' + fromCode + '</span>');
+                    if (toCode)   sub.push('<span style="color:rgba(6,214,160,0.4);">' + toCode + '</span>');
+                    if (trip.prodotto) sub.push('<span style="color:rgba(255,255,255,0.35);">' + trip.prodotto + '</span>');
+                    if (sub.length) {
+                        html += '<div style="display:flex;align-items:center;gap:6px;font-size:10px;padding-left:2px;">'
+                            + sub.join('<span style="color:rgba(255,255,255,0.1);">·</span>')
+                            + '</div>';
+                    }
+                    html += '</div>'; // fine swipe-row
+                    html += '</div>'; // fine swipe-row-wrap
+                });
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+
+            // Swipe-to-delete per tripsNext
+            _initNextSwipe();
+        }
+
+        // Swipe delete per la vista prossima
+        function _initNextSwipe() {
+            var _sx=0,_sy=0,_el=null,_wrap=null,_moved=false;
+            var THRESHOLD=90;
+            document.querySelectorAll('#nextBody .swipe-row').forEach(function(row) {
+                row.addEventListener('touchstart', function(e) {
+                    _el=row; _wrap=row.parentElement;
+                    _sx=e.touches[0].clientX; _sy=e.touches[0].clientY;
+                    _moved=false; row.style.transition='none';
+                }, {passive:true});
+            });
+            // Usiamo delegazione globale già esistente — la funzione swipe-to-delete
+            // gestisce anche data-next-idx tramite il controllo seguente
+        }
+
+        // Modifica viaggio nella prossima settimana
+        function editNextTrip(idx) {
+            var trip = tripsNext[idx];
+            if (!trip) return;
+            var editingNextIndex = idx;
+            // Usa lo stesso modal di edit ma salva in tripsNext
+            document.getElementById('editData').value = trip.data || '';
+            document.getElementById('editTrasportatore').value = trip.trasportatore || '';
+            document.getElementById('editPartenza').value = trip.partenza || '';
+            document.getElementById('editArrivo').value = trip.arrivo || '';
+            document.getElementById('editProdotto').value = trip.prodotto || '';
+            document.getElementById('editNote').value = trip.note || '';
+            document.getElementById('editDaConfermare').checked = trip.daConfermare || false;
+            // Salva indice next nel modal
+            document.getElementById('editModal').setAttribute('data-next-idx', idx);
+            document.getElementById('editModal').classList.add('active');
         }
 
         function renderCardView() {
@@ -5433,9 +5666,10 @@
                     // Conferma delete — anima fuori schermo
                     _el.style.transform = 'translateX(110vw)';
                     var idx = parseInt(_el.getAttribute('data-idx'));
+                    var nextIdx = parseInt(_el.getAttribute('data-next-idx'));
+                    var isNextSwipe = !isNaN(nextIdx) && nextIdx >= 0;
                     var wrap = _wrap;
                     setTimeout(function() {
-                        // Elimina con animazione altezza
                         if (wrap) {
                             wrap.style.transition = 'max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease';
                             wrap.style.maxHeight = wrap.offsetHeight + 'px';
@@ -5446,10 +5680,16 @@
                                 wrap.style.marginBottom = '0';
                             });
                             setTimeout(function() {
-                                trips.splice(idx, 1);
-                                saveToLocalStorage();
-                                filterApply();
-                                updateStats();
+                                if (isNextSwipe) {
+                                    tripsNext.splice(nextIdx, 1);
+                                    saveNextToLocalStorage();
+                                    renderNextView();
+                                } else {
+                                    trips.splice(idx, 1);
+                                    saveToLocalStorage();
+                                    filterApply();
+                                    updateStats();
+                                }
                                 haptic('heavy');
                             }, 200);
                         }
@@ -5559,15 +5799,19 @@
             const container = document.getElementById('desktopBody');
             if (!container) return;
 
+            // Modalità settimana: corrente o prossima
+            const _isNextMode = (typeof _pcWeekMode !== 'undefined' && _pcWeekMode === 'next');
+            const _workingTrips = _isNextMode ? tripsNext : trips;
+
             // Calcola stats
-            const total = trips.length;
-            const daConfermare = trips.filter(t => t.daConfermare).length;
+            const total = _workingTrips.length;
+            const daConfermare = _workingTrips.filter(t => t.daConfermare).length;
             const todayStr = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
-            const todayCount = trips.filter(t => t.data === todayStr).length;
+            const todayCount = _workingTrips.filter(t => t.data === todayStr).length;
 
             // Rotte rapide: impara dai viaggi esistenti + manuali salvate
             const routeMap = {};
-            trips.forEach(t => {
+            _workingTrips.forEach(t => {
                 if (!t.trasportatore || !t.partenza || !t.arrivo) return;
                 const k = `${t.trasportatore}||${t.partenza}||${t.arrivo}`;
                 if (!routeMap[k]) routeMap[k] = { trasportatore:t.trasportatore, partenza:t.partenza, arrivo:t.arrivo, uses:0 };
@@ -5587,7 +5831,7 @@
 
             // Applica filtro giorno PC se attivo
             const dayMap = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
-            const sorted = [...trips]
+            const sorted = [..._workingTrips]
                 .filter(t => {
                     if (!_desktopDayFilter || _desktopDayFilter === 'Tutti') return true;
                     const d = new Date((t.data||'') + 'T12:00:00');
@@ -5769,7 +6013,19 @@
                     <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:#080b13;flex-shrink:0;">
 
                         <!-- Riga 1: navigazione + stato + azioni principali -->
-                        <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;">
+                        <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
+
+                            <!-- Toggle Sett. corrente / prossima -->
+                            <div id="pcWeekToggle" style="display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;overflow:hidden;flex-shrink:0;">
+                                <button onclick="pcSetWeek('current',this)" id="pcToggleCurrent"
+                                    style="padding:6px 12px;border:none;background:var(--accent);color:#000;font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
+                                    ● Corrente
+                                </button>
+                                <button onclick="pcSetWeek('next',this)" id="pcToggleNext"
+                                    style="padding:6px 12px;border:none;background:transparent;color:rgba(167,139,250,0.6);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
+                                    ◎ Prossima
+                                </button>
+                            </div>
 
                             <!-- ← Torna mobile -->
                             <button onclick="switchView('compact', null)" title="Torna alla vista smartphone"
@@ -5853,7 +6109,7 @@
                                     const dayNums = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
                                     return ['Tutti','Lun','Mar','Mer','Gio','Ven'].map(function(d,i) {
                                         const dayNum = dayNums[d];
-                                        const cnt = d === 'Tutti' ? trips.length : trips.filter(function(t) { const dt = new Date((t.data||'')+'T12:00:00'); return dt.getDay() === dayNum; }).length;
+                                        const cnt = d === 'Tutti' ? trips.length : _workingTrips.filter(function(t) { const dt = new Date((t.data||'')+'T12:00:00'); return dt.getDay() === dayNum; }).length;
                                         const isActive = (i === 0 && (!_desktopDayFilter || _desktopDayFilter === 'Tutti')) || _desktopDayFilter === d;
                                         const bg    = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.05)';
                                         const bdr   = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.09)';
@@ -5875,7 +6131,7 @@
                         <div style="display:flex;flex-wrap:wrap;gap:8px;">
                             ${(() => {
                                 const counts = {};
-                                trips.forEach(t => { const k = t.trasportatore||'?'; counts[k]=(counts[k]||0)+1; });
+                                _workingTrips.forEach(t => { const k = t.trasportatore||'?'; counts[k]=(counts[k]||0)+1; });
                                 return Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,n]) => {
                                     const cc = getTransporterColorClass(name);
                                     return `<span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;">
@@ -5909,7 +6165,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${sorted.map(t => tripRow(t, trips.indexOf(t))).join('')}
+                                ${sorted.map(t => tripRow(t, _workingTrips.indexOf(t))).join('')}
                             </tbody>
                         </table>
                         ${sorted.length === 0 ? '<div style="text-align:center;padding:60px;color:var(--text-dim);"><div style="font-size:48px;opacity:0.3;margin-bottom:12px;">📋</div><div>Nessun viaggio. Usa le rotte rapide a sinistra.</div></div>' : ''}
@@ -6087,12 +6343,16 @@
         }
 
         function desktopSetField(idx, field, val) {
-            trips[idx][field] = val;
-            localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
-            updateStats();
-            filterPopulateDropdowns();
-            debouncedDriveSave();
-            // Feedback visivo: flash verde breve sul campo
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            if (_wt[idx]) _wt[idx][field] = val;
+            if (_pcWeekMode === 'next') {
+                saveNextToLocalStorage();
+            } else {
+                localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
+                updateStats();
+                filterPopulateDropdowns();
+                debouncedDriveSave();
+            }
             _showSavedFlash();
         }
 
@@ -6112,45 +6372,50 @@
         }
 
         function desktopToggleConf(idx) {
-            trips[idx].daConfermare = !trips[idx].daConfermare;
-            saveToLocalStorage();
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            if (_wt[idx]) _wt[idx].daConfermare = !_wt[idx].daConfermare;
+            if (_pcWeekMode === 'next') saveNextToLocalStorage(); else saveToLocalStorage();
             renderDesktopView();
         }
 
         function desktopToggleConfermato(idx) {
-            trips[idx].confermato = !trips[idx].confermato;
-            saveToLocalStorage();
-            // Aggiorna solo la cella visivamente, senza re-render completo
-            const cell = document.querySelector('#drow-' + idx + ' [data-conf-cell]');
-            if (cell) {
-                const conf = trips[idx].confermato;
-                cell.style.borderColor  = conf ? '#34d399' : 'rgba(52,211,153,0.3)';
-                cell.style.background   = conf ? '#34d399' : 'transparent';
-                cell.textContent        = conf ? '✓' : '';
-                cell.title = conf ? 'Confermato al trasportatore — clicca per annullare' : 'Non ancora confermato — clicca per confermare';
-            } else {
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            if (_wt[idx]) _wt[idx].confermato = !_wt[idx].confermato;
+            if (_pcWeekMode === 'next') {
+                saveNextToLocalStorage();
                 renderDesktopView();
+            } else {
+                saveToLocalStorage();
+                const cell = document.querySelector('#drow-' + idx + ' [data-conf-cell]');
+                if (cell) {
+                    const conf = trips[idx].confermato;
+                    cell.style.borderColor = conf ? '#34d399' : 'rgba(52,211,153,0.3)';
+                    cell.style.background  = conf ? '#34d399' : 'transparent';
+                    cell.textContent       = conf ? '✓' : '';
+                } else { renderDesktopView(); }
+                updateStats(); debouncedDriveSave();
             }
-            updateStats();
-            debouncedDriveSave();
         }
 
         function desktopDel(idx) {
-            const t = trips[idx];
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            const t = _wt[idx];
             const label = [t.trasportatore, t.partenza ? t.partenza.split('(')[0].trim() : '', '→', t.arrivo ? t.arrivo.split('(')[0].trim() : ''].filter(Boolean).join(' ');
             if (confirm('🗑️ Eliminare questo viaggio?\n\n' + label)) {
                 haptic('heavy');
-                trips.splice(idx, 1);
-                saveToLocalStorage();
-                filterApply();
+                _wt.splice(idx, 1);
+                if (_pcWeekMode === 'next') { saveNextToLocalStorage(); }
+                else { saveToLocalStorage(); filterApply(); }
                 renderDesktopView();
                 showStatus('🗑️ Viaggio eliminato', 'info');
             }
         }
 
         function desktopDup(idx) {
-            trips.splice(idx+1, 0, {...trips[idx]});
-            saveToLocalStorage();
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            _wt.splice(idx+1, 0, {..._wt[idx]});
+            if (_pcWeekMode === 'next') { saveNextToLocalStorage(); }
+            else { saveToLocalStorage(); }
             renderDesktopView();
         }
 
@@ -6179,6 +6444,24 @@
         }
 
         let _desktopQuickQuery = '';
+
+        function pcSetWeek(mode, btn) {
+            _pcWeekMode = mode;
+            var btnCurr = document.getElementById('pcToggleCurrent');
+            var btnNext = document.getElementById('pcToggleNext');
+            if (btnCurr) {
+                btnCurr.style.background = mode === 'current' ? 'var(--accent)' : 'transparent';
+                btnCurr.style.color      = mode === 'current' ? '#000' : 'rgba(255,255,255,0.4)';
+            }
+            if (btnNext) {
+                btnNext.style.background = mode === 'next' ? '#a78bfa' : 'transparent';
+                btnNext.style.color      = mode === 'next' ? '#000' : 'rgba(167,139,250,0.6)';
+            }
+            // Evidenzia sfondo toolbar
+            var pcBody = document.getElementById('desktopBody');
+            if (pcBody) pcBody.style.borderTop = mode === 'next' ? '2px solid rgba(167,139,250,0.4)' : '';
+            renderDesktopView();
+        }
         let _desktopChrono = false;
 
         function desktopToggleChrono() {
@@ -6530,14 +6813,16 @@
             }
 
             var newTrips = [];
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
             dates.forEach(function(date) {
                 var t = { data:date, trasportatore:'', partenza:'', arrivo:'', prodotto:'', note:'', daConfermare:false, confermato:false };
-                trips.push(t);
+                _wt.push(t);
                 newTrips.push(t);
             });
 
-            trips.sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
-            saveToLocalStorage();
+            _wt.sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
+            if (_pcWeekMode === 'next') { saveNextToLocalStorage(); }
+            else { saveToLocalStorage(); }
             renderDesktopView();
 
             // Mostra riepilogo
@@ -6603,23 +6888,31 @@
 
             if (!confirm('🗓 Imposta settimana prossima?\n\n' + dateStr + '\n\nVerranno aggiunte 5 righe vuote (una per giorno). Potrai poi compilare o rimuovere quelle non necessarie.')) return;
 
+            // Routing: corrente o prossima
+            var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+
             // Aggiungi 5 righe vuote, una per giorno
             dates.forEach(data => {
-                trips.push({ data, trasportatore:'', partenza:'', arrivo:'', prodotto:'', note:'', daConfermare:false });
+                _wt.push({ data, trasportatore:'', partenza:'', arrivo:'', prodotto:'', note:'', daConfermare:false });
             });
 
-            // Aggiorna titolo settimana
-            const lun = dates[0]; const ven = dates[4];
-            const fmtShort = d => { const dt = new Date(d+'T12:00:00'); return String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0'); };
-            const newTitle = 'Settimana ' + getWeekNumber(new Date(lun+'T12:00:00')) + '/' + new Date(lun+'T12:00:00').getFullYear() + ' (Lun.' + fmtShort(lun) + ' - Ven. ' + fmtShort(ven) + ')';
-            weekTitle = newTitle;
-            localStorage.setItem('weekTitle', newTitle);
-            setText('weekInfo', newTitle);
+            // Aggiorna titolo settimana (solo se settimana corrente)
+            if (_pcWeekMode !== 'next') {
+                const lun = dates[0]; const ven = dates[4];
+                const fmtShort = d => { const dt = new Date(d+'T12:00:00'); return String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0'); };
+                const newTitle = 'Settimana ' + getWeekNumber(new Date(lun+'T12:00:00')) + '/' + new Date(lun+'T12:00:00').getFullYear() + ' (Lun.' + fmtShort(lun) + ' - Ven. ' + fmtShort(ven) + ')';
+                weekTitle = newTitle;
+                localStorage.setItem('weekTitle', newTitle);
+                setText('weekInfo', newTitle);
+            }
 
-            trips.sort((a,b) => (a.data||'') > (b.data||'') ? 1 : -1);
-            saveToLocalStorage();
+            _wt.sort((a,b) => (a.data||'') > (b.data||'') ? 1 : -1);
+            if (_pcWeekMode === 'next') { saveNextToLocalStorage(); }
+            else { saveToLocalStorage(); }
             renderDesktopView();
-            showStatus('🗓 Settimana ' + dateStr + ' impostata — compila le righe!', 'success');
+            showStatus(_pcWeekMode === 'next'
+                ? '📅 ' + dateStr + ' aggiunti alla settimana prossima!'
+                : '🗓 Settimana ' + dateStr + ' impostata — compila le righe!', 'success');
 
             // Scroll alla prima riga nuova
             setTimeout(() => {
@@ -6950,19 +7243,26 @@
                 daConfermare:  document.getElementById('dmDaConf') ? document.getElementById('dmDaConf').checked       : false,
                 confermato:    false
             };
+            // Routing: corrente o prossima
+            var _wt2 = (_pcWeekMode === 'next') ? tripsNext : trips;
             // Aggiungi N copie per ogni giorno selezionato
             Object.entries(_dayPickerCounts).forEach(function(entry) {
                 const d = entry[0], cnt = entry[1];
                 for (let i = 0; i < cnt; i++) {
-                    trips.push(Object.assign({}, base, {data: desktopGetNextWeekday(d)}));
+                    _wt2.push(Object.assign({}, base, {data: desktopGetNextWeekday(d)}));
                 }
             });
-            if (specificDate) trips.push(Object.assign({}, base, {data: specificDate}));
-            trips.sort((a,b) => (a.data||'') > (b.data||'') ? 1 : -1);
-            saveToLocalStorage();
-            filterApply();
-            updateStats();
-            if (driveAccessToken) autoSaveDrive();
+            if (specificDate) _wt2.push(Object.assign({}, base, {data: specificDate}));
+
+            _wt2.sort((a,b) => (a.data||'') > (b.data||'') ? 1 : -1);
+            if (_pcWeekMode === 'next') {
+                saveNextToLocalStorage();
+            } else {
+                saveToLocalStorage();
+                filterApply();
+                updateStats();
+                if (driveAccessToken) autoSaveDrive();
+            }
             desktopCloseAddModal();
             renderDesktopView();
             haptic('success');
@@ -7008,6 +7308,7 @@
         }
         let _desktopDayFilter = 'Tutti';
         let _desktopSort = { field: 'data', dir: 'asc' };
+        let _pcWeekMode = 'current'; // 'current' | 'next'
 
         // Restituisce i viaggi visibili in base ai filtri desktop attivi
         function _getVisibleTrips() {
@@ -7115,48 +7416,54 @@
         }
 
         function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
+            var modal = document.getElementById('editModal');
+            if (modal) { modal.classList.remove('active'); modal.removeAttribute('data-next-idx'); }
             editingIndex = null;
         }
 
         const _editForm = document.getElementById('editForm');
         if (_editForm) _editForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            if (editingIndex !== null) {
-                trips[editingIndex] = {
-                    data: document.getElementById('editData').value,
-                    trasportatore: document.getElementById('editTrasportatore').value.trim(),
-                    partenza: document.getElementById('editPartenza').value.trim(),
-                    arrivo: document.getElementById('editArrivo').value.trim(),
-                    prodotto: document.getElementById('editProdotto').value,
-                    note: document.getElementById('editNote').value.trim(),
-                    daConfermare: document.getElementById('editDaConfermare').checked
-                };
-                
-                // Auto-aggiungi trasportatore, partenza, arrivo alle liste
-                var et = document.getElementById('editTrasportatore').value.trim();
-                var ep = document.getElementById('editPartenza').value.trim();
-                var ea = document.getElementById('editArrivo').value.trim();
-                if (et && !transportersList.includes(et)) {
-                    transportersList.push(et);
-                    transportersList.sort();
-                    updateTransporterDatalist();
-                    saveTransportersList();
-                }
-                addLocationToList(ep, 'partenza');
-                addLocationToList(ea, 'arrivo');
+            var modal = document.getElementById('editModal');
+            var nextIdx = modal ? parseInt(modal.getAttribute('data-next-idx')) : NaN;
+            var isNext = !isNaN(nextIdx) && nextIdx >= 0;
 
+            var updatedTrip = {
+                data: document.getElementById('editData').value,
+                trasportatore: document.getElementById('editTrasportatore').value.trim(),
+                partenza: document.getElementById('editPartenza').value.trim(),
+                arrivo: document.getElementById('editArrivo').value.trim(),
+                prodotto: document.getElementById('editProdotto').value,
+                note: document.getElementById('editNote').value.trim(),
+                daConfermare: document.getElementById('editDaConfermare').checked
+            };
+            var et = updatedTrip.trasportatore;
+            var ep = updatedTrip.partenza;
+            var ea = updatedTrip.arrivo;
+            if (et && !transportersList.includes(et)) {
+                transportersList.push(et); transportersList.sort();
+                updateTransporterDatalist(); saveTransportersList();
+            }
+            addLocationToList(ep, 'partenza');
+            addLocationToList(ea, 'arrivo');
+
+            if (isNext) {
+                tripsNext[nextIdx] = updatedTrip;
+                tripsNext.sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
+                saveNextToLocalStorage();
+                renderNextView();
+            } else if (editingIndex !== null) {
+                trips[editingIndex] = updatedTrip;
                 trips.sort((a, b) => new Date(a.data) - new Date(b.data));
                 saveToLocalStorage();
                 filteredTrips = [...trips];
                 filterApply();
                 updateStats();
                 filterPopulateDropdowns();
-                closeEditModal();
-                haptic('success');
-                showStatus('✅ Viaggio modificato con successo!', 'success');
             }
+            closeEditModal();
+            haptic('success');
+            showStatus('✅ Viaggio modificato!', 'success');
         });
 
         // Close modal when clicking outside
@@ -7944,6 +8251,8 @@
         }
 
         function filterApply() {
+            // Se siamo in vista prossima, renderizza solo quella e basta
+            if (currentView === 'next') { renderNextView(); return; }
             // Leggi i filtri dai dropdown mobile SOLO se non siamo in vista desktop
             // (in desktop i filtri vengono settati direttamente da desktopFilter)
             if (currentView !== 'desktop') {
@@ -8755,28 +9064,50 @@
             const archive = loadArchive();
             archive.push({
                 title: weekTitle || 'Settimana senza titolo',
-                trips: JSON.parse(JSON.stringify(trips)), // deep copy
+                trips: JSON.parse(JSON.stringify(trips)),
                 archivedAt: new Date().toISOString()
             });
             saveArchive(archive);
-            // Pulisci settimana corrente
-            trips = [];
-            saveToLocalStorage();
-            filteredTrips = [];
-            // Aggiorna titolo se inserito
+
+            // Aggiorna titolo
             if (newTitle) {
                 weekTitle = newTitle;
                 setText('weekInfo', weekTitle);
                 localStorage.setItem('weekTitle', weekTitle);
             }
+
+            // Hai viaggi nella prossima settimana?
+            if (tripsNext.length > 0) {
+                closeNewWeekModalV2();
+                // Mostra dialog importazione
+                var msg = '📅 Hai ' + tripsNext.length + ' ' + _pv(tripsNext.length) + ' già pianificati per la settimana prossima.\n\n'
+                    + 'Vuoi usarli come base per la nuova settimana corrente?\n\n'
+                    + '• SÌ → diventano la settimana corrente\n'
+                    + '• NO → parti da zero (i viaggi rimangono nella vista Prossima)';
+                if (confirm(msg)) {
+                    trips = JSON.parse(JSON.stringify(tripsNext));
+                    trips.sort(function(a,b){ var da=a.data?new Date(a.data+'T12:00:00'):new Date(0); var db=b.data?new Date(b.data+'T12:00:00'):new Date(0); return da-db; });
+                    tripsNext = [];
+                    saveNextToLocalStorage();
+                    showStatus('✅ ' + trips.length + ' ' + _pv(trips.length) + ' importati dalla settimana prossima!', 'success');
+                } else {
+                    trips = [];
+                    showStatus('✅ Settimana archiviata! Parti da zero.', 'success');
+                }
+            } else {
+                trips = [];
+                closeNewWeekModalV2();
+                showStatus('✅ Settimana archiviata! Pronti per ' + (newTitle || 'la nuova settimana'), 'success');
+            }
+
+            saveToLocalStorage();
+            filteredTrips = [];
             filterApply();
             renderTrips();
             updateStats();
             filterPopulateDropdowns();
             renderArchive();
-            closeNewWeekModalV2();
             haptic('success');
-            showStatus(`✅ Settimana archiviata! Pronti per ${newTitle || 'la nuova settimana'}`, 'success');
             if (driveAccessToken) debouncedDriveSave();
         }
 
@@ -9016,16 +9347,17 @@
 
     <div class="mobile-bottom-nav">
         <div class="view-toggle">
-            <!-- Card -->
-            <button class="view-btn" onclick="switchView('card', this)" title="Viaggi di oggi">
+            <!-- Prossima settimana -->
+            <button class="view-btn" onclick="switchView('next', this)" title="Settimana prossima">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="17" rx="2.5"/>
                     <line x1="3" y1="9" x2="21" y2="9"/>
                     <line x1="8" y1="2" x2="8" y2="6"/>
                     <line x1="16" y1="2" x2="16" y2="6"/>
-                    <circle cx="12" cy="15" r="2.5" fill="currentColor" stroke="none"/>
+                    <polyline points="8,14 12,18 16,14"/>
+                    <line x1="12" y1="12" x2="12" y2="18"/>
                 </svg>
-                <span class="nav-label">Oggi</span>
+                <span class="nav-label">Prossima</span>
             </button>
             <!-- Trasportatore -->
             <button class="view-btn" onclick="switchView('medium', this)" title="Vista per trasportatore">
