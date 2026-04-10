@@ -1360,27 +1360,27 @@
 
         .modal.active {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 16px;
+            padding: 16px 16px 80px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .modal-content {
             background: var(--primary);
             border-radius: 16px;
-            padding: 24px;
+            padding: 0;
             max-width: 600px;
             width: 100%;
             box-sizing: border-box;
             border: 2px solid var(--border);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: slideIn 0.4s ease-out;
-            max-height: 90vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            /* Scrollbar non occupa spazio sul contenuto */
-            scrollbar-gutter: stable;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .modal-header {
@@ -3983,12 +3983,14 @@
     <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
+            <!-- Header fisso -->
+            <div class="modal-header" style="padding:18px 20px 14px;flex-shrink:0;">
                 <div class="modal-title">✏️ Modifica Viaggio</div>
                 <button class="modal-close" onclick="closeEditModal()">×</button>
             </div>
-            <form id="editForm">
-                <div class="form-grid">
+            <form id="editForm" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;">
+                <!-- Campi scrollabili -->
+                <div class="form-grid" style="overflow-y:auto;padding:4px 20px 12px;flex:1;-webkit-overflow-scrolling:touch;">
                     <div class="form-group">
                         <label for="editData">Data</label>
                         <input type="date" id="editData" required>
@@ -4011,7 +4013,7 @@
 
                     <div class="form-group">
                         <label for="editProdotto">Prodotto</label>
-                        <select id="editProdotto" style="width: 100%; padding: 10px; background: var(--primary); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: 'Outfit', sans-serif; cursor: pointer;">
+                        <select id="editProdotto" style="width:100%;padding:10px;background:var(--primary);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'Outfit',sans-serif;cursor:pointer;">
                             <option value="">Seleziona prodotto...</option>
                             <option value="Cippato">Cippato</option>
                             <option value="Sfarinato">Sfarinato</option>
@@ -4022,20 +4024,23 @@
 
                     <div class="form-group">
                         <label for="editNote">Note interne (opzionale)</label>
-                        <textarea id="editNote" placeholder="Note interne..." style="width: 100%; padding: 10px; background: var(--primary); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: 'Outfit', sans-serif; min-height: 60px; resize: vertical;"></textarea>
+                        <textarea id="editNote" placeholder="Note interne..." style="width:100%;padding:10px;background:var(--primary);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'Outfit',sans-serif;min-height:60px;resize:vertical;"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="editDaConfermare" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" id="editDaConfermare" style="width: auto; cursor: pointer;">
+                        <label for="editDaConfermare" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" id="editDaConfermare" style="width:auto;cursor:pointer;">
                             <span>⚠️ Da confermare</span>
                         </label>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;width:100%;">
-                    💾 Salva Modifiche
-                </button>
+                <!-- Bottone SEMPRE visibile in fondo -->
+                <div style="padding:12px 20px 16px;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.07);background:var(--primary);">
+                    <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-size:15px;font-weight:700;">
+                        💾 Salva Modifiche
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -4208,8 +4213,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v51') {
-                localStorage.setItem('appVersion', 'v51');
+            if (localStorage.getItem('appVersion') !== 'v51b') {
+                localStorage.setItem('appVersion', 'v51b');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
