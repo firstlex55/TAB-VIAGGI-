@@ -3360,6 +3360,25 @@
             color: var(--text);
         }
 
+
+        /* ── Vista PC: righe tabella migliorata ── */
+        #desktopBody tbody tr:focus-within {
+            outline: 1px solid rgba(255,107,53,0.3) !important;
+            background: rgba(255,107,53,0.03) !important;
+        }
+        #desktopBody tbody tr:hover:not(:focus-within) td {
+            background: rgba(255,255,255,0.015);
+        }
+        @keyframes rowFlash {
+            0%   { box-shadow: inset 0 0 0 1px rgba(255,107,53,0.6); }
+            100% { box-shadow: none; }
+        }
+        .row-flash { animation: rowFlash 1.5s ease-out; }
+        #desktopBody tbody input:focus {
+            box-shadow: 0 0 0 2px rgba(255,107,53,0.12) !important;
+        }
+        .day-sep-row:focus-within { outline: none !important; }
+
         /* Print Styles - Excel-like colored output */
         @media print {
             body {
@@ -5892,92 +5911,146 @@
                 const colorClass = getTransporterColorClass(trip.trasportatore);
                 const transporterKey = getTransporterKey(trip.trasportatore);
                 const isToday = trip.data === todayStr;
+                const tColorVar = 'var(--t-' + transporterKey + ')';
+                const rowBg = isToday ? 'rgba(255,107,53,0.05)' : 'transparent';
 
-                return `
-                <tr style="border-bottom:1px solid rgba(255,255,255,0.07);${isToday ? 'background:rgba(255,107,53,0.06);' : ''};transition:background 0.12s;" id="drow-${realIdx}"
-                    onmouseover="if(this.id!==document.activeElement?.closest('tr')?.id)this.style.background='rgba(255,255,255,0.03)'"
-                    onmouseout="this.style.background='${isToday ? 'rgba(255,107,53,0.06)' : 'transparent'}'"
-                    onfocusin="this.style.background='rgba(255,107,53,0.04);outline: none'"
-                    onfocusout="this.style.background='${isToday ? 'rgba(255,107,53,0.06)' : 'transparent'}'">
-                    <td style="padding:5px 4px;width:20px;text-align:center;">
-                        <div style="display:flex;flex-direction:column;gap:1px;">
-                            <span style="color:rgba(255,255,255,0.12);font-size:12px;line-height:1;cursor:default;user-select:none;">⋮</span>
-                            <span style="color:rgba(255,255,255,0.12);font-size:12px;line-height:1;cursor:default;user-select:none;">⋮</span>
-                        </div>
-                    </td>
-                    <td style="padding:7px 8px;white-space:nowrap;">
-                        <div style="display:flex;align-items:center;gap:6px;">
-                            <span data-dateval style="font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:0.5px;min-width:72px;">${_fmtDesktopDate(trip.data)}</span>
-                            <input type="date" value="${trip.data||''}"
-                                onchange="desktopSetField(${realIdx},'data',this.value);this.closest('tr').querySelector('[data-dateval]').textContent=_fmtDesktopDate(this.value);"
-                                style="width:22px;height:22px;opacity:0.35;border:1px solid rgba(255,255,255,0.15);border-radius:5px;background:rgba(255,255,255,0.05);cursor:pointer;padding:0;outline:none;"
-                                title="Cambia data"
-                                onfocus="this.style.opacity='1';this.style.borderColor='var(--accent)'"
-                                onblur="this.style.opacity='0.35';this.style.borderColor='rgba(255,255,255,0.15)'">
-                        </div>
-                    </td>
-                    <td style="padding:7px 8px;">
-                        <div style="display:flex;align-items:center;gap:6px;">
-                            ${trip.trasportatore ? `<span class="${colorClass}" style="font-size:10px;font-weight:800;padding:3px 7px;border-radius:5px;flex-shrink:0;letter-spacing:0.3px;">${trip.trasportatore.substring(0,8)}</span>` : ''}
-                            <input type="text" value="${trip.trasportatore||''}" list="dtransp"
-                                onchange="desktopSetField(${realIdx},'trasportatore',this.value);"
-                                placeholder="trasportatore"
-                                style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:5px 7px;outline:none;width:115px;transition:border-color 0.15s;"
-                                onfocus="this.style.borderColor='var(--accent)';this.style.background='rgba(255,255,255,0.04)'"
-                                onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                        </div>
-                    </td>
-                    <td style="padding:5px 6px;">
-                        <input type="text" value="${trip.partenza||''}" list="dfrom"
-                            onchange="desktopSetField(${realIdx},'partenza',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
-                            placeholder="Partenza..."
-                            style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
-                            onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
-                            onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                    </td>
-                    <td style="padding:5px 6px;">
-                        <input type="text" value="${trip.arrivo||''}" list="dto"
-                            onchange="desktopSetField(${realIdx},'arrivo',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
-                            placeholder="Arrivo..."
-                            style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
-                            onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
-                            onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                    </td>
-                    <td style="padding:5px 6px;">
-                        <input type="text" value="${trip.prodotto||''}" list="dprod" placeholder="—"
-                            onchange="desktopSetField(${realIdx},'prodotto',this.value)" onkeydown="if(event.key==='Tab'){event.preventDefault();var inputs=this.closest('tbody').querySelectorAll('input[type=text],input[type=date]');var arr=Array.from(inputs);var i=arr.indexOf(this);if(arr[i+1])arr[i+1].focus();}"
-                            style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:6px 8px;outline:none;width:100%;transition:border-color 0.15s;"
-                            onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
-                            onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                    </td>
-                    <td style="padding:5px 6px;">
-                        <input type="text" value="${trip.note||''}" placeholder="note..."
-                            onchange="desktopSetField(${realIdx},'note',this.value)"
-                            style="background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;padding:5px 7px;outline:none;width:100%;transition:border-color 0.15s;"
-                            onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--secondary)'"
-                            onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                    </td>
-                    <td style="padding:5px 6px;text-align:center;">
-                        <div onclick="desktopToggleConf(${realIdx})"
-                            style="width:24px;height:24px;border-radius:5px;border:2px solid ${trip.daConfermare?'var(--warning)':'rgba(255,210,63,0.3)'};background:${trip.daConfermare?'var(--warning)':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;margin:auto;font-size:12px;font-weight:900;color:#000;transition:all 0.15s;"
-                            title="${trip.daConfermare?'Da confermare — clicca per confermare':'Confermato — clicca per mettere in attesa'}">
-                            ${trip.daConfermare?'⚠':'✓'}
-                        </div>
-                    </td>
-                    <td style="padding:5px 6px;text-align:center;">
-                        <div onclick="desktopToggleConfermato(${realIdx})" data-conf-cell
-                            style="width:24px;height:24px;border-radius:5px;border:2px solid ${trip.confermato?'#34d399':'rgba(52,211,153,0.3)'};background:${trip.confermato?'#34d399':'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:center;margin:auto;font-size:13px;font-weight:900;color:#000;transition:all 0.15s;"
-                            title="${trip.confermato?'Confermato al trasportatore — clicca per annullare':'Non ancora confermato — clicca per confermare'}">
-                            ${trip.confermato?'✓':''}
-                        </div>
-                    </td>
-                    <td style="padding:5px 6px;">
-                        <div style="display:flex;gap:4px;">
-                            <button onclick="desktopDup(${realIdx})" title="Duplica" style="padding:4px 7px;background:rgba(255,210,63,0.1);border:1px solid rgba(255,210,63,0.2);border-radius:5px;color:var(--warning);font-size:11px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='var(--warning)';this.style.color='#000'" onmouseout="this.style.background='rgba(255,210,63,0.1)';this.style.color='var(--warning)'">📋</button>
-                            <button onclick="desktopDel(${realIdx})" title="Elimina" style="padding:4px 7px;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.2);border-radius:5px;color:var(--accent);font-size:11px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='var(--accent)';this.style.color='white'" onmouseout="this.style.background='rgba(255,107,53,0.1)';this.style.color='var(--accent)'">🗑</button>
-                        </div>
-                    </td>
-                </tr>`;
+                // Codici da partenza/arrivo
+                const fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/) || [])[1] || '';
+                const toCode   = ((trip.arrivo||'').match(/[(]([^)]+)[)]/)   || [])[1] || '';
+                const fromName = (trip.partenza||'').split('(')[0].trim();
+                const toName   = (trip.arrivo||'').split('(')[0].trim();
+
+                // Stato combinato in un'unica cella
+                const isWarn  = trip.daConfermare;
+                const isConf  = trip.confermato;
+
+                // Stili input standard — leggero sfondo sempre visibile
+                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;padding:6px 9px;outline:none;width:100%;transition:all 0.15s;';
+                const inpFocus = 'this.style.borderColor=\'var(--accent)\';this.style.background=\'rgba(255,107,53,0.06)\';this.closest(\'tr\').style.outline=\'1px solid rgba(255,107,53,0.3)\'';
+                const inpBlur  = 'this.style.borderColor=\'rgba(255,255,255,0.09)\';this.style.background=\'rgba(255,255,255,0.04)\';this.closest(\'tr\').style.outline=\'\'';
+
+                // Tab → campo successivo nella stessa riga, poi riga successiva
+                const tabNav = 'if(event.key===\'Tab\'||event.key===\'Enter\'){event.preventDefault();' +
+                    'var row=this.closest(\'tr\');' +
+                    'var allInputs=Array.from(document.querySelectorAll(\'#desktopBody tbody tr:not(.day-sep-row) input[type=text],#desktopBody tbody tr:not(.day-sep-row) input[type=date]\'));' +
+                    'var i=allInputs.indexOf(this);' +
+                    'var next=allInputs[i+1];' +
+                    'if(next){next.focus();next.select();}' +
+                    '}';
+
+                return '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:' + rowBg + ';border-left:3px solid ' + tColorVar + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
+                    ' onfocusin="this.style.outline=\'1px solid rgba(255,107,53,0.25)\'"' +
+                    ' onfocusout="this.style.outline=\'\'">' +
+
+                    // Drag handle
+                    '<td style="padding:4px 3px;width:14px;text-align:center;opacity:0.2;cursor:default;user-select:none;">' +
+                    '<span style="font-size:11px;">⋮⋮</span>' +
+                    '</td>' +
+
+                    // DATA — più grande e cliccabile
+                    '<td style="padding:5px 8px;white-space:nowrap;width:120px;">' +
+                    '<div style="display:flex;flex-direction:column;gap:2px;">' +
+                    '<span data-dateval style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:' + tColorVar + ';letter-spacing:0.5px;">' + _fmtDesktopDate(trip.data) + '</span>' +
+                    '<input type="date" value="' + (trip.data||'') + '"' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'data\',this.value);this.closest(\'tr\').querySelector(\'[data-dateval]\').textContent=_fmtDesktopDate(this.value);"' +
+                    ' style="width:100%;padding:4px 6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:5px;color:var(--text-dim);font-family:\'Outfit\',sans-serif;font-size:10px;outline:none;cursor:pointer;transition:border-color 0.15s;"' +
+                    ' onfocus="this.style.borderColor=\'var(--accent)\'"' +
+                    ' onblur="this.style.borderColor=\'rgba(255,255,255,0.09)\'"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    '</div>' +
+                    '</td>' +
+
+                    // TRASPORTATORE — solo input, no badge ridondante
+                    '<td style="padding:5px 6px;width:140px;">' +
+                    '<div style="display:flex;align-items:center;gap:5px;">' +
+                    '<div style="width:4px;height:28px;border-radius:2px;background:' + tColorVar + ';flex-shrink:0;"></div>' +
+                    '<input type="text" value="' + (trip.trasportatore||'') + '" list="dtransp"' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'trasportatore\',this.value);"' +
+                    ' placeholder="Trasp."' +
+                    ' style="' + inpStyle + 'font-weight:700;"' +
+                    ' onfocus="' + inpFocus + '"' +
+                    ' onblur="' + inpBlur + '"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    '</div>' +
+                    '</td>' +
+
+                    // PARTENZA — su due righe: nome + codice
+                    '<td style="padding:5px 6px;">' +
+                    '<input type="text" value="' + (trip.partenza||'') + '" list="dfrom"' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'partenza\',this.value)"' +
+                    ' placeholder="Partenza..."' +
+                    ' style="' + inpStyle + 'font-weight:600;color:#eef2fa;"' +
+                    ' onfocus="' + inpFocus + '"' +
+                    ' onblur="' + inpBlur + '"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    (fromCode ? '<div style="font-size:9px;color:rgba(255,107,53,0.6);font-weight:700;margin-top:2px;padding-left:2px;">' + fromCode + '</div>' : '') +
+                    '</td>' +
+
+                    // ARRIVO — su due righe
+                    '<td style="padding:5px 6px;">' +
+                    '<input type="text" value="' + (trip.arrivo||'') + '" list="dto"' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'arrivo\',this.value)"' +
+                    ' placeholder="Arrivo..."' +
+                    ' style="' + inpStyle + 'font-weight:600;color:#06d6a0;"' +
+                    ' onfocus="' + inpFocus + '"' +
+                    ' onblur="' + inpBlur + '"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    (toCode ? '<div style="font-size:9px;color:rgba(6,214,160,0.55);font-weight:700;margin-top:2px;padding-left:2px;">' + toCode + '</div>' : '') +
+                    '</td>' +
+
+                    // PRODOTTO
+                    '<td style="padding:5px 6px;width:110px;">' +
+                    '<input type="text" value="' + (trip.prodotto||'') + '" list="dprod" placeholder="—"' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'prodotto\',this.value)"' +
+                    ' style="' + inpStyle + 'color:rgba(255,255,255,0.65);"' +
+                    ' onfocus="' + inpFocus + '"' +
+                    ' onblur="' + inpBlur + '"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    '</td>' +
+
+                    // NOTE
+                    '<td style="padding:5px 6px;width:140px;">' +
+                    '<input type="text" value="' + (trip.note||'') + '" placeholder="note..."' +
+                    ' onchange="desktopSetField(' + realIdx + ',\'note\',this.value)"' +
+                    ' style="' + inpStyle + 'font-size:12px;color:rgba(255,255,255,0.5);"' +
+                    ' onfocus="' + inpFocus + '"' +
+                    ' onblur="' + inpBlur + '"' +
+                    ' onkeydown="' + tabNav + '">' +
+                    '</td>' +
+
+                    // STATO — colonna unica con ⚠ e ✓ distinti visivamente
+                    '<td style="padding:5px 6px;text-align:center;width:60px;">' +
+                    '<div style="display:flex;gap:4px;justify-content:center;align-items:center;">' +
+                    '<div onclick="desktopToggleConf(' + realIdx + ')"' +
+                    ' style="width:22px;height:22px;border-radius:5px;border:1.5px solid ' + (isWarn ? 'var(--warning)' : 'rgba(255,210,63,0.2)') + ';background:' + (isWarn ? 'rgba(255,210,63,0.2)' : 'transparent') + ';cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.15s;"' +
+                    ' title="' + (isWarn ? 'Da confermare' : 'Confermato') + '">' +
+                    (isWarn ? '<span style="color:var(--warning);">⚠</span>' : '<span style="color:rgba(255,210,63,0.2);font-size:9px;">○</span>') +
+                    '</div>' +
+                    '<div onclick="desktopToggleConfermato(' + realIdx + ')" data-conf-cell' +
+                    ' style="width:22px;height:22px;border-radius:5px;border:1.5px solid ' + (isConf ? '#34d399' : 'rgba(52,211,153,0.2)') + ';background:' + (isConf ? 'rgba(52,211,153,0.15)' : 'transparent') + ';cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:' + (isConf ? '#34d399' : 'rgba(52,211,153,0.2)') + ';transition:all 0.15s;"' +
+                    ' title="' + (isConf ? 'Confermato al trasportatore' : 'Non confermato') + '">' +
+                    (isConf ? '✓' : '○') +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+
+                    // AZIONI
+                    '<td style="padding:5px 4px;width:60px;">' +
+                    '<div style="display:flex;gap:3px;justify-content:center;">' +
+                    '<button onclick="desktopDup(' + realIdx + ')" title="Duplica (Ctrl+D)"' +
+                    ' style="padding:4px 6px;background:rgba(255,210,63,0.08);border:1px solid rgba(255,210,63,0.15);border-radius:5px;color:rgba(255,210,63,0.6);font-size:11px;cursor:pointer;transition:all 0.15s;"' +
+                    ' onmouseover="this.style.background=\'rgba(255,210,63,0.2)\';this.style.color=\'var(--warning)\'"' +
+                    ' onmouseout="this.style.background=\'rgba(255,210,63,0.08)\';this.style.color=\'rgba(255,210,63,0.6)\'"' +
+                    '>📋</button>' +
+                    '<button onclick="desktopDel(' + realIdx + ')" title="Elimina"' +
+                    ' style="padding:4px 6px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.15);border-radius:5px;color:rgba(255,107,53,0.5);font-size:11px;cursor:pointer;transition:all 0.15s;"' +
+                    ' onmouseover="this.style.background=\'rgba(255,107,53,0.2)\';this.style.color=\'var(--accent)\'"' +
+                    ' onmouseout="this.style.background=\'rgba(255,107,53,0.08)\';this.style.color=\'rgba(255,107,53,0.5)\'"' +
+                    '>🗑</button>' +
+                    '</div>' +
+                    '</td>' +
+
+                    '</tr>';
             }
 
             container.innerHTML = `
@@ -6153,15 +6226,16 @@
                                 <tr>
                                     <th style="width:22px;padding:10px 4px;"></th>
                                     ${['data','trasportatore','partenza','arrivo','prodotto','note'].map((f,i) => {
-                                        const labels = {data:'Data',trasportatore:'Trasportatore',partenza:'Partenza',arrivo:'Arrivo',prodotto:'Prodotto',note:'Note'};
-                                        const widths = {data:'120px',trasportatore:'175px',partenza:'',arrivo:'',prodotto:'95px',note:'130px'};
+                                        const labels = {data:'Data',trasportatore:'Trasp.',partenza:'Partenza',arrivo:'Arrivo',prodotto:'Prodotto',note:'Note'};
+                                        const widths = {data:'120px',trasportatore:'140px',partenza:'',arrivo:'',prodotto:'110px',note:'140px'};
                                         const isActive = _desktopSort.field === f;
-                                        const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
-                                        return `<th onclick="desktopSortBy('${f}')" style="padding:10px 10px;text-align:left;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:${isActive?'#fff':'rgba(255,107,53,0.85)'};background:${isActive?'rgba(255,107,53,0.14)':'transparent'};letter-spacing:0.5px;text-transform:uppercase;${widths[f]?'width:'+widths[f]+';':''}cursor:pointer;user-select:none;white-space:nowrap;transition:background 0.15s;border-bottom:1px solid rgba(255,107,53,0.12);" title="Ordina per ${labels[f]}">${labels[f]}<span style="font-size:8px;opacity:0.5;margin-left:3px;">${arrow}</span></th>`;
+                                        const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
+                                        const clr = isActive ? '#ff8c61' : 'rgba(255,255,255,0.3)';
+                                        const bdr = isActive ? '2px solid var(--accent)' : '2px solid rgba(255,255,255,0.06)';
+                                        return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:10px 10px;text-align:left;font-size:9px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:1.2px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:var(--accent);font-size:10px;\">' + arrow + '</span>' : '') + '</th>';
                                     }).join('')}
-                                    <th style="padding:10px 8px;text-align:center;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:var(--warning);width:32px;border-bottom:1px solid rgba(255,107,53,0.12);" title="Da confermare">⚠️</th>
-                                    <th style="padding:10px 8px;text-align:center;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:#34d399;width:32px;border-bottom:1px solid rgba(255,107,53,0.12);" title="Confermato al trasportatore">✓</th>
-                                    <th style="width:72px;"></th>
+                                    <th style="padding:10px 8px;text-align:center;font-size:9px;font-weight:800;color:rgba(255,255,255,0.3);width:60px;border-bottom:2px solid rgba(255,255,255,0.06);letter-spacing:1px;">STATO</th>
+                                    <th style="width:60px;border-bottom:2px solid rgba(255,255,255,0.06);"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -6353,6 +6427,38 @@
                 filterPopulateDropdowns();
                 debouncedDriveSave();
             }
+            // Aggiorna inline il codice sotto partenza/arrivo senza re-render
+            if (field === 'partenza' || field === 'arrivo') {
+                var row = document.getElementById('drow-' + idx);
+                if (row) {
+                    var colIdx = field === 'partenza' ? 3 : 4; // colonne nella riga
+                    var cells = row.querySelectorAll('td');
+                    if (cells[colIdx]) {
+                        var codeDiv = cells[colIdx].querySelector('div[style*="9px"]');
+                        var match = val.match(/[(]([^)]+)[)]/);
+                        var code = match ? match[1] : '';
+                        if (codeDiv) {
+                            codeDiv.textContent = code;
+                        } else if (code) {
+                            var newDiv = document.createElement('div');
+                            newDiv.style.cssText = 'font-size:9px;font-weight:700;margin-top:2px;padding-left:2px;color:' + (field==='partenza' ? 'rgba(255,107,53,0.6)' : 'rgba(6,214,160,0.55)') + ';';
+                            newDiv.textContent = code;
+                            cells[colIdx].appendChild(newDiv);
+                        }
+                    }
+                }
+            }
+            // Aggiorna colore bordo sinistro se cambia trasportatore
+            if (field === 'trasportatore' && _wt[idx]) {
+                var row = document.getElementById('drow-' + idx);
+                if (row) {
+                    var tKey = getTransporterKey(val);
+                    row.style.borderLeftColor = 'var(--t-' + tKey + ')';
+                    // Aggiorna anche il divisore colorato nella cella
+                    var bar = row.querySelector('td:nth-child(3) div[style*="4px"]');
+                    if (bar) bar.style.background = 'var(--t-' + tKey + ')';
+                }
+            }
             _showSavedFlash();
         }
 
@@ -6386,12 +6492,14 @@
                 renderDesktopView();
             } else {
                 saveToLocalStorage();
+                const conf = trips[idx] && trips[idx].confermato;
                 const cell = document.querySelector('#drow-' + idx + ' [data-conf-cell]');
                 if (cell) {
-                    const conf = trips[idx].confermato;
-                    cell.style.borderColor = conf ? '#34d399' : 'rgba(52,211,153,0.3)';
-                    cell.style.background  = conf ? '#34d399' : 'transparent';
-                    cell.textContent       = conf ? '✓' : '';
+                    cell.style.borderColor  = conf ? '#34d399' : 'rgba(52,211,153,0.2)';
+                    cell.style.background   = conf ? 'rgba(52,211,153,0.15)' : 'transparent';
+                    cell.style.color        = conf ? '#34d399' : 'rgba(52,211,153,0.2)';
+                    cell.textContent        = conf ? '✓' : '○';
+                    cell.title = conf ? 'Confermato al trasportatore' : 'Non confermato';
                 } else { renderDesktopView(); }
                 updateStats(); debouncedDriveSave();
             }
@@ -6444,6 +6552,7 @@
         }
 
         let _desktopQuickQuery = '';
+        let _pcWeekMode = 'current'; // 'current' | 'next'
 
         function pcSetWeek(mode, btn) {
             _pcWeekMode = mode;
@@ -6836,11 +6945,8 @@
                     var dateInp = row.querySelector('input[type="date"]');
                     if (!dateInp) return;
                     if (dates.indexOf(dateInp.value) !== -1) {
-                        // Highlight arancio su tutte le righe aggiunte
-                        row.style.transition = 'box-shadow 0.2s, background 0.2s';
-                        row.style.boxShadow = '0 0 0 2px var(--accent)';
-                        row.style.background = 'rgba(255,107,53,0.08)';
-                        setTimeout(function(r){ r.style.boxShadow=''; r.style.background=''; }(row), 1500);
+                        row.classList.add('row-flash');
+                        setTimeout(function(r){ r.classList.remove('row-flash'); }(row), 1600);
                         if (!firstTarget) firstTarget = row;
                     }
                 });
@@ -7308,7 +7414,6 @@
         }
         let _desktopDayFilter = 'Tutti';
         let _desktopSort = { field: 'data', dir: 'asc' };
-        let _pcWeekMode = 'current'; // 'current' | 'next'
 
         // Restituisce i viaggi visibili in base ai filtri desktop attivi
         function _getVisibleTrips() {
