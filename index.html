@@ -4226,8 +4226,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v55b') {
-                localStorage.setItem('appVersion', 'v55b');
+            if (localStorage.getItem('appVersion') !== 'v55e') {
+                localStorage.setItem('appVersion', 'v55e');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -5637,45 +5637,68 @@
                 var dayNames2 = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
                 var confRows = toConfirm.map(function(t) {
                     var idx = trips.indexOf(t);
-                    var tKey = getTransporterKey(t.trasportatore);
                     var colorClass = getTransporterColorClass(t.trasportatore);
                     var fromN = (t.partenza||'').split('(')[0].trim();
                     var toN   = (t.arrivo||'').split('(')[0].trim();
                     var d2 = t.data ? new Date(t.data + 'T12:00:00') : null;
-                    var dayLabel = d2 ? (dayNames2[d2.getDay()] + ' ' + String(d2.getDate()).padStart(2,'0')) : '';
-                    return '<div style="display:flex;align-items:center;gap:10px;'
-                        + 'background:rgba(0,0,0,0.25);border-radius:10px;'
-                        + 'padding:9px 12px;margin-bottom:6px;cursor:pointer;"'
-                        + ' onclick="_compactConfirm(' + idx + ')">'
-                        + '<div style="width:28px;height:28px;border-radius:8px;'
-                        + 'border:2px solid rgba(255,210,63,0.5);background:transparent;'
-                        + 'flex-shrink:0;display:flex;align-items:center;justify-content:center;'
-                        + 'transition:all 0.15s;" id="ckb-' + idx + '"></div>'
-                        + '<div style="flex:1;min-width:0;">'
-                        + '<div style="font-size:10px;font-weight:800;margin-bottom:2px;" class="' + colorClass + '">' + (t.trasportatore||'') + '</div>'
-                        + '<div style="font-size:12px;font-weight:600;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + fromN + ' → ' + toN + '</div>'
+                    var dayNames2 = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+                    var dayShort = d2 ? dayNames2[d2.getDay()] : '';
+                    var dayNum   = d2 ? String(d2.getDate()).padStart(2,'0') : '';
+                    return '<div onclick="_compactConfirm(' + idx + ')"'
+                        + ' id="ckb-row-' + idx + '"'
+                        + ' style="display:flex;align-items:center;gap:8px;'
+                        + 'background:rgba(0,0,0,0.22);border-radius:9px;'
+                        + 'padding:8px 10px;margin-bottom:5px;cursor:pointer;'
+                        + 'border:1px solid rgba(255,255,255,0.06);">'
+                        // Checkbox
+                        + '<div id="ckb-' + idx + '" style="width:18px;height:18px;border-radius:5px;'
+                        + 'border:1.5px solid rgba(255,210,63,0.55);flex-shrink:0;'
+                        + 'display:flex;align-items:center;justify-content:center;'
+                        + 'font-size:12px;transition:all 0.15s;"></div>'
+                        // Data compatta
+                        + '<div style="flex-shrink:0;text-align:center;width:28px;">'
+                        + '<div style="font-size:8px;font-weight:700;color:rgba(255,210,63,0.65);'
+                        + 'text-transform:uppercase;line-height:1;">' + dayShort + '</div>'
+                        + '<div style="font-size:14px;font-weight:900;color:var(--warning);'
+                        + 'font-family:JetBrains Mono,monospace;line-height:1.1;">' + dayNum + '</div>'
                         + '</div>'
-                        + '<span style="font-size:10px;color:rgba(255,255,255,0.35);font-family:JetBrains Mono,monospace;flex-shrink:0;">' + dayLabel + '</span>'
+                        // Badge trasportatore
+                        + '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;'
+                        + 'padding:2px 6px;border-radius:5px;flex-shrink:0;white-space:nowrap;">'
+                        + (t.trasportatore||'') + '</span>'
+                        // Rotta — prende tutto lo spazio rimanente
+                        + '<div style="flex:1;min-width:0;">'
+                        + '<div style="font-size:12px;font-weight:700;color:#eef2fa;'
+                        + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+                        + fromN + '</div>'
+                        + '<div style="font-size:11px;font-weight:600;color:#06d6a0;'
+                        + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+                        + toN + '</div>'
+                        + '</div>'
                         + '</div>';
                 }).join('');
 
-                html += '<div id="daConfBanner" style="background:rgba(255,210,63,0.08);border:1px solid rgba(255,210,63,0.3);border-radius:14px;overflow:hidden;margin-bottom:16px;">'
-                    // Header cliccabile
-                    + '<div onclick="_toggleDaConfBanner()" style="display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;">'
-                    + '<span style="font-size:16px;">⚠️</span>'
+                html += '<div id="daConfBanner" style="background:rgba(255,210,63,0.07);'
+                    + 'border:1px solid rgba(255,210,63,0.28);border-radius:13px;'
+                    + 'overflow:hidden;margin-bottom:14px;">'
+                    // Header
+                    + '<div onclick="_toggleDaConfBanner()" style="display:flex;align-items:center;'
+                    + 'gap:8px;padding:10px 13px;cursor:pointer;">'
+                    + '<span style="font-size:15px;">⚠️</span>'
                     + '<div style="flex:1;">'
-                    + '<div style="font-size:13px;font-weight:800;color:var(--warning);">' + toConfirm.length + ' da confermare</div>'
-                    + '<div style="font-size:10px;color:rgba(255,210,63,0.55);">Tocca per vedere e confermare</div>'
+                    + '<span style="font-size:12px;font-weight:800;color:var(--warning);">'
+                    + toConfirm.length + ' da confermare</span>'
                     + '</div>'
-                    + '<span id="daConfArr" style="color:rgba(255,210,63,0.5);font-size:14px;transition:transform 0.2s;">▾</span>'
+                    + '<span id="daConfArr" style="color:rgba(255,210,63,0.5);font-size:11px;'
+                    + 'transition:transform 0.2s;">▾</span>'
                     + '</div>'
-                    // Body collassabile
-                    + '<div id="daConfBody" style="padding:0 10px 10px;">'
+                    // Body
+                    + '<div id="daConfBody" style="padding:0 8px 8px;">'
                     + confRows
-                    + '<button onclick="_confirmAllCompact()" style="width:100%;margin-top:2px;padding:9px;'
-                    + 'background:rgba(6,214,160,0.12);border:1.5px solid rgba(6,214,160,0.4);'
-                    + 'border-radius:10px;color:#06d6a0;font-family:Outfit,sans-serif;'
-                    + 'font-size:12px;font-weight:800;cursor:pointer;">'
+                    + '<button onclick="_confirmAllCompact()" style="width:100%;margin-top:4px;padding:8px;'
+                    + 'background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.35);'
+                    + 'border-radius:9px;color:#06d6a0;font-family:Outfit,sans-serif;'
+                    + 'font-size:11px;font-weight:800;cursor:pointer;letter-spacing:0.3px;">'
                     + '✅ Conferma tutti'
                     + '</button>'
                     + '</div>'
