@@ -4226,8 +4226,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v55') {
-                localStorage.setItem('appVersion', 'v55');
+            if (localStorage.getItem('appVersion') !== 'v55b') {
+                localStorage.setItem('appVersion', 'v55b');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -5629,8 +5629,8 @@
                 grouped[trip.data].push(trip);
             });
 
-            // ── Banner "Da confermare" collassabile ──
-            const toConfirm = displayTrips.filter(t => t.daConfermare);
+            // ── Banner "Da confermare" — cerca sempre in trips[], non nel subset filtrato
+            const toConfirm = trips.filter(t => t.daConfermare);
             let html = '';
 
             if (toConfirm.length > 0) {
