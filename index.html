@@ -3914,7 +3914,7 @@
                            font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;">
                     ⬇️ Excel
                 </button>
-                <button onclick="showNewWeekModal()"
+                <button onclick="showNewWeekModalV2()"
                     style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
                            padding:9px 12px;border-radius:10px;cursor:pointer;
                            background:rgba(255,107,53,0.08);color:var(--accent);
@@ -4226,8 +4226,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v51g') {
-                localStorage.setItem('appVersion', 'v51g');
+            if (localStorage.getItem('appVersion') !== 'v55') {
+                localStorage.setItem('appVersion', 'v55');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -5550,24 +5550,57 @@
             return card;
         }
 
+        // Toggle banner "Da confermare"
+        function _toggleDaConfBanner() {
+            var body = document.getElementById('daConfBody');
+            var arr  = document.getElementById('daConfArr');
+            if (!body) return;
+            var isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : '';
+            if (arr) arr.style.transform = isOpen ? 'rotate(-90deg)' : '';
+        }
+
+        // Conferma tutti dalla vista Rapida
+        function _confirmAllCompact() {
+            var changed = false;
+            trips.forEach(function(t) {
+                if (t.daConfermare) { t.daConfermare = false; changed = true; }
+            });
+            if (changed) {
+                saveToLocalStorage();
+                haptic('success');
+                renderCompactView();
+                updateStats();
+                showStatus('✅ Tutti i viaggi confermati!', 'success');
+            }
+        }
+
         // Conferma viaggio dalla vista Rapida (click sul badge ⚠)
         function _compactConfirm(idx) {
             if (!trips[idx]) return;
             trips[idx].daConfermare = false;
             saveToLocalStorage();
             haptic('success');
-            // Aggiorna solo il badge senza re-render completo
-            var badge = document.querySelector('.swipe-row[data-idx="' + idx + '"] .compact-transporter ~ div');
-            if (badge) {
-                // Anima rimozione
-                badge.style.transition = 'opacity 0.25s, transform 0.25s';
-                badge.style.opacity = '0';
-                badge.style.transform = 'scale(0.7)';
-                setTimeout(function() { badge.remove(); }, 260);
-            } else {
-                renderCompactView();
-            }
             updateStats();
+            // Anima checkbox nel banner se visibile
+            var ck = document.getElementById('ckb-' + idx);
+            if (ck) {
+                ck.style.background = 'rgba(6,214,160,0.2)';
+                ck.style.borderColor = '#06d6a0';
+                ck.innerHTML = '<span style="color:#06d6a0;font-size:14px;font-weight:900;">✓</span>';
+                setTimeout(function() { renderCompactView(); }, 380);
+            } else {
+                // Anima rimozione badge nella lista
+                var badge = document.querySelector('.swipe-row[data-idx="' + idx + '"] .compact-transporter ~ span');
+                if (badge) {
+                    badge.style.transition = 'opacity 0.25s, transform 0.25s';
+                    badge.style.opacity = '0';
+                    badge.style.transform = 'scale(0.7)';
+                    setTimeout(function() { renderCompactView(); }, 280);
+                } else {
+                    renderCompactView();
+                }
+            }
             showStatus('✅ Viaggio confermato!', 'success');
         }
 
@@ -5596,7 +5629,59 @@
                 grouped[trip.data].push(trip);
             });
 
+            // ── Banner "Da confermare" collassabile ──
+            const toConfirm = displayTrips.filter(t => t.daConfermare);
             let html = '';
+
+            if (toConfirm.length > 0) {
+                var dayNames2 = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+                var confRows = toConfirm.map(function(t) {
+                    var idx = trips.indexOf(t);
+                    var tKey = getTransporterKey(t.trasportatore);
+                    var colorClass = getTransporterColorClass(t.trasportatore);
+                    var fromN = (t.partenza||'').split('(')[0].trim();
+                    var toN   = (t.arrivo||'').split('(')[0].trim();
+                    var d2 = t.data ? new Date(t.data + 'T12:00:00') : null;
+                    var dayLabel = d2 ? (dayNames2[d2.getDay()] + ' ' + String(d2.getDate()).padStart(2,'0')) : '';
+                    return '<div style="display:flex;align-items:center;gap:10px;'
+                        + 'background:rgba(0,0,0,0.25);border-radius:10px;'
+                        + 'padding:9px 12px;margin-bottom:6px;cursor:pointer;"'
+                        + ' onclick="_compactConfirm(' + idx + ')">'
+                        + '<div style="width:28px;height:28px;border-radius:8px;'
+                        + 'border:2px solid rgba(255,210,63,0.5);background:transparent;'
+                        + 'flex-shrink:0;display:flex;align-items:center;justify-content:center;'
+                        + 'transition:all 0.15s;" id="ckb-' + idx + '"></div>'
+                        + '<div style="flex:1;min-width:0;">'
+                        + '<div style="font-size:10px;font-weight:800;margin-bottom:2px;" class="' + colorClass + '">' + (t.trasportatore||'') + '</div>'
+                        + '<div style="font-size:12px;font-weight:600;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + fromN + ' → ' + toN + '</div>'
+                        + '</div>'
+                        + '<span style="font-size:10px;color:rgba(255,255,255,0.35);font-family:JetBrains Mono,monospace;flex-shrink:0;">' + dayLabel + '</span>'
+                        + '</div>';
+                }).join('');
+
+                html += '<div id="daConfBanner" style="background:rgba(255,210,63,0.08);border:1px solid rgba(255,210,63,0.3);border-radius:14px;overflow:hidden;margin-bottom:16px;">'
+                    // Header cliccabile
+                    + '<div onclick="_toggleDaConfBanner()" style="display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;">'
+                    + '<span style="font-size:16px;">⚠️</span>'
+                    + '<div style="flex:1;">'
+                    + '<div style="font-size:13px;font-weight:800;color:var(--warning);">' + toConfirm.length + ' da confermare</div>'
+                    + '<div style="font-size:10px;color:rgba(255,210,63,0.55);">Tocca per vedere e confermare</div>'
+                    + '</div>'
+                    + '<span id="daConfArr" style="color:rgba(255,210,63,0.5);font-size:14px;transition:transform 0.2s;">▾</span>'
+                    + '</div>'
+                    // Body collassabile
+                    + '<div id="daConfBody" style="padding:0 10px 10px;">'
+                    + confRows
+                    + '<button onclick="_confirmAllCompact()" style="width:100%;margin-top:2px;padding:9px;'
+                    + 'background:rgba(6,214,160,0.12);border:1.5px solid rgba(6,214,160,0.4);'
+                    + 'border-radius:10px;color:#06d6a0;font-family:Outfit,sans-serif;'
+                    + 'font-size:12px;font-weight:800;cursor:pointer;">'
+                    + '✅ Conferma tutti'
+                    + '</button>'
+                    + '</div>'
+                    + '</div>';
+            }
+
             Object.keys(grouped).sort().forEach(date => {
                 const dayTrips = grouped[date];
                 const d = new Date(date + 'T12:00:00');
@@ -5626,15 +5711,15 @@
                     const toCode   = ((trip.arrivo   || '').match(/\(([^)]+)\)/) || [])[1] || '';
                     // Badge ⚠ cliccabile: click → conferma (rimuove daConfermare), stopPropagation
                     const conf = trip.daConfermare
-                        ? '<div onclick="event.stopPropagation();_compactConfirm(' + actualIndex + ')" '
-                          + 'style="margin-top:4px;display:inline-flex;align-items:center;gap:3px;'
-                          + 'background:rgba(255,210,63,0.15);border:1px solid rgba(255,210,63,0.45);'
-                          + 'color:var(--warning);padding:3px 7px;border-radius:20px;'
-                          + 'font-size:9px;font-weight:800;cursor:pointer;white-space:nowrap;'
+                        ? '<span onclick="event.stopPropagation();_compactConfirm(' + actualIndex + ')" '
+                          + 'style="display:block;margin-top:3px;text-align:center;'
+                          + 'background:rgba(255,210,63,0.15);border:1px solid rgba(255,210,63,0.4);'
+                          + 'color:var(--warning);padding:1px 6px;border-radius:8px;'
+                          + 'font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;'
                           + 'transition:all 0.15s;-webkit-tap-highlight-color:transparent;" '
-                          + 'onmouseover="this.style.background=\'rgba(255,210,63,0.3)\'" '
+                          + 'onmouseover="this.style.background=\'rgba(255,210,63,0.28)\'" '
                           + 'onmouseout="this.style.background=\'rgba(255,210,63,0.15)\'" '
-                          + 'title="Tocca per confermare">⚠ Da conf.</div>'
+                          + 'title="Tocca per confermare">⚠ conf.</span>'
                         : '';
 
                     // Wrapper swipe-to-delete
@@ -5957,12 +6042,13 @@
                 </div>`;
             }
 
-            function tripRow(trip, realIdx) {
+            function tripRow(trip, realIdx, dayRgb) {
                 const colorClass = getTransporterColorClass(trip.trasportatore);
                 const transporterKey = getTransporterKey(trip.trasportatore);
                 const isToday = trip.data === todayStr;
                 const tColorVar = 'var(--t-' + transporterKey + ')';
-                const rowBg = isToday ? 'rgba(255,107,53,0.05)' : 'transparent';
+                var dayBg = dayRgb ? 'rgba(' + dayRgb + ',0.03)' : 'transparent';
+                const rowBg = isToday ? 'rgba(255,107,53,0.05)' : dayBg;
 
                 // Codici da partenza/arrivo
                 const fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/) || [])[1] || '';
@@ -5999,7 +6085,7 @@
 
                     // DATA — solo testo grande, picker nascosto al click
                     '<td style="padding:5px 8px;white-space:nowrap;width:90px;position:relative;">' +
-                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:' + tColorVar + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:6px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(255,255,255,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
+                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:6px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(255,255,255,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
                     '<input type="date" value="' + (trip.data||'') + '"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'data\',this.value);this.previousElementSibling.textContent=_fmtDesktopDate(this.value);"' +
                     ' style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;pointer-events:none;"' +
@@ -6029,7 +6115,7 @@
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
-                    (fromCode ? '<div style="font-size:9px;color:rgba(255,107,53,0.6);font-weight:700;margin-top:2px;padding-left:2px;">' + fromCode + '</div>' : '') +
+                    (fromCode ? _codeChip(fromCode) : '') +
                     '</td>' +
 
                     // ARRIVO — su due righe
@@ -6041,7 +6127,7 @@
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
-                    (toCode ? '<div style="font-size:9px;color:rgba(6,214,160,0.55);font-weight:700;margin-top:2px;padding-left:2px;">' + toCode + '</div>' : '') +
+                    (toCode ? _codeChip(toCode) : '') +
                     '</td>' +
 
                     // PRODOTTO
@@ -6280,7 +6366,49 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${sorted.map(t => tripRow(t, _workingTrips.indexOf(t))).join('')}
+                                ${(function() {
+                                    var rows = '';
+                                    var lastDate = null;
+                                    var dayColors = {
+                                        1:{col:'#60a5fa',rgb:'96,165,250',  name:'LUNEDÌ'},
+                                        2:{col:'#34d399',rgb:'52,211,153',  name:'MARTEDÌ'},
+                                        3:{col:'#a78bfa',rgb:'167,139,250', name:'MERCOLEDÌ'},
+                                        4:{col:'#fbbf24',rgb:'251,191,36',  name:'GIOVEDÌ'},
+                                        5:{col:'#f472b6',rgb:'244,114,182', name:'VENERDÌ'},
+                                        6:{col:'#94a3b8',rgb:'148,163,184', name:'SABATO'},
+                                        0:{col:'#94a3b8',rgb:'148,163,184', name:'DOMENICA'},
+                                    };
+                                    var dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+
+                                    sorted.forEach(function(t) {
+                                        if (t.data !== lastDate) {
+                                            // Conta viaggi di questo giorno
+                                            var cnt = sorted.filter(function(x){ return x.data === t.data; }).length;
+                                            var d = t.data ? new Date(t.data + 'T12:00:00') : null;
+                                            var dow = d ? d.getDay() : 1;
+                                            var dc = dayColors[dow] || {col:'#94a3b8',rgb:'148,163,184',name:'—'};
+                                            var dateLabel = d ? dc.name + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') : '—';
+
+                                            rows += '<tr style="background:rgba(' + dc.rgb + ',0.08);border-top:1px solid rgba(' + dc.rgb + ',0.22);border-bottom:1px solid rgba(' + dc.rgb + ',0.12);" class="day-sep-row">'
+                                                + '<td colspan="9" style="padding:5px 14px;">'
+                                                + '<div style="display:flex;align-items:center;gap:10px;">'
+                                                + '<div style="width:3px;height:16px;border-radius:2px;background:' + dc.col + ';flex-shrink:0;"></div>'
+                                                + '<span style="font-size:11px;font-weight:800;color:' + dc.col + ';letter-spacing:0.5px;">' + dateLabel + '</span>'
+                                                + '<span style="font-size:9px;font-weight:700;color:rgba(' + dc.rgb + ',0.5);background:rgba(' + dc.rgb + ',0.1);padding:2px 8px;border-radius:10px;">' + cnt + ' ' + (cnt===1?'viaggio':'viaggi') + '</span>'
+                                                + '</div>'
+                                                + '</td>'
+                                                + '</tr>';
+                                            lastDate = t.data;
+                                        }
+                                        // Riga viaggio con sfondo giorno
+                                        var d2 = t.data ? new Date(t.data + 'T12:00:00') : null;
+                                        var dow2 = d2 ? d2.getDay() : 1;
+                                        var dc2 = dayColors[dow2] || {col:'#94a3b8',rgb:'148,163,184'};
+                                        var realIdx = _workingTrips.indexOf(t);
+                                        rows += tripRow(t, realIdx, dc2.rgb);
+                                    });
+                                    return rows;
+                                })()}
                             </tbody>
                         </table>
                         ${sorted.length === 0 ? '<div style="text-align:center;padding:60px;color:var(--text-dim);"><div style="font-size:48px;opacity:0.3;margin-bottom:12px;">📋</div><div>Nessun viaggio. Usa le rotte rapide a sinistra.</div></div>' : ''}
@@ -6450,6 +6578,49 @@
         }
 
         // ── DESKTOP HELPERS ──────────────────────────────────────
+
+        // Colore fisso per codice azienda — hash sul nome
+        function _locationCodeColor(code) {
+            if (!code) return null;
+            var c = code.toUpperCase().trim();
+            // Codici noti — colori fissi
+            var map = {
+                'INCONTRATO': {bg:'rgba(96,165,250,0.12)',  bd:'rgba(96,165,250,0.35)',  tx:'#60a5fa'},
+                'AGROGI':     {bg:'rgba(52,211,153,0.12)',  bd:'rgba(52,211,153,0.35)',  tx:'#34d399'},
+                'SICEM':      {bg:'rgba(245,158,11,0.12)', bd:'rgba(245,158,11,0.35)', tx:'#f59e0b'},
+                'SICEM SRL':  {bg:'rgba(245,158,11,0.12)', bd:'rgba(245,158,11,0.35)', tx:'#f59e0b'},
+                'ARDENGHI':   {bg:'rgba(232,121,249,0.12)', bd:'rgba(232,121,249,0.35)', tx:'#e879f9'},
+                'TACCHELLA':  {bg:'rgba(251,113,133,0.12)', bd:'rgba(251,113,133,0.35)', tx:'#fb7185'},
+                'TRUCIOLI':   {bg:'rgba(56,189,248,0.12)',  bd:'rgba(56,189,248,0.35)',  tx:'#38bdf8'},
+                'VENDER':     {bg:'rgba(167,139,250,0.12)', bd:'rgba(167,139,250,0.35)', tx:'#a78bfa'},
+                'CAI-BF':     {bg:'rgba(251,191,36,0.12)',  bd:'rgba(251,191,36,0.35)',  tx:'#fbbf24'},
+                'MANCINI':    {bg:'rgba(74,222,128,0.12)',  bd:'rgba(74,222,128,0.35)',  tx:'#4ade80'},
+                'LEGNO VIVO': {bg:'rgba(249,168,212,0.12)', bd:'rgba(249,168,212,0.35)', tx:'#f9a8d4'},
+                'PUNTO VERDE':{bg:'rgba(52,211,153,0.12)',  bd:'rgba(52,211,153,0.35)',  tx:'#34d399'},
+                'BONIFICHE':  {bg:'rgba(129,140,248,0.12)', bd:'rgba(129,140,248,0.35)', tx:'#818cf8'},
+                'ILT':        {bg:'rgba(251,146,60,0.12)',  bd:'rgba(251,146,60,0.35)',  tx:'#fb923c'},
+                'COVI':       {bg:'rgba(163,230,53,0.12)',  bd:'rgba(163,230,53,0.35)',  tx:'#a3e635'},
+            };
+            if (map[c]) return map[c];
+            // Fallback: colore deterministico dal nome
+            var hash = 0;
+            for (var i=0; i<c.length; i++) hash = ((hash<<5)-hash)+c.charCodeAt(i);
+            var hue = Math.abs(hash) % 360;
+            return {
+                bg: 'hsla('+hue+',70%,65%,0.12)',
+                bd: 'hsla('+hue+',70%,65%,0.35)',
+                tx: 'hsl('+hue+',70%,70%)'
+            };
+        }
+
+        // Badge HTML per codice azienda
+        function _codeChip(code) {
+            if (!code) return '';
+            var col = _locationCodeColor(code);
+            return '<span style="display:inline-block;margin-top:3px;font-size:9px;font-weight:800;letter-spacing:0.4px;padding:2px 7px;border-radius:4px;'
+                + 'background:' + col.bg + ';border:1px solid ' + col.bd + ';color:' + col.tx + ';white-space:nowrap;">'
+                + code + '</span>';
+        }
         // Debounce per Drive — evita 10 chiamate API per 10 modifiche rapide
         let _driveDebounceTimer = null;
         function debouncedDriveSave() {
@@ -6468,23 +6639,31 @@
                 filterPopulateDropdowns();
                 debouncedDriveSave();
             }
-            // Aggiorna inline il codice sotto partenza/arrivo senza re-render
+            // Aggiorna inline il chip codice sotto partenza/arrivo senza re-render
             if (field === 'partenza' || field === 'arrivo') {
                 var row = document.getElementById('drow-' + idx);
                 if (row) {
-                    var colIdx = field === 'partenza' ? 3 : 4; // colonne nella riga
+                    var colIdx = field === 'partenza' ? 3 : 4;
                     var cells = row.querySelectorAll('td');
                     if (cells[colIdx]) {
-                        var codeDiv = cells[colIdx].querySelector('div[style*="9px"]');
                         var match = val.match(/[(]([^)]+)[)]/);
                         var code = match ? match[1] : '';
-                        if (codeDiv) {
-                            codeDiv.textContent = code;
+                        var existing = cells[colIdx].querySelector('span[style*="border-radius:4px"]');
+                        if (existing) {
+                            if (code) {
+                                var col = _locationCodeColor(code);
+                                existing.textContent = code;
+                                existing.style.background = col.bg;
+                                existing.style.borderColor = col.bd;
+                                existing.style.color = col.tx;
+                            } else {
+                                existing.remove();
+                            }
                         } else if (code) {
-                            var newDiv = document.createElement('div');
-                            newDiv.style.cssText = 'font-size:9px;font-weight:700;margin-top:2px;padding-left:2px;color:' + (field==='partenza' ? 'rgba(255,107,53,0.6)' : 'rgba(6,214,160,0.55)') + ';';
-                            newDiv.textContent = code;
-                            cells[colIdx].appendChild(newDiv);
+                            var chipHtml = _codeChip(code);
+                            var tmp = document.createElement('div');
+                            tmp.innerHTML = chipHtml;
+                            cells[colIdx].appendChild(tmp.firstChild);
                         }
                     }
                 }
@@ -6644,21 +6823,47 @@
             // Multi-termine: divide per spazio, ogni termine deve essere presente
             const terms = _desktopQuickQuery ? _desktopQuickQuery.split(/\s+/).filter(Boolean) : [];
 
-            const rows = document.querySelectorAll('#desktopBody tbody tr');
+            const tbody = document.querySelector('#desktopBody tbody');
+            if (!tbody) return;
+
             let visible = 0;
-            rows.forEach(row => {
-                if (row.classList.contains('day-header')) { row.style.display = ''; return; }
-                const text = row.textContent.toLowerCase();
-                const match = terms.length === 0 || terms.every(t => text.includes(t));
+
+            // Prima nascondi/mostra le righe viaggio (non i separatori)
+            const tripRows = tbody.querySelectorAll('tr:not(.day-sep-row)');
+            tripRows.forEach(row => {
+                if (terms.length === 0) {
+                    row.style.display = '';
+                    visible++;
+                    return;
+                }
+                // Cerca solo negli input values — non nel textContent (che include chip e separatori)
+                const inputs = row.querySelectorAll('input[type="text"], input[type="date"]');
+                const vals = Array.from(inputs).map(i => i.value.toLowerCase()).join(' ');
+                const match = terms.every(t => vals.includes(t));
                 row.style.display = match ? '' : 'none';
                 if (match) visible++;
+            });
+
+            // Poi gestisci i separatori di giorno:
+            // mostra solo se almeno una riga viaggio nel suo gruppo è visibile
+            const sepRows = tbody.querySelectorAll('tr.day-sep-row');
+            sepRows.forEach(sep => {
+                // Raccogli tutte le righe viaggio che seguono questo separatore
+                // fino al separatore successivo
+                var next = sep.nextElementSibling;
+                var hasVisible = false;
+                while (next && !next.classList.contains('day-sep-row')) {
+                    if (next.style.display !== 'none') { hasVisible = true; break; }
+                    next = next.nextElementSibling;
+                }
+                sep.style.display = hasVisible ? '' : 'none';
             });
 
             // Aggiorna contatore
             const countEl = document.getElementById('desktopFilterCount');
             if (countEl) {
                 if (terms.length > 0) {
-                    countEl.textContent = visible + ' risultati' + (terms.length > 1 ? ' (' + terms.length + ' filtri)' : '');
+                    countEl.textContent = visible + ' ' + (visible === 1 ? 'risultato' : 'risultati');
                     countEl.style.display = 'inline';
                 } else {
                     countEl.style.display = 'none';
@@ -7018,11 +7223,12 @@
 
         function desktopSetNextWeek() {
             const now = new Date();
-            // Trova il lunedì della settimana prossima
+            // Trova SEMPRE il lunedì della settimana SUCCESSIVA a quella corrente
             const day = now.getDay(); // 0=dom,1=lun...6=sab
-            const daysToMon = day === 0 ? 1 : (8 - day); // giorni al prossimo lunedì
+            // Giorni mancanti al prossimo lunedì + 7 = lunedì della settimana prossima
+            const daysToThisMon = day === 0 ? -6 : (1 - day); // lunedì di questa settimana
             const nextMon = new Date(now);
-            nextMon.setDate(now.getDate() + daysToMon);
+            nextMon.setDate(now.getDate() + daysToThisMon + 7); // +7 = settimana prossima
             nextMon.setHours(12,0,0,0);
 
             const giorni = ['lun','mar','mer','gio','ven'];
