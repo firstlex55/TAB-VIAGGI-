@@ -36,17 +36,17 @@
         }
 
         :root {
-            --primary: #0c1422;
-            --secondary: #111e30;
+            --primary: #0f1117;
+            --secondary: #161922;
             --accent: #ff6b35;
             --accent-dim: rgba(255, 107, 53, 0.13);
             --success: #06d6a0;
             --warning: #ffd23f;
-            --bg: #070d18;
-            --text: #f0f4ff;
-            --text-dim: #8fa3bc;
-            --text-muted: #5a7088;
-            --border: rgba(255, 255, 255, 0.09);
+            --bg: #080a10;
+            --text: #f2f4f8;
+            --text-dim: #9aa3b2;
+            --text-muted: #5a6272;
+            --border: rgba(255, 255, 255, 0.10);
             --border-warm: rgba(255, 107, 53, 0.12);
             --shadow: rgba(0, 0, 0, 0.5);
         }
@@ -58,10 +58,9 @@
             line-height: 1.6;
             padding-bottom: 80px;
             background-image:
-                radial-gradient(ellipse at 20% 20%,  rgba(30, 80, 160, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%,  rgba(15, 50, 120, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 10%,  rgba(20, 60, 140, 0.08) 0%, transparent 40%),
-                linear-gradient(160deg, #060c18 0%, #0a1422 50%, #0c1828 100%);
+                radial-gradient(ellipse at 0% 0%,   rgba(255, 107, 53, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(15,  20,  40, 0.15) 0%, transparent 50%),
+                linear-gradient(160deg, #080a10 0%, #0d1018 50%, #0a0d14 100%);
             background-attachment: fixed;
             /* Font rendering nitido */
             -webkit-font-smoothing: antialiased;
@@ -72,7 +71,7 @@
         }
 
         .top-bar {
-            background: #060e1c;
+            background: #0d1018;
             padding: 14px 18px 12px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
@@ -3362,12 +3361,13 @@
 
         /* ── Vista PC: righe tabella migliorata ── */
         #desktopBody tbody tr:focus-within {
-            outline: 1px solid rgba(255,107,53,0.35) !important;
-            background: rgba(255,107,53,0.05) !important;
+            outline: 2px solid rgba(255,107,53,0.4) !important;
+            background: rgba(255,107,53,0.06) !important;
+            box-shadow: inset 0 0 0 1px rgba(255,107,53,0.1);
         }
         #desktopBody tbody tr:hover:not(:focus-within) {
-            background: rgba(96,165,250,0.04) !important;
-            outline: 1px solid rgba(96,165,250,0.12);
+            background: rgba(255,255,255,0.04) !important;
+            outline: 1px solid rgba(255,255,255,0.1);
         }
         #desktopBody tbody input:focus {
             background: rgba(255,107,53,0.07) !important;
@@ -4232,8 +4232,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v57') {
-                localStorage.setItem('appVersion', 'v57');
+            if (localStorage.getItem('appVersion') !== 'v57c') {
+                localStorage.setItem('appVersion', 'v57c');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -6115,7 +6115,7 @@
                 const isConf  = trip.confermato;
 
                 // Stili input standard — leggero sfondo sempre visibile
-                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;padding:7px 9px;outline:none;width:100%;transition:all 0.15s;';
+                const inpStyle = 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:14px;padding:9px 10px;outline:none;width:100%;transition:all 0.15s;';
                 const inpFocus = 'this.style.borderColor=\'var(--accent)\';this.style.background=\'rgba(255,107,53,0.06)\';this.closest(\'tr\').style.outline=\'1px solid rgba(255,107,53,0.3)\'';
                 const inpBlur  = 'this.style.borderColor=\'rgba(255,255,255,0.09)\';this.style.background=\'rgba(255,255,255,0.04)\';this.closest(\'tr\').style.outline=\'\'';
 
@@ -6128,7 +6128,7 @@
                     'if(next){next.focus();next.select();}' +
                     '}';
 
-                var altBg = (realIdx % 2 === 0) ? 'rgba(255,255,255,0.015)' : 'transparent';
+                var altBg = (realIdx % 2 === 0) ? 'rgba(255,255,255,0.025)' : 'transparent';
                 var finalBg = isToday ? 'rgba(255,107,53,0.05)' : (dayRgb ? 'rgba(' + dayRgb + ',0.03)' : altBg);
                 return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:' + finalBg + ';border-left:3px solid ' + tColorVar + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
                     ' onfocusin="this.style.outline=\'1px solid rgba(255,107,53,0.25)\'"' +
@@ -6140,7 +6140,7 @@
                     '</td>' +
 
                     // DATA — solo testo grande, picker nascosto al click
-                    '<td style="padding:5px 8px;white-space:nowrap;width:90px;position:relative;">' +
+                    '<td style="padding:7px 8px;white-space:nowrap;width:90px;position:relative;">' +
                     '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:6px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(255,255,255,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
                     '<input type="date" value="' + (trip.data||'') + '"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'data\',this.value);this.previousElementSibling.textContent=_fmtDesktopDate(this.value);"' +
@@ -6149,7 +6149,7 @@
                     '</td>' +
 
                     // TRASPORTATORE — solo input, no badge ridondante
-                    '<td style="padding:5px 6px;width:140px;">' +
+                    '<td style="padding:7px 6px;width:140px;">' +
                     '<div style="display:flex;align-items:center;gap:5px;">' +
                     '<div style="width:4px;height:28px;border-radius:2px;background:' + tColorVar + ';flex-shrink:0;"></div>' +
                     '<input type="text" value="' + (trip.trasportatore||'') + '" list="dtransp"' +
@@ -6163,7 +6163,7 @@
                     '</td>' +
 
                     // PARTENZA — su due righe: nome + codice
-                    '<td style="padding:5px 6px;">' +
+                    '<td style="padding:7px 6px;">' +
                     '<input type="text" value="' + (trip.partenza||'') + '" list="dfrom"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'partenza\',this.value)"' +
                     ' placeholder="Partenza..."' +
@@ -6175,7 +6175,7 @@
                     '</td>' +
 
                     // ARRIVO — su due righe
-                    '<td style="padding:5px 6px;">' +
+                    '<td style="padding:7px 6px;">' +
                     '<input type="text" value="' + (trip.arrivo||'') + '" list="dto"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'arrivo\',this.value)"' +
                     ' placeholder="Arrivo..."' +
@@ -6187,7 +6187,7 @@
                     '</td>' +
 
                     // PRODOTTO
-                    '<td style="padding:5px 6px;width:110px;">' +
+                    '<td style="padding:7px 6px;width:110px;">' +
                     '<input type="text" value="' + (trip.prodotto||'') + '" list="dprod" placeholder="—"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'prodotto\',this.value)"' +
                     ' style="' + inpStyle + 'color:rgba(255,255,255,0.65);"' +
@@ -6197,7 +6197,7 @@
                     '</td>' +
 
                     // NOTE
-                    '<td style="padding:5px 6px;width:140px;">' +
+                    '<td style="padding:7px 6px;width:140px;">' +
                     '<input type="text" value="' + (trip.note||'') + '" placeholder="note..."' +
                     ' onchange="desktopSetField(' + realIdx + ',\'note\',this.value)"' +
                     ' style="' + inpStyle + 'font-size:12px;color:rgba(255,255,255,0.75);"' +
@@ -6207,7 +6207,7 @@
                     '</td>' +
 
                     // STATO — solo ⚠ Da confermare come badge pill
-                    '<td style="padding:5px 8px;white-space:nowrap;">' +
+                    '<td style="padding:7px 8px;white-space:nowrap;">' +
                     (isWarn
                       ? '<span onclick="event.stopPropagation();desktopToggleConf(' + realIdx + ')" '
                         + 'style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,210,63,0.15);border:1px solid rgba(255,210,63,0.45);color:var(--warning);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.15s;" '
@@ -6218,7 +6218,7 @@
                     '</td>' +
 
                     // AZIONI
-                    '<td style="padding:5px 4px;width:60px;">' +
+                    '<td style="padding:7px 4px;width:60px;">' +
                     '<div style="display:flex;gap:3px;justify-content:center;">' +
                     '<button onclick="desktopDup(' + realIdx + ')" title="Duplica (Ctrl+D)"' +
                     ' style="padding:4px 6px;background:rgba(255,210,63,0.08);border:1px solid rgba(255,210,63,0.15);border-radius:5px;color:rgba(255,210,63,0.6);font-size:11px;cursor:pointer;transition:all 0.15s;"' +
@@ -6248,7 +6248,7 @@
             <div style="display:grid;grid-template-columns:270px 1fr;height:100%;overflow:hidden;">
 
                 <!-- SIDEBAR ROTTE RAPIDE -->
-                <div style="background:#080e1c;border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow:hidden;">
+                <div style="background:#0c1018;border-right:2px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;overflow:hidden;">
                     <div style="padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
                         <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">⚡ Rotte rapide <span style="background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:10px;font-weight:800;">${allRoutes.length}</span></div>
                         <input id="desktopRouteSearch" type="text" placeholder="🔍 Filtra..." oninput="desktopFilterRoutes()"
@@ -6266,7 +6266,7 @@
                 <!-- TABELLA VIAGGI -->
                 <div style="display:flex;flex-direction:column;overflow:hidden;">
                     <!-- ── TOOLBAR ── -->
-                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.07);background:#060e1c;flex-shrink:0;">
+                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:#0d1018;flex-shrink:0;">
 
                         <!-- Riga 1: navigazione + stato + azioni principali -->
                         <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
@@ -6345,9 +6345,10 @@
                             <div style="flex:1;"></div>
 
                             <!-- Cerca -->
-                            <input id="desktopQuickSearch" type="text" placeholder="🔍 es: coap bientina" oninput="desktopQuickFilter()"
-                                style="padding:5px 11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text);font-family:'Outfit',sans-serif;font-size:11px;outline:none;width:190px;transition:border-color 0.15s;"
-                                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                            <input id="desktopQuickSearch" type="text" placeholder="🔍 Cerca trasportatore, luogo..." oninput="desktopQuickFilter()"
+                                style="padding:7px 13px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;width:240px;transition:all 0.15s;"
+                                onfocus="this.style.borderColor='var(--accent)';this.style.background='rgba(255,255,255,0.08)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.12)';this.style.background='rgba(255,255,255,0.06)'"
                                 onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
                             <button id="desktopSortChronoBtn" onclick="desktopToggleChrono()" title="Ordine cronologico"
                                 style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;">⏱ Data</button>
@@ -6429,11 +6430,11 @@
                                         const widths = {data:'90px',trasportatore:'140px',partenza:'',arrivo:'',prodotto:'110px',note:'130px'};
                                         const isActive = _desktopSort.field === f;
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
-                                        const clr = isActive ? '#ff8c61' : 'rgba(255,255,255,0.3)';
-                                        const bdr = isActive ? '2px solid var(--accent)' : '2px solid rgba(255,255,255,0.06)';
-                                        return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:10px 10px;text-align:left;font-size:9px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:1.2px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:var(--accent);font-size:10px;\">' + arrow + '</span>' : '') + '</th>';
+                                        const clr = isActive ? '#ff8c61' : 'rgba(255,255,255,0.55)';
+                                        const bdr = isActive ? '2px solid var(--accent)' : '2px solid rgba(255,255,255,0.08)';
+                                        return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:11px 10px;text-align:left;font-size:10px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:1px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:var(--accent);font-size:10px;\">' + arrow + '</span>' : '') + '</th>';
                                     }).join('')}
-                                    <th style="padding:10px 8px;text-align:left;font-size:9px;font-weight:800;color:rgba(255,255,255,0.3);border-bottom:2px solid rgba(255,255,255,0.06);letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
+                                    <th style="padding:11px 8px;text-align:left;font-size:10px;font-weight:800;color:rgba(255,255,255,0.55);border-bottom:2px solid rgba(255,255,255,0.08);letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
                                     <th style="width:60px;border-bottom:2px solid rgba(255,255,255,0.06);"></th>
                                 </tr>
                             </thead>
@@ -6461,15 +6462,7 @@
                                             var dc = dayColors[dow] || {col:'#94a3b8',rgb:'148,163,184',name:'—'};
                                             var dateLabel = d ? dc.name + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') : '—';
 
-                                            rows += '<tr style="background:rgba(' + dc.rgb + ',0.08);border-top:1px solid rgba(' + dc.rgb + ',0.22);border-bottom:1px solid rgba(' + dc.rgb + ',0.12);" class="day-sep-row">'
-                                                + '<td colspan="9" style="padding:5px 14px;">'
-                                                + '<div style="display:flex;align-items:center;gap:10px;">'
-                                                + '<div style="width:3px;height:16px;border-radius:2px;background:' + dc.col + ';flex-shrink:0;"></div>'
-                                                + '<span style="font-size:11px;font-weight:800;color:' + dc.col + ';letter-spacing:0.5px;">' + dateLabel + '</span>'
-                                                + '<span style="font-size:9px;font-weight:700;color:rgba(' + dc.rgb + ',0.5);background:rgba(' + dc.rgb + ',0.1);padding:2px 8px;border-radius:10px;">' + cnt + ' ' + (cnt===1?'viaggio':'viaggi') + '</span>'
-                                                + '</div>'
-                                                + '</td>'
-                                                + '</tr>';
+                                            rows += '<tr style="background:rgba(' + dc.rgb + ',0.09);border-top:2px solid rgba(' + dc.rgb + ',0.3);border-bottom:1px solid rgba(' + dc.rgb + ',0.15);" class="day-sep-row">'                                                + '<td colspan="9" style="padding:8px 14px;">'                                                + '<div style="display:flex;align-items:center;gap:10px;">'                                                + '<div style="width:4px;height:20px;border-radius:2px;background:' + dc.col + ';flex-shrink:0;"></div>'                                                + '<span style="font-size:12px;font-weight:800;color:' + dc.col + ';letter-spacing:0.5px;">' + dateLabel + '</span>'                                                + '<span style="font-size:10px;font-weight:700;color:rgba(' + dc.rgb + ',0.65);background:rgba(' + dc.rgb + ',0.12);padding:2px 10px;border-radius:10px;">' + cnt + ' ' + (cnt===1?'viaggio':'viaggi') + '</span>'                                                + '</div>'                                                + '</td>'                                                + '</tr>';
                                             lastDate = t.data;
                                         }
                                         // Riga viaggio con sfondo giorno
