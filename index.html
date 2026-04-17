@@ -36,19 +36,19 @@
         }
 
         :root {
-            --primary: #0f1220;
-            --secondary: #161b2e;
+            --primary: #0c1422;
+            --secondary: #111e30;
             --accent: #ff6b35;
             --accent-dim: rgba(255, 107, 53, 0.13);
             --success: #06d6a0;
             --warning: #ffd23f;
-            --bg: #070a10;
-            --text: #e8edf5;           /* +leggermente più bianco */
-            --text-dim: #8892a4;       /* più contrastato */
-            --text-muted: #5a6478;     /* nuovo: per testi molto secondari */
-            --border: rgba(255, 255, 255, 0.10);
+            --bg: #070d18;
+            --text: #f0f4ff;
+            --text-dim: #8fa3bc;
+            --text-muted: #5a7088;
+            --border: rgba(255, 255, 255, 0.09);
             --border-warm: rgba(255, 107, 53, 0.12);
-            --shadow: rgba(0, 0, 0, 0.45);
+            --shadow: rgba(0, 0, 0, 0.5);
         }
 
         body {
@@ -58,10 +58,10 @@
             line-height: 1.6;
             padding-bottom: 80px;
             background-image:
-                radial-gradient(ellipse at 0% 0%,   rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 100% 100%, rgba(20,  40, 110, 0.14) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 40%,  rgba(15,  30,  80, 0.25) 0%, transparent 60%),
-                linear-gradient(160deg, #0d1018 0%, #101522 50%, #111a2e 100%);
+                radial-gradient(ellipse at 20% 20%,  rgba(30, 80, 160, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%,  rgba(15, 50, 120, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 10%,  rgba(20, 60, 140, 0.08) 0%, transparent 40%),
+                linear-gradient(160deg, #060c18 0%, #0a1422 50%, #0c1828 100%);
             background-attachment: fixed;
             /* Font rendering nitido */
             -webkit-font-smoothing: antialiased;
@@ -72,7 +72,7 @@
         }
 
         .top-bar {
-            background: #080b14;
+            background: #060e1c;
             padding: 14px 18px 12px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
@@ -3362,11 +3362,17 @@
 
         /* ── Vista PC: righe tabella migliorata ── */
         #desktopBody tbody tr:focus-within {
-            outline: 1px solid rgba(255,107,53,0.3) !important;
-            background: rgba(255,107,53,0.03) !important;
+            outline: 1px solid rgba(255,107,53,0.35) !important;
+            background: rgba(255,107,53,0.05) !important;
         }
-        #desktopBody tbody tr:hover:not(:focus-within) td {
-            background: rgba(255,255,255,0.015);
+        #desktopBody tbody tr:hover:not(:focus-within) {
+            background: rgba(96,165,250,0.04) !important;
+            outline: 1px solid rgba(96,165,250,0.12);
+        }
+        #desktopBody tbody input:focus {
+            background: rgba(255,107,53,0.07) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 2px rgba(255,107,53,0.12) !important;
         }
         @keyframes rowFlash {
             0%   { box-shadow: inset 0 0 0 1px rgba(255,107,53,0.6); }
@@ -4226,8 +4232,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v55e') {
-                localStorage.setItem('appVersion', 'v55e');
+            if (localStorage.getItem('appVersion') !== 'v57') {
+                localStorage.setItem('appVersion', 'v57');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -4386,9 +4392,30 @@
         function loadTransportersList() {
             const saved = localStorage.getItem('transportersList');
             if (saved) {
-                transportersList = JSON.parse(saved);
-                updateTransporterDatalist();
+                try { transportersList = JSON.parse(saved); } catch(e) {}
             }
+            // Aggiungi trasportatori da archivio storico — non devono sparire
+            try {
+                var archive = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                archive.forEach(function(week) {
+                    (week.trips || []).forEach(function(t) {
+                        if (t.trasportatore && !transportersList.includes(t.trasportatore)) {
+                            transportersList.push(t.trasportatore);
+                        }
+                    });
+                });
+                // Aggiungi anche dalla settimana corrente e prossima
+                var curr = JSON.parse(localStorage.getItem('viaggiLogistica') || '[]');
+                var next = JSON.parse(localStorage.getItem('viaggiLogisticaNext') || '[]');
+                curr.concat(next).forEach(function(t) {
+                    if (t.trasportatore && !transportersList.includes(t.trasportatore)) {
+                        transportersList.push(t.trasportatore);
+                    }
+                });
+                transportersList.sort();
+                saveTransportersList();
+            } catch(e) {}
+            updateTransporterDatalist();
             
             // Load locations
             const savedPartenza = localStorage.getItem('partenzaList');
@@ -6002,7 +6029,7 @@
             const allRoutes = Object.values(routeMap).sort((a,b) => b.uses - a.uses);
 
             // Unique lists per datalist
-            const allT = [...new Set([...trips.map(t=>t.trasportatore), ...["CEVOLO","COAP","ConEco","CONSAR","AVIO","ALB","LINO BRA","Stegagno","Cirioni"]].filter(Boolean))];
+            const allT = [...new Set([...transportersList, ...trips.map(t=>t.trasportatore), ...tripsNext.map(t=>t.trasportatore)].filter(Boolean))].sort();
             const allF = [...new Set([...trips.map(t=>t.partenza), ...["Bientina (INCONTRATO)","S.Felice (CAI-BF)","Dosolo (ARDENGHI)","Grezzana (TACCHELLA)","Mercatino (COVI)","Tirano (ILT)","Jolanda (Bonifiche)","Mezzocorona (VENDER)"]].filter(Boolean))];
             const allA = [...new Set([...trips.map(t=>t.arrivo), ...["Ponzano Romano (SICEM)","Verolavecchia (AGROGI)","Mezzano RA (SICEM Srl)","Tarmassia (TRUCIOLI)"]].filter(Boolean))];
 
@@ -6050,19 +6077,23 @@
                 const tp = r.arrivo.split('(')[0].trim();
                 const tc = (r.arrivo.match(/\(([^)]+)\)/) || [])[1] || '';
                 const colorClass = getTransporterColorClass(r.trasportatore);
-                return `
-                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-left:3px solid var(--accent);border-radius:10px;padding:10px 11px;margin-bottom:6px;transition:all 0.18s;" onmouseover="this.style.background='#1f2236'" onmouseout="this.style.background='#1a1d2e'">
-                    <span class="${colorClass}" style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;">${r.trasportatore}</span>
-                    <div style="display:flex;align-items:center;gap:5px;margin:5px 0 4px;font-size:12px;flex-wrap:wrap;">
-                        <strong style="color:var(--text);">${fp}</strong>
-                        ${fc ? `<span style="color:var(--accent);font-size:10px;font-weight:700;">(${fc})</span>` : ''}
-                        <span style="color:var(--accent);font-weight:900;">→</span>
-                        <strong style="color:var(--text);">${tp}</strong>
-                        ${tc ? `<span style="color:var(--success);font-size:10px;font-weight:700;">(${tc})</span>` : ''}
-                    </div>
-                    <div style="font-size:10px;color:var(--text-dim);margin-bottom:7px;font-family:monospace;">${r.manual ? '📌 manuale' : `usata ${r.uses}×`}</div>
-                    <button onclick="desktopOpenAddModal(${idx})" style="width:100%;padding:6px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:6px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.18s;" onmouseover="this.style.background='var(--accent)';this.style.color='white'" onmouseout="this.style.background='rgba(255,107,53,0.08)';this.style.color='var(--accent)'">➕ Aggiungi alla settimana</button>
-                </div>`;
+                const tKey = getTransporterKey(r.trasportatore);
+                return '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-left:3px solid var(--t-' + tKey + ');border-radius:10px;padding:9px 11px;margin-bottom:5px;transition:all 0.15s;"'
+                    + ' onmouseover="this.style.background=\'rgba(255,255,255,0.06)\'"'
+                    + ' onmouseout="this.style.background=\'rgba(255,255,255,0.03)\'">'
+                    + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">'
+                    + '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;">' + r.trasportatore + '</span>'
+                    + '<span style="font-size:9px;color:rgba(255,255,255,0.25);">' + (r.manual ? '📌' : r.uses + '×') + '</span>'
+                    + '</div>'
+                    + '<div style="font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">' + fp + '</div>'
+                    + '<div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">'
+                    + '<span style="color:rgba(255,107,53,0.5);font-size:12px;">↳</span>'
+                    + '<span style="font-size:12px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tp + '</span>'
+                    + '</div>'
+                    + '<button onclick="desktopOpenAddModal(' + idx + ')" style="width:100%;padding:5px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:6px;color:var(--accent);font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"'
+                    + ' onmouseover="this.style.background=\'rgba(255,107,53,0.18)\';this.style.borderColor=\'rgba(255,107,53,0.4)\'"'
+                    + ' onmouseout="this.style.background=\'rgba(255,107,53,0.08)\';this.style.borderColor=\'rgba(255,107,53,0.2)\'">＋ Aggiungi</button>'
+                    + '</div>';
             }
 
             function tripRow(trip, realIdx, dayRgb) {
@@ -6084,7 +6115,7 @@
                 const isConf  = trip.confermato;
 
                 // Stili input standard — leggero sfondo sempre visibile
-                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;padding:6px 9px;outline:none;width:100%;transition:all 0.15s;';
+                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;padding:7px 9px;outline:none;width:100%;transition:all 0.15s;';
                 const inpFocus = 'this.style.borderColor=\'var(--accent)\';this.style.background=\'rgba(255,107,53,0.06)\';this.closest(\'tr\').style.outline=\'1px solid rgba(255,107,53,0.3)\'';
                 const inpBlur  = 'this.style.borderColor=\'rgba(255,255,255,0.09)\';this.style.background=\'rgba(255,255,255,0.04)\';this.closest(\'tr\').style.outline=\'\'';
 
@@ -6097,7 +6128,9 @@
                     'if(next){next.focus();next.select();}' +
                     '}';
 
-                return '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);background:' + rowBg + ';border-left:3px solid ' + tColorVar + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
+                var altBg = (realIdx % 2 === 0) ? 'rgba(255,255,255,0.015)' : 'transparent';
+                var finalBg = isToday ? 'rgba(255,107,53,0.05)' : (dayRgb ? 'rgba(' + dayRgb + ',0.03)' : altBg);
+                return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:' + finalBg + ';border-left:3px solid ' + tColorVar + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
                     ' onfocusin="this.style.outline=\'1px solid rgba(255,107,53,0.25)\'"' +
                     ' onfocusout="this.style.outline=\'\'">' +
 
@@ -6134,7 +6167,7 @@
                     '<input type="text" value="' + (trip.partenza||'') + '" list="dfrom"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'partenza\',this.value)"' +
                     ' placeholder="Partenza..."' +
-                    ' style="' + inpStyle + 'font-weight:600;color:#eef2fa;"' +
+                    ' style="' + inpStyle + 'font-weight:600;color:#f0f4ff;font-size:14px;"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6146,7 +6179,7 @@
                     '<input type="text" value="' + (trip.arrivo||'') + '" list="dto"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'arrivo\',this.value)"' +
                     ' placeholder="Arrivo..."' +
-                    ' style="' + inpStyle + 'font-weight:600;color:#06d6a0;"' +
+                    ' style="' + inpStyle + 'font-weight:600;color:#06d6a0;font-size:14px;"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6167,7 +6200,7 @@
                     '<td style="padding:5px 6px;width:140px;">' +
                     '<input type="text" value="' + (trip.note||'') + '" placeholder="note..."' +
                     ' onchange="desktopSetField(' + realIdx + ',\'note\',this.value)"' +
-                    ' style="' + inpStyle + 'font-size:12px;color:rgba(255,255,255,0.5);"' +
+                    ' style="' + inpStyle + 'font-size:12px;color:rgba(255,255,255,0.75);"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6215,7 +6248,7 @@
             <div style="display:grid;grid-template-columns:270px 1fr;height:100%;overflow:hidden;">
 
                 <!-- SIDEBAR ROTTE RAPIDE -->
-                <div style="background:#0c0f1a;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;overflow:hidden;">
+                <div style="background:#080e1c;border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow:hidden;">
                     <div style="padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
                         <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">⚡ Rotte rapide <span style="background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:10px;font-weight:800;">${allRoutes.length}</span></div>
                         <input id="desktopRouteSearch" type="text" placeholder="🔍 Filtra..." oninput="desktopFilterRoutes()"
@@ -6233,19 +6266,19 @@
                 <!-- TABELLA VIAGGI -->
                 <div style="display:flex;flex-direction:column;overflow:hidden;">
                     <!-- ── TOOLBAR ── -->
-                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:#080b13;flex-shrink:0;">
+                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.07);background:#060e1c;flex-shrink:0;">
 
                         <!-- Riga 1: navigazione + stato + azioni principali -->
                         <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
 
-                            <!-- Toggle Sett. corrente / prossima -->
-                            <div id="pcWeekToggle" style="display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;overflow:hidden;flex-shrink:0;">
+                            <!-- Toggle Sett. corrente / prossima — più prominente -->
+                            <div id="pcWeekToggle" style="display:flex;align-items:center;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
                                 <button onclick="pcSetWeek('current',this)" id="pcToggleCurrent"
-                                    style="padding:6px 12px;border:none;background:var(--accent);color:#000;font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
+                                    style="padding:7px 16px;border:none;background:var(--accent);color:#000;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;white-space:nowrap;letter-spacing:0.3px;">
                                     ● Corrente
                                 </button>
                                 <button onclick="pcSetWeek('next',this)" id="pcToggleNext"
-                                    style="padding:6px 12px;border:none;background:transparent;color:rgba(167,139,250,0.6);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
+                                    style="padding:7px 16px;border:none;background:transparent;color:rgba(167,139,250,0.7);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
                                     ◎ Prossima
                                 </button>
                             </div>
@@ -6264,9 +6297,24 @@
 
                             <!-- Badge da confermare -->
                             ${daConfermare > 0
-                                ? `<span onclick="openDaConfermarModal()" style="font-size:11px;background:rgba(255,210,63,0.15);border:1px solid rgba(255,210,63,0.35);color:var(--warning);padding:4px 10px;border-radius:6px;font-weight:700;cursor:pointer;flex-shrink:0;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,210,63,0.25)'" onmouseout="this.style.background='rgba(255,210,63,0.15)'">⚠️ ${daConfermare} da confermare</span>`
-                                : `<span style="font-size:11px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.25);color:var(--success);padding:4px 10px;border-radius:6px;font-weight:700;flex-shrink:0;">✅ Tutto confermato</span>`
+                                ? `<span onclick="openDaConfermarModal()" style="font-size:11px;background:rgba(255,210,63,0.15);border:1px solid rgba(255,210,63,0.35);color:var(--warning);padding:4px 10px;border-radius:6px;font-weight:700;cursor:pointer;flex-shrink:0;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,210,63,0.25)'" onmouseout="this.style.background='rgba(255,210,63,0.15)'">⚠️ ${daConfermare} da conf.</span>`
+                                : `<span style="font-size:11px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.25);color:var(--success);padding:4px 10px;border-radius:6px;font-weight:700;flex-shrink:0;">✅ Tutto ok</span>`
                             }
+
+                            <!-- Mini totali per trasportatore inline -->
+                            <div style="display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;flex-shrink:1;scrollbar-width:none;">
+                            ${(() => {
+                                const counts = {};
+                                _workingTrips.forEach(t => { if(t.trasportatore) counts[t.trasportatore]=(counts[t.trasportatore]||0)+1; });
+                                return Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,n]) => {
+                                    const cc = getTransporterColorClass(name);
+                                    return '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);white-space:nowrap;flex-shrink:0;">'
+                                        + '<span class="' + cc + '" style="font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;">' + name + '</span>'
+                                        + '<span style="font-size:11px;font-weight:800;color:var(--text);">' + n + '</span>'
+                                        + '</span>';
+                                }).join('');
+                            })()}
+                            </div>
 
                             <!-- Separatore -->
                             <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
@@ -6285,10 +6333,11 @@
                                 📦 Nuova sett.
                             </button>
 
-                            <!-- ＋ Nuova riga -->
+                            <!-- ＋ Nuova riga — azione primaria -->
                             <button onclick="desktopAddEmpty()"
-                                style="padding:5px 12px;background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.35);border-radius:7px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(255,107,53,0.22)'" onmouseout="this.style.background='rgba(255,107,53,0.12)'">
+                                style="padding:7px 16px;background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:9px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;box-shadow:0 2px 10px rgba(255,107,53,0.15);"
+                                onmouseover="this.style.background='rgba(255,107,53,0.28)';this.style.boxShadow='0 4px 16px rgba(255,107,53,0.25)'"
+                                onmouseout="this.style.background='rgba(255,107,53,0.15)';this.style.boxShadow='0 2px 10px rgba(255,107,53,0.15)'">
                                 ＋ Nuova riga
                             </button>
 
