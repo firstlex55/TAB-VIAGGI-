@@ -4232,8 +4232,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v57c') {
-                localStorage.setItem('appVersion', 'v57c');
+            if (localStorage.getItem('appVersion') !== 'v58') {
+                localStorage.setItem('appVersion', 'v58');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -6967,26 +6967,21 @@
                 return dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
             }
 
+            const dayColorMap2 = {0:'#475569',1:'#1d4ed8',2:'#047857',3:'#6d28d9',4:'#b45309',5:'#be185d',6:'#475569'};
             const rows = days.map(day => {
                 const d = new Date(day + 'T12:00:00');
                 const dayLabel = dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
-                const header = '<tr class="day-header"><td colspan="8" style="padding:10px 12px 6px;background:transparent;border-bottom:1px solid rgba(255,255,255,0.05);">'
-                    + '<span style="font-family:Outfit,sans-serif;font-size:12px;font-weight:800;color:rgba(255,107,53,0.9);letter-spacing:0.3px;text-transform:uppercase;">' + dayLabel + '</span>'
-                    + ' <span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:600;color:rgba(255,255,255,0.2);margin-left:6px;">' + byDay[day].length + ' ' + _pv(byDay[day].length) + '</span>'
-                    + '</td></tr>';
+                const dc = dayColorMap2[d.getDay()] || '#475569';
+                const header = '<tr class="day-sep"><td colspan="7">'                    + '<div class="day-sep-inner" style="background:' + dc + '18;border-left:4px solid ' + dc + ';padding:5px 10px;border-radius:4px;">'                    + '<span class="day-label" style="color:' + dc + ';font-size:11px;font-weight:800;">' + dayLabel + '</span>'                    + ' <span style="font-size:9px;color:#94a3b8;margin-left:6px;">' + byDay[day].length + ' ' + _pv(byDay[day].length) + '</span>'                    + '</div></td></tr>';
                 const tripRows = byDay[day].map(t => {
                     const c = _printColor(t.trasportatore);
-                    const ddt = t.daConfermare ? '<span style="color:#c00;font-weight:700;">DA CONFERMARE</span>' : (t.note||'');
-                    const conf = t.confermato ? '<span style="color:#16a34a;font-weight:800;">✓</span>' : '';
-                    return '<tr class="' + (t.daConfermare ? 'da-conf' : '') + '">'
-                        + '<td>' + fmtDate(t.data) + '</td>'
-                        + '<td><span class="transp-badge" style="background:' + c.bg + ';color:' + c.txt + ';">' + (t.trasportatore||'') + '</span></td>'
-                        + '<td>' + (t.partenza||'') + '</td>'
-                        + '<td>' + (t.arrivo||'') + '</td>'
-                        + '<td>' + (t.prodotto||'') + '</td>'
-                        + '<td>' + ddt + '</td>'
-                        + '<td style="text-align:center;">' + conf + '</td>'
-                        + '</tr>';
+                    const fromName = (t.partenza||'').split('(')[0].trim();
+                    const fromCode = ((t.partenza||'').match(/\(([^)]+)\)/) || [])[1] || '';
+                    const toName   = (t.arrivo||'').split('(')[0].trim();
+                    const toCode   = ((t.arrivo||'').match(/\(([^)]+)\)/) || [])[1] || '';
+                    const noteCell = t.daConfermare ? '<span style="color:#92400e;font-weight:700;background:#fef3c7;padding:1px 5px;border-radius:3px;font-size:9px;">⚠ DA CONF.</span>' : (t.note||'<span style="color:#cbd5e1;">—</span>');
+                    const statoCell = t.confermato ? '<span style="color:#065f46;font-weight:900;font-size:13px;">✓</span>' : '<span style="color:#e2e8f0;">—</span>';
+                    return '<tr class="' + (t.daConfermare ? 'da-conf' : '') + '">'                        + '<td style="font-weight:600;color:#374151;white-space:nowrap;">' + fmtDate(t.data) + '</td>'                        + '<td><span class="tb" style="background:' + c.bg + ';color:' + c.txt + ';">' + (t.trasportatore||'') + '</span></td>'                        + '<td><strong style="color:#1e293b;">' + fromName + '</strong>' + (fromCode ? '<br><span style="font-size:9px;color:#94a3b8;">' + fromCode + '</span>' : '') + '</td>'                        + '<td><strong style="color:#065f46;">' + toName + '</strong>' + (toCode ? '<br><span style="font-size:9px;color:#94a3b8;">' + toCode + '</span>' : '') + '</td>'                        + '<td style="color:#374151;">' + (t.prodotto||'<span style="color:#cbd5e1;">—</span>') + '</td>'                        + '<td>' + noteCell + '</td>'                        + '<td style="text-align:center;">' + statoCell + '</td>'                        + '</tr>';
                 }).join('');
                 return header + tripRows;
             }).join('');
@@ -6995,44 +6990,66 @@
             sorted.forEach(t => { const k=t.trasportatore||'?'; counts[k]=(counts[k]||0)+1; });
             const totalsRows = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([n,c]) => {
                 const col = _printColor(n);
-                return '<tr><td><span class="transp-badge" style="background:' + col.bg + ';color:' + col.txt + ';">' + n + '</span></td>'
-                    + '<td><strong>' + c + ' ' + _pv(c) + '</strong></td></tr>';
+                return '<div class="totals-chip"><span class="tb" style="background:' + col.bg + ';color:' + col.txt + ';">' + n + '</span><span class="n">' + c + '</span><span class="lbl">' + _pv(c) + '</span></div>';
             }).join('');
 
             const filterLabel = data.length < trips.length ? ' (filtrati: ' + data.length + ' su ' + trips.length + ')' : '';
+            const printDate = new Date().toLocaleDateString('it-IT', {weekday:'long',day:'2-digit',month:'long',year:'numeric'});
             const win = window.open('', '_blank');
-            win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8">'
-                + '<title>Planning Viaggi</title>'
-                + '<style>'
-                + '* { margin:0; padding:0; box-sizing:border-box; }'
-                + 'body { font-family: Arial, sans-serif; font-size: 11px; color: #000; padding: 16px; }'
-                + '.header-title { font-size: 22px; font-weight: 900; color: #1a2340; margin-bottom: 2px; }'
-                + '.header-sub { font-size: 12px; color: #c00; font-weight: 600; margin-bottom: 18px; }'
-                + 'table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }'
-                + 'th { background: #1a2340; color: white; padding: 7px 8px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #0f1520; }'
-                + 'td { padding: 5px 8px; border: 1px solid #ddd; vertical-align: middle; font-size: 11px; }'
-                + '.day-header td { background: #e4ecef; font-weight: 800; font-size: 11px; padding: 7px 8px; border-bottom: 2px solid #b0bec5; color: #1a2340; }'
-                + '.da-conf td { background: #fff9c4; }'
-                + '.transp-badge { display:inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 10px; letter-spacing: 0.3px; }'
-                + '.totals-section { margin-top: 24px; page-break-inside: avoid; }'
-                + '.totals-section h3 { font-size: 11px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; color: #1a2340; letter-spacing: 1px; }'
-                + '.totals-table { width: auto; min-width: 220px; }'
-                + '.totals-table td { padding: 5px 12px; }'
-                + '.total-row td { font-weight: 800; background: #e4ecef; }'
-                + '@media print { body { padding: 4px; } button { display: none; } }'
-                + '@page { size: A4 landscape; margin: 1cm; }'
-                + '</style></head><body>'
-                + '<button onclick="window.print();" style="margin-bottom:14px;padding:8px 20px;background:#ff6b35;color:white;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;">🖨️ Stampa</button>'
-                + '<div class="header-title">PLANNING VIAGGI</div>'
-                + '<div class="header-sub">' + (weekTitle||'') + filterLabel + '</div>'
-                + '<table><thead><tr>'
-                + '<th>Data</th><th>Trasportatore</th><th>Partenza da</th><th>Arrivo a</th><th>Prodotto</th><th>Note / DDT</th><th>✓</th>'
-                + '</tr></thead><tbody>' + rows + '</tbody></table>'
-                + '<div class="totals-section"><h3>Totali per trasportatore</h3>'
-                + '<table class="totals-table"><tbody>' + totalsRows
-                + '<tr class="total-row"><td><strong>TOTALE</strong></td><td><strong>' + sorted.length + ' viaggi</strong></td></tr>'
-                + '</tbody></table></div>'
-                + '</body></html>');
+            win.document.write(`<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8">
+<title>Planning Viaggi</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',Arial,sans-serif;font-size:11px;color:#1e293b;background:#fff;padding:18px 22px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:3px solid #ff6b35}
+.hbrand{font-size:8px;font-weight:700;color:#ff6b35;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px}
+.htitle{font-size:20px;font-weight:900;color:#0f172a;letter-spacing:-0.5px;line-height:1}
+.hweek{font-size:10px;font-weight:600;color:#64748b;margin-top:3px}
+.hright{text-align:right}
+.hdate{font-size:8px;color:#94a3b8;margin-bottom:3px}
+.htotal{font-size:13px;font-weight:800;color:#0f172a}
+.htotal span{color:#ff6b35}
+table{width:100%;border-collapse:collapse;margin-bottom:16px}
+thead th{background:#0f172a;color:#f8fafc;padding:7px 9px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px}
+tbody td{padding:6px 9px;border-bottom:1px solid #e2e8f0;vertical-align:middle;font-size:11px;line-height:1.3}
+tbody tr:nth-child(even):not(.day-sep) td{background:#f8fafc}
+tbody tr.da-conf td{background:#fef9c3!important}
+tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
+.day-sep td{padding:10px 0 4px!important;background:#fff!important;border:none!important}
+.dsi{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:4px}
+.dlabel{font-size:11px;font-weight:800}
+.dcnt{font-size:9px;color:#94a3b8;margin-left:4px}
+.tb{display:inline-block;padding:2px 8px;border-radius:4px;font-weight:800;font-size:10px;white-space:nowrap}
+.warn-cell{color:#92400e;font-weight:700;background:#fef3c7;padding:1px 5px;border-radius:3px;font-size:9px;white-space:nowrap}
+.ok-cell{color:#065f46;font-weight:900;font-size:13px}
+.totals-title{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:7px;padding-bottom:3px;border-bottom:2px solid #e2e8f0}
+.totals-grid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.totals-chip{display:flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;background:#f8fafc}
+.totals-chip .n{font-size:14px;font-weight:900;color:#0f172a}
+.totals-chip .lbl{font-size:9px;color:#64748b}
+.tot-total{display:inline-flex;gap:8px;align-items:center;padding:5px 12px;background:#0f172a;color:#fff;border-radius:6px}
+.tot-total .n{font-size:14px;font-weight:900}
+.tot-total .lbl{font-size:9px;opacity:0.65}
+.page-footer{margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8}
+@media print{.no-print{display:none!important} body{padding:6px 10px} .day-sep td{padding:8px 0 3px!important}}
+@page{size:A4 landscape;margin:0.7cm 0.9cm}
+</style></head><body>
+<button class="no-print" onclick="window.print()" style="margin-bottom:14px;padding:8px 20px;background:#ff6b35;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🖨️ Stampa / Salva PDF</button>
+<div class="page-header">
+  <div><div class="hbrand">Pro Trasporti · Planning Logistica</div><div class="htitle">VIAGGI SETTIMANALI</div><div class="hweek">${weekTitle||''}</div></div>
+  <div class="hright"><div class="hdate">Stampato il ${printDate}</div><div class="htotal"><span>${sorted.length}</span> viaggi${filterLabel}</div></div>
+</div>
+<table>
+  <thead><tr><th style="width:88px">Data</th><th style="width:105px">Trasportatore</th><th>Partenza</th><th>Arrivo</th><th style="width:85px">Prodotto</th><th style="width:130px">Note</th><th style="width:40px;text-align:center">✓</th></tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+<div class="totals-title">Totali per trasportatore</div>
+<div class="totals-grid">${totalsRows}</div>
+<div class="tot-total"><span class="n">${sorted.length}</span><span class="lbl">viaggi totali</span></div>
+<div class="page-footer"><span>TAB-VIAGGI · Pro Trasporti</span><span>${weekTitle||''}</span><span>${printDate}</span></div>
+</body></html>`);
             win.document.close();
         };
 
