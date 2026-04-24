@@ -4232,8 +4232,8 @@
 
         // Initialize
         window.onload = function() {
-            if (localStorage.getItem('appVersion') !== 'v58') {
-                localStorage.setItem('appVersion', 'v58');
+            if (localStorage.getItem('appVersion') !== 'v58b') {
+                localStorage.setItem('appVersion', 'v58b');
                 // Prima apertura v61 — forza riordino cronologico dei dati salvati
                 try {
                     var raw = localStorage.getItem('viaggiLogistica');
@@ -7366,32 +7366,71 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
             const dayNum = { lun:1, mar:2, mer:3, gio:4, ven:5, sab:6 };
             const target = dayNum[dayName];
 
-            // 1. Cerca il lunedì della settimana corrente dai viaggi esistenti
-            //    (usa il primo viaggio come riferimento per la settimana)
-            if (trips.length > 0) {
-                const ref = new Date((trips[0].data || '') + 'T12:00:00');
-                // Trova il lunedì di quella settimana
-                const refDay = ref.getDay(); // 0=dom,1=lun,...
-                const diffToMon = refDay === 0 ? -6 : 1 - refDay;
-                const monday = new Date(ref);
-                monday.setDate(ref.getDate() + diffToMon);
-                // Calcola il giorno target nella stessa settimana
-                const diffToTarget = target === 0 ? 6 : target - 1; // lun=0, mar=1...
-                const result = new Date(monday);
-                result.setDate(monday.getDate() + diffToTarget);
-                return result.toISOString().split('T')[0];
+            // Helper: dato un Date, trova il lunedì della sua settimana
+            function getMondayOf(d) {
+                const day = d.getDay();
+                const diff = day === 0 ? -6 : 1 - day;
+                const mon = new Date(d);
+                mon.setDate(d.getDate() + diff);
+                mon.setHours(12,0,0,0);
+                return mon;
             }
 
-            // 2. Fallback: settimana corrente a partire da oggi
+            // Helper: dal lunedì trovato, ottieni il giorno target
+            function getTargetDay(monday, target) {
+                const diff = target - 1; // lun=0, mar=1, mer=2, gio=3, ven=4
+                const result = new Date(monday);
+                result.setDate(monday.getDate() + diff);
+                const y = result.getFullYear();
+                const m = String(result.getMonth()+1).padStart(2,'0');
+                const d2 = String(result.getDate()).padStart(2,'0');
+                return y + '-' + m + '-' + d2;
+            }
+
+            // 1. Se siamo in modalità prossima settimana (toggle PC)
+            if (typeof _pcWeekMode !== 'undefined' && _pcWeekMode === 'next') {
+                // Usa tripsNext come riferimento se disponibile
+                const refArr = tripsNext.length > 0 ? tripsNext : null;
+                if (refArr) {
+                    const ref = new Date(refArr[0].data + 'T12:00:00');
+                    return getTargetDay(getMondayOf(ref), target);
+                }
+                // Fallback: lunedì prossimo
+                const now = new Date();
+                const todayDay = now.getDay();
+                const daysToThisMon = todayDay === 0 ? -6 : 1 - todayDay;
+                const nextMon = new Date(now);
+                nextMon.setDate(now.getDate() + daysToThisMon + 7);
+                nextMon.setHours(12,0,0,0);
+                return getTargetDay(nextMon, target);
+            }
+
+            // 2. Settimana corrente: prima fonte = weekTitle (contiene le date esatte)
+            //    Formato titolo: "Settimana XX/YYYY (Lun. GG/MM - Ven. GG/MM)"
+            if (weekTitle) {
+                const m = weekTitle.match(/Lun\.\s*(\d{2})\/(\d{2})/);
+                if (m) {
+                    const now = new Date();
+                    const dd = parseInt(m[1]), mm = parseInt(m[2]);
+                    // Determina l'anno — se il mese è nel passato usa l'anno prossimo
+                    let yyyy = now.getFullYear();
+                    if (mm < now.getMonth() + 1 - 1) yyyy++;
+                    const monday = new Date(yyyy, mm-1, dd, 12, 0, 0);
+                    return getTargetDay(monday, target);
+                }
+            }
+
+            // 3. Se ci sono viaggi nella settimana corrente, usa il primo come riferimento
+            const wt = (_pcWeekMode === 'next') ? tripsNext : trips;
+            if (wt.length > 0) {
+                const ref = new Date(wt[0].data + 'T12:00:00');
+                return getTargetDay(getMondayOf(ref), target);
+            }
+
+            // 4. Fallback finale: lunedì di questa settimana
             const now = new Date();
-            const todayDay = now.getDay();
-            const diffToMon = todayDay === 0 ? -6 : 1 - todayDay;
-            const monday = new Date(now);
-            monday.setDate(now.getDate() + diffToMon);
-            const diffToTarget = target === 0 ? 6 : target - 1;
-            const result = new Date(monday);
-            result.setDate(monday.getDate() + diffToTarget);
-            return result.toISOString().split('T')[0];
+            const monday = getMondayOf(now);
+            return getTargetDay(monday, target);
         }
 
         function desktopOpenAddModal(ri) {
