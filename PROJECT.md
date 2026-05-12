@@ -1,293 +1,424 @@
 # TAB-VIAGGI — Project Context
 
 ## Cos'è questa app
-Web app single-file HTML per la **pianificazione logistica settimanale dei viaggi** di Pro Trasporti.
-Hosted su GitHub Pages: `firstlex55.github.io/TAB-VIAGGI-`
-
-File principale: **`index.html`** (~9500 righe) — tutto in un file, HTML + CSS + JS vanilla.
-File aggiuntivi nel repo: `manifest.json`, `sw.js`, `logo.png`.
+Web app **single-file HTML vanilla** per la pianificazione logistica settimanale dei viaggi di **Pro Trasporti**.
+- Hosted su GitHub Pages: `firstlex55.github.io/TAB-VIAGGI-`
+- File principale: `index.html` (~10000 righe) — tutto in un file, HTML + CSS + JS
+- Fil (utente) comunica in **italiano** e vuole risposte in italiano
+- Usata quotidianamente su **mobile e desktop**
 
 ---
 
 ## Stack tecnico
-- **HTML/CSS/JS vanilla** — nessun framework, no build step
-- **ExcelJS 4.4.0** — export Excel (2 fogli: Viaggi + Riepilogo, landscape A4)
+- **HTML/CSS/JS vanilla** — nessun framework, nessun build step
+- **ExcelJS 4.4.0** — export Excel (2 fogli: Viaggi + Riepilogo, landscape A4, Calibri)
 - **XLSX 0.18.5** — import Excel
-- **Google Drive API** — sync via OAuth2 + fetch diretto (no gapi library)
+- **Google Drive API** — sync OAuth2 + fetch diretto (no gapi)
 - **Google Fonts** — Outfit + JetBrains Mono
-- **PWA** — manifest.json + sw.js (network-first, cache offline) + logo.png
+- **PWA** — manifest.json + sw.js (network-first) + logo.png
 
 ---
 
-## Struttura dati
+## Schema dati
 ```js
-// Settimana corrente
+// Ogni viaggio:
 {
-  data: "2026-04-07",        // ISO YYYY-MM-DD
+  data: "2026-05-04",            // ISO YYYY-MM-DD — MAI toISOString() per oggi (timezone bug)
   trasportatore: "COAP",
-  partenza: "Bientina (INCONTRATO)",
-  arrivo: "Verolavecchia (AGROGI)",
-  prodotto: "Segatura",      // opzionale
-  note: "",                  // opzionale
+  partenza: "Bientina (INCONTRATO)",   // nome (CODICE)
+  arrivo: "Verolavecchia (AGROGI)",    // nome (CODICE)
+  prodotto: "Segatura",          // opzionale
+  note: "",                      // opzionale
   daConfermare: false,
   confermato: false
 }
+
+// Settimana corrente
+let trips = [];                  // localStorage 'viaggiLogistica' — MAI dati hardcoded
+// Settimana prossima — completamente separata
+let tripsNext = [];              // localStorage 'viaggiLogisticaNext'
 ```
-Salvato in `localStorage` chiave `viaggiLogistica`. **Sempre in ordine cronologico.**
-`trips = []` — array vuoto all'avvio, NO dati hardcoded.
-
-**Settimana prossima** salvata in chiave separata `viaggiLogisticaNext`.
-`tripsNext = []` — stesso schema, vive separato da `trips`.
 
 ---
 
-## Trasportatori e colori
-CEVOLO `#e8821a` ambra, COAP `#5b8dd9` blu, CONECO `#e040a0` fucsia, CONSAR `#06d6a0` verde acqua,
-AVIO `#38bdf8` azzurro, ALB `#f5a623` giallo, LINO BRA `#c084fc` viola, Stegagno `#94a3b8` grigio,
-Cirioni `#34d399` verde smeraldo, CLP `#CA8A04` oro.
-Colori CSS: variabili `--t-{key}` e `--t-{key}-bg`.
+## Trasportatori e colori CSS
+Variabili CSS: `--t-{key}` e `--t-{key}-bg`
+```
+CEVOLO  → #e8821a ambra        key: cevolo
+COAP    → #5b8dd9 blu          key: coap
+ConEco  → #e040a0 fucsia       key: coneco
+CONSAR  → #06d6a0 verde acqua  key: consar
+AVIO    → #38bdf8 azzurro      key: avio
+LINO BRA→ #c084fc viola        key: linobra
+C.M TRASP→ #34d399 verde       key: cmtrasp
+CLP     → #CA8A04 oro          key: clp
+ALB     → #f5a623 giallo       key: alb
+Stegagno→ #94a3b8 grigio       key: stegagno
+```
+Funzioni: `getTransporterKey(name)`, `getTransporterColorClass(name)`
 
 ---
 
-## Viste (bottom nav mobile + pc-view-switcher su desktop)
+## Viste mobile (bottom nav)
 | Vista | ID | Descrizione |
 |-------|----|-------------|
-| PROSSIMA | `#nextView` | Viaggi settimana prossima (`tripsNext`). Stessa UI della RAPIDA ma in viola. |
-| TRASP. | `#mediumView` | Card per trasportatore — Concept C: card con header num. grande + righe 2-livelli. |
-| RAPIDA | `#compactView` | Righe compatte per giorno — **vista principale**. Swipe destra → elimina. |
-| PC | `#desktopView` | Tabella editabile inline, sidebar rotte rapide, toggle Corrente/Prossima |
+| PROSSIMA | `#nextView` + `#nextBody` | tripsNext, sfondo viola `#a78bfa`, sostituisce la vecchia OGGI |
+| TRASP. | `#mediumView` | Card per trasportatore, Concept C (header grande + righe 2 livelli) |
+| RAPIDA | `#compactView` + `#compactBody` | Vista principale. Swipe destra → elimina. Banner "da confermare" in cima |
+| PC | `#desktopView` + `#desktopBody` | Tabella editabile inline. Toggle Corrente/Prossima in toolbar |
 
-`currentView` salvato in `localStorage` come `preferredView`. Default: `compact`.
-**OGGI è stata rimossa** — sostituita da PROSSIMA.
-
----
-
-## Vista PROSSIMA (nuova in v49)
-- Mostra `tripsNext` (settimana +1), completamente separata da `trips`
-- Sfondo e accenti viola (`#a78bfa`) per distinguerla visivamente dalla corrente
-- Swipe-to-delete funziona (usa `data-next-idx`)
-- Modifica via modal editTrip — salva in `tripsNext` (modal tiene `data-next-idx`)
-- Premi `+` → form apre con data precompilata a Lunedì prossimo + banner viola
-- `filterApply()` in questa vista chiama solo `renderNextView()` e ritorna
+`currentView` salvato in localStorage `preferredView`. Default: `compact`.
 
 ---
 
-## Toggle PC Corrente/Prossima
-- Due bottoni in toolbar: `● Corrente` (arancio) e `◎ Prossima` (viola)
-- Variabile globale: `let _pcWeekMode = 'current'` (dichiarata vicino a `_desktopSort`)
-- Funzione: `pcSetWeek(mode, btn)` — aggiorna bottoni e chiama `renderDesktopView()`
-- **Tutte le operazioni PC** (modifica, elimina, duplica, toggle conf, nuova riga, popup rotte) rispettano `_pcWeekMode`:
-  - `desktopSetField`, `desktopDel`, `desktopDup`, `desktopToggleConf`, `desktopToggleConfermato`
+## Vista PROSSIMA (tripsNext)
+- Mostra `tripsNext` separati da `trips` — **non appaiono mai nelle altre viste**
+- Sfondo e accenti viola per distinguerla visivamente
+- Premi `+` → form apre con data precompilata a **lunedì prossimo** + banner viola
+- `_prefillNextWeekDate()` → calcola lunedì prossimo
+- `filterApply()` — **skippa completamente** se `currentView==='next'`
+- Swipe-delete usa `data-next-idx` (non `data-idx`)
+- Modifica via `editNextTrip(idx)` → modal con `data-next-idx`
+- `saveNextToLocalStorage()` → salva in `viaggiLogisticaNext`
+- `loadNextFromLocalStorage()` → chiamata in `window.onload`
+
+---
+
+## Banner "Da confermare" (Vista RAPIDA)
+Appare in cima alla lista RAPIDA quando `trips.filter(t => t.daConfermare).length > 0`
+
+**Struttura ogni riga del banner:**
+- Checkbox 18×18px
+- Data: giorno abbreviato piccolo + numero grande giallo (es. `Lun` / `13`)
+- Badge trasportatore compatto
+- Partenza (bianco) su riga 1, Arrivo (verde) su riga 2
+
+**Funzioni:**
+- `_toggleDaConfBanner()` → collassa/espande body
+- `_compactConfirm(idx)` → anima checkbox, poi `renderCompactView()` dopo 380ms
+- `_confirmAllCompact()` → conferma tutti in un colpo, salva, ri-renderizza
+
+**Importante:** cerca sempre in `trips[]` completo, non in `displayTrips` filtrato.
+
+**Badge micro nella lista:** ogni riga con `daConfermare=true` mostra `⚠ conf.` sotto il badge trasportatore (nella colonna sinistra). Click → `stopPropagation` + `_compactConfirm(idx)`. Click riga → apre modal modifica.
+
+---
+
+## Vista PC — tabella editabile
+
+### Toggle Corrente/Prossima
+```js
+let _pcWeekMode = 'current'; // 'current' | 'next'
+// DICHIARATA insieme a _desktopSort (non dopo desktopSetField!)
+let _desktopSort = { field:'data', dir:'asc' };
+let _pcWeekMode = 'current';
+```
+- `pcSetWeek(mode, btn)` → aggiorna stile bottoni + chiama `renderDesktopView()`
+- Si resetta a `'current'` quando esci dalla vista PC (`switchView`)
+- **Tutte le operazioni PC** usano `_workingTrips = _pcWeekMode==='next' ? tripsNext : trips`:
+  - `desktopSetField`, `desktopDel`, `desktopDup`
+  - `desktopToggleConf`, `desktopToggleConfermato`
   - `desktopAddEmptyConfirm`, `desktopConfirmAdd`, `desktopSetNextWeek`
-- `renderDesktopView()` usa `_workingTrips = _pcWeekMode==='next' ? tripsNext : trips`
-- Il toggle si resetta a 'current' quando si esce dalla vista PC
+
+### Separatori di giorno (renderDesktopView)
+Inseriti automaticamente tra gruppi di date. Colori fissi per giorno:
+```js
+const dayColors = {
+  1:{col:'#60a5fa',rgb:'96,165,250',  name:'LUNEDÌ'},
+  2:{col:'#34d399',rgb:'52,211,153',  name:'MARTEDÌ'},
+  3:{col:'#a78bfa',rgb:'167,139,250', name:'MERCOLEDÌ'},
+  4:{col:'#fbbf24',rgb:'251,191,36',  name:'GIOVEDÌ'},
+  5:{col:'#f472b6',rgb:'244,114,182', name:'VENERDÌ'},
+};
+```
+Ogni riga viaggio ha `background: rgba(rgb, 0.03)` del giorno + colore data.
+
+### tripRow(trip, realIdx, dayRgb)
+- Terzo parametro `dayRgb` → sfondo alternato per giorno
+- Colonna DATA: testo grande cliccabile, picker nativo nascosto (opacity:0)
+- Colonna TRASP: barra verticale 3px colorata + input
+- Partenza/Arrivo: input 14px + chip codice `_codeChip(code)` sotto
+- Stato: solo badge `⚠ Da conf.` (pill giallo), niente ✓ confermato
+- Click badge → `desktopToggleConf(idx)` → imposta `daConfermare=false` (NON toggle)
+- Tab+Enter → campo successivo in tutta la tabella
+- `inpStyle`: `font-size:14px; padding:9px 10px`
+
+### Ricerca PC — desktopQuickFilter()
+- **Cerca su `input[type="text"]` values** — non su textContent (che include chip e separatori)
+- Dopo aver filtrato le righe, nasconde i separatori di giorno se non hanno righe visibili
+- Termini separati da spazio = AND
+
+### Mini totali per trasportatore (toolbar)
+Inline nella toolbar, chips `COAP 4 | CEVOLO 3 | ...` calcolati da `_workingTrips`.
+
+### Codici azienda colorati
+```js
+function _locationCodeColor(code) { ... }  // ritorna {bg, bd, tx}
+function _codeChip(code) { ... }           // ritorna HTML badge
+```
+Mappa colori fissi per codice noto (INCONTRATO=blu, AGROGI=verde, SICEM=ambra, ARDENGHI=viola, TACCHELLA=rosa, TRUCIOLI=azzurro, VENDER=lilla, CAI-BF=giallo, MANCINI=verde chiaro, LEGNO VIVO=rosa, PUNTO VERDE=verde, ILT=arancio).
+Fallback: hash deterministico → colore HSL sempre uguale per lo stesso nome.
+`desktopSetField` aggiorna il chip inline senza re-render quando cambia partenza/arrivo.
 
 ---
 
-## Archiviazione smart (v49)
-- `archiveAndNewWeek()`: dopo aver archiviato la settimana corrente, se `tripsNext.length > 0`:
-  - Chiede con `confirm()`: *"Hai X viaggi per la prossima — vuoi usarli come base?"*
-  - SÌ → `trips = deepCopy(tripsNext)`, `tripsNext = []`, salva entrambi
-  - NO → `trips = []`, `tripsNext` rimane intatto nella vista Prossima
+## desktopGetNextWeekday(dayName) — BUGFIX v58b
+**Problema storico:** dopo "Nuova settimana" `trips[]` era vuoto → date sbagliate.
+
+**Priorità corretta:**
+1. Se `_pcWeekMode==='next'` → usa `tripsNext[0]` o calcola lunedì prossimo
+2. Se `weekTitle` contiene "Lun. DD/MM" → **legge dal titolo** (fonte più affidabile)
+3. Se `trips[0]` esiste → usa come riferimento
+4. Fallback → lunedì di questa settimana
+
+```js
+// Il weekTitle ha formato: "Settimana 18/2026 (Lun. 27/04 - Ven. 01/05)"
+const m = weekTitle.match(/Lun\.\s*(\d{2})\/(\d{2})/);
+```
 
 ---
 
-## Card layout — Vista TRASP. (Concept C, v48)
-Struttura card per trasportatore:
-- **Header**: badge colorato + numero grande + badge "N ✓" / "N ⚠"
-- **Righe viaggio a 2 livelli**:
-  - Riga 1: giorno (colore trasportatore) + partenza (per esteso) `›` arrivo (per esteso) + stato
-  - Riga 2: codice partenza · codice arrivo · prodotto (font 10px)
-- Funzione: `renderMediumView()`
+## desktopSetNextWeek() — BUGFIX v53
+Calcola sempre il **lunedì della settimana SUCCESSIVA** a quella corrente:
+```js
+const daysToThisMon = day === 0 ? -6 : (1 - day);
+const nextMon = new Date(now);
+nextMon.setDate(now.getDate() + daysToThisMon + 7); // +7 = sempre settimana prossima
+```
 
 ---
 
-## Vista OGGI (rimossa in v48/v49)
-- Sostituita da PROSSIMA
-- `renderCardView()` e `_renderTodayCard()` ancora presenti nel codice ma non raggiunte dalla nav
-- Il CSS `.trip-card.today-card::after { content: "OGGI" }` rimane ma non usato
+## Archiviazione smart — archiveAndNewWeek()
+1. Archivia `trips[]` in `weekArchive`
+2. Se `tripsNext.length > 0` → `confirm()`:
+   - **SÌ** → `trips = deepCopy(tripsNext)`, `tripsNext = []`, salva entrambi
+   - **NO** → `trips = []`, `tripsNext` rimane intatto
+3. Aggiorna `filteredTrips = [...trips]` prima di `filterApply()`
+
+**IMPORTANTE:** Il bottone mobile "Nuova settimana" chiama `showNewWeekModalV2()` — **NON** il vecchio `showNewWeekModal()` che aveva comportamento diverso e causava doppioni.
 
 ---
 
-## Vista RAPIDA
-- Righe raggruppate per giorno con separatori pill colorati (Concept C)
-- **Swipe a destra** → elimina (soglia 90px, sfondo rosso)
-- Ogni riga: badge trasportatore + partenza › arrivo (2 righe) + codici sottotitolo
-- Funzione: `renderCompactView()`
+## Import Excel — importaExcel(file) — BUGFIX v58c/d
+
+### Formato file prodotto dall'app:
+```
+Riga 1: PLANNING VIAGGI
+Riga 2: Settimana 19/2026 (Lun.04/05 - Ven. 08/05)
+Riga 3: [vuoto] | Data | Trasportatore | Partenza da | Arrivo a | Eseguito/DDT
+Riga 4: [vuoto] | LUN. 04/05/2026 | COAP | Bientina (INCONTRATO) | Verolavecchia (AGROGI) | 396
+```
+
+### Fix implementati:
+- **Parsing data robusto**: rimuove prefisso giorno (`LUN.`, `MAR.`, `MERC.`, `GIOV.`, `VEN.`) prima di parsare
+- Supporta: `dd/mm/yyyy`, ISO `yyyy-mm-dd`, formato corto `dd/mm`, seriale numerico Excel
+- **Colonna Data in posizione 1** (non 0) — prima colonna del foglio è vuota
+- Cerca foglio "Viaggi" o "Planning" prima del foglio 0
+- Header detection permissiva (fino a riga 15), fallback su "trasportatore" come ancora
+- Importa anche il campo **prodotto** (prima era sempre vuoto)
+- Normalizza: `"LINO BRANCHINI"` → `"LINO BRA"`, `"Con.Eco"` rimane invariato
+- `cellDates: true` in XLSX.read per date native
 
 ---
 
-## Vista PC
-- `renderDesktopView()` — usa `_workingTrips` (corrente o prossima)
-- Grid: sidebar 270px + tabella principale
-- **Tab fluido**: Tab naviga Partenza → Arrivo → Prodotto → Note
-- **Colonna ✓ cliccabile** direttamente senza re-render
-- **Toggle Corrente/Prossima** in toolbar (vedi sopra)
-- **Ricerca multi-termine**: spazio come AND
-- **Bottone ⏱ Data**: toggle ordine cronologico fisso
-- Filtri giorno Lun-Ven, Ctrl+D duplica, **Ctrl+Z undo** (stack 20 operazioni)
-- **📦 Nuova sett.**: archivia + svuota + chiede importazione tripsNext
-- **🗓 Sett. prossima**: aggiunge 5 righe vuote — rispetta `_pcWeekMode`
-- Export Excel usa sempre `_getVisibleTrips()` (settimana corrente)
+## Export Excel — _buildAndDownloadExcel()
+- 2 fogli: **Viaggi** (landscape A4, Calibri, bordi, celle colorate) + **Riepilogo** (5 sezioni)
+- Intestazione colonne: `['', 'Data', 'Trasportatore', 'Partenza da', 'Arrivo a', 'Eseguito/DDT']`
+- Formato data nelle celle: `"LUN. DD/MM/YYYY"` (es. `"LUN. 04/05/2026"`)
+- Usa `_getVisibleTrips()` per rispettare filtri PC attivi
+- Foglio Riepilogo: totali per trasportatore, per giorno, per partenza, per arrivo, per prodotto
 
 ---
 
-## Form mobile aggiunta viaggio
-Flusso: **Trasportatore → Rotta → Prodotto+Note → Quando**
-
-- **Contestuale**: se `currentView === 'next'` → aggiunge a `tripsNext`, altrimenti a `trips`
-- Banner viola in cima al form quando si aggiunge alla prossima settimana
-- Data precompilata: Lunedì prossimo se vista PROSSIMA, oggi se vista RAPIDA/TRASP.
-- Chip Lun-Ven con date reali, logica "sempre avanti", +7gg, Reset
-- Bottone "✅ Aggiungi Viaggio": sticky sopra la bottom nav
+## Stampa — window.printPlanning()
+Layout professionale in nuova finestra (A4 landscape):
+- Font **Inter** (importato da Google Fonts)
+- Header: brand "Pro Trasporti · Planning Logistica" + titolo + data stampa a destra
+- Separatori di giorno colorati per giorno (stessi colori della vista PC)
+- Righe alternate grigio chiarissimo
+- Righe `daConfermare` con sfondo giallo e bordo sinistro arancio
+- Codici partenza/arrivo in piccolo sotto il nome
+- Chips totali per trasportatore + totale complessivo
+- Footer: brand + settimana + data
+- Bottone "🖨️ Stampa / Salva PDF" nascosto in stampa (`class="no-print"`)
 
 ---
 
-## Storage localStorage
+## Autocomplete trasportatori
+`loadTransportersList()` raccoglie **tutti** i trasportatori mai usati:
+1. `localStorage.transportersList`
+2. Archivio storico `weekArchive` (tutte le settimane passate)
+3. `trips[]` corrente e `tripsNext[]`
+→ Un trasportatore non usato questa settimana **rimane sempre disponibile** nell'autocomplete.
+
+Il datalist PC (`allT`) usa `transportersList` completa invece di una lista hardcoded.
+
+---
+
+## Modal modifica viaggio
+- Struttura flex con 3 zone fisse: header + form scrollabile + bottone sticky
+- `z-index: 2000` (sopra la bottom nav che è 1000)
+- `max-height: calc(100vh - 72px - env(safe-area-inset-bottom))` su mobile
+- Bottone "Salva Modifiche": outline arancio `border:1.5px solid #ff6b35`, `background:rgba(255,107,53,0.08)`, `color:#ff6b35`
+- Per `tripsNext`: il modal riceve `data-next-idx`, salvato in tripsNext, rimosso in `closeEditModal()`
+
+---
+
+## Colori tema (CSS root)
+```css
+--bg: #080a10;
+--primary: #0f1117;
+--secondary: #161922;
+--accent: #ff6b35;
+--success: #06d6a0;
+--warning: #ffd23f;
+--text: #f2f4f8;
+--text-dim: #9aa3b2;
+--text-muted: #5a6272;
+--border: rgba(255,255,255,0.10);
+```
+
+---
+
+## localStorage — tutte le chiavi
 | Chiave | Contenuto |
 |--------|-----------|
-| `viaggiLogistica` | `trips[]` — settimana corrente |
-| `viaggiLogisticaNext` | `tripsNext[]` — settimana prossima |
+| `viaggiLogistica` | trips[] corrente |
+| `viaggiLogisticaNext` | tripsNext[] prossima |
 | `weekTitle` | Titolo settimana corrente |
-| `transportersList` | Lista trasportatori autocomplete |
-| `partenzaList` | Lista partenze autocomplete |
-| `arrivoList` | Lista arrivi autocomplete |
+| `transportersList` | Lista trasportatori per autocomplete |
+| `partenzaList` | Lista partenze |
+| `arrivoList` | Lista arrivi |
 | `preferredView` | Vista attiva al riavvio |
 | `pcb_routes` | Rotte manuali sidebar PC |
-| `archiveData` | Archivio settimane passate |
-| `appVersion` | Versione per migration (attuale: v49b) |
-
----
-
-## Google Drive
-- Scope: `drive.appdata`, file: `planning-viaggi-data.json`
-- **Auto-save sempre silenzioso** (`driveSave(true)`)
-- Conflict modal solo su salvataggio **manuale**
-- Auto-reconnect token ogni 50min silenzioso
-- Bottoni: `syncBtn` (mobile) + `desktopSyncBtn` (PC)
-- **tripsNext NON viene sincronizzato su Drive** (locale only per ora)
+| `weekArchive` | Archivio settimane passate |
+| `appVersion` | Versione app (v58d) |
 
 ---
 
 ## Funzioni JS critiche
 ```
+renderNextView()              → vista PROSSIMA (tripsNext)
+renderCompactView()           → RAPIDA con banner da confermare
+renderDesktopView()           → tabella PC, usa _workingTrips
+renderMediumView()            → TRASP. Concept C
+
+_compactConfirm(idx)          → conferma da RAPIDA/banner (anima, poi re-render)
+_confirmAllCompact()          → conferma tutti dalla RAPIDA
+_toggleDaConfBanner()         → collassa/espande banner da confermare
+_prefillNextWeekDate()        → precompila lunedì prossimo nel form
+_locationCodeColor(code)      → {bg,bd,tx} colore fisso per codice azienda
+_codeChip(code)               → HTML badge colorato per codice
 _pv(n)                        → plurale: n===1 ? 'viaggio' : 'viaggi'
-renderTrips()                 → dispatcha alla vista corrente (SEMPRE chiamare dopo modifiche)
-renderCardView()              → vista OGGI (legacy, non raggiunta dalla nav)
-_renderTodayCard(t, today)    → card legacy
-renderMediumView()            → vista TRASP. — Concept C con card per trasportatore
-renderCompactView()           → vista RAPIDA (swipe-to-delete)
-renderNextView()              → vista PROSSIMA SETTIMANA (tripsNext)
-renderDesktopView()           → vista PC tabella — usa _workingTrips
-filterApply()                 → filtra + ordina + renderTrips(); skip se currentView==='next'
-saveToLocalStorage()          → ordina trips + salva + autoSaveDrive()
-saveNextToLocalStorage()      → ordina tripsNext + salva in viaggiLogisticaNext
-loadTripsFromLocalStorage()   → carica + ordina trips
-loadNextFromLocalStorage()    → carica + ordina tripsNext
-_buildAndDownloadExcel()      → xlsx 2 fogli landscape A4 (solo settimana corrente)
-_getVisibleTrips()            → rispetta filtri desktop attivi
-downloadExcel()               → unificato
-window.printPlanning()        → stampa con filtri
-switchView(view, el)          → cambia vista; se view!='desktop' resetta _pcWeekMode a 'current'
-pcSetWeek(mode, btn)          → toggle PC corrente/prossima; aggiorna _pcWeekMode
-desktopAddEmpty(prefill?)     → popup nuovo viaggio PC
-desktopConfirmAdd()           → crea viaggi dal popup rotte; routing su _wt2
-desktopAddEmptyConfirm()      → crea righe vuote dal popup date; routing su _workingTrips
-desktopSetNextWeek()          → 5 righe vuote Lun→Ven; routing su _pcWeekMode
-desktopToggleConf(i)          → toggle ⚠ senza re-render
-desktopToggleConfermato(i)    → toggle ✓; routing su _pcWeekMode
-desktopSetField(i,f,v)        → modifica campo inline; routing su _pcWeekMode
-desktopDel(i)                 → elimina riga; routing su _pcWeekMode
-desktopDup(i)                 → duplica riga; routing su _pcWeekMode
-desktopQuickFilter()          → ricerca multi-termine AND su input values
-desktopToggleChrono()         → toggle ordine cronologico fisso
-driveSave(silent?)            → salva Drive
-autoSaveDrive()               → chiama driveSave(true)
-archiveAndNewWeek()           → archivia + svuota + chiede importazione tripsNext
-editTrip(idx)                 → apre modal modifica per trips[idx]
-editNextTrip(idx)             → apre modal modifica per tripsNext[idx] (data-next-idx)
-showSummaryModal(trips)       → popup riepilogo viaggi aggiunti
-renderArchive()               → lista archivio
-setText(id, value)            → helper safe textContent
-toggleAddForm()               → apre/chiude form; contestuale a currentView
-_prefillNextWeekDate()        → precompila data al lunedì prossimo
-_undoPush(idx,field,oldVal)   → push undo stack (max 20)
 _hov(el) / _hout(el)         → helper hover senza apici annidati
+_undoPush(idx,field,val)      → push undo stack (max 20)
+
+filterApply()                 → SALTA se currentView==='next'
+saveToLocalStorage()          → ordina + salva + autoSaveDrive
+saveNextToLocalStorage()      → ordina tripsNext + salva
+loadTripsFromLocalStorage()   → chiamata in onload
+loadNextFromLocalStorage()    → chiamata in onload
+loadTransportersList()        → raccoglie da archivio storico
+
+switchView(view, el)          → se view!='desktop': resetta _pcWeekMode='current'
+pcSetWeek(mode, btn)          → toggle PC, aggiorna bottoni
+desktopSetField(i,f,v)        → modifica inline + aggiorna chip codice
+desktopDel(i)                 → elimina, routing _pcWeekMode
+desktopDup(i)                 → duplica, routing _pcWeekMode
+desktopToggleConf(i)          → imposta daConfermare=FALSE (non toggle!), no re-render
+desktopToggleConfermato(i)    → toggle confermato, routing _pcWeekMode
+desktopAddEmptyConfirm()      → nuove righe vuote, routing _wt
+desktopConfirmAdd()           → da popup rotte, routing _wt2
+desktopSetNextWeek()          → 5 righe Lun-Ven settimana PROSSIMA, routing _pcWeekMode
+desktopGetNextWeekday(day)    → data corretta da weekTitle (priorità)
+desktopQuickFilter()          → ricerca su input values, nasconde separatori vuoti
+
+archiveAndNewWeek()           → archivia + confirm import tripsNext + filteredTrips sync
+showNewWeekModalV2()          → modal nuova settimana (USARE QUESTO, non showNewWeekModal!)
+editNextTrip(idx)             → apre modal per tripsNext[idx]
+importaExcel(file)            → import robusto con parsing data prefisso giorno
+window.printPlanning()        → stampa premium in nuova finestra
+downloadExcel()               → export Excel 2 fogli
+_buildAndDownloadExcel(trips, title, suffix) → core export
+getTransporterKey(name)       → chiave CSS colore trasportatore
+getTransporterColorClass(name)→ classe CSS badge
 ```
 
 ---
 
 ## Variabili globali principali
 ```js
-let trips = []                    // settimana corrente, ordine cronologico
-let tripsNext = []                // settimana prossima, separata
+let trips = []                    // settimana corrente — MAI hardcoded
+let tripsNext = []                // settimana prossima — separata
 let filteredTrips = []
-let weekTitle = "Sett. 15/2026..."
-let currentView = 'compact'       // default
-let searchQuery = ''
-let importMode = 'add'
-let filterState = { today, date, transporter, partenza, arrivo, giorno }
+let weekTitle = "Sett. 19/2026 (Lun. 04/05 - Ven. 08/05)"
+let currentView = 'compact'
+let transportersList = [...]      // include storico archivio
+let partenzaList = []
+let arrivoList = []
 let driveAccessToken = null
 let driveFileId = null
+let importMode = 'add'            // 'add' | 'replace'
 let _desktopSort = { field:'data', dir:'asc' }
 let _desktopDayFilter = 'Tutti'
 let _desktopQuickQuery = ''
 let _desktopChrono = false
-let _pcWeekMode = 'current'       // 'current' | 'next' — toggle PC settimana
-let _undoStack = []               // max 20 entries: {idx, field, val}
+let _pcWeekMode = 'current'       // dichiarata CON _desktopSort, prima di desktopSetField
+let _undoStack = []               // max 20: {idx, field, val}
 const _dayPickerCounts = {lun:0, mar:0, mer:0, gio:0, ven:0}
-const _dpkColors = {lun:'96,165,250', mar:'52,211,153', mer:'167,139,250', gio:'251,191,36', ven:'244,114,182'}
-const _DAY_COLORS = {1:{bg,border,txt,label}, ...}
-let transportersList = [...]
-let partenzaList = [...]
-let arrivoList = [...]
 ```
 
 ---
 
-## Elementi HTML critici
-`#nextView`, `#nextBody`,
-`#cardView`, `#compactView`, `#compactBody`, `#mediumView`, `#desktopView`, `#desktopBody`,
-`#addTripSection`, `#tripForm`, `#editModal`, `#editForm`,
-`#weekInfo`, `#syncBtn`, `#loadBtn`, `#desktopSyncBtn`, `#desktopLoadBtn`,
-`#mobileDayPicker`, `#mdpk-btn-{lun|mar|mer|gio|ven}`, `#mdpk-date-{lun|mar|mer|gio|ven}`,
-`#mobileDaySummary`, `#pcViewSwitcher`, `#archiveSection`, `#archiveList`,
-`#desktopAddModal`, `#dmTransp`, `#dmFrom`, `#dmTo`, `#dmProd`, `#dmNote`, `#dmDate`, `#dmDaConf`, `#dmSummary`, `#dmRouteChips`,
-`#desktopQuickSearch`, `#desktopSortChronoBtn`, `#desktopFilterCount`,
-`#dpk-{lun|mar|mer|gio|ven}`, `#dpk-cnt-{lun|mar|mer|gio|ven}`,
-`#addFormContextBanner`,
-`#pcWeekToggle`, `#pcToggleCurrent`, `#pcToggleNext`,
-`#newWeekModalV2`, `#nwv2CurrentTitle`, `#nwv2CurrentCount`, `#nwv2NewTitle`
+## Elementi HTML critici (ID)
+```
+#nextView, #nextBody
+#compactView, #compactBody
+#mediumView
+#desktopView, #desktopBody
+#cardView (legacy, non raggiunta dalla nav)
+
+#daConfBanner, #daConfBody, #daConfArr    ← banner da confermare RAPIDA
+#addTripSection, #tripForm
+#addFormContextBanner                      ← banner viola form aggiunta prossima sett.
+#editModal, #editForm
+
+#pcWeekToggle, #pcToggleCurrent, #pcToggleNext
+#desktopQuickSearch                        ← ricerca PC 240px
+#newWeekModalV2, #nwv2CurrentTitle, #nwv2NewTitle, #nwv2CurrentCount
+
+#weekInfo                                  ← titolo settimana
+#syncBtn, #desktopSyncBtn
+#loadBtn, #desktopLoadBtn
+#fileInput                                 ← input file import Excel
+
+#desktopAddModal, #dmTransp, #dmFrom, #dmTo, #dmProd, #dmNote, #dmDate, #dmDaConf
+#dpk-{lun|mar|mer|gio|ven}, #dpk-cnt-{...} ← day picker PC
+```
 
 ---
 
-## Tema visivo
-- Sfondo: `#070a10`, pannelli: `#0f1220` / `#161b2e`, card: `#12161f`
-- Accento corrente: `#ff6b35` (arancio)
-- Accento prossima: `#a78bfa` (viola)
-- Successo: `#06d6a0`, warning: `#ffd23f`
-- Testo: `#e8edf5`, testo-dim: `#8892a4`
-- Easing: `--spring: cubic-bezier(0.34,1.56,0.64,1)`
+## Regole critiche — NON fare mai
+1. **No framework** — single-file HTML vanilla
+2. **No template literal** (backtick) in `renderArchive()` — usa concatenazione `+`
+3. **No apici singoli annidati** in stringhe JS — usa `_hov(el)/_hout(el)` per mouseover inline
+4. **No `toISOString().split('T')[0]`** per la data di oggi — sfasa timezone; usa getFullYear/getMonth/getDate
+5. **No dati hardcoded** in `let trips = [...]` — deve essere `let trips = []`
+6. **No `filterApply()`** dalla vista PROSSIMA — la funzione ha il suo skip per `currentView==='next'`
+7. **No `trips[]` diretto** nelle funzioni desktop — usare `_workingTrips` o `_wt`
+8. **No vecchio `showNewWeekModal()`** — usare `showNewWeekModalV2()`
+9. **No Sabato** nei filtri — rimosso intenzionalmente
+10. Plurale: sempre `_pv(n)`, mai hardcoded
 
 ---
 
-## Cosa NON fare
-- **Non usare framework** — single-file HTML vanilla
-- **Non usare template literal** (`` ` ``) in `renderArchive()` — usa concatenazione
-- **Non annidare apici singoli** in stringhe JS — usa `_hov(el)` / `_hout(el)` per mouseover
-- **Non aggiungere Sabato** — rimosso intenzionalmente
-- **Non usare `toISOString().split('T')[0]`** per la data di oggi — sfasa timezone
-- **Non mettere dati hardcoded** in `let trips` — deve essere `let trips = []`
-- **Non fare re-render completo** per operazioni piccole
-- **Non chiamare `filterApply()`** dalla vista PROSSIMA — ha il suo skip
-- **Non modificare `trips[]` direttamente** nelle funzioni desktop — usare `_workingTrips` o `_wt`
-- Per il plurale usare sempre `_pv(n)`
-- Verificare **tutti gli script tag** con `node --check` — script indice 3, 4, 5
-
----
-
-## Verifica codice (da fare dopo ogni modifica)
+## Workflow sviluppo
 ```bash
+# Claude scarica il file direttamente da GitHub:
+# https://raw.githubusercontent.com/firstlex55/TAB-VIAGGI-/refs/heads/main/index.html
+
+# Modifiche: usa bash_tool + python3 per str.replace chirurgici
+# Dopo ogni modifica → verifica sintassi JS:
 python3 -c "
 import re
 with open('/home/claude/index.html') as f: content = f.read()
@@ -297,32 +428,38 @@ for i, sc in enumerate(scripts):
         with open(f'/tmp/sc_{i}.js','w') as f: f.write(sc)
 "
 for i in 3 4 5; do node --check /tmp/sc_$i.js && echo "OK $i" || echo "ERRORE $i"; done
+
+# Output finale:
+cp /home/claude/index.html /mnt/user-data/outputs/app_viaggi_vXX.html
+```
+
+**Script indices rilevanti:** 3, 4, 5 (gli altri sono librerie esterne)
+
+**Fallback str.replace:** se `str.replace()` fallisce per whitespace/escape diversi:
+```python
+idx = content.find('testo_da_trovare')
+end = content.find('fine_del_blocco', idx) + len('fine_del_blocco')
+content = content[:idx] + nuovo_testo + content[end:]
 ```
 
 ---
 
-## File output
-- Lavoro: `/home/claude/index.html`
-- Output versionate: `/mnt/user-data/outputs/app_viaggi_vN.html`
-- Versione corrente: **v49b**
-- Link GitHub raw: `https://raw.githubusercontent.com/firstlex55/TAB-VIAGGI-/refs/heads/main/index.html`
-
----
+## Versione corrente: **v58d**
+GitHub raw: `https://raw.githubusercontent.com/firstlex55/TAB-VIAGGI-/refs/heads/main/index.html`
 
 ## Storico versioni
-| v | Contenuto |
-|---|-----------|
-| v39 | Excel 2 fogli, stampa, ordinamento fix |
-| v40 | Tema scuro, glow card, badge trasportatori |
-| v41 | Form Opzione A, chip date reali, vista Oggi, vista Trasportatore, banner rimosso, PWA |
-| v42 | Swipe-to-delete rapida, popup PC chip giorni, popup riepilogo, scroll auto |
-| v43 | Spring physics, scroll 120Hz, font smoothing, GPU layers, azioni compatte, archivio |
-| v44 | Fix SyntaxError renderArchive, fix plurale _pv(n), fix modal tagliato |
-| v45 | Card OGGI/TRASP. redesign compatto, colori CEVOLO/CONECO, Excel premium Calibri, foglio Riepilogo 5 sezioni, auto-save silenzioso Drive, ricerca multi-termine PC, Tab fluido PC, ✓ click diretto, bottone sticky submit mobile |
-| v46 | Popup PC unificato, versioning, fix timezone, rimosse date hardcoded, bottone 📦 Nuova sett. |
-| v47 | Fix ricerca multi-termine (tutti i campi), contatori barra giorni corretti, badge trasportatore update inline, Ctrl+Z undo, separatori giorno PC premium, badge "da conf" pulse, filtro sidebar rotte multi-termine, hint Ctrl+Z/D |
-| v48 | Vista OGGI → PROSSIMA (poi v48b fix opacity), Concept C per OGGI e TRASP., rotte 2 righe con nomi completi, tripRow bordo sinistro colorato, header tabella PC premium, routeCard redesign |
-| v48b | Fix sbiadimento viste: giorni futuri a piena opacità |
-| v48c | Fix troncamento nomi: _ccRow e renderMediumView a 2 righe |
-| v49 | Vista PROSSIMA SETTIMANA (tripsNext), toggle PC Corrente/Prossima, archiviazione smart con importazione tripsNext, form contestuale, swipe-delete next |
-| v49b | Fix bug: _pcWeekMode posizione, desktopSetNextWeek/ConfirmAdd routing, filterApply skip next, reset toggle su switchView, controllo generale codice |
+| v | Contenuto principale |
+|---|---------------------|
+| v49b | Vista PROSSIMA (tripsNext), toggle PC Corrente/Prossima, archiviazione smart |
+| v50b | Redesign tabella PC, colonna DATA solo testo cliccabile |
+| v51-v51g | Badge ⚠ Da conf. pill, _compactConfirm RAPIDA, modal z-index fix, bottone salva outline |
+| v52 | Codici azienda colorati (_codeChip, _locationCodeColor) |
+| v53-v53d | Separatori giorno PC colorati, fix ricerca PC (input values), fix date settimana PC, fix mobile nuova settimana |
+| v54 | Badge ⚠ conf. micro sotto trasportatore (Concept C) |
+| v55-v55e | Banner "Da confermare" collassabile in RAPIDA, rotte 2 righe nel banner |
+| v56 | Autocomplete trasportatori da archivio storico, totali inline toolbar, routeCard redesign |
+| v57-v57c | Leggibilità PC: font 14px, padding righe, label colonne 10px, ricerca 240px, hover/focus migliorati |
+| v58 | Stampa premium (Inter, separatori colorati, chips totali, footer) |
+| v58b | Fix desktopGetNextWeekday: usa weekTitle come fonte primaria (non trips[0]) |
+| v58c | Fix import Excel: parsing "LUN. DD/MM/YYYY", header detection permissiva, prodotto importato |
+| v58d | Fix parsing data con prefisso giorno (MERC., GIOV. ecc.) |
