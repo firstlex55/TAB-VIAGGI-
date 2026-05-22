@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Viaggi">
     <meta name="application-name" content="Viaggi">
-    <meta name="theme-color" content="#070a10">
+    <meta name="theme-color" content="#1f2d42">
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,13 +36,13 @@
         }
 
         :root {
-            --primary: #0f1117;
-            --secondary: #161922;
+            --primary: #223040;
+            --secondary: #283a50;
             --accent: #ff6b35;
             --accent-dim: rgba(255, 107, 53, 0.13);
             --success: #06d6a0;
             --warning: #ffd23f;
-            --bg: #080a10;
+            --bg: #1f2d42;
             --text: #f2f4f8;
             --text-dim: #9aa3b2;
             --text-muted: #5a6272;
@@ -58,9 +58,8 @@
             line-height: 1.6;
             padding-bottom: 80px;
             background-image:
-                radial-gradient(ellipse at 0% 0%,   rgba(255, 107, 53, 0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 100% 100%, rgba(15,  20,  40, 0.15) 0%, transparent 50%),
-                linear-gradient(160deg, #080a10 0%, #0d1018 50%, #0a0d14 100%);
+                radial-gradient(ellipse at 0% 0%, rgba(255,107,53,0.03) 0%, transparent 50%),
+                linear-gradient(160deg, #1f2d42 0%, #253348 50%, #162030 100%);
             background-attachment: fixed;
             /* Font rendering nitido */
             -webkit-font-smoothing: antialiased;
@@ -71,7 +70,7 @@
         }
 
         .top-bar {
-            background: #0d1018;
+            background: #253348;
             padding: 14px 18px 12px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
@@ -86,6 +85,41 @@
             will-change: transform;
             transform: translateZ(0);
         }
+
+        /* In vista PC: top-bar ultra compatta su una riga sola */
+        .desktop-view-active .top-bar {
+            padding: 6px 14px;
+            min-height: 0;
+        }
+        .desktop-view-active .top-bar-truck { display: none; }
+        .desktop-view-active .logo-planning-text { display: none; }
+        .desktop-view-active .logo-badge { display: none; }
+        .desktop-view-active .logo-viaggi {
+            font-size: 15px;
+            letter-spacing: 2px;
+            display: inline;
+            background: linear-gradient(90deg, #ff7a40, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: none;
+        }
+        .desktop-view-active .logo { flex-direction: row; align-items: center; gap: 8px; }
+        .desktop-view-active .week-info {
+            display: inline;
+            font-size: 11px;
+            margin-top: 0;
+            margin-left: 10px;
+            color: rgba(255,255,255,0.5);
+        }
+        .desktop-view-active .header-summary { display: none; }
+        .desktop-view-active .top-bar-titles {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex: 1;
+        }
+        .desktop-view-active .top-bar-left { gap: 8px; }
 
         .top-bar-left {
             display: flex;
@@ -689,13 +723,13 @@
         }
 
         .filter-select option {
-            background: #111422;
+            background: #283a50;
             color: var(--text);
         }
 
         /* ===== PANNELLO FILTRI RAPIDI (nuovo, in cima) ===== */
         .filter-panel {
-            background: linear-gradient(135deg, #0e1525 0%, #111827 100%);
+            background: linear-gradient(135deg, #26364e 0%, #26364e 100%);
             border: 1px solid rgba(255,107,53,0.3);
             border-top: 3px solid var(--accent);
             border-radius: 14px;
@@ -2196,6 +2230,26 @@
         .pc-view-switcher {
             display: none;
         }
+        /* ── SCALA TESTO SU SCHERMI GRANDI (PC) ── */
+        @media (min-width: 1280px) {
+            .desktop-view-active body { font-size: 16px; }
+            .desktop-view-active #desktopBody table { font-size: 15px; }
+            .desktop-view-active #desktopBody input[type="text"] { font-size: 15px !important; }
+            .desktop-view-active #desktopBody .day-sep-row td { font-size: 14px; }
+        }
+        @media (min-width: 1600px) {
+            .desktop-view-active body { font-size: 17px; }
+            .desktop-view-active #desktopBody table { font-size: 16px; }
+            .desktop-view-active #desktopBody input[type="text"] { font-size: 16px !important; }
+            .desktop-view-active #desktopBody .day-sep-row td { font-size: 15px; }
+        }
+        @media (min-width: 1920px) {
+            .desktop-view-active body { font-size: 18px; }
+            .desktop-view-active #desktopBody table { font-size: 17px; }
+            .desktop-view-active #desktopBody input[type="text"] { font-size: 17px !important; }
+            .desktop-view-active #desktopBody .day-sep-row td { font-size: 16px; }
+        }
+
         @media (min-width: 768px) {
             .mobile-bottom-nav { display: none !important; }
             .pc-view-switcher {
@@ -2203,7 +2257,7 @@
                 align-items: center;
                 gap: 4px;
                 padding: 8px 16px;
-                background: #080b13;
+                background: #131c2b;
                 border-bottom: 1px solid rgba(255,255,255,0.06);
             }
             .pc-view-switcher .pcvs-label {
@@ -2903,21 +2957,6 @@
         .desktop-view-active .section:not(:has(#desktopView)) {
             display: none !important;
         }
-        /* desktopView occupa tutto lo schermo residuo */
-        .desktop-view-active #desktopView {
-            position: fixed !important;
-            top: 62px; /* sotto la top-bar */
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-            z-index: 50;
-            background: var(--bg);
-        }
-        .desktop-view-active #desktopBody {
-            height: 100%;
-            overflow: hidden;
-        }
 
         /* ===== FULL-SCREEN DESKTOP VIEW ===== */
         .desktop-view-active {
@@ -2948,14 +2987,16 @@
             padding: 0 !important;
             margin: 0 !important;
         }
-        /* desktopView fisso sotto la top-bar, occupa tutto */
+        /* desktopView occupa tutto lo schermo residuo */
         .desktop-view-active #desktopView {
-            position: fixed !important;
-            top: 65px;
+            position: fixed;
+            top: 38px; /* altezza top-bar compatta */
             left: 0;
             right: 0;
             bottom: 0;
             overflow: hidden;
+            display: flex !important;
+            flex-direction: column;
             z-index: 50;
             background: var(--bg);
         }
@@ -3354,7 +3395,7 @@
             background: var(--secondary);
         }
         select option {
-            background: #111422;
+            background: #283a50;
             color: var(--text);
         }
 
@@ -4649,7 +4690,7 @@
             modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:4000;display:flex;align-items:center;justify-content:center;padding:16px;';
 
             modal.innerHTML =
-                '<div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--success);border-radius:16px;padding:24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.8);">'
+                '<div style="background:#253348;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--success);border-radius:16px;padding:24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.8);">'
                 // Header
                 + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'
                 + '<div>'
@@ -6101,7 +6142,7 @@
                 var nDaConf = tTrips.filter(function(t){ return t.daConfermare; }).length;
 
                 // ── Card trasportatore ──
-                html += '<div style="background:#0d1018;border-radius:12px;border:1px solid rgba(255,255,255,0.07);border-top:2px solid ' + tColorVar + ';overflow:hidden;margin-bottom:12px;">';
+                html += '<div style="background:#253348;border-radius:12px;border:1px solid rgba(255,255,255,0.07);border-top:2px solid ' + tColorVar + ';overflow:hidden;margin-bottom:12px;">';
 
                 // Header
                 html += '<div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">';
@@ -6280,8 +6321,8 @@
                 const isWarn  = trip.daConfermare;
                 const isConf  = trip.confermato;
 
-                // Stili input — variante C: più grandi, sfondo scuro, focus teal
-                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:15px;padding:10px 12px;outline:none;width:100%;transition:all 0.15s;';
+                // Stili input — variante C compatta per vista PC
+                const inpStyle = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:14px;padding:7px 10px;outline:none;width:100%;transition:all 0.15s;';
                 const inpFocus = 'this.style.borderColor=\'rgba(0,210,180,0.5)\';this.style.background=\'rgba(0,210,180,0.04)\';this.closest(\'tr\').style.outline=\'1px solid rgba(0,210,180,0.2)\'';
                 const inpBlur  = 'this.style.borderColor=\'rgba(255,255,255,0.08)\';this.style.background=\'rgba(255,255,255,0.04)\';this.closest(\'tr\').style.outline=\'\'';
 
@@ -6301,13 +6342,13 @@
                     ' onfocusout="this.style.outline=\'\'">' +
 
                     // Drag handle
-                    '<td style="padding:4px 3px;width:14px;text-align:center;opacity:0.15;cursor:default;user-select:none;">' +
-                    '<span style="font-size:11px;">⋮⋮</span>' +
+                    '<td style="padding:2px 2px;width:14px;text-align:center;opacity:0.12;cursor:default;user-select:none;">' +
+                    '<span style="font-size:10px;">⋮⋮</span>' +
                     '</td>' +
 
                     // DATA
-                    '<td style="padding:8px 10px;white-space:nowrap;width:100px;position:relative;">' +
-                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:7px 5px;border-radius:6px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(255,255,255,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
+                    '<td style="padding:4px 7px;white-space:nowrap;width:100px;position:relative;">' +
+                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:4px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(255,255,255,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
                     '<input type="date" value="' + (trip.data||'') + '"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'data\',this.value);this.previousElementSibling.textContent=_fmtDesktopDate(this.value);_validateTripDate(this.value,this.previousElementSibling);"' +
                     ' style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;pointer-events:none;"' +
@@ -6315,7 +6356,7 @@
                     '</td>' +
 
                     // TRASPORTATORE — barra colorata + input grande
-                    '<td style="padding:8px 8px;width:145px;">' +
+                    '<td style="padding:4px 5px;width:140px;">' +
                     '<div style="display:flex;align-items:center;gap:7px;">' +
                     '<div style="width:3px;min-height:36px;border-radius:2px;background:' + tColorVar + ';flex-shrink:0;align-self:stretch;"></div>' +
                     '<input type="text" value="' + (trip.trasportatore||'') + '" list="dtransp"' +
@@ -6327,8 +6368,8 @@
                     ' onkeydown="' + tabNav + '">' +
                     '</div>' +
                     // PARTENZA — nome 15px + badge neon C
-                    '<td style="padding:8px 8px;">' +
-                    '<div style="display:flex;flex-direction:column;gap:4px;">' +
+                    '<td style="padding:4px 5px;">' +
+                    '<div style="display:flex;flex-direction:column;gap:3px;">' +
                     '<input type="text" value="' + fromName + '" list="dfrom"' +
                     ' data-fullval="' + (trip.partenza||'').replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'partenza\',full);"' +
@@ -6342,8 +6383,8 @@
                     '</td>' +
 
                     // ARRIVO — nome 15px teal + badge neon C
-                    '<td style="padding:8px 8px;">' +
-                    '<div style="display:flex;flex-direction:column;gap:4px;">' +
+                    '<td style="padding:4px 5px;">' +
+                    '<div style="display:flex;flex-direction:column;gap:3px;">' +
                     '<input type="text" value="' + toName + '" list="dto"' +
                     ' data-fullval="' + (trip.arrivo||'').replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
@@ -6357,7 +6398,7 @@
                     '</td>' +
 
                     // PRODOTTO
-                    '<td style="padding:8px 8px;width:115px;">' +
+                    '<td style="padding:4px 5px;width:110px;">' +
                     '<input type="text" value="' + (trip.prodotto||'') + '" list="dprod" placeholder="—"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'prodotto\',this.value)"' +
                     ' style="' + inpStyle + 'color:rgba(255,255,255,0.5);font-size:14px;"' +
@@ -6367,7 +6408,7 @@
                     '</td>' +
 
                     // STATO
-                    '<td style="padding:8px 10px;white-space:nowrap;">' +
+                    '<td style="padding:4px 7px;white-space:nowrap;">' +
                     (isWarn
                       ? '<span onclick="event.stopPropagation();desktopToggleConf(' + realIdx + ')" '
                         + 'style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,160,50,0.1);border:1px solid rgba(255,160,50,0.35);color:#ffa032;padding:5px 11px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.15s;" '
@@ -6378,7 +6419,7 @@
                     '</td>' +
 
                     // AZIONI
-                    '<td style="padding:8px 5px;width:90px;">' +
+                    '<td style="padding:4px 4px;width:88px;">' +
                     '<div style="display:flex;gap:4px;justify-content:center;align-items:center;">' +
                     (trip.note ? ('<span title="' + (trip.note||'').replace(/"/g,'&quot;') + '" style="padding:5px 6px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);border-radius:6px;color:rgba(167,139,250,0.85);font-size:12px;cursor:pointer;" onclick="event.stopPropagation();desktopEditNote(' + realIdx + ')">📝</span>') : ('<button onclick="event.stopPropagation();desktopEditNote(' + realIdx + ')" title="Aggiungi nota" style="padding:5px 6px;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:rgba(255,255,255,0.15);font-size:12px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor=\'rgba(0,210,180,0.3)\';this.style.color=\'rgba(0,210,180,0.6)\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.06)\';this.style.color=\'rgba(255,255,255,0.15)\'">📝</button>')) +
                     '<button onclick="desktopDup(' + realIdx + ')" title="Duplica (Ctrl+D)"' +
@@ -6406,7 +6447,7 @@
             <div style="display:grid;grid-template-columns:270px 1fr;height:100%;overflow:hidden;">
 
                 <!-- SIDEBAR ROTTE RAPIDE -->
-                <div style="background:#050a0e;border-right:1px solid rgba(0,210,180,0.12);display:flex;flex-direction:column;overflow:hidden;">
+                <div style="background:#1c2b3e;border-right:1px solid rgba(0,210,180,0.12);display:flex;flex-direction:column;overflow:hidden;">
                     <div style="padding:14px 14px 10px;border-bottom:1px solid rgba(0,210,180,0.08);flex-shrink:0;">
                         <div style="font-size:9px;font-weight:800;color:rgba(0,210,180,0.45);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;">Rotte Rapide <span style="background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:10px;font-weight:800;">${allRoutes.length}</span></div>
                         <input id="desktopRouteSearch" type="text" placeholder="🔍 Filtra..." oninput="desktopFilterRoutes()"
@@ -6424,7 +6465,7 @@
                 <!-- TABELLA VIAGGI -->
                 <div style="display:flex;flex-direction:column;overflow:hidden;">
                     <!-- ── TOOLBAR ── -->
-                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(0,210,180,0.08);background:#070d12;flex-shrink:0;">
+                    <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(0,210,180,0.08);background:#1f2d42;flex-shrink:0;">
 
                         <!-- Riga 1: navigazione + stato + azioni principali -->
                         <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
@@ -6525,7 +6566,7 @@
                                         onmouseleave="document.getElementById('shortcutTooltip').style.display='none'"
                                         style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;line-height:1;transition:all 0.15s;"
                                         title="Tasti rapidi">⌨</button>
-                                <div id="shortcutTooltip" style="display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:500;background:#0d1018;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;width:230px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+                                <div id="shortcutTooltip" style="display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:500;background:#253348;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;width:230px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
                                     <div style="font-size:9px;font-weight:800;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Tasti rapidi</div>
                                     <div style="display:flex;flex-direction:column;gap:6px;">
                                         <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -6606,7 +6647,7 @@
                             <span id="desktopFilterCount" style="display:none;font-size:11px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#4fc3f7;padding:3px 10px;border-radius:6px;font-weight:700;margin-left:4px;"></span>
                         </div>
                     </div>
-                    <div id="desktopTotalsPanel" style="display:none;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);background:#090c14;flex-shrink:0;">
+                    <div id="desktopTotalsPanel" style="display:none;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);background:#202f44;flex-shrink:0;">
                         <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px;">📊 Totali per trasportatore — settimana corrente</div>
                         <div style="display:flex;flex-wrap:wrap;gap:8px;">
                             ${(() => {
@@ -6627,9 +6668,9 @@
                             </span>
                         </div>
                     </div>
-                    <div style="flex:1;overflow-y:auto;overflow-x:auto;background:#070d12;" id="desktopTableScroll">
+                    <div style="flex:1;overflow-y:auto;overflow-x:auto;background:#1f2d42;" id="desktopTableScroll">
                         <table style="width:100%;border-collapse:collapse;min-width:800px;">
-                            <thead style="position:sticky;top:0;z-index:10;background:#050a0e;box-shadow:0 1px 0 rgba(0,210,180,0.1);">
+                            <thead style="position:sticky;top:0;z-index:10;background:#1c2b3e;box-shadow:0 1px 0 rgba(0,210,180,0.1);">
                                 <tr>
                                     <th style="width:22px;padding:10px 4px;"></th>
                                     ${['data','trasportatore','partenza','arrivo','prodotto'].map((f,i) => {
@@ -6639,7 +6680,7 @@
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
                                         const clr = isActive ? '#00d2b4' : 'rgba(0,210,180,0.35)';
                                         const bdr = isActive ? '2px solid #00d2b4' : '2px solid rgba(0,210,180,0.08)';
-                                        return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:12px 12px;text-align:left;font-size:9px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:2.5px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:#00d2b4;font-size:10px;\">' + arrow + '</span>' : '') + '</th>';
+                                        return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:9px 12px;text-align:left;font-size:9px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:2.5px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:#00d2b4;font-size:10px;\">' + arrow + '</span>' : '') + '</th>';
                                     }).join('')}
                                     <th style="padding:12px 8px;text-align:left;font-size:9px;font-weight:800;color:rgba(255,160,50,0.45);border-bottom:2px solid rgba(0,210,180,0.08);letter-spacing:2.5px;white-space:nowrap;text-transform:uppercase;">Stato</th>
                                     <th style="width:80px;border-bottom:2px solid rgba(0,210,180,0.06);"></th>
@@ -6670,11 +6711,11 @@
                                             var dateLabel = d ? dc.name + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') : '—';
 
                                             rows += '<tr style="background:rgba(' + dc.rgb + ',0.04);border-top:1px solid rgba(' + dc.rgb + ',0.12);border-bottom:1px solid rgba(' + dc.rgb + ',0.06);" class="day-sep-row">'
-                                                + '<td colspan="9" style="padding:9px 14px;">'
+                                                + '<td colspan="9" style="padding:6px 14px;">'
                                                 + '<div style="display:flex;align-items:center;gap:10px;">'
-                                                + '<div style="width:8px;height:8px;border-radius:50%;background:' + dc.col + ';box-shadow:0 0 8px ' + dc.col + ';flex-shrink:0;"></div>'
-                                                + '<span style="font-family:\'Barlow Condensed\',\'Outfit\',sans-serif;font-size:14px;font-weight:700;color:' + dc.col + ';letter-spacing:2px;text-transform:uppercase;">' + dateLabel + '</span>'
-                                                + '<span style="font-size:10px;font-weight:800;color:rgba(' + dc.rgb + ',0.55);background:rgba(' + dc.rgb + ',0.1);padding:2px 10px;border-radius:10px;letter-spacing:1px;">' + cnt + ' ' + (cnt===1?'viaggio':'viaggi') + '</span>'
+                                                + '<div style="width:7px;height:7px;border-radius:50%;background:' + dc.col + ';box-shadow:0 0 7px ' + dc.col + ';flex-shrink:0;"></div>'
+                                                + '<span style="font-family:\'Barlow Condensed\',\'Outfit\',sans-serif;font-size:13px;font-weight:700;color:' + dc.col + ';letter-spacing:2px;text-transform:uppercase;">' + dateLabel + '</span>'
+                                                + '<span style="font-size:10px;font-weight:800;color:rgba(' + dc.rgb + ',0.55);background:rgba(' + dc.rgb + ',0.1);padding:1px 9px;border-radius:10px;letter-spacing:1px;">' + cnt + ' ' + (cnt===1?'viaggio':'viaggi') + '</span>'
                                                 + '</div>'
                                                 + '</td>'
                                                 + '</tr>';
@@ -6698,7 +6739,7 @@
 
             <!-- MODAL aggiungi da rotta (desktop) -->
             <div id="desktopAddModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#0e1120;border:1px solid rgba(255,255,255,0.07);border-top:3px solid var(--accent);border-radius:18px;padding:0;width:580px;max-width:96vw;max-height:92vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);display:flex;flex-direction:column;">
+                <div style="background:#253348;border:1px solid rgba(255,255,255,0.07);border-top:3px solid var(--accent);border-radius:18px;padding:0;width:580px;max-width:96vw;max-height:92vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);display:flex;flex-direction:column;">
 
                     <!-- Header -->
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">
@@ -6717,7 +6758,7 @@
                                 <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Trasportatore</div>
                                 <input id="dmTransp" type="text" list="dtransp" placeholder="es. COAP" autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    style="width:100%;padding:10px 12px;background:#283a50;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
                                     onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
                             </div>
                             <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
@@ -6725,7 +6766,7 @@
                                 <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Prodotto</div>
                                 <input type="text" id="dmProd" placeholder="Cippato, Sfarinato..." list="dmProdList" autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                                    style="width:100%;padding:10px 12px;background:#283a50;border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
                                     onfocus="this.style.borderColor='rgba(255,255,255,0.2)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
                                 <datalist id="dmProdList"><option value="Cippato"><option value="Sfarinato"><option value="Segatura"><option value="Pula"></datalist>
                             </div>
@@ -6736,7 +6777,7 @@
                                 <div style="font-size:9px;font-weight:700;color:rgba(255,107,53,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Da</div>
                                 <input id="dmFrom" type="text" list="dfrom" placeholder="Partenza..." autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(255,107,53,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    style="width:100%;padding:10px 12px;background:#283a50;border:1.5px solid rgba(255,107,53,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
                                     onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,107,53,0.2)'">
                             </div>
                             <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
@@ -6744,14 +6785,14 @@
                                 <div style="font-size:9px;font-weight:700;color:rgba(6,214,160,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">A</div>
                                 <input id="dmTo" type="text" list="dto" placeholder="Arrivo..." autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#13172a;border:1.5px solid rgba(6,214,160,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    style="width:100%;padding:10px 12px;background:#283a50;border:1.5px solid rgba(6,214,160,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
                                     onfocus="this.style.borderColor='var(--success)'" onblur="this.style.borderColor='rgba(6,214,160,0.2)'">
                             </div>
                         </div>
 
                         <div style="margin-bottom:16px;">
                             <input id="dmNote" type="text" placeholder="Note interne (opzionale)..."
-                                style="width:100%;padding:9px 12px;background:#13172a;border:1.5px solid rgba(255,255,255,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                style="width:100%;padding:9px 12px;background:#283a50;border:1.5px solid rgba(255,255,255,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
                                 onfocus="this.style.borderColor='rgba(255,255,255,0.2)'" onblur="this.style.borderColor='rgba(255,255,255,0.06)'">
                         </div>
 
@@ -6771,13 +6812,13 @@
                                 return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">'
                                     + '<div style="display:flex;align-items:stretch;border:1.5px solid rgba(255,255,255,0.07);border-radius:9px;overflow:hidden;width:100%;" id="dpk-' + d + '">'
                                     + '<button type="button" onclick="desktopDayDec(\'' + d + '\')"'
-                                    + ' style="padding:9px 8px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + ' style="padding:9px 8px;background:#223040;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
                                     + '>−</button>'
                                     + '<button type="button" data-day="' + d + '" onclick="desktopDayInc(\'' + d + '\')"'
-                                    + ' style="flex:1;padding:9px 4px;background:#0c0f1a;border:none;border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;">'
+                                    + ' style="flex:1;padding:9px 4px;background:#223040;border:none;border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.3);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;">'
                                     + label + '</button>'
                                     + '<button type="button" onclick="desktopDayInc(\'' + d + '\')"'
-                                    + ' style="padding:9px 8px;background:#0c0f1a;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + ' style="padding:9px 8px;background:#223040;border:none;color:rgba(255,255,255,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
                                     + '>+</button>'
                                     + '</div>'
                                     + '<span id="dpk-cnt-' + d + '" style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.2);">—</span>'
@@ -6789,7 +6830,7 @@
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
                             <span style="font-size:11px;color:var(--text-dim);white-space:nowrap;">o data specifica:</span>
                             <input type="date" id="dmDate" oninput="desktopUpdateSummary()"
-                                style="flex:1;padding:7px 10px;background:#13172a;border:1.5px solid rgba(255,255,255,0.07);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
+                                style="flex:1;padding:7px 10px;background:#283a50;border:1.5px solid rgba(255,255,255,0.07);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
                         </div>
 
                         <!-- DA CONFERMARE -->
@@ -6812,27 +6853,27 @@
 
             <!-- MODAL nuova rotta manuale (desktop) -->
             <div id="desktopRouteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#111422;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:440px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+                <div style="background:#283a50;border:1px solid rgba(255,255,255,0.08);border-top:3px solid var(--accent);border-radius:16px;padding:26px;width:440px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
                     <div style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:18px;">⚡ Nuova rotta manuale</div>
                     <div style="display:grid;gap:12px;margin-bottom:16px;">
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Trasportatore</div>
                             <input id="drTransp" type="text" list="dtransp" placeholder="es. CEVOLO"
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#223040;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Partenza da</div>
                             <input id="drFrom" type="text" list="dfrom" placeholder="es. Bientina (INCONTRATO)"
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#223040;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                         <div>
                             <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;">Arrivo a</div>
                             <input id="drTo" type="text" list="dto" placeholder="es. Ponzano Romano (SICEM)"
-                                style="width:100%;padding:9px 11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
+                                style="width:100%;padding:9px 11px;background:#223040;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;">
                         </div>
                     </div>
                     <div style="display:flex;gap:10px;">
-                        <button onclick="desktopCloseRouteModal()" style="flex:1;padding:11px;background:#0c0f1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
+                        <button onclick="desktopCloseRouteModal()" style="flex:1;padding:11px;background:#223040;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
                         <button onclick="desktopSaveRoute()" style="flex:2;padding:11px;background:linear-gradient(135deg,#e05c25,#e8754a);border:none;border-radius:8px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💾 Salva rotta</button>
                     </div>
                 </div>
@@ -7616,14 +7657,14 @@
 body{font-family:'Inter',Arial,sans-serif;font-size:11px;color:#1e293b;background:#fff;padding:18px 22px}
 .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:3px solid #ff6b35}
 .hbrand{font-size:8px;font-weight:700;color:#ff6b35;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px}
-.htitle{font-size:20px;font-weight:900;color:#0f172a;letter-spacing:-0.5px;line-height:1}
+.htitle{font-size:20px;font-weight:900;color:#26364e;letter-spacing:-0.5px;line-height:1}
 .hweek{font-size:10px;font-weight:600;color:#64748b;margin-top:3px}
 .hright{text-align:right}
 .hdate{font-size:8px;color:#94a3b8;margin-bottom:3px}
-.htotal{font-size:13px;font-weight:800;color:#0f172a}
+.htotal{font-size:13px;font-weight:800;color:#26364e}
 .htotal span{color:#ff6b35}
 table{width:100%;border-collapse:collapse;margin-bottom:16px}
-thead th{background:#0f172a;color:#f8fafc;padding:7px 9px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px}
+thead th{background:#26364e;color:#f8fafc;padding:7px 9px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px}
 tbody td{padding:6px 9px;border-bottom:1px solid #e2e8f0;vertical-align:middle;font-size:11px;line-height:1.3}
 tbody tr:nth-child(even):not(.day-sep) td{background:#f8fafc}
 tbody tr.da-conf td{background:#fef9c3!important}
@@ -7638,9 +7679,9 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
 .totals-title{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:7px;padding-bottom:3px;border-bottom:2px solid #e2e8f0}
 .totals-grid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 .totals-chip{display:flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;background:#f8fafc}
-.totals-chip .n{font-size:14px;font-weight:900;color:#0f172a}
+.totals-chip .n{font-size:14px;font-weight:900;color:#26364e}
 .totals-chip .lbl{font-size:9px;color:#64748b}
-.tot-total{display:inline-flex;gap:8px;align-items:center;padding:5px 12px;background:#0f172a;color:#fff;border-radius:6px}
+.tot-total{display:inline-flex;gap:8px;align-items:center;padding:5px 12px;background:#26364e;color:#fff;border-radius:6px}
 .tot-total .n{font-size:14px;font-weight:900}
 .tot-total .lbl{font-size:9px;opacity:0.65}
 .page-footer{margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8}
@@ -7770,7 +7811,7 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
             popup.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:3000;display:flex;align-items:center;justify-content:center;';
 
             popup.innerHTML =
-                '<div style="background:#111422;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--accent);border-radius:16px;padding:24px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.7);">'
+                '<div style="background:#283a50;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--accent);border-radius:16px;padding:24px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.7);">'
                 // Titolo
                 + '<div style="font-size:15px;font-weight:800;color:var(--accent);margin-bottom:18px;">➕ Nuove righe</div>'
                 // Data primo viaggio
@@ -8269,7 +8310,7 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
                 wrap.style.borderColor = active ? 'rgba(' + col + ',0.6)' : 'rgba(255,255,255,0.07)';
             }
             if (btn) {
-                btn.style.background = active ? 'rgba(' + col + ',0.2)' : '#0c0f1a';
+                btn.style.background = active ? 'rgba(' + col + ',0.2)' : '#223040';
                 btn.style.color      = active ? 'rgb(' + col + ')' : 'rgba(255,255,255,0.3)';
                 const label = d.charAt(0).toUpperCase() + d.slice(1);
                 btn.textContent = active && cnt > 1 ? label + ' ×' + cnt : label;
@@ -9052,7 +9093,7 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
             modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:4000;display:flex;align-items:center;justify-content:center;padding:20px;';
 
             modal.innerHTML =
-                '<div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #06d6a0;border-radius:16px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.8);text-align:center;">'
+                '<div style="background:#253348;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #06d6a0;border-radius:16px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.8);text-align:center;">'
                 + '<div style="font-size:48px;margin-bottom:12px;">📥</div>'
                 + '<div style="font-size:16px;font-weight:800;color:#06d6a0;margin-bottom:8px;">Excel scaricato!</div>'
                 + '<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;">' + count + ' ' + _pv(count) + ' · 2 fogli</div>'
@@ -10587,7 +10628,7 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
          MODAL MULTI-TRATTA
          ═══════════════════════════════════════════════════════════════ -->
     <div id="multiTrattaModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3500;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
-        <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #ff6b35;border-radius:18px;width:100%;max-width:660px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
+        <div style="background:#253348;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #ff6b35;border-radius:18px;width:100%;max-width:660px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
 
             <!-- Header -->
             <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;">
@@ -10699,7 +10740,7 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
         background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);
         z-index:9000;align-items:center;justify-content:center;">
         <div style="
-            background:#111422;border:1px solid rgba(255,255,255,0.1);
+            background:#283a50;border:1px solid rgba(255,255,255,0.1);
             border-top:3px solid #ffd23f;border-radius:16px;
             padding:28px 26px;width:520px;max-width:95vw;
             box-shadow:0 24px 64px rgba(0,0,0,0.7);font-family:'Outfit',sans-serif;">
