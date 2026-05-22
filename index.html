@@ -4267,7 +4267,8 @@
                 } catch(e) {}
             }
             setDefaultDate();
-            loadTransportersList();
+            loadTransportersList();  // carica anche loadLearnedDB e _refreshAllDatalistsLearn
+            bulkLearnFromAllTrips(); // impara da tutto lo storico esistente
             loadWeekTitle();
             loadTripsFromLocalStorage();
             loadNextFromLocalStorage();
@@ -4509,6 +4510,32 @@
             if (t.arrivo)        changed = _learnValue(learnedArrivi,         'learnedArrivi',        t.arrivo)        || changed;
             if (t.prodotto)      changed = _learnValue(learnedProdotti,       'learnedProdotti',      t.prodotto)      || changed;
             if (t.trasportatore) changed = _learnValue(learnedTrasportatori,  'learnedTrasportatori', t.trasportatore) || changed;
+            if (changed) _refreshAllDatalistsLearn();
+        }
+
+        // Scansiona TUTTI i viaggi (correnti + prossima + archivio) e popola i DB appresi
+        // Chiamata all'avvio — silenziosamente impara tutto lo storico
+        function bulkLearnFromAllTrips() {
+            var changed = false;
+            var allTrips = [];
+            // Correnti
+            try { var r1 = localStorage.getItem('viaggiLogistica'); if (r1) allTrips = allTrips.concat(JSON.parse(r1)); } catch(e) {}
+            // Prossima settimana
+            try { var r2 = localStorage.getItem('viaggiLogisticaNext'); if (r2) allTrips = allTrips.concat(JSON.parse(r2)); } catch(e) {}
+            // Archivio settimane
+            try {
+                var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                arch.forEach(function(w) {
+                    if (w.trips && Array.isArray(w.trips)) allTrips = allTrips.concat(w.trips);
+                });
+            } catch(e) {}
+
+            allTrips.forEach(function(t) {
+                if (t.partenza)      changed = _learnValue(learnedPartenze,      'learnedPartenze',      t.partenza)      || changed;
+                if (t.arrivo)        changed = _learnValue(learnedArrivi,         'learnedArrivi',        t.arrivo)        || changed;
+                if (t.prodotto)      changed = _learnValue(learnedProdotti,       'learnedProdotti',      t.prodotto)      || changed;
+                if (t.trasportatore) changed = _learnValue(learnedTrasportatori,  'learnedTrasportatori', t.trasportatore) || changed;
+            });
             if (changed) _refreshAllDatalistsLearn();
         }
 
@@ -6966,43 +6993,40 @@
         }
 
         // ═══════════════════════════════════════════════════════════════
-        //  MULTI-TRATTA — logica completa
+        //  MULTI-TRATTA — logica completa (v2: chip per riga + contatore)
         // ═══════════════════════════════════════════════════════════════
 
-        var _mtDays    = {};   // {lun:true, mer:true, ...}
         var _mtWeekRef = null; // Date: lunedì della settimana di riferimento
-        var _mtRowIdx  = 0;    // contatore righe
+        var _mtRowIdx  = 0;    // contatore righe (mai decrementato)
 
-        // ── Apri / Chiudi ────────────────────────────────────────────
+        var _mtDayColors = {lun:'#60a5fa', mar:'#34d399', mer:'#a78bfa', gio:'#fbbf24', ven:'#f472b6'};
+        var _mtDayNums   = {lun:0, mar:1, mer:2, gio:3, ven:4};
+        var _mtDayShort  = {lun:'Lun', mar:'Mar', mer:'Mer', gio:'Gio', ven:'Ven'};
+        var _mtDayOrder  = ['lun','mar','mer','gio','ven'];
+
+        // ── Apri / Chiudi ─────────────────────────────────────────────
         function openMultiTratta() {
             var modal = document.getElementById('multiTrattaModal');
             if (!modal) return;
-            // Reset stato
-            _mtDays    = {};
-            _mtRowIdx  = 0;
+            _mtRowIdx = 0;
             _mtWeekRef = null;
             document.getElementById('mtTrasp').value = '';
             document.getElementById('mtDaConf').checked = false;
             document.getElementById('mtTrattaList').innerHTML = '';
             document.getElementById('mtPreview').style.display = 'none';
-            document.getElementById('mtConfirmBtn').disabled = true;
-            document.getElementById('mtConfirmBtn').textContent = '✅ Crea viaggi';
-            // Calcola lunedì settimana corrente come riferimento
+            var btn = document.getElementById('mtConfirmBtn');
+            if (btn) { btn.disabled = true; btn.textContent = '✅ Crea viaggi'; btn.style.opacity = '0.5'; }
+            // Calcola lunedì settimana corrente
             var today = new Date();
             var dow   = today.getDay();
-            var diff  = (dow === 0) ? -6 : 1 - dow;
             _mtWeekRef = new Date(today);
-            _mtWeekRef.setDate(today.getDate() + diff);
+            _mtWeekRef.setDate(today.getDate() + ((dow === 0) ? -6 : 1 - dow));
             _mtWeekRef.setHours(12,0,0,0);
-            // Reset chip giorni
-            _mtResetChips();
-            // Aggiungi 2 righe di partenza
+            // 2 righe iniziali
             mtAddRow();
             mtAddRow();
-            // Mostra modal
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            // Focus sul trasportatore
             setTimeout(function(){ var t = document.getElementById('mtTrasp'); if(t) t.focus(); }, 150);
         }
 
@@ -7012,105 +7036,153 @@
             document.body.style.overflow = '';
         }
 
-        // ── Chip giorni ───────────────────────────────────────────────
-        var _mtDayColors = {lun:'#60a5fa', mar:'#34d399', mer:'#a78bfa', gio:'#fbbf24', ven:'#f472b6'};
-        var _mtDayNums   = {lun:0, mar:1, mer:2, gio:3, ven:4};
-
-        function _mtResetChips() {
-            ['lun','mar','mer','gio','ven'].forEach(function(d) {
-                _mtDays[d] = false;
-                var btn = document.getElementById('mt-btn-' + d);
-                var lbl = document.getElementById('mt-date-' + d);
-                if (!btn) return;
-                var target = new Date(_mtWeekRef);
-                target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
-                var dd = String(target.getDate()).padStart(2,'0');
-                var mm = String(target.getMonth()+1).padStart(2,'0');
-                if (lbl) lbl.textContent = dd + '/' + mm;
-                btn.style.background = 'rgba(255,255,255,0.04)';
-                btn.style.border     = '2px solid rgba(255,255,255,0.08)';
-                btn.style.color      = 'rgba(255,255,255,0.2)';
-            });
-        }
-
-        function mtDayTap(d) {
-            _mtDays[d] = !_mtDays[d];
-            var btn = document.getElementById('mt-btn-' + d);
-            var col = _mtDayColors[d] || '#fff';
-            if (_mtDays[d]) {
-                btn.style.background = 'rgba(' + _hexToRgb(col) + ',0.15)';
-                btn.style.border     = '2px solid ' + col;
-                btn.style.color      = col;
-            } else {
-                btn.style.background = 'rgba(255,255,255,0.04)';
-                btn.style.border     = '2px solid rgba(255,255,255,0.08)';
-                btn.style.color      = 'rgba(255,255,255,0.2)';
-            }
-            mtUpdatePreview();
-        }
-
+        // ── +7gg / Reset settimana ─────────────────────────────────────
         function mtNextWeek() {
             _mtWeekRef.setDate(_mtWeekRef.getDate() + 7);
-            // Aggiorna label date nei chip
-            ['lun','mar','mer','gio','ven'].forEach(function(d) {
-                var lbl = document.getElementById('mt-date-' + d);
-                if (!lbl) return;
-                var target = new Date(_mtWeekRef);
-                target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
-                var dd = String(target.getDate()).padStart(2,'0');
-                var mm = String(target.getMonth()+1).padStart(2,'0');
-                lbl.textContent = dd + '/' + mm;
+            // Aggiorna tutte le label data nei chip di tutte le righe
+            document.querySelectorAll('[id^="mt-row-"]').forEach(function(row) {
+                var rid = row.id.replace('mt-row-','');
+                _mtDayOrder.forEach(function(d) {
+                    var lbl = document.getElementById('mt-dlbl-' + rid + '-' + d);
+                    if (!lbl) return;
+                    var target = new Date(_mtWeekRef);
+                    target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
+                    lbl.textContent = _mtDateLabel(target);
+                });
             });
             mtUpdatePreview();
         }
 
         function mtResetDays() {
-            // Torna alla settimana corrente
             var today = new Date();
             var dow   = today.getDay();
-            var diff  = (dow === 0) ? -6 : 1 - dow;
             _mtWeekRef = new Date(today);
-            _mtWeekRef.setDate(today.getDate() + diff);
+            _mtWeekRef.setDate(today.getDate() + ((dow === 0) ? -6 : 1 - dow));
             _mtWeekRef.setHours(12,0,0,0);
-            _mtDays = {};
-            _mtResetChips();
+            // Deseleziona tutti i chip di tutte le righe e aggiorna date
+            document.querySelectorAll('[id^="mt-row-"]').forEach(function(row) {
+                var rid = row.id.replace('mt-row-','');
+                _mtDayOrder.forEach(function(d) {
+                    var chip = document.getElementById('mt-chip-' + rid + '-' + d);
+                    var lbl  = document.getElementById('mt-dlbl-' + rid + '-' + d);
+                    var cnt  = document.getElementById('mt-cnt-'  + rid + '-' + d);
+                    if (chip) _mtChipOff(chip, d);
+                    if (cnt)  cnt.textContent = '1';
+                    if (lbl) {
+                        var target = new Date(_mtWeekRef);
+                        target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
+                        lbl.textContent = _mtDateLabel(target);
+                    }
+                    // Nasconde controllo copie
+                    var cc = document.getElementById('mt-cc-' + rid + '-' + d);
+                    if (cc) cc.style.display = 'none';
+                });
+            });
             mtUpdatePreview();
         }
 
-        // ── Righe tratte ──────────────────────────────────────────────
+        function _mtDateLabel(dateObj) {
+            return String(dateObj.getDate()).padStart(2,'0') + '/' + String(dateObj.getMonth()+1).padStart(2,'0');
+        }
+
+        // ── Chip per singola riga ─────────────────────────────────────
+        function _mtChipOn(chip, d) {
+            var col = _mtDayColors[d] || '#fff';
+            chip.style.background = 'rgba(' + _hexToRgb(col) + ',0.18)';
+            chip.style.border     = '2px solid ' + col;
+            chip.style.color      = col;
+            chip.dataset.active   = '1';
+        }
+        function _mtChipOff(chip, d) {
+            chip.style.background = 'rgba(255,255,255,0.04)';
+            chip.style.border     = '2px solid rgba(255,255,255,0.08)';
+            chip.style.color      = 'rgba(255,255,255,0.2)';
+            chip.dataset.active   = '0';
+        }
+
+        function mtRowDayTap(rid, d) {
+            var chip = document.getElementById('mt-chip-' + rid + '-' + d);
+            var cc   = document.getElementById('mt-cc-'   + rid + '-' + d);
+            if (!chip) return;
+            var active = chip.dataset.active === '1';
+            if (active) {
+                _mtChipOff(chip, d);
+                if (cc) cc.style.display = 'none';
+            } else {
+                _mtChipOn(chip, d);
+                if (cc) cc.style.display = 'flex';
+            }
+            mtUpdatePreview();
+        }
+
+        function mtRowCntChange(rid, d, delta) {
+            var el = document.getElementById('mt-cnt-' + rid + '-' + d);
+            if (!el) return;
+            var v = Math.max(1, Math.min(9, parseInt(el.textContent||'1',10) + delta));
+            el.textContent = v;
+            mtUpdatePreview();
+        }
+
+        // ── Aggiungi / Rimuovi riga ───────────────────────────────────
         function mtAddRow() {
             var list = document.getElementById('mtTrattaList');
             if (!list) return;
-            var id = _mtRowIdx++;
+            var id  = _mtRowIdx++;
             var row = document.createElement('div');
-            row.id = 'mt-row-' + id;
-            row.style.cssText = 'display:flex;gap:6px;align-items:center;animation:fadeInUp 0.2s ease;';
-            var inp = 'width:100%;padding:9px 11px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.09);border-radius:9px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;';
+            row.id  = 'mt-row-' + id;
+            row.style.cssText = 'background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px;margin-bottom:8px;';
+
+            var inp = 'padding:8px 11px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.09);border-radius:9px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;';
             var foc = 'this.style.borderColor=\'var(--accent)\'';
             var blr = 'this.style.borderColor=\'rgba(255,255,255,0.09)\'';
-            row.innerHTML =
-                '<div style="flex:2;min-width:0;">' +
-                '<input type="text" id="mt-from-' + id + '" list="partenzaList" placeholder="Partenza..." autocomplete="off"' +
-                ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"' +
-                ' style="' + inp + 'color:#f0f4ff;">' +
-                '</div>' +
-                '<div style="color:rgba(255,107,53,0.5);font-size:14px;font-weight:800;flex-shrink:0;">→</div>' +
-                '<div style="flex:2;min-width:0;">' +
-                '<input type="text" id="mt-to-' + id + '" list="arrivoList" placeholder="Arrivo..." autocomplete="off"' +
-                ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"' +
-                ' style="' + inp + 'color:#06d6a0;">' +
-                '</div>' +
-                '<div style="flex:1;min-width:0;">' +
-                '<input type="text" id="mt-prod-' + id + '" list="prodottoList" placeholder="Prod." autocomplete="off"' +
-                ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"' +
-                ' style="' + inp + 'color:rgba(255,255,255,0.5);">' +
-                '</div>' +
-                '<button type="button" onclick="mtRemoveRow(' + id + ')"' +
-                ' style="flex-shrink:0;padding:7px 9px;background:rgba(255,80,80,0.07);border:1px solid rgba(255,80,80,0.15);border-radius:8px;color:rgba(255,100,100,0.5);font-size:13px;cursor:pointer;transition:all 0.15s;"' +
-                ' onmouseover="this.style.background=\'rgba(255,80,80,0.2)\';this.style.color=\'#ff6b6b\'"' +
-                ' onmouseout="this.style.background=\'rgba(255,80,80,0.07)\';this.style.color=\'rgba(255,100,100,0.5)\'">🗑</button>';
+
+            // -- riga input --
+            var html = '<div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;">';
+            html += '<input type="text" id="mt-from-' + id + '" list="partenzaList" placeholder="Partenza..." autocomplete="off"'
+                  + ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"'
+                  + ' style="flex:2;min-width:0;' + inp + 'color:#f0f4ff;">';
+            html += '<span style="color:rgba(255,107,53,0.5);font-size:14px;font-weight:800;flex-shrink:0;">→</span>';
+            html += '<input type="text" id="mt-to-' + id + '" list="arrivoList" placeholder="Arrivo..." autocomplete="off"'
+                  + ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"'
+                  + ' style="flex:2;min-width:0;' + inp + 'color:#06d6a0;">';
+            html += '<input type="text" id="mt-prod-' + id + '" list="prodottoList" placeholder="Prod." autocomplete="off"'
+                  + ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"'
+                  + ' style="flex:1;min-width:60px;' + inp + 'color:rgba(255,255,255,0.5);">';
+            html += '<button type="button" onclick="mtRemoveRow(' + id + ')"'
+                  + ' style="flex-shrink:0;padding:6px 9px;background:rgba(255,80,80,0.07);border:1px solid rgba(255,80,80,0.15);border-radius:8px;color:rgba(255,100,100,0.5);font-size:12px;cursor:pointer;"'
+                  + ' onmouseover="this.style.background=\'rgba(255,80,80,0.2)\';this.style.color=\'#ff6b6b\'"'
+                  + ' onmouseout="this.style.background=\'rgba(255,80,80,0.07)\';this.style.color=\'rgba(255,100,100,0.5)\'">🗑</button>';
+            html += '</div>';
+
+            // -- chip giorni per questa riga --
+            html += '<div style="display:flex;gap:5px;flex-wrap:wrap;">';
+            _mtDayOrder.forEach(function(d) {
+                var target = new Date(_mtWeekRef);
+                target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
+                var dateStr = _mtDateLabel(target);
+                var col = _mtDayColors[d];
+                // chip principale
+                html += '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">';
+                html += '<button type="button" id="mt-chip-' + id + '-' + d + '" data-active="0"'
+                      + ' onclick="mtRowDayTap(' + id + ',\'' + d + '\')"'
+                      + ' style="padding:6px 8px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:9px;color:rgba(255,255,255,0.2);font-family:\'Outfit\',sans-serif;cursor:pointer;transition:all 0.15s;min-width:44px;text-align:center;">'
+                      + '<div style="font-size:10px;font-weight:800;line-height:1;">' + _mtDayShort[d] + '</div>'
+                      + '<div id="mt-dlbl-' + id + '-' + d + '" style="font-family:\'JetBrains Mono\',monospace;font-size:8px;margin-top:2px;opacity:0.6;">' + dateStr + '</div>'
+                      + '</button>';
+                // controllo copie (nascosto finché chip è off)
+                html += '<div id="mt-cc-' + id + '-' + d + '" style="display:none;align-items:center;gap:2px;">';
+                html += '<button type="button" onclick="mtRowCntChange(' + id + ',\'' + d + '\',-1)"'
+                      + ' style="width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:12px;cursor:pointer;line-height:1;padding:0;font-family:monospace;">−</button>';
+                html += '<span id="mt-cnt-' + id + '-' + d + '" style="font-size:11px;font-weight:800;color:' + col + ';min-width:14px;text-align:center;">1</span>';
+                html += '<button type="button" onclick="mtRowCntChange(' + id + ',\'' + d + '\',1)"'
+                      + ' style="width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:12px;cursor:pointer;line-height:1;padding:0;font-family:monospace;">＋</button>';
+                html += '</div>';
+                html += '</div>'; // fine colonna chip
+            });
+            html += '</div>'; // fine flex chip
+
+            row.innerHTML = html;
             list.appendChild(row);
-            // Focus sulla partenza della nuova riga
             setTimeout(function(){ var f = document.getElementById('mt-from-' + id); if(f) f.focus(); }, 80);
             mtUpdatePreview();
         }
@@ -7121,42 +7193,40 @@
             mtUpdatePreview();
         }
 
-        // ── Raccolta dati tratte ──────────────────────────────────────
+        // ── Raccolta dati per anteprima e conferma ────────────────────
+        // Ritorna array di {partenza, arrivo, prodotto, days:[{dateStr, count}]}
         function _mtGetRows() {
-            var list = document.getElementById('mtTrattaList');
-            if (!list) return [];
             var rows = [];
-            list.querySelectorAll('[id^="mt-row-"]').forEach(function(row) {
-                var rid = row.id.replace('mt-row-','');
+            document.querySelectorAll('[id^="mt-row-"]').forEach(function(row) {
+                var rid  = row.id.replace('mt-row-','');
                 var from = (document.getElementById('mt-from-' + rid)||{value:''}).value.trim();
                 var to   = (document.getElementById('mt-to-'   + rid)||{value:''}).value.trim();
                 var prod = (document.getElementById('mt-prod-'  + rid)||{value:''}).value.trim();
-                if (from || to) rows.push({partenza: from, arrivo: to, prodotto: prod});
+                var days = [];
+                _mtDayOrder.forEach(function(d) {
+                    var chip = document.getElementById('mt-chip-' + rid + '-' + d);
+                    if (!chip || chip.dataset.active !== '1') return;
+                    var cnt  = parseInt((document.getElementById('mt-cnt-' + rid + '-' + d)||{textContent:'1'}).textContent, 10) || 1;
+                    var target = new Date(_mtWeekRef);
+                    target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
+                    days.push({dateStr: target.toISOString().split('T')[0], count: cnt, dayKey: d});
+                });
+                if ((from || to) && days.length > 0) {
+                    rows.push({partenza: from, arrivo: to, prodotto: prod, days: days});
+                }
             });
             return rows;
         }
 
-        function _mtGetDates() {
-            var dates = [];
-            ['lun','mar','mer','gio','ven'].forEach(function(d) {
-                if (!_mtDays[d]) return;
-                var target = new Date(_mtWeekRef);
-                target.setDate(_mtWeekRef.getDate() + _mtDayNums[d]);
-                dates.push(target.toISOString().split('T')[0]);
-            });
-            return dates;
-        }
-
         // ── Anteprima live ────────────────────────────────────────────
-        var _mtDayLabels = {lun:'Lunedì', mar:'Martedì', mer:'Mercoledì', gio:'Giovedì', ven:'Venerdì'};
-        var _mtDayShort  = {lun:'Lun', mar:'Mar', mer:'Mer', gio:'Gio', ven:'Ven'};
-
         function mtUpdatePreview() {
-            var trasp   = (document.getElementById('mtTrasp')||{value:''}).value.trim();
-            var rows    = _mtGetRows();
-            var dates   = _mtGetDates();
+            var trasp = (document.getElementById('mtTrasp')||{value:''}).value.trim();
+            var rows  = _mtGetRows();
             var validRows = rows.filter(function(r){ return r.partenza && r.arrivo; });
-            var total   = validRows.length * dates.length;
+
+            // Calcola totale
+            var total = 0;
+            validRows.forEach(function(r){ r.days.forEach(function(d){ total += d.count; }); });
 
             var preview = document.getElementById('mtPreview');
             var body    = document.getElementById('mtPreviewBody');
@@ -7168,27 +7238,42 @@
                 if (btn) { btn.disabled = true; btn.textContent = '✅ Crea viaggi'; btn.style.opacity = '0.5'; }
                 return;
             }
-
             if (preview) preview.style.display = 'block';
 
-            // Corpo anteprima: una riga per giorno
+            // Costruisce anteprima: una riga per ogni viaggio (riga × giorno × copie)
+            var entries = [];
+            validRows.forEach(function(r) {
+                r.days.forEach(function(day) {
+                    entries.push({
+                        dateStr: day.dateStr,
+                        dayKey:  day.dayKey,
+                        count:   day.count,
+                        from:    r.partenza,
+                        to:      r.arrivo
+                    });
+                });
+            });
+            // Ordina per data
+            entries.sort(function(a,b){ return a.dateStr > b.dateStr ? 1 : -1; });
+
             var html = '';
-            dates.forEach(function(dateStr) {
-                var d   = new Date(dateStr + 'T12:00:00');
-                var dow = d.getDay();
-                var dayKey = ['dom','lun','mar','mer','gio','ven','sab'][dow];
-                var col = _mtDayColors[dayKey] || 'rgba(255,255,255,0.4)';
+            entries.forEach(function(e) {
+                var col = _mtDayColors[e.dayKey] || 'rgba(255,255,255,0.4)';
+                var d   = new Date(e.dateStr + 'T12:00:00');
                 var dd  = String(d.getDate()).padStart(2,'0');
                 var mm  = String(d.getMonth()+1).padStart(2,'0');
-                html += '<div style="display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
-                html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:800;color:' + col + ';flex-shrink:0;min-width:56px;">' + (_mtDayShort[dayKey]||'') + ' ' + dd + '/' + mm + '</span>';
-                html += '<span style="font-size:11px;color:rgba(255,255,255,0.4);">' + trasp + ' &nbsp;·&nbsp; </span>';
-                html += '<span style="font-size:11px;color:rgba(255,255,255,0.6);">';
-                validRows.forEach(function(r, i) {
-                    if (i > 0) html += '  <span style="color:rgba(255,107,53,0.4);">|</span>  ';
-                    html += r.partenza.split('(')[0].trim() + ' <span style="color:rgba(255,107,53,0.5);">→</span> ' + r.arrivo.split('(')[0].trim();
-                });
-                html += '</span></div>';
+                html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
+                html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:800;color:' + col + ';flex-shrink:0;min-width:52px;">' + _mtDayShort[e.dayKey] + ' ' + dd + '/' + mm + '</span>';
+                html += '<span style="font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;">' + trasp + '</span>';
+                html += '<span style="font-size:11px;color:rgba(255,255,255,0.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+                      + e.from.split('(')[0].trim()
+                      + ' <span style="color:rgba(255,107,53,0.6);">→</span> '
+                      + e.to.split('(')[0].trim()
+                      + '</span>';
+                if (e.count > 1) {
+                    html += '<span style="font-size:10px;font-weight:800;color:' + col + ';background:rgba(255,255,255,0.06);border-radius:5px;padding:1px 6px;flex-shrink:0;">×' + e.count + '</span>';
+                }
+                html += '</div>';
             });
             if (body) body.innerHTML = html;
             if (totEl) totEl.textContent = '📦 Totale: ' + total + ' ' + _pv(total);
@@ -7201,35 +7286,32 @@
 
         // ── Conferma e creazione viaggi ───────────────────────────────
         function mtConfirm() {
-            var trasp     = (document.getElementById('mtTrasp')||{value:''}).value.trim();
-            var daConf    = document.getElementById('mtDaConf') ? document.getElementById('mtDaConf').checked : false;
-            var rows      = _mtGetRows().filter(function(r){ return r.partenza && r.arrivo; });
-            var dates     = _mtGetDates();
+            var trasp  = (document.getElementById('mtTrasp')||{value:''}).value.trim();
+            var daConf = document.getElementById('mtDaConf') ? document.getElementById('mtDaConf').checked : false;
+            var rows   = _mtGetRows().filter(function(r){ return r.partenza && r.arrivo; });
 
-            if (!trasp)          { showStatus('⚠️ Inserisci il trasportatore', 'warning'); return; }
-            if (dates.length === 0) { showStatus('⚠️ Seleziona almeno un giorno', 'warning'); return; }
-            if (rows.length === 0)  { showStatus('⚠️ Aggiungi almeno una tratta con partenza e arrivo', 'warning'); return; }
+            if (!trasp)         { showStatus('⚠️ Inserisci il trasportatore', 'warning'); return; }
+            if (rows.length === 0) { showStatus('⚠️ Seleziona almeno un giorno per ogni tratta', 'warning'); return; }
 
             var newTrips = [];
-            dates.forEach(function(dateStr) {
-                rows.forEach(function(r) {
-                    newTrips.push({
-                        data:          dateStr,
-                        trasportatore: trasp,
-                        partenza:      r.partenza,
-                        arrivo:        r.arrivo,
-                        prodotto:      r.prodotto || '',
-                        note:          '',
-                        daConfermare:  daConf,
-                        confermato:    false
-                    });
+            rows.forEach(function(r) {
+                r.days.forEach(function(day) {
+                    for (var c = 0; c < day.count; c++) {
+                        newTrips.push({
+                            data:          day.dateStr,
+                            trasportatore: trasp,
+                            partenza:      r.partenza,
+                            arrivo:        r.arrivo,
+                            prodotto:      r.prodotto || '',
+                            note:          '',
+                            daConfermare:  daConf,
+                            confermato:    false
+                        });
+                    }
                 });
             });
 
-            // Apprendi nei DB
             newTrips.forEach(function(t){ learnFromTrip(t); });
-
-            // Aggiungi alla lista corrente
             newTrips.forEach(function(t){ trips.push(t); });
             trips.sort(function(a,b){ return new Date(a.data+'T12:00:00') - new Date(b.data+'T12:00:00'); });
             saveToLocalStorage();
@@ -7238,22 +7320,19 @@
             updateStats();
             filterPopulateDropdowns();
             if (driveAccessToken) autoSaveDrive();
-            if (typeof renderDesktopView === 'function' && currentView === 'desktop') renderDesktopView();
+            if (currentView === 'desktop') renderDesktopView();
 
             closeMultiTratta();
             haptic('success');
             showSummaryModal(newTrips);
         }
 
-        // ── Utility colore hex→rgb ────────────────────────────────────
+        // ── Utility ───────────────────────────────────────────────────
         function _hexToRgb(hex) {
-            var r = parseInt(hex.slice(1,3),16);
-            var g = parseInt(hex.slice(3,5),16);
-            var b = parseInt(hex.slice(5,7),16);
-            return r + ',' + g + ',' + b;
+            return parseInt(hex.slice(1,3),16) + ',' + parseInt(hex.slice(3,5),16) + ',' + parseInt(hex.slice(5,7),16);
         }
 
-        // ── Chiudi modal cliccando fuori ──────────────────────────────
+        // ── Chiudi cliccando fuori ────────────────────────────────────
         window.addEventListener('DOMContentLoaded', function() {
             var _mtModal = document.getElementById('multiTrattaModal');
             if (_mtModal) _mtModal.addEventListener('click', function(e) {
@@ -10525,43 +10604,14 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
                         onfocus="this.style.borderColor='#ff6b35'" onblur="this.style.borderColor='rgba(255,107,53,0.35)'">
                 </div>
 
-                <!-- GIORNI -->
-                <div>
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-                        <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Giorni</div>
-                        <div style="display:flex;gap:6px;">
-                            <button type="button" onclick="mtNextWeek()"
-                                style="padding:3px 10px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:20px;color:rgba(96,165,250,0.8);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">+7gg →</button>
-                            <button type="button" onclick="mtResetDays()"
-                                style="padding:3px 10px;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:20px;color:rgba(255,100,100,0.7);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">↺ Reset</button>
-                        </div>
-                    </div>
-                    <div style="display:flex;gap:5px;" id="mtDayPicker">
-                        <button type="button" id="mt-btn-lun" data-mtday="lun" onclick="mtDayTap('lun')"
-                            style="flex:1;padding:9px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
-                            <div style="font-size:11px;font-weight:800;line-height:1;">Lun</div>
-                            <div id="mt-date-lun" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;opacity:0.5;">—</div>
-                        </button>
-                        <button type="button" id="mt-btn-mar" data-mtday="mar" onclick="mtDayTap('mar')"
-                            style="flex:1;padding:9px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
-                            <div style="font-size:11px;font-weight:800;line-height:1;">Mar</div>
-                            <div id="mt-date-mar" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;opacity:0.5;">—</div>
-                        </button>
-                        <button type="button" id="mt-btn-mer" data-mtday="mer" onclick="mtDayTap('mer')"
-                            style="flex:1;padding:9px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
-                            <div style="font-size:11px;font-weight:800;line-height:1;">Mer</div>
-                            <div id="mt-date-mer" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;opacity:0.5;">—</div>
-                        </button>
-                        <button type="button" id="mt-btn-gio" data-mtday="gio" onclick="mtDayTap('gio')"
-                            style="flex:1;padding:9px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
-                            <div style="font-size:11px;font-weight:800;line-height:1;">Gio</div>
-                            <div id="mt-date-gio" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;opacity:0.5;">—</div>
-                        </button>
-                        <button type="button" id="mt-btn-ven" data-mtday="ven" onclick="mtDayTap('ven')"
-                            style="flex:1;padding:9px 2px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:10px;color:rgba(255,255,255,0.2);font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;">
-                            <div style="font-size:11px;font-weight:800;line-height:1;">Ven</div>
-                            <div id="mt-date-ven" style="font-family:'JetBrains Mono',monospace;font-size:8px;margin-top:3px;opacity:0.5;">—</div>
-                        </button>
+                <!-- CONTROLLI SETTIMANA (agiscono su tutte le righe) -->
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Tratte &amp; Giorni</div>
+                    <div style="display:flex;gap:6px;">
+                        <button type="button" onclick="mtNextWeek()"
+                            style="padding:3px 10px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:20px;color:rgba(96,165,250,0.8);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">+7gg →</button>
+                        <button type="button" onclick="mtResetDays()"
+                            style="padding:3px 10px;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:20px;color:rgba(255,100,100,0.7);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">↺ Reset</button>
                     </div>
                 </div>
 
@@ -10571,10 +10621,9 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
                     <span style="font-size:13px;color:var(--warning);font-weight:600;">⚠️ Da confermare</span>
                 </label>
 
-                <!-- TRATTE -->
+                <!-- TRATTE (ognuna con i propri chip giorni) -->
                 <div>
-                    <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:7px;">Tratte</div>
-                    <div id="mtTrattaList" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    <div id="mtTrattaList"></div>
                     <button type="button" onclick="mtAddRow()"
                         style="width:100%;margin-top:8px;padding:10px;background:rgba(255,255,255,0.03);border:1.5px dashed rgba(255,255,255,0.12);border-radius:10px;color:rgba(255,255,255,0.35);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;"
                         onmouseover="this.style.borderColor='rgba(255,107,53,0.4)';this.style.color='rgba(255,107,53,0.7)'"
