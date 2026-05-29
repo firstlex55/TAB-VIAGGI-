@@ -5483,8 +5483,14 @@
 
                     // Riga 2: codici + prodotto
                     var sub = [];
-                    if (fromCode) sub.push('<span style="color:rgba(255,107,53,0.5);">' + fromCode + '</span>');
-                    if (toCode)   sub.push('<span style="color:rgba(6,214,160,0.4);">' + toCode + '</span>');
+                    if (fromCode) {
+                        var fc3 = _locationCodeColor(fromCode);
+                        sub.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;font-size:10px;color:' + fc3.tx + ';text-shadow:0 0 5px ' + fc3.bd + ';">' + fromCode + '</span>');
+                    }
+                    if (toCode) {
+                        var tc3 = _locationCodeColor(toCode);
+                        sub.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;font-size:10px;color:' + tc3.tx + ';text-shadow:0 0 5px ' + tc3.bd + ';">' + toCode + '</span>');
+                    }
                     if (trip.prodotto) sub.push('<span style="color:rgba(255,255,255,0.35);">' + trip.prodotto + '</span>');
                     if (sub.length) {
                         html += '<div style="display:flex;align-items:center;gap:6px;font-size:10px;padding-left:2px;">'
@@ -5593,8 +5599,14 @@
 
                 // Riga 2: giorno + codici + prodotto
                 var sub = [];
-                if (fromCode) sub.push('<span style="color:rgba(255,107,53,0.5)">' + fromCode + '</span>');
-                if (toCode)   sub.push('<span style="color:rgba(6,214,160,0.4)">' + toCode + '</span>');
+                if (fromCode) {
+                    var fc = _locationCodeColor(fromCode);
+                    sub.push('<span style="font-size:10px;font-weight:800;letter-spacing:1px;font-family:\'JetBrains Mono\',monospace;color:' + fc.tx + ';text-shadow:0 0 6px ' + fc.bd + ';">' + fromCode + '</span>');
+                }
+                if (toCode) {
+                    var tc = _locationCodeColor(toCode);
+                    sub.push('<span style="font-size:10px;font-weight:800;letter-spacing:1px;font-family:\'JetBrains Mono\',monospace;color:' + tc.tx + ';text-shadow:0 0 6px ' + tc.bd + ';">' + toCode + '</span>');
+                }
                 if (trip.prodotto) sub.push('<span style="color:rgba(255,255,255,0.28)">' + trip.prodotto + '</span>');
                 var subHtml = sub.length
                     ? '<span style="color:rgba(255,255,255,0.1)">·</span>' + sub.join('<span style="color:rgba(255,255,255,0.1)">·</span>')
@@ -5703,8 +5715,14 @@
 
             // Riga sottotitolo: codici + prodotto
             var subs = [];
-            if (fromCode) subs.push('<span style="color:rgba(255,107,53,0.7);font-weight:700;">' + fromCode + '</span>');
-            if (toCode)   subs.push('<span style="color:rgba(6,214,160,0.55);font-weight:700;">' + toCode + '</span>');
+            if (fromCode) {
+                var fc2 = _locationCodeColor(fromCode);
+                subs.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;color:' + fc2.tx + ';text-shadow:0 0 5px ' + fc2.bd + ';">' + fromCode + '</span>');
+            }
+            if (toCode) {
+                var tc2 = _locationCodeColor(toCode);
+                subs.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;color:' + tc2.tx + ';text-shadow:0 0 5px ' + tc2.bd + ';">' + toCode + '</span>');
+            }
             if (trip.prodotto) subs.push('<span style="color:rgba(255,255,255,0.22);">' + trip.prodotto + '</span>');
             if (subs.length) {
                 card += '<div style="font-size:9px;margin-top:2px;display:flex;gap:4px;align-items:center;">' + subs.join('<span style="color:rgba(255,255,255,0.1);">·</span>') + '</div>';
@@ -5850,7 +5868,7 @@
                         + '<div style="font-size:12px;font-weight:700;color:#eef2fa;'
                         + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                         + fromN + '</div>'
-                        + '<div style="font-size:11px;font-weight:600;color:#06d6a0;'
+                        + '<div style="font-size:11px;font-weight:600;color:#86efac;'
                         + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                         + toN + '</div>'
                         + '</div>'
@@ -6135,8 +6153,14 @@
 
                     // Riga 2: codici + prodotto (info secondarie)
                     var sub2 = [];
-                    if (fromCode) sub2.push('<span style="color:rgba(255,107,53,0.5);">' + fromCode + '</span>');
-                    if (toCode)   sub2.push('<span style="color:rgba(6,214,160,0.4);">' + toCode + '</span>');
+                    if (fromCode) {
+                        var fc4 = _locationCodeColor(fromCode);
+                        sub2.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;font-size:10px;color:' + fc4.tx + ';text-shadow:0 0 5px ' + fc4.bd + ';">' + fromCode + '</span>');
+                    }
+                    if (toCode) {
+                        var tc4 = _locationCodeColor(toCode);
+                        sub2.push('<span style="font-weight:800;font-family:\'JetBrains Mono\',monospace;letter-spacing:0.8px;font-size:10px;color:' + tc4.tx + ';text-shadow:0 0 5px ' + tc4.bd + ';">' + toCode + '</span>');
+                    }
                     if (trip.prodotto) sub2.push('<span style="color:rgba(255,255,255,0.3);">' + trip.prodotto + '</span>');
                     if (sub2.length) {
                         html += '<div style="display:flex;gap:6px;align-items:center;padding-left:50px;font-size:10px;">'
