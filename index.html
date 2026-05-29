@@ -5477,7 +5477,7 @@
                     html += '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;">' + (trip.trasportatore||'—') + '</span>';
                     html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + fromName + '</span>';
                     html += '<span style="color:rgba(255,107,53,0.5);font-size:14px;flex-shrink:0;">›</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">' + toName + '</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#86efac;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">' + toName + '</span>';
                     if (statoHtml) html += '<span style="flex-shrink:0;margin-left:4px;">' + statoHtml + '</span>';
                     html += '</div>';
 
@@ -5608,7 +5608,7 @@
                     + '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;">' + (trip.trasportatore||'—') + '</span>'
                     + '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (trip.partenza||'') + '">' + fromName + '</span>'
                     + '<span style="color:rgba(255,107,53,0.5);font-size:14px;flex-shrink:0;">›</span>'
-                    + '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>'
+                    + '<span style="font-size:13px;font-weight:700;color:#86efac;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>'
                     + (statoHtml ? '<span style="flex-shrink:0;margin-left:4px;">' + statoHtml + '</span>' : '')
                     + '</div>'
 
@@ -5698,7 +5698,7 @@
             card += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
             card += '<span style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%;">' + fromName + '</span>';
             card += '<span style="font-size:11px;color:rgba(255,107,53,0.5);flex-shrink:0;">→</span>';
-            card += '<span style="font-size:13px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
+            card += '<span style="font-size:13px;font-weight:700;color:#86efac;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
             card += '</div>';
 
             // Riga sottotitolo: codici + prodotto
@@ -6129,7 +6129,7 @@
                     html += '<span style="font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;color:' + tColorVar + ';opacity:0.8;flex-shrink:0;min-width:44px;">' + dayLbl + '</span>';
                     html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (trip.partenza||'') + '">' + fromName + '</span>';
                     html += '<span style="font-size:14px;color:rgba(255,107,53,0.5);flex-shrink:0;line-height:1;">›</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:#06d6a0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>';
+                    html += '<span style="font-size:13px;font-weight:700;color:#86efac;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;" title="' + (trip.arrivo||'') + '">' + toName + '</span>';
                     if (statoHtml) html += '<span style="flex-shrink:0;margin-left:6px;">' + statoHtml + '</span>';
                     html += '</div>';
 
@@ -6247,7 +6247,7 @@
                     + '<div style="font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">' + fp + '</div>'
                     + '<div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">'
                     + '<span style="color:rgba(255,107,53,0.5);font-size:12px;">↳</span>'
-                    + '<span style="font-size:12px;font-weight:700;color:#06d6a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tp + '</span>'
+                    + '<span style="font-size:12px;font-weight:700;color:#86efac;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tp + '</span>'
                     + '</div>'
                     + '<button onclick="desktopOpenAddModal(' + idx + ')" style="width:100%;padding:5px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:6px;color:var(--accent);font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"'
                     + ' onmouseover="this.style.background=\'rgba(255,107,53,0.18)\';this.style.borderColor=\'rgba(255,107,53,0.4)\'"'
@@ -6344,7 +6344,7 @@
                     ' data-fullval="' + (trip.arrivo||'').replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
                     ' placeholder="Arrivo..."' +
-                    ' style="' + inpStyle + 'font-weight:700;color:#06d6a0;font-size:14px;"' +
+                    ' style="' + inpStyle + 'font-weight:700;color:#86efac;font-size:14px;"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6876,32 +6876,41 @@
         function _locationCodeColor(code) {
             if (!code) return null;
             var c = code.toUpperCase().trim();
-            // Codici noti — colori fissi
+            // Colori calibrati per non conflittare con:
+            // - Partenza: #f0f4ff (bianco caldo)
+            // - Arrivo:   #86efac (verde menta)
             var map = {
-                'INCONTRATO': {bg:'rgba(96,165,250,0.12)',  bd:'rgba(96,165,250,0.35)',  tx:'#60a5fa'},
-                'AGROGI':     {bg:'rgba(52,211,153,0.12)',  bd:'rgba(52,211,153,0.35)',  tx:'#34d399'},
-                'SICEM':      {bg:'rgba(245,158,11,0.12)', bd:'rgba(245,158,11,0.35)', tx:'#f59e0b'},
-                'SICEM SRL':  {bg:'rgba(245,158,11,0.12)', bd:'rgba(245,158,11,0.35)', tx:'#f59e0b'},
-                'ARDENGHI':   {bg:'rgba(232,121,249,0.12)', bd:'rgba(232,121,249,0.35)', tx:'#e879f9'},
-                'TACCHELLA':  {bg:'rgba(251,113,133,0.12)', bd:'rgba(251,113,133,0.35)', tx:'#fb7185'},
-                'TRUCIOLI':   {bg:'rgba(56,189,248,0.12)',  bd:'rgba(56,189,248,0.35)',  tx:'#38bdf8'},
-                'VENDER':     {bg:'rgba(167,139,250,0.12)', bd:'rgba(167,139,250,0.35)', tx:'#a78bfa'},
-                'CAI-BF':     {bg:'rgba(251,191,36,0.12)',  bd:'rgba(251,191,36,0.35)',  tx:'#fbbf24'},
-                'MANCINI':    {bg:'rgba(74,222,128,0.12)',  bd:'rgba(74,222,128,0.35)',  tx:'#4ade80'},
-                'LEGNO VIVO': {bg:'rgba(249,168,212,0.12)', bd:'rgba(249,168,212,0.35)', tx:'#f9a8d4'},
-                'PUNTO VERDE':{bg:'rgba(52,211,153,0.12)',  bd:'rgba(52,211,153,0.35)',  tx:'#34d399'},
-                'BONIFICHE':  {bg:'rgba(129,140,248,0.12)', bd:'rgba(129,140,248,0.35)', tx:'#818cf8'},
-                'ILT':        {bg:'rgba(251,146,60,0.12)',  bd:'rgba(251,146,60,0.35)',  tx:'#fb923c'},
-                'COVI':       {bg:'rgba(163,230,53,0.12)',  bd:'rgba(163,230,53,0.35)',  tx:'#a3e635'},
+                'INCONTRATO': {bg:'rgba(96,165,250,0.12)',   bd:'rgba(96,165,250,0.45)',   tx:'#60a5fa'},   // blu
+                'AGROGI':     {bg:'rgba(251,146,60,0.12)',   bd:'rgba(251,146,60,0.45)',   tx:'#fb923c'},   // arancio (era verde)
+                'SICEM':      {bg:'rgba(245,158,11,0.12)',   bd:'rgba(245,158,11,0.45)',   tx:'#f59e0b'},   // ambra
+                'SICEM SRL':  {bg:'rgba(245,158,11,0.12)',   bd:'rgba(245,158,11,0.45)',   tx:'#f59e0b'},   // ambra
+                'SICEM SAGA': {bg:'rgba(251,191,36,0.12)',   bd:'rgba(251,191,36,0.45)',   tx:'#fbbf24'},   // giallo
+                'ARDENGHI':   {bg:'rgba(232,121,249,0.12)',  bd:'rgba(232,121,249,0.45)',  tx:'#e879f9'},   // fuxia
+                'TACCHELLA':  {bg:'rgba(251,113,133,0.12)',  bd:'rgba(251,113,133,0.45)',  tx:'#fb7185'},   // rosa
+                'TRUCIOLI':   {bg:'rgba(167,139,250,0.12)',  bd:'rgba(167,139,250,0.45)',  tx:'#a78bfa'},   // viola (era azzurro)
+                'VENDER':     {bg:'rgba(232,121,249,0.12)',  bd:'rgba(232,121,249,0.45)',  tx:'#e879f9'},   // fuxia
+                'CAI-BF':     {bg:'rgba(251,191,36,0.12)',   bd:'rgba(251,191,36,0.45)',   tx:'#fbbf24'},   // giallo
+                'MANCINI':    {bg:'rgba(251,146,60,0.12)',   bd:'rgba(251,146,60,0.45)',   tx:'#fb923c'},   // arancio (era verde)
+                'LEGNO VIVO': {bg:'rgba(249,168,212,0.12)',  bd:'rgba(249,168,212,0.45)',  tx:'#f9a8d4'},   // rosa chiaro
+                'PUNTO VERDE':{bg:'rgba(96,165,250,0.12)',   bd:'rgba(96,165,250,0.45)',   tx:'#60a5fa'},   // blu (era verde)
+                'BONIFICHE':  {bg:'rgba(129,140,248,0.12)',  bd:'rgba(129,140,248,0.45)',  tx:'#818cf8'},   // indaco
+                'ILT':        {bg:'rgba(251,146,60,0.12)',   bd:'rgba(251,146,60,0.45)',   tx:'#fb923c'},   // arancio
+                'COVI':       {bg:'rgba(251,191,36,0.12)',   bd:'rgba(251,191,36,0.45)',   tx:'#fbbf24'},   // giallo (era lime)
+                'CFP':        {bg:'rgba(251,191,36,0.12)',   bd:'rgba(251,191,36,0.45)',   tx:'#fbbf24'},   // giallo
+                'ZIGNAGO':    {bg:'rgba(192,132,252,0.12)',  bd:'rgba(192,132,252,0.45)',  tx:'#c084fc'},   // lavanda
+                'POGGIO DEL FARRO': {bg:'rgba(251,146,60,0.12)', bd:'rgba(251,146,60,0.45)', tx:'#fb923c'}, // arancio
+                'TOSCO IMBALLAGGI': {bg:'rgba(129,140,248,0.12)', bd:'rgba(129,140,248,0.45)', tx:'#818cf8'}, // indaco
             };
             if (map[c]) return map[c];
-            // Fallback: colore deterministico dal nome
+            // Fallback deterministico — evita hue vicini al verde (90-165) e al bianco
             var hash = 0;
             for (var i=0; i<c.length; i++) hash = ((hash<<5)-hash)+c.charCodeAt(i);
             var hue = Math.abs(hash) % 360;
+            // Sposta hue lontano dal verde arrivo (120) e dal bianco
+            if (hue >= 90 && hue <= 165) hue = (hue + 120) % 360;
             return {
                 bg: 'hsla('+hue+',70%,65%,0.12)',
-                bd: 'hsla('+hue+',70%,65%,0.35)',
+                bd: 'hsla('+hue+',70%,65%,0.45)',
                 tx: 'hsl('+hue+',70%,70%)'
             };
         }
@@ -7004,7 +7013,6 @@
             _mtRowIdx = 0;
             _mtWeekRef = null;
             document.getElementById('mtTrasp').value = '';
-            document.getElementById('mtDaConf').checked = false;
             document.getElementById('mtTrattaList').innerHTML = '';
             document.getElementById('mtPreview').style.display = 'none';
             var btn = document.getElementById('mtConfirmBtn');
@@ -7137,10 +7145,15 @@
             html += '<span style="color:rgba(255,107,53,0.5);font-size:14px;font-weight:800;flex-shrink:0;">→</span>';
             html += '<input type="text" id="mt-to-' + id + '" list="arrivoList" placeholder="Arrivo..." autocomplete="off"'
                   + ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"'
-                  + ' style="flex:2;min-width:0;' + inp + 'color:#06d6a0;">';
+                  + ' style="flex:2;min-width:0;' + inp + 'color:#86efac;">';
             html += '<input type="text" id="mt-prod-' + id + '" list="prodottoList" placeholder="Prod." autocomplete="off"'
                   + ' oninput="mtUpdatePreview()" onfocus="' + foc + '" onblur="' + blr + '"'
                   + ' style="flex:1;min-width:60px;' + inp + 'color:rgba(255,255,255,0.5);">';
+            // Checkbox da confermare — piccolo e discreto
+            html += '<label title="Da confermare" style="flex-shrink:0;display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 7px;background:rgba(255,210,63,0.06);border:1px solid rgba(255,210,63,0.15);border-radius:7px;transition:all 0.15s;" onmouseover="this.style.background=\'rgba(255,210,63,0.12)\'" onmouseout="this.style.background=\'rgba(255,210,63,0.06)\'">'
+                  + '<input type="checkbox" id="mt-conf-' + id + '" style="width:12px;height:12px;cursor:pointer;accent-color:#fbbf24;margin:0;">'
+                  + '<span style="font-size:10px;color:rgba(255,210,63,0.7);font-weight:700;white-space:nowrap;">⚠</span>'
+                  + '</label>';
             html += '<button type="button" onclick="mtRemoveRow(' + id + ')"'
                   + ' style="flex-shrink:0;padding:6px 9px;background:rgba(255,80,80,0.07);border:1px solid rgba(255,80,80,0.15);border-radius:8px;color:rgba(255,100,100,0.5);font-size:12px;cursor:pointer;"'
                   + ' onmouseover="this.style.background=\'rgba(255,80,80,0.2)\';this.style.color=\'#ff6b6b\'"'
@@ -7195,6 +7208,7 @@
                 var from = (document.getElementById('mt-from-' + rid)||{value:''}).value.trim();
                 var to   = (document.getElementById('mt-to-'   + rid)||{value:''}).value.trim();
                 var prod = (document.getElementById('mt-prod-'  + rid)||{value:''}).value.trim();
+                var conf = document.getElementById('mt-conf-'  + rid) ? document.getElementById('mt-conf-' + rid).checked : false;
                 var days = [];
                 _mtDayOrder.forEach(function(d) {
                     var chip = document.getElementById('mt-chip-' + rid + '-' + d);
@@ -7205,7 +7219,7 @@
                     days.push({dateStr: target.toISOString().split('T')[0], count: cnt, dayKey: d});
                 });
                 if ((from || to) && days.length > 0) {
-                    rows.push({partenza: from, arrivo: to, prodotto: prod, days: days});
+                    rows.push({partenza: from, arrivo: to, prodotto: prod, daConfermare: conf, days: days});
                 }
             });
             return rows;
@@ -7280,10 +7294,9 @@
         // ── Conferma e creazione viaggi ───────────────────────────────
         function mtConfirm() {
             var trasp  = (document.getElementById('mtTrasp')||{value:''}).value.trim();
-            var daConf = document.getElementById('mtDaConf') ? document.getElementById('mtDaConf').checked : false;
             var rows   = _mtGetRows().filter(function(r){ return r.partenza && r.arrivo; });
 
-            if (!trasp)         { showStatus('⚠️ Inserisci il trasportatore', 'warning'); return; }
+            if (!trasp)            { showStatus('⚠️ Inserisci il trasportatore', 'warning'); return; }
             if (rows.length === 0) { showStatus('⚠️ Seleziona almeno un giorno per ogni tratta', 'warning'); return; }
 
             var newTrips = [];
@@ -7297,7 +7310,7 @@
                             arrivo:        r.arrivo,
                             prodotto:      r.prodotto || '',
                             note:          '',
-                            daConfermare:  daConf,
+                            daConfermare:  r.daConfermare || false,
                             confermato:    false
                         });
                     }
@@ -10607,12 +10620,6 @@ tbody tr.da-conf td:first-child{border-left:3px solid #ca8a04}
                             style="padding:3px 10px;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:20px;color:rgba(255,100,100,0.7);font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">↺ Reset</button>
                     </div>
                 </div>
-
-                <!-- Da confermare -->
-                <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(255,210,63,0.05);border:1px solid rgba(255,210,63,0.15);border-radius:8px;cursor:pointer;user-select:none;">
-                    <input type="checkbox" id="mtDaConf" style="width:16px;height:16px;cursor:pointer;accent-color:var(--warning);">
-                    <span style="font-size:13px;color:var(--warning);font-weight:600;">⚠️ Da confermare</span>
-                </label>
 
                 <!-- TRATTE (ognuna con i propri chip giorni) -->
                 <div>
