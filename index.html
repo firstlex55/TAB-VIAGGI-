@@ -72,7 +72,7 @@
 
         .top-bar {
             background: #181f2a;
-            padding: 14px 18px 12px;
+            padding: 8px 14px 7px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
             position: sticky;
@@ -81,8 +81,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            /* GPU layer per scroll fluido */
+            gap: 10px;
             will-change: transform;
             transform: translateZ(0);
         }
@@ -90,7 +89,7 @@
         .top-bar-left {
             display: flex;
             align-items: center;
-            gap: 13px;
+            gap: 10px;
             min-width: 0;
             flex: 1;
         }
@@ -103,13 +102,13 @@
             justify-content: center;
         }
         .top-bar-logo-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 13px;
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
             object-fit: cover;
             filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
             border: 1.5px solid rgba(255,107,53,0.5);
-            box-shadow: 0 0 16px rgba(255,107,53,0.15);
+            box-shadow: 0 0 12px rgba(255,107,53,0.15);
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
         }
@@ -117,27 +116,20 @@
         .top-bar-titles {
             min-width: 0;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
         }
 
         .logo {
             display: flex;
-            flex-direction: column;
-            gap: 0;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* "planning" — sottotitolo chiaro */
-        .logo-planning      { display: contents; }
-        .logo-planning-line { display: none; }
         .logo-planning-text {
-            display: inline-block;
-            color: rgba(255,255,255,0.35);
-            font-weight: 700;
-            letter-spacing: 4px;
-            font-size: 8px;
-            text-transform: uppercase;
-            font-family: 'JetBrains Mono', monospace;
-            line-height: 1;
-            margin-bottom: 1px;
+            display: none;
         }
         .logo-badge {
             display: inline-block;
@@ -151,25 +143,21 @@
             font-family: 'JetBrains Mono', monospace;
             padding: 1px 5px;
             border-radius: 4px;
-            vertical-align: middle;
-            margin-left: 6px;
-            position: relative;
-            top: -1px;
         }
 
-        /* "VIAGGI" — grande, arancio chiaro */
+        /* "VIAGGI" — compatto inline */
         .logo-viaggi {
-            display: block;
+            display: inline;
             font-weight: 900;
-            letter-spacing: 4px;
-            font-size: 30px;
+            letter-spacing: 3px;
+            font-size: 22px;
             background: linear-gradient(90deg, #ff7a40 0%, #ff6b35 50%, #ff5520 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-transform: uppercase;
             line-height: 1;
-            filter: drop-shadow(0 0 14px rgba(255,107,53,0.5));
+            filter: drop-shadow(0 0 10px rgba(255,107,53,0.4));
         }
 
         /* Riepilogo compatto nell'header */
@@ -177,7 +165,6 @@
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
-            margin-top: 5px;
             align-items: center;
         }
         .header-summary-badge {
@@ -196,14 +183,14 @@
             margin-right: 2px;
         }
 
-        /* Data — completa, ben visibile */
+        /* Data — compatta sotto il titolo */
         .week-info {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.85);
-            letter-spacing: 0.5px;
-            margin-top: 5px;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.3px;
+            margin-top: 0;
             display: block;
             white-space: nowrap;
             overflow: hidden;
@@ -237,6 +224,15 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to   { opacity: 1; }
+        }
+        @keyframes mic-pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(255,107,53,0.5); }
+            70%  { box-shadow: 0 0 0 14px rgba(255,107,53,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); }
+        }
+        @keyframes vbar-wave {
+            from { transform: scaleY(0.3); opacity: 0.4; }
+            to   { transform: scaleY(1);   opacity: 1; }
         }
 
         @keyframes cardIn {
@@ -3616,11 +3612,11 @@
     </div>
 
     <div class="week-progress-bar" id="weekProgressBar">
-        <div class="week-seg future" id="wseg-1" onclick="filterByWeekDay('lun')" title="Filtra Lun"><div class="week-seg-top-bar"></div><span class="week-seg-label">Lun</span><span class="week-seg-count" id="wseg-cnt-1"></span><span class="week-seg-pct" id="wseg-pct-1"></span></div>
-        <div class="week-seg future" id="wseg-2" onclick="filterByWeekDay('mar')" title="Filtra Mar"><div class="week-seg-top-bar"></div><span class="week-seg-label">Mar</span><span class="week-seg-count" id="wseg-cnt-2"></span><span class="week-seg-pct" id="wseg-pct-2"></span></div>
-        <div class="week-seg future" id="wseg-3" onclick="filterByWeekDay('mer')" title="Filtra Mer"><div class="week-seg-top-bar"></div><span class="week-seg-label">Mer</span><span class="week-seg-count" id="wseg-cnt-3"></span><span class="week-seg-pct" id="wseg-pct-3"></span></div>
-        <div class="week-seg future" id="wseg-4" onclick="filterByWeekDay('gio')" title="Filtra Gio"><div class="week-seg-top-bar"></div><span class="week-seg-label">Gio</span><span class="week-seg-count" id="wseg-cnt-4"></span><span class="week-seg-pct" id="wseg-pct-4"></span></div>
-        <div class="week-seg future" id="wseg-5" onclick="filterByWeekDay('ven')" title="Filtra Ven"><div class="week-seg-top-bar"></div><span class="week-seg-label">Ven</span><span class="week-seg-count" id="wseg-cnt-5"></span><span class="week-seg-pct" id="wseg-pct-5"></span></div>
+        <div class="week-seg future" id="wseg-1" onclick="filterByWeekDay('lun')" title="Filtra Lun"><div class="week-seg-top-bar"></div><span class="week-seg-label">Lun</span><span class="week-seg-count" id="wseg-cnt-1"></span><span class="week-seg-pct" id="wseg-pct-1"></span><div id="wseg-dots-1" style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px;min-height:7px;"></div></div>
+        <div class="week-seg future" id="wseg-2" onclick="filterByWeekDay('mar')" title="Filtra Mar"><div class="week-seg-top-bar"></div><span class="week-seg-label">Mar</span><span class="week-seg-count" id="wseg-cnt-2"></span><span class="week-seg-pct" id="wseg-pct-2"></span><div id="wseg-dots-2" style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px;min-height:7px;"></div></div>
+        <div class="week-seg future" id="wseg-3" onclick="filterByWeekDay('mer')" title="Filtra Mer"><div class="week-seg-top-bar"></div><span class="week-seg-label">Mer</span><span class="week-seg-count" id="wseg-cnt-3"></span><span class="week-seg-pct" id="wseg-pct-3"></span><div id="wseg-dots-3" style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px;min-height:7px;"></div></div>
+        <div class="week-seg future" id="wseg-4" onclick="filterByWeekDay('gio')" title="Filtra Gio"><div class="week-seg-top-bar"></div><span class="week-seg-label">Gio</span><span class="week-seg-count" id="wseg-cnt-4"></span><span class="week-seg-pct" id="wseg-pct-4"></span><div id="wseg-dots-4" style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px;min-height:7px;"></div></div>
+        <div class="week-seg future" id="wseg-5" onclick="filterByWeekDay('ven')" title="Filtra Ven"><div class="week-seg-top-bar"></div><span class="week-seg-label">Ven</span><span class="week-seg-count" id="wseg-cnt-5"></span><span class="week-seg-pct" id="wseg-pct-5"></span><div id="wseg-dots-5" style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px;min-height:7px;"></div></div>
     </div>
 
     <!-- Barra navigazione viste per PC -->
@@ -3633,6 +3629,8 @@
         <div class="pcvs-sep"></div>
         <button class="pcvs-add" onclick="toggleAddForm()">＋ Aggiungi</button>
         <button class="pcvs-add" onclick="openMultiTratta()" style="background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.3);color:#ff6b35;">🚛 Multi</button>
+        <button class="pcvs-add" onclick="openDbClean()" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" title="Gestisci database appresi">🗃️</button>
+        <button class="pcvs-add" onclick="toggleQuickStats()" id="statsToggleBtn" style="background:rgba(0,210,180,0.08);border-color:rgba(0,210,180,0.25);color:#00d2b4;" title="Statistiche settimana">📊</button>
     </div>
 
     <div class="container">
@@ -3718,6 +3716,14 @@
                     </div>
                 </div>
 
+                <!-- Filtro prodotto -->
+                <div>
+                    <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:7px;">Prodotto (opzionale)</div>
+                    <div id="asProdBtns" style="display:flex;gap:5px;flex-wrap:wrap;">
+                        <button onclick="asSetProd('')" data-prod="" style="padding:4px 10px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:#60a5fa;transition:all 0.15s;">Tutti</button>
+                    </div>
+                </div>
+
                 <!-- Bottone cerca -->
                 <button onclick="runArchiveSearch()"
                     style="width:100%;padding:11px;background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;border-radius:10px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,0.3);">
@@ -3796,6 +3802,12 @@
                 <div class="stat-number" id="countDaConfermare" style="color: var(--warning);">0</div>
                 <div class="stat-label" style="color:var(--warning);opacity:0.9;">Da conf.</div>
             </div>
+        </div>
+
+        <!-- STATISTICHE RAPIDE (panel espandibile) -->
+        <div id="quickStatsPanel" style="display:none;padding:12px 14px;background:rgba(0,210,180,0.03);border-bottom:1px solid rgba(0,210,180,0.1);">
+            <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(0,210,180,0.5);margin-bottom:10px;">📊 Statistiche settimana</div>
+            <div id="quickStatsBody" style="display:flex;flex-direction:column;gap:8px;"></div>
         </div>
 
         <!-- Aggiungi Viaggio -->
@@ -5290,45 +5302,56 @@
         }
 
         function updateWeekProgress() {
-            const d = new Date();
-            const day = d.getDay(); // 0=dom,1=lun..5=ven,6=sab
-            const hours = d.getHours() + d.getMinutes() / 60;
+            var d = new Date();
+            var day = d.getDay();
+            var hours = d.getHours() + d.getMinutes() / 60;
+            var activeSeg = (day >= 1 && day <= 5) ? day : (day === 6 ? 6 : 0);
+            var dayPct = Math.round((hours / 24) * 100);
 
-            // Segmento corrente: 1=lun,2=mar,3=mer,4=gio,5=ven
-            // day===0 domenica → tutto future
-            // day===6 sabato   → tutto done
-            const activeSeg = (day >= 1 && day <= 5) ? day : (day === 6 ? 6 : 0);
-            // percentuale intra-giorno (0-100)
-            const dayPct = Math.round((hours / 24) * 100);
+            // Conta viaggi per giorno e raccoglie trasportatori
+            var dayNamesMap = {1:'lun',2:'mar',3:'mer',4:'gio',5:'ven'};
+            var countByDay = {}; // {1: count, ...}
+            var traspByDay = {}; // {1: [colore1, colore2, ...], ...}
 
-            // Conta viaggi per giorno settimana (1=lun..5=ven)
-            const dayLabels = ['','lun','mar','mer','gio','ven'];
-            const countByDay = {};
-            (window.filteredTrips || window.trips || []).forEach(t => {
-                const g = (t.giorno||'').toLowerCase().substring(0,3);
-                for (let d=1;d<=5;d++) { if (g === dayLabels[d]) { countByDay[d] = (countByDay[d]||0)+1; } }
+            (filteredTrips || trips || []).forEach(function(t) {
+                if (!t.data) return;
+                var dObj = new Date(t.data + 'T12:00:00');
+                var dow  = dObj.getDay(); // 1=lun..5=ven
+                if (dow < 1 || dow > 5) return;
+                countByDay[dow] = (countByDay[dow] || 0) + 1;
+                if (!traspByDay[dow]) traspByDay[dow] = [];
+                var col = getTransporterColorVar(t.trasportatore);
+                if (col && traspByDay[dow].indexOf(col) === -1) traspByDay[dow].push(col);
             });
 
-            for (let i = 1; i <= 5; i++) {
-                const seg = document.getElementById('wseg-' + i);
-                const pctEl = document.getElementById('wseg-pct-' + i);
-                const cntEl = document.getElementById('wseg-cnt-' + i);
+            for (var i = 1; i <= 5; i++) {
+                var seg    = document.getElementById('wseg-' + i);
+                var pctEl  = document.getElementById('wseg-pct-' + i);
+                var cntEl  = document.getElementById('wseg-cnt-' + i);
+                var dotsEl = document.getElementById('wseg-dots-' + i);
                 if (!seg) continue;
-                // Aggiorna contatore
-                if (cntEl) { const n = countByDay[i]||0; cntEl.textContent = n > 0 ? n : ''; }
+
+                // Contatore
+                if (cntEl) { var n = countByDay[i] || 0; cntEl.textContent = n > 0 ? n : ''; }
+
+                // Dots trasportatori
+                if (dotsEl) {
+                    var cols = traspByDay[i] || [];
+                    dotsEl.innerHTML = cols.slice(0,5).map(function(c) {
+                        return '<div style="width:5px;height:5px;border-radius:50%;background:' + c + ';flex-shrink:0;opacity:0.85;"></div>';
+                    }).join('');
+                }
+
                 seg.classList.remove('done','active','future','weekend');
                 if (activeSeg === 0) {
-                    // domenica: tutto future
                     seg.classList.add('future');
                 } else if (activeSeg >= 6) {
-                    // sabato: tutto done
                     seg.classList.add('done');
                 } else if (i < activeSeg) {
                     seg.classList.add('done');
                 } else if (i === activeSeg) {
                     seg.classList.add('active');
                     if (pctEl) pctEl.textContent = dayPct + '%';
-                    // fill dal basso proporzionale all'ora del giorno
                     seg.style.setProperty('--fill-pct', dayPct + '%');
                 } else {
                     seg.classList.add('future');
@@ -5336,8 +5359,8 @@
             }
 
             // Fix top dinamico
-            const tb = document.querySelector('.top-bar');
-            const wpb = document.querySelector('.week-progress-bar');
+            var tb  = document.querySelector('.top-bar');
+            var wpb = document.querySelector('.week-progress-bar');
             if (tb && wpb) wpb.style.top = tb.offsetHeight + 'px';
         }
 
@@ -5351,31 +5374,56 @@
         }
 
         function updateStats() {
-            const displayTrips = searchQuery ? filteredTrips : trips;
+            var displayTrips = searchQuery ? filteredTrips : trips;
             setText('totalTrips', trips.length);
             animateStat('totalTrips');
-            const uniqueTransporters = [...new Set(trips.map(t => t.trasportatore))].length;
-            setText('uniqueTransporters', uniqueTransporters);
-            const _tripCountText = searchQuery 
-                ? `${displayTrips.length} di ${trips.length} viaggi`
-                : `${trips.length} ${trips.length === 1 ? 'viaggio' : 'viaggi'}`;
+            var uniqueTransporters = [];
+            trips.forEach(function(t){ if (t.trasportatore && uniqueTransporters.indexOf(t.trasportatore) === -1) uniqueTransporters.push(t.trasportatore); });
+            setText('uniqueTransporters', uniqueTransporters.length);
+            var _tripCountText = searchQuery
+                ? (displayTrips.length + ' di ' + trips.length + ' viaggi')
+                : (trips.length + ' ' + (trips.length === 1 ? 'viaggio' : 'viaggi'));
             setText('tripCount', _tripCountText);
-            const _badge = document.getElementById('tripCountBadge');
+            var _badge = document.getElementById('tripCountBadge');
             if (_badge) _badge.textContent = _tripCountText;
 
-            // Aggiorna banner oggi
-            // renderTodayBanner();
             updateWeekSummary();
 
             // Da Confermare badge
-            const daConfermarCount = trips.filter(t => t.daConfermare).length;
-            const statCard = document.getElementById('statCardDaConfermare');
-            const countEl = document.getElementById('countDaConfermare');
+            var daConfermarCount = trips.filter(function(t){ return t.daConfermare; }).length;
+            var statCard = document.getElementById('statCardDaConfermare');
+            var countEl  = document.getElementById('countDaConfermare');
             if (daConfermarCount > 0) {
-                if (countEl) countEl.textContent = daConfermarCount;
+                if (countEl)  countEl.textContent = daConfermarCount;
                 if (statCard) statCard.style.display = '';
             } else {
                 if (statCard) statCard.style.display = 'none';
+            }
+
+            // PWA badge — mostra numero da confermare nell'icona app
+            if (daConfermarCount > 0) {
+                if (navigator.setAppBadge) navigator.setAppBadge(daConfermarCount).catch(function(){});
+            } else {
+                if (navigator.clearAppBadge) navigator.clearAppBadge().catch(function(){});
+            }
+
+            // Badge visivo nella bottom nav — punto arancio sul bottone Oggi se ci sono da confermare oggi
+            var today = new Date().toISOString().split('T')[0];
+            var todayWarn = trips.filter(function(t){ return t.data === today && t.daConfermare; }).length;
+            var oggiNavBtn = document.querySelector('.view-btn[onclick*="oggi"]');
+            if (oggiNavBtn) {
+                var existing = oggiNavBtn.querySelector('.warn-dot');
+                if (todayWarn > 0) {
+                    if (!existing) {
+                        var dot = document.createElement('div');
+                        dot.className = 'warn-dot';
+                        dot.style.cssText = 'position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:#ffa032;box-shadow:0 0 6px rgba(255,160,50,0.8);pointer-events:none;';
+                        oggiNavBtn.style.position = 'relative';
+                        oggiNavBtn.appendChild(dot);
+                    }
+                } else {
+                    if (existing) existing.remove();
+                }
             }
         }
 
@@ -5780,15 +5828,29 @@
             var todayLabel = dayNamesLong[nowD.getDay()] + ' ' + String(nowD.getDate()).padStart(2,'0') + '/' + String(nowD.getMonth()+1).padStart(2,'0');
 
             // ── helper: header sezione stile dashboard ──
-            function _secHdr(label, count, accent) {
-                var bg  = accent ? 'rgba(255,107,53,0.1)'  : 'rgba(255,255,255,0.05)';
-                var bdr = accent ? '3px solid rgba(255,107,53,0.7)' : '3px solid rgba(255,255,255,0.2)';
+            function _secHdr(label, count, accent, tripsList) {
+                var bg  = accent ? 'rgba(255,107,53,0.06)'  : 'rgba(255,255,255,0.03)';
+                var bdr = accent ? '3px solid rgba(255,107,53,0.6)' : '3px solid rgba(255,255,255,0.15)';
                 var col = accent ? 'var(--accent)' : 'rgba(255,255,255,0.6)';
-                var h = '<div style="display:flex;align-items:center;justify-content:space-between;'
+
+                // Raccoglie colori trasportatori unici del gruppo
+                var traspCols = [];
+                if (tripsList) {
+                    tripsList.forEach(function(t) {
+                        var c = getTransporterColorVar(t.trasportatore);
+                        if (c && traspCols.indexOf(c) === -1) traspCols.push(c);
+                    });
+                }
+                var dotsHtml = traspCols.slice(0,6).map(function(c) {
+                    return '<div style="width:6px;height:6px;border-radius:50%;background:' + c + ';flex-shrink:0;opacity:0.9;"></div>';
+                }).join('');
+
+                var h = '<div style="display:flex;align-items:center;gap:8px;'
                     + 'padding:7px 12px;background:' + bg + ';'
                     + 'border-left:' + bdr + ';border-radius:0 8px 8px 0;margin-bottom:5px;">';
                 h += '<span style="font-size:12px;font-weight:800;color:' + col + ';letter-spacing:0.3px;">' + label + '</span>';
-                h += '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.22);font-family:JetBrains Mono,monospace;">' + count + ' ' + _pv(count) + '</span>';
+                if (dotsHtml) h += '<div style="display:flex;gap:3px;align-items:center;">' + dotsHtml + '</div>';
+                h += '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.22);font-family:JetBrains Mono,monospace;margin-left:auto;">' + count + ' ' + _pv(count) + '</span>';
                 h += '</div>';
                 return h;
             }
@@ -5801,6 +5863,7 @@
             function _ccRow(trip, dimmed) {
                 var idx = trips.indexOf(trip);
                 var colorClass = getTransporterColorClass(trip.trasportatore);
+                var tColor = getTransporterColorVar(trip.trasportatore);
                 var fromName = (trip.partenza||'').split('(')[0].trim();
                 var fromCode = ((trip.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
                 var toName   = (trip.arrivo||'').split('(')[0].trim();
@@ -5809,11 +5872,26 @@
                 var dayLbl = dayNamesShort[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0');
                 var opacity = dimmed ? 'opacity:0.82;' : '';
 
+                // Sfondo sfumato dal colore trasportatore
+                var hexToRgb = function(hex) {
+                    if (!hex || hex[0] !== '#') return '255,255,255';
+                    return parseInt(hex.slice(1,3),16)+','+parseInt(hex.slice(3,5),16)+','+parseInt(hex.slice(5,7),16);
+                };
+                var rgb = hexToRgb(tColor);
+                var cardBg = 'linear-gradient(135deg,rgba(' + rgb + ',0.09) 0%,rgba(' + rgb + ',0.03) 55%,transparent 100%)';
+                var topLine = 'linear-gradient(90deg,rgba(' + rgb + ',0.35),transparent)';
+                var borderColor = 'rgba(' + rgb + ',0.3)';
+
+                var isWarn = trip.daConfermare;
+                if (isWarn) {
+                    cardBg = 'linear-gradient(135deg,rgba(255,160,50,0.07) 0%,rgba(255,160,50,0.02) 55%,transparent 100%)';
+                    borderColor = 'rgba(255,160,50,0.3)';
+                }
+
                 var statoHtml = '';
-                if (trip.daConfermare) statoHtml = '<span style="font-size:11px;color:var(--warning)">⚠</span>';
+                if (isWarn) statoHtml = '<span style="font-size:11px;color:var(--warning)">⚠</span>';
                 else if (trip.confermato) statoHtml = '<span style="font-size:12px;color:var(--success);font-weight:900">✓</span>';
 
-                // Riga 2: giorno + codici + prodotto
                 var sub = [];
                 if (fromCode) {
                     var fc = _locationCodeColor(fromCode);
@@ -5829,7 +5907,14 @@
                     : '';
 
                 return '<div onclick="editTrip(' + idx + ')" onmouseover="_hov(this)" onmouseout="_hout(this)" '
-                    + 'style="padding:9px 10px 7px;border-radius:8px;margin-bottom:3px;cursor:pointer;transition:background 0.1s;' + opacity + '">'
+                    + 'style="padding:9px 10px 7px;border-radius:10px;margin-bottom:4px;cursor:pointer;transition:all 0.15s;' + opacity
+                    + 'background:' + cardBg + ';'
+                    + 'border:1px solid ' + borderColor + ';'
+                    + 'border-left:3px solid rgba(' + rgb + ',0.7);'
+                    + 'position:relative;overflow:hidden;">'
+
+                    // Linea superiore sfumata
+                    + '<div style="position:absolute;top:0;left:0;right:0;height:1px;background:' + topLine + ';pointer-events:none;"></div>'
 
                     // Riga 1: badge + rotta + stato
                     + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">'
@@ -5853,7 +5938,7 @@
 
             // ── OGGI ──
             html += '<div style="margin-bottom:14px;">';
-            html += _secHdr(todayLabel, todayTrips.length, true);
+            html += _secHdr(todayLabel, todayTrips.length, true, todayTrips);
             if (todayTrips.length === 0) {
                 html += '<div style="text-align:center;padding:18px;color:rgba(255,255,255,0.25);font-size:13px;font-weight:600;">✌️ Nessun viaggio oggi</div>';
             } else {
@@ -5866,7 +5951,7 @@
                 var dtom = new Date(tomorrow + 'T12:00:00');
                 var tomLabel = dayNamesLong[dtom.getDay()] + ' ' + String(dtom.getDate()).padStart(2,'0') + '/' + String(dtom.getMonth()+1).padStart(2,'0');
                 html += '<div style="margin-bottom:14px;">';
-                html += _secHdr(tomLabel, tomorrowTrips.length, false);
+                html += _secHdr(tomLabel, tomorrowTrips.length, false, tomorrowTrips);
                 tomorrowTrips.forEach(function(t) { html += _ccRow(t, false); });
                 html += '</div>';
             }
@@ -5883,7 +5968,7 @@
                     var d2 = new Date(dateKey + 'T12:00:00');
                     var lbl = dayNamesLong[d2.getDay()] + ' ' + String(d2.getDate()).padStart(2,'0') + '/' + String(d2.getMonth()+1).padStart(2,'0');
                     html += '<div style="margin-bottom:10px;">';
-                    html += _secHdr(lbl, byDay[dateKey].length, false);
+                    html += _secHdr(lbl, byDay[dateKey].length, false, byDay[dateKey]);
                     byDay[dateKey].forEach(function(t) { html += _ccRow(t, false); });
                     html += '</div>';
                 });
@@ -6561,34 +6646,33 @@
                     '</div>' +
                     '</td>' +
 
-                    // PARTENZA — nome pulito nell'input + badge neon separato sotto
+                    // PARTENZA — input + codice inline a fianco
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;flex-direction:column;gap:3px;">' +
+                    '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
                     '<input type="text" value="' + fromName + '" list="dfrom"' +
-                    ' onchange="desktopSetField(' + realIdx + ',\'partenza\',this.value+((_locationCodeLookup(this.value,\'' + (trip.partenza||'') + '\'))?\' (\'+_locationCodeLookup(this.value,\'' + (trip.partenza||'') + '\')+\')\':\'\'  ))"' +
                     ' data-fullval="' + (trip.partenza||'').replace(/"/g,'&quot;') + '"' +
-                    ' onchange="var full=this.value;var code=(full.match(/\\(([^)]+)\\)/)||[])[1]||_locationCodeLookup(this.value,this.dataset.fullval);desktopSetField(' + realIdx + ',\'partenza\',full);"' +
+                    ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'partenza\',full);"' +
                     ' placeholder="Partenza..."' +
-                    ' style="' + inpStyle + 'font-weight:700;color:#f0f4ff;font-size:14px;"' +
+                    ' style="' + inpStyle + 'font-weight:700;color:#f0f4ff;font-size:14px;flex:1;min-width:80px;"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
-                    (fromCode ? ('<span style="display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.8px;padding:2px 8px;border-radius:4px;pointer-events:none;white-space:nowrap;align-self:flex-start;text-transform:uppercase;' + (function(){ var c = _locationCodeColor(fromCode); return 'background:' + c.bg + ';border:1px solid ' + c.bd + ';color:' + c.tx + ';box-shadow:0 0 6px ' + c.bd + ';'; })() + '">' + fromCode + '</span>') : '') +
+                    (fromCode ? ('<span style="color:rgba(255,255,255,0.2);font-size:11px;flex-shrink:0;">·</span><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:800;letter-spacing:1.2px;pointer-events:none;white-space:nowrap;text-transform:uppercase;flex-shrink:0;' + (function(){ var c = _locationCodeColor(fromCode); return 'color:' + c.tx + ';text-shadow:0 0 7px ' + c.bd + ';'; })() + '">' + fromCode + '</span>') : '') +
                     '</div>' +
                     '</td>' +
 
-                    // ARRIVO — nome pulito nell'input + badge neon separato sotto
+                    // ARRIVO — input + codice inline a fianco
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;flex-direction:column;gap:3px;">' +
+                    '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
                     '<input type="text" value="' + toName + '" list="dto"' +
                     ' data-fullval="' + (trip.arrivo||'').replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
                     ' placeholder="Arrivo..."' +
-                    ' style="' + inpStyle + 'font-weight:700;color:#86efac;font-size:14px;"' +
+                    ' style="' + inpStyle + 'font-weight:700;color:#86efac;font-size:14px;flex:1;min-width:80px;"' +
                     ' onfocus="' + inpFocus + '"' +
                     ' onblur="' + inpBlur + '"' +
                     ' onkeydown="' + tabNav + '">' +
-                    (toCode ? ('<span style="display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.8px;padding:2px 8px;border-radius:4px;pointer-events:none;white-space:nowrap;align-self:flex-start;text-transform:uppercase;' + (function(){ var c = _locationCodeColor(toCode); return 'background:' + c.bg + ';border:1px solid ' + c.bd + ';color:' + c.tx + ';box-shadow:0 0 6px ' + c.bd + ';'; })() + '">' + toCode + '</span>') : '') +
+                    (toCode ? ('<span style="color:rgba(255,255,255,0.2);font-size:11px;flex-shrink:0;">·</span><span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:800;letter-spacing:1.2px;pointer-events:none;white-space:nowrap;text-transform:uppercase;flex-shrink:0;' + (function(){ var c = _locationCodeColor(toCode); return 'color:' + c.tx + ';text-shadow:0 0 7px ' + c.bd + ';'; })() + '">' + toCode + '</span>') : '') +
                     '</div>' +
                     '</td>' +
 
@@ -6665,7 +6749,7 @@
                         <!-- Riga 1: navigazione + stato + azioni principali -->
                         <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
 
-                            <!-- Toggle Sett. corrente / prossima — più prominente -->
+                            <!-- Toggle Sett. corrente / prossima / oggi -->
                             <div id="pcWeekToggle" style="display:flex;align-items:center;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
                                 <button onclick="pcSetWeek('current',this)" id="pcToggleCurrent"
                                     style="padding:7px 16px;border:none;background:var(--accent);color:#000;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;white-space:nowrap;letter-spacing:0.3px;">
@@ -6674,6 +6758,10 @@
                                 <button onclick="pcSetWeek('next',this)" id="pcToggleNext"
                                     style="padding:7px 16px;border:none;background:transparent;color:rgba(167,139,250,0.7);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
                                     ◎ Prossima
+                                </button>
+                                <button onclick="pcSetWeek('oggi',this)" id="pcToggleOggi"
+                                    style="padding:7px 16px;border:none;background:transparent;color:rgba(0,210,180,0.7);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;border-left:1px solid rgba(255,255,255,0.08);">
+                                    📅 Oggi
                                 </button>
                             </div>
 
@@ -7606,6 +7694,7 @@
         var _asScope       = {current: true, archive: true};
         var _asPeriod      = 'all';
         var _asTrasp       = '';
+        var _asProd        = '';
 
         function toggleArchiveSearch() {
             _asOpen = !_asOpen;
@@ -7618,6 +7707,8 @@
                 btn.style.background = 'rgba(96,165,250,0.2)';
                 btn.style.borderColor= 'rgba(96,165,250,0.55)';
                 btn.textContent      = '🗂 ▲';
+                _asTrasp = '';
+                _asProd  = '';
                 _asRenderTraspBtns();
                 _asApplyPeriodStyle('all');
             } else {
@@ -7675,33 +7766,60 @@
             if (!container) return;
             container.querySelectorAll('button').forEach(function(b) {
                 var isActive = b.dataset.trasp === name;
-                b.style.background  = isActive ? 'rgba(96,165,250,0.15)'       : 'rgba(255,255,255,0.05)';
-                b.style.borderColor = isActive ? 'rgba(96,165,250,0.45)'        : 'rgba(255,255,255,0.1)';
-                b.style.color       = isActive ? '#60a5fa'                       : 'rgba(255,255,255,0.5)';
+                b.style.background  = isActive ? 'rgba(96,165,250,0.15)'  : 'rgba(255,255,255,0.05)';
+                b.style.borderColor = isActive ? 'rgba(96,165,250,0.45)'   : 'rgba(255,255,255,0.1)';
+                b.style.color       = isActive ? '#60a5fa'                  : 'rgba(255,255,255,0.5)';
+            });
+        }
+
+        function asSetProd(name) {
+            _asProd = name;
+            var container = document.getElementById('asProdBtns');
+            if (!container) return;
+            container.querySelectorAll('button').forEach(function(b) {
+                var isActive = b.dataset.prod === name;
+                b.style.background  = isActive ? 'rgba(167,139,250,0.15)'  : 'rgba(255,255,255,0.05)';
+                b.style.borderColor = isActive ? 'rgba(167,139,250,0.45)'   : 'rgba(255,255,255,0.1)';
+                b.style.color       = isActive ? '#a78bfa'                   : 'rgba(255,255,255,0.5)';
             });
         }
 
         function _asRenderTraspBtns() {
             var container = document.getElementById('asTraspBtns');
+            var prodContainer = document.getElementById('asProdBtns');
             if (!container) return;
-            // Raccoglie tutti i trasportatori da archivio + correnti
-            var all = [];
-            trips.forEach(function(t){ if (t.trasportatore && all.indexOf(t.trasportatore) === -1) all.push(t.trasportatore); });
+            // Raccoglie tutti i trasportatori e prodotti da archivio + correnti
+            var allT = [], allP = [];
+            trips.forEach(function(t) {
+                if (t.trasportatore && allT.indexOf(t.trasportatore) === -1) allT.push(t.trasportatore);
+                if (t.prodotto && allP.indexOf(t.prodotto) === -1) allP.push(t.prodotto);
+            });
             try {
                 var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
                 arch.forEach(function(w) {
-                    if (w.trips) w.trips.forEach(function(t){
-                        if (t.trasportatore && all.indexOf(t.trasportatore) === -1) all.push(t.trasportatore);
+                    if (w.trips) w.trips.forEach(function(t) {
+                        if (t.trasportatore && allT.indexOf(t.trasportatore) === -1) allT.push(t.trasportatore);
+                        if (t.prodotto && allP.indexOf(t.prodotto) === -1) allP.push(t.prodotto);
                     });
                 });
             } catch(e) {}
-            all.sort();
-            var html = '<button onclick="asSetTrasp(\'\')" data-trasp="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:#60a5fa;transition:all 0.15s;">Tutti</button>';
-            all.forEach(function(t) {
-                var col = getTransporterColorVar(t);
-                html += '<button onclick="asSetTrasp(\'' + t.replace(/'/g,"\\'") + '\')" data-trasp="' + t.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);transition:all 0.15s;">' + t + '</button>';
+            allT.sort(); allP.sort();
+
+            // Bottoni trasportatori
+            var htmlT = '<button onclick="asSetTrasp(\'\')" data-trasp="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:#60a5fa;transition:all 0.15s;">Tutti</button>';
+            allT.forEach(function(t) {
+                htmlT += '<button onclick="asSetTrasp(\'' + t.replace(/'/g,"\\'") + '\')" data-trasp="' + t.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);transition:all 0.15s;">' + t + '</button>';
             });
-            container.innerHTML = html;
+            container.innerHTML = htmlT;
+
+            // Bottoni prodotti
+            if (prodContainer) {
+                var htmlP = '<button onclick="asSetProd(\'\')" data-prod="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:#60a5fa;transition:all 0.15s;">Tutti</button>';
+                allP.forEach(function(p) {
+                    htmlP += '<button onclick="asSetProd(\'' + p.replace(/'/g,"\\'") + '\')" data-prod="' + p.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);transition:all 0.15s;">' + p + '</button>';
+                });
+                prodContainer.innerHTML = htmlP;
+            }
         }
 
         function _asGetDateRange() {
@@ -7762,6 +7880,8 @@
         function _asMatchTrip(t, query, range) {
             // Filtro trasportatore
             if (_asTrasp && (t.trasportatore||'').toLowerCase() !== _asTrasp.toLowerCase()) return false;
+            // Filtro prodotto
+            if (_asProd && (t.prodotto||'').toLowerCase() !== _asProd.toLowerCase()) return false;
             // Filtro periodo
             if (range.from && t.data) {
                 var d = new Date(t.data + 'T12:00:00');
@@ -7870,9 +7990,483 @@
         //  FINE RICERCA AVANZATA ARCHIVIO
         // ═══════════════════════════════════════════════════════════════
 
-        // ── Sintesi vocale stub ───────────────────────────────────────
+        // ═══════════════════════════════════════════════════════════════
+        //  STATISTICHE RAPIDE
+        // ═══════════════════════════════════════════════════════════════
+        function toggleQuickStats() {
+            var panel = document.getElementById('quickStatsPanel');
+            var btn   = document.getElementById('statsToggleBtn');
+            if (!panel) return;
+            var open = panel.style.display !== 'none';
+            if (open) {
+                panel.style.display = 'none';
+                if (btn) { btn.style.background='rgba(0,210,180,0.08)'; btn.style.borderColor='rgba(0,210,180,0.25)'; }
+            } else {
+                panel.style.display = 'block';
+                if (btn) { btn.style.background='rgba(0,210,180,0.18)'; btn.style.borderColor='rgba(0,210,180,0.5)'; }
+                renderQuickStats();
+            }
+        }
+
+        function renderQuickStats() {
+            var body = document.getElementById('quickStatsBody');
+            if (!body || trips.length === 0) {
+                if (body) body.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.2);font-style:italic;">Nessun viaggio questa settimana</div>';
+                return;
+            }
+
+            // Conteggi per trasportatore
+            var byTrasp = {};
+            trips.forEach(function(t) {
+                var k = t.trasportatore || '?';
+                byTrasp[k] = (byTrasp[k] || 0) + 1;
+            });
+            var sorted = Object.keys(byTrasp).sort(function(a,b){ return byTrasp[b]-byTrasp[a]; });
+            var topTrasp = sorted[0];
+
+            // Giorno più carico
+            var byDay = {};
+            var dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+            trips.forEach(function(t) {
+                if (!t.data) return;
+                var d = new Date(t.data + 'T12:00:00');
+                var k = dayNames[d.getDay()];
+                byDay[k] = (byDay[k] || 0) + 1;
+            });
+            var topDay = Object.keys(byDay).sort(function(a,b){ return byDay[b]-byDay[a]; })[0];
+
+            // Da confermare
+            var daConf = trips.filter(function(t){ return t.daConfermare; }).length;
+
+            // Confronto con settimana precedente
+            var prevCount = 0, prevLabel = '';
+            try {
+                var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                if (arch.length > 0) {
+                    var last = arch[arch.length - 1];
+                    prevCount = last.trips ? last.trips.length : 0;
+                    prevLabel = last.title || 'Sett. precedente';
+                }
+            } catch(e) {}
+
+            var diff = prevCount > 0 ? trips.length - prevCount : null;
+            var diffStr = '';
+            if (diff !== null) {
+                diffStr = diff > 0 ? '<span style="color:#86efac;">▲ +' + diff + '</span>' :
+                          diff < 0 ? '<span style="color:#fb923c;">▼ ' + diff + '</span>' :
+                          '<span style="color:rgba(255,255,255,0.3);">= uguale</span>';
+            }
+
+            var html = '';
+
+            // Barre per trasportatore
+            var maxV = byTrasp[topTrasp] || 1;
+            html += '<div style="display:flex;flex-direction:column;gap:5px;">';
+            sorted.forEach(function(t) {
+                var c   = getTransporterColorVar(t);
+                var pct = Math.round((byTrasp[t] / maxV) * 100);
+                html += '<div style="display:flex;align-items:center;gap:8px;">';
+                html += '<span style="font-size:10px;font-weight:800;color:' + c + ';width:80px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + t + '</span>';
+                html += '<div style="flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">';
+                html += '<div style="width:' + pct + '%;height:100%;background:' + c + ';border-radius:3px;transition:width 0.4s ease;"></div>';
+                html += '</div>';
+                html += '<span style="font-size:10px;font-weight:800;color:rgba(255,255,255,0.5);width:20px;text-align:right;">' + byTrasp[t] + '</span>';
+                html += '</div>';
+            });
+            html += '</div>';
+
+            // Cards info
+            html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">';
+
+            // Giorno più carico
+            if (topDay) {
+                html += '<div style="flex:1;min-width:100px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 10px;">';
+                html += '<div style="font-size:8px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Giorno più carico</div>';
+                html += '<div style="font-size:14px;font-weight:800;color:#f0f4ff;">' + topDay + ' <span style="font-size:11px;color:rgba(255,255,255,0.4);">(' + (byDay[topDay]||0) + ')</span></div>';
+                html += '</div>';
+            }
+
+            // Da confermare
+            html += '<div style="flex:1;min-width:100px;background:' + (daConf > 0 ? 'rgba(255,160,50,0.06)' : 'rgba(255,255,255,0.03)') + ';border:1px solid ' + (daConf > 0 ? 'rgba(255,160,50,0.2)' : 'rgba(255,255,255,0.07)') + ';border-radius:8px;padding:8px 10px;">';
+            html += '<div style="font-size:8px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Da confermare</div>';
+            html += '<div style="font-size:14px;font-weight:800;color:' + (daConf > 0 ? '#ffa032' : '#86efac') + ';">' + (daConf > 0 ? daConf + ' ⚠' : '✓ tutti') + '</div>';
+            html += '</div>';
+
+            // Confronto sett. precedente
+            if (diff !== null) {
+                html += '<div style="flex:1;min-width:100px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 10px;">';
+                html += '<div style="font-size:8px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">vs sett. prec.</div>';
+                html += '<div style="font-size:13px;font-weight:800;">' + diffStr + ' <span style="font-size:9px;color:rgba(255,255,255,0.2);">(' + prevCount + ')</span></div>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+            body.innerHTML = html;
+        }
+        // ═══════════════════════════════════════════════════════════════
+        //  FINE STATISTICHE RAPIDE
+        // ═══════════════════════════════════════════════════════════════
+        function openDbClean() {
+            var modal = document.getElementById('dbCleanModal');
+            if (!modal) return;
+            _dbCleanRender();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDbClean() {
+            var modal = document.getElementById('dbCleanModal');
+            if (modal) modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        function _dbCleanRender() {
+            var body = document.getElementById('dbCleanBody');
+            if (!body) return;
+            var dbs = [
+                {key:'learnedPartenze',      arr:learnedPartenze,      label:'📍 Partenze',      color:'#f0f4ff'},
+                {key:'learnedArrivi',         arr:learnedArrivi,         label:'🏁 Arrivi',        color:'#86efac'},
+                {key:'learnedTrasportatori',  arr:learnedTrasportatori,  label:'🚛 Trasportatori', color:'#ff8c5a'},
+                {key:'learnedProdotti',        arr:learnedProdotti,       label:'📦 Prodotti',      color:'#b0bcd0'},
+            ];
+            var html = '';
+            dbs.forEach(function(db) {
+                html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;">';
+                html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
+                html += '<span style="font-size:12px;font-weight:800;color:' + db.color + ';">' + db.label + '</span>';
+                html += '<span style="font-size:10px;color:rgba(255,255,255,0.25);">' + db.arr.length + ' voci</span>';
+                html += '</div>';
+                if (db.arr.length === 0) {
+                    html += '<div style="font-size:11px;color:rgba(255,255,255,0.2);font-style:italic;">Nessuna voce salvata</div>';
+                } else {
+                    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+                    db.arr.forEach(function(val, idx) {
+                        html += '<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:3px 10px 3px 12px;">';
+                        html += '<span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);">' + val + '</span>';
+                        html += '<button onclick="dbCleanRemove(\'' + db.key + '\',' + idx + ')" style="background:none;border:none;color:rgba(255,80,80,0.6);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;transition:color 0.15s;" onmouseover="this.style.color=\'#ff6b6b\'" onmouseout="this.style.color=\'rgba(255,80,80,0.6)\'">×</button>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                    html += '<button onclick="dbCleanClearAll(\'' + db.key + '\')" style="margin-top:10px;padding:5px 12px;background:rgba(255,80,80,0.07);border:1px solid rgba(255,80,80,0.2);border-radius:8px;color:rgba(255,100,100,0.6);font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">🗑 Svuota tutto</button>';
+                }
+                html += '</div>';
+            });
+            body.innerHTML = html;
+        }
+        function dbCleanRemove(key, idx) {
+            var map = {learnedPartenze:learnedPartenze, learnedArrivi:learnedArrivi, learnedTrasportatori:learnedTrasportatori, learnedProdotti:learnedProdotti};
+            if (!map[key]) return;
+            map[key].splice(idx, 1);
+            localStorage.setItem(key, JSON.stringify(map[key]));
+            _refreshAllDatalistsLearn();
+            _dbCleanRender();
+        }
+        function dbCleanClearAll(key) {
+            if (!confirm('Svuotare tutto il database "' + key.replace('learned','') + '"?')) return;
+            var map = {learnedPartenze:learnedPartenze, learnedArrivi:learnedArrivi, learnedTrasportatori:learnedTrasportatori, learnedProdotti:learnedProdotti};
+            if (!map[key]) return;
+            map[key].length = 0;
+            localStorage.setItem(key, '[]');
+            _refreshAllDatalistsLearn();
+            _dbCleanRender();
+        }
+        // ═══════════════════════════════════════════════════════════════
+        //  FINE PULIZIA DB APPRESI
+        // ═══════════════════════════════════════════════════════════════
+
+        // ── Sintesi vocale — implementazione Web Speech API ──────────
         function openVoiceInput() {
-            showStatus('🎤 Sintesi vocale in arrivo nella prossima versione', 'info');
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showStatus('⚠️ Sintesi vocale non supportata su questo browser. Usa Chrome.', 'warning');
+                return;
+            }
+            // Crea modal vocale
+            var existing = document.getElementById('voiceModal');
+            if (existing) existing.remove();
+
+            var modal = document.createElement('div');
+            modal.id = 'voiceModal';
+            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:20px;';
+            modal.innerHTML =
+                '<div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #ff6b35;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;">' +
+                '  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">' +
+                '    <div id="vmMicBtn" style="width:48px;height:48px;border-radius:50%;background:#ff6b35;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;animation:mic-pulse 1.5s ease-out infinite;cursor:pointer;" onclick="voiceStop()">🎤</div>' +
+                '    <div>' +
+                '      <div id="vmStatus" style="font-size:14px;font-weight:800;color:#ff6b35;">In ascolto...</div>' +
+                '      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;">Parla naturalmente in italiano</div>' +
+                '    </div>' +
+                '    <button onclick="voiceCancel()" style="margin-left:auto;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;padding:6px 10px;">✕</button>' +
+                '  </div>' +
+
+                // Barre audio animate
+                '  <div style="display:flex;align-items:center;gap:3px;height:40px;margin-bottom:12px;" id="vmBars"></div>' +
+
+                // Testo live
+                '  <div id="vmTranscript" style="min-height:36px;font-size:13px;color:rgba(255,255,255,0.5);font-style:italic;margin-bottom:14px;line-height:1.5;">Aspetto che tu parli...</div>' +
+
+                // Campi riconosciuti
+                '  <div style="display:flex;flex-direction:column;gap:6px;" id="vmFields">' +
+                _voiceFieldHTML('vmTrasp', '🚛', 'Trasportatore', 'empty') +
+                _voiceFieldHTML('vmData', '📅', 'Giorno', 'empty') +
+                _voiceFieldHTML('vmFrom', '📍', 'Partenza', 'empty') +
+                _voiceFieldHTML('vmTo',   '🏁', 'Arrivo',   'empty') +
+                _voiceFieldHTML('vmProd', '📦', 'Prodotto', 'empty') +
+                '  </div>' +
+
+                // Bottoni
+                '  <div style="display:flex;gap:8px;margin-top:16px;">' +
+                '    <button onclick="voiceCancel()" style="flex:1;padding:11px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.4);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✕ Annulla</button>' +
+                '    <button onclick="voiceRetry()" style="flex:1;padding:11px;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.3);border-radius:10px;color:#ff8c5a;font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🎤 Riprova</button>' +
+                '    <button id="vmSaveBtn" onclick="voiceSave()" disabled style="flex:2;padding:11px;background:rgba(134,239,172,0.1);border:1px solid rgba(134,239,172,0.2);border-radius:10px;color:rgba(134,239,172,0.4);font-family:\'Outfit\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;">✓ Salva viaggio</button>' +
+                '  </div>' +
+                '  <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.15);margin-top:10px;">Dì <span style="color:rgba(134,239,172,0.5);font-weight:700;">\'sì\'</span> per salvare · <span style="color:rgba(255,100,100,0.5);font-weight:700;">\'no\'</span> per annullare</div>' +
+                '</div>';
+
+            document.body.appendChild(modal);
+            _voiceBarsAnimate();
+            _voiceStart();
+        }
+
+        function _voiceFieldHTML(id, icon, label, state) {
+            var borderColor = state === 'ok' ? 'rgba(134,239,172,0.35)' : state === 'listening' ? 'rgba(251,191,36,0.4)' : 'rgba(255,255,255,0.07)';
+            var bg = state === 'ok' ? 'rgba(134,239,172,0.05)' : state === 'listening' ? 'rgba(251,191,36,0.05)' : 'rgba(255,255,255,0.02)';
+            return '<div id="' + id + 'Row" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1.5px solid ' + borderColor + ';background:' + bg + ';transition:all 0.3s;">'
+                + '<span style="font-size:15px;flex-shrink:0;">' + icon + '</span>'
+                + '<div style="flex:1;min-width:0;">'
+                + '<div id="' + id + 'Label" style="font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.25);">' + label + '</div>'
+                + '<div id="' + id + 'Val" style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.15);font-style:italic;margin-top:2px;">—</div>'
+                + '</div>'
+                + '<div id="' + id + 'Status" style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,0.2);">·</div>'
+                + '</div>';
+        }
+
+        function _voiceSetField(id, value, state) {
+            var row    = document.getElementById(id + 'Row');
+            var valEl  = document.getElementById(id + 'Val');
+            var statEl = document.getElementById(id + 'Status');
+            if (!row) return;
+            if (state === 'ok') {
+                row.style.borderColor = 'rgba(134,239,172,0.35)';
+                row.style.background  = 'rgba(134,239,172,0.05)';
+                if (valEl)  { valEl.style.color = '#f0f4ff'; valEl.style.fontStyle = 'normal'; valEl.textContent = value; }
+                if (statEl) { statEl.style.background = 'rgba(134,239,172,0.15)'; statEl.style.color = '#86efac'; statEl.textContent = '✓'; }
+            } else if (state === 'error') {
+                row.style.borderColor = 'rgba(255,100,100,0.35)';
+                row.style.background  = 'rgba(255,100,100,0.04)';
+                if (valEl)  { valEl.style.color = 'rgba(255,100,100,0.7)'; valEl.textContent = '? ' + value; }
+                if (statEl) { statEl.style.background = 'rgba(255,100,100,0.15)'; statEl.style.color = '#ff6b6b'; statEl.textContent = '?'; }
+            } else {
+                row.style.borderColor = 'rgba(255,255,255,0.07)';
+                row.style.background  = 'rgba(255,255,255,0.02)';
+                if (valEl)  { valEl.style.color = 'rgba(255,255,255,0.15)'; valEl.style.fontStyle = 'italic'; valEl.textContent = '—'; }
+                if (statEl) { statEl.style.background = 'rgba(255,255,255,0.04)'; statEl.style.color = 'rgba(255,255,255,0.2)'; statEl.textContent = '·'; }
+            }
+        }
+
+        var _voiceRecognition = null;
+        var _voiceResult      = {};
+        var _voiceBarsTimer   = null;
+
+        function _voiceBarsAnimate() {
+            var container = document.getElementById('vmBars');
+            if (!container) return;
+            var html = '';
+            for (var i = 0; i < 28; i++) {
+                var delay = (i * 0.04).toFixed(2);
+                var h     = Math.floor(Math.random() * 28) + 4;
+                html += '<div style="width:3px;border-radius:3px;background:#ff6b35;height:' + h + 'px;animation:vbar-wave 0.6s ease-in-out ' + delay + 's infinite alternate;opacity:0.7;"></div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function _voiceStart() {
+            var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) return;
+            _voiceResult  = {};
+            var rec = new SR();
+            _voiceRecognition = rec;
+            rec.lang = 'it-IT';
+            rec.continuous = false;
+            rec.interimResults = true;
+
+            rec.onresult = function(e) {
+                var transcript = '';
+                for (var i = 0; i < e.results.length; i++) {
+                    transcript += e.results[i][0].transcript;
+                }
+                var el = document.getElementById('vmTranscript');
+                if (el) el.textContent = transcript;
+                if (e.results[0] && e.results[0].isFinal) {
+                    _voiceParse(transcript.trim().toLowerCase());
+                }
+            };
+            rec.onerror = function(e) {
+                var st = document.getElementById('vmStatus');
+                if (st) { st.textContent = 'Errore: ' + e.error; st.style.color = '#ff6b6b'; }
+            };
+            rec.onend = function() {
+                var btn = document.getElementById('vmMicBtn');
+                if (btn) { btn.style.animation = 'none'; btn.style.background = 'rgba(255,107,53,0.3)'; }
+                var st = document.getElementById('vmStatus');
+                if (st && st.textContent === 'In ascolto...') st.textContent = 'Elaborazione...';
+            };
+            rec.start();
+        }
+
+        function _voiceParse(text) {
+            // Mappa nomi appresi per matching fuzzy
+            var dayMap = {lun:0,lunedì:0,mar:1,martedì:1,mer:2,mercoledì:2,gio:3,giovedì:3,ven:4,venerdì:4,sab:5,sabato:5,dom:6,domenica:6,oggi:7,domani:8};
+            var result = {};
+
+            // --- Controllo conferma/annulla vocale ---
+            if (text === 'sì' || text === 'si' || text === 'yes' || text === 'ok' || text === 'salva') { voiceSave(); return; }
+            if (text === 'no' || text === 'annulla' || text === 'cancella') { voiceCancel(); return; }
+
+            // --- Trasportatore ---
+            var allT = learnedTrasportatori.slice();
+            allT.forEach(function(t) {
+                if (text.indexOf(t.toLowerCase()) !== -1) result.trasportatore = t;
+            });
+            // Fallback: prima parola maiuscola probabile è il trasportatore
+            if (!result.trasportatore) {
+                var firstWord = text.split(' ')[0].toUpperCase();
+                if (firstWord.length >= 2) result.trasportatore = firstWord;
+            }
+
+            // --- Giorno ---
+            var todayDate = new Date();
+            Object.keys(dayMap).forEach(function(k) {
+                if (text.indexOf(k) !== -1) {
+                    var dv = dayMap[k];
+                    var d  = new Date(todayDate);
+                    if (dv === 7) { /* oggi */ }
+                    else if (dv === 8) { d.setDate(d.getDate() + 1); }
+                    else {
+                        var curr = d.getDay();
+                        var diff = dv - curr;
+                        if (diff < 0) diff += 7;
+                        d.setDate(d.getDate() + diff);
+                    }
+                    result.data = d.toISOString().split('T')[0];
+                }
+            });
+
+            // --- Partenza: parola dopo "da" ---
+            var fromMatch = text.match(/\bda\s+([a-zàèìòù''\s]+?)(?:\s+a\s|\s+a$|\s+prodotto|\s+cippato|\s+segatura|\s+pula|\s+farro|$)/i);
+            if (fromMatch) {
+                var fromRaw = fromMatch[1].trim();
+                result.partenza = _voiceMatchDB(fromRaw, learnedPartenze) || _capitalize(fromRaw);
+            }
+
+            // --- Arrivo: parola dopo "a" ---
+            var toMatch = text.match(/\ba\s+([a-zàèìòù''\s]+?)(?:\s+prodotto|\s+lunedì|\s+martedì|\s+mercoledì|\s+giovedì|\s+venerdì|\s+cippato|\s+segatura|\s+pula|\s+farro|$)/i);
+            if (toMatch) {
+                var toRaw = toMatch[1].trim();
+                result.arrivo = _voiceMatchDB(toRaw, learnedArrivi) || _capitalize(toRaw);
+            }
+
+            // --- Prodotto ---
+            var prodotti = ['cippato','segatura','pula','farro','trucioli','pellet','biomassa'];
+            learnedProdotti.forEach(function(p){ prodotti.push(p.toLowerCase()); });
+            prodotti.forEach(function(p) {
+                if (text.indexOf(p) !== -1) result.prodotto = _voiceMatchDB(p, learnedProdotti) || _capitalize(p);
+            });
+
+            // --- Da confermare ---
+            result.daConfermare = text.indexOf('confermare') !== -1 || text.indexOf('da conf') !== -1;
+
+            _voiceResult = result;
+            _voiceUpdateFields(result);
+        }
+
+        function _voiceMatchDB(raw, db) {
+            var best = null, bestScore = 0;
+            db.forEach(function(entry) {
+                var e = entry.toLowerCase();
+                var r = raw.toLowerCase();
+                if (e === r) { best = entry; bestScore = 100; return; }
+                if (e.indexOf(r) !== -1 || r.indexOf(e) !== -1) {
+                    var score = Math.min(e.length, r.length) / Math.max(e.length, r.length) * 90;
+                    if (score > bestScore) { best = entry; bestScore = score; }
+                }
+            });
+            return bestScore > 40 ? best : null;
+        }
+
+        function _capitalize(s) {
+            if (!s) return '';
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+
+        function _voiceUpdateFields(r) {
+            var dayNames = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+            var allOk = true;
+
+            _voiceSetField('vmTrasp', r.trasportatore || '', r.trasportatore ? 'ok' : 'empty'); if (!r.trasportatore) allOk = false;
+            if (r.data) {
+                var d = new Date(r.data + 'T12:00:00');
+                _voiceSetField('vmData', dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'), 'ok');
+            } else { _voiceSetField('vmData', '', 'empty'); allOk = false; }
+            _voiceSetField('vmFrom', r.partenza || '', r.partenza ? 'ok' : 'empty'); if (!r.partenza) allOk = false;
+            _voiceSetField('vmTo',   r.arrivo   || '', r.arrivo   ? 'ok' : 'empty'); if (!r.arrivo)   allOk = false;
+            _voiceSetField('vmProd', r.prodotto || 'non specificato', r.prodotto ? 'ok' : 'empty');
+
+            var saveBtn = document.getElementById('vmSaveBtn');
+            if (saveBtn) {
+                saveBtn.disabled = !allOk;
+                saveBtn.style.background  = allOk ? 'rgba(134,239,172,0.15)' : 'rgba(134,239,172,0.05)';
+                saveBtn.style.borderColor = allOk ? 'rgba(134,239,172,0.4)'  : 'rgba(134,239,172,0.1)';
+                saveBtn.style.color       = allOk ? '#86efac' : 'rgba(134,239,172,0.3)';
+            }
+            var st = document.getElementById('vmStatus');
+            if (st) { st.textContent = allOk ? '✅ Pronto — controlla e salva' : '⚠ Mancano alcuni campi'; st.style.color = allOk ? '#86efac' : '#ffa032'; }
+        }
+
+        function voiceRetry() {
+            if (_voiceRecognition) { try { _voiceRecognition.abort(); } catch(e) {} }
+            _voiceResult = {};
+            ['vmTrasp','vmData','vmFrom','vmTo','vmProd'].forEach(function(id){ _voiceSetField(id,'','empty'); });
+            var el = document.getElementById('vmTranscript'); if (el) el.textContent = 'Aspetto che tu parli...';
+            var st = document.getElementById('vmStatus');     if (st) { st.textContent = 'In ascolto...'; st.style.color = '#ff6b35'; }
+            var btn = document.getElementById('vmMicBtn');    if (btn) { btn.style.animation = 'mic-pulse 1.5s ease-out infinite'; btn.style.background = '#ff6b35'; }
+            _voiceStart();
+        }
+
+        function voiceStop() {
+            if (_voiceRecognition) { try { _voiceRecognition.stop(); } catch(e) {} }
+        }
+
+        function voiceCancel() {
+            if (_voiceRecognition) { try { _voiceRecognition.abort(); } catch(e) {} }
+            var m = document.getElementById('voiceModal'); if (m) m.remove();
+        }
+
+        function voiceSave() {
+            var r = _voiceResult;
+            if (!r.trasportatore || !r.data || !r.partenza || !r.arrivo) {
+                showStatus('⚠️ Campi incompleti — controlla i dati', 'warning'); return;
+            }
+            var trip = {
+                data: r.data,
+                trasportatore: r.trasportatore,
+                partenza: r.partenza,
+                arrivo:   r.arrivo,
+                prodotto: r.prodotto || '',
+                note:     '',
+                daConfermare: r.daConfermare || false,
+                confermato:   false
+            };
+            learnFromTrip(trip);
+            trips.push(trip);
+            trips.sort(function(a,b){ return new Date(a.data+'T12:00:00')-new Date(b.data+'T12:00:00'); });
+            saveToLocalStorage();
+            filteredTrips = trips.slice();
+            filterApply();
+            updateStats();
+            filterPopulateDropdowns();
+            if (driveAccessToken) autoSaveDrive();
+            if (currentView === 'desktop') renderDesktopView();
+            voiceCancel();
+            haptic('success');
+            showStatus('✅ Viaggio aggiunto con la voce!', 'success');
         }
 
         function desktopEditNote(idx) {
@@ -7903,14 +8497,27 @@
         function desktopToggleConf(idx) {
             var _wt = (_pcWeekMode === 'next') ? tripsNext : trips;
             if (!_wt[idx]) return;
-            // Il badge appare solo quando daConfermare=true — cliccarlo lo conferma (rimuove badge)
             _wt[idx].daConfermare = false;
             if (_pcWeekMode === 'next') saveNextToLocalStorage(); else saveToLocalStorage();
-            // Aggiornamento minimo: rimuovi solo il badge senza re-render completo
+            // Animazione conferma — flash verde sulla riga
+            var row = document.getElementById('drow-' + idx);
+            if (row) {
+                row.style.transition = 'background 0.15s';
+                row.style.background = 'rgba(134,239,172,0.18)';
+                row.style.borderLeftColor = '#86efac';
+                setTimeout(function() {
+                    row.style.transition = 'background 0.6s';
+                    row.style.background = '';
+                    row.style.borderLeftColor = '';
+                }, 500);
+            }
+            // Aggiorna solo la cella stato
             var cell = document.querySelector('#drow-' + idx + ' td:nth-child(8)');
-            if (cell) cell.innerHTML = '<span style="font-size:10px;color:rgba(255,255,255,0.15);">—</span>';
+            if (cell) cell.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.1);">—</span>';
             updateStats();
+            haptic('success');
             showStatus('✅ Viaggio confermato!', 'success');
+            if (driveAccessToken) autoSaveDrive();
         }
 
         function desktopToggleConfermato(idx) {
@@ -7986,6 +8593,7 @@
             _pcWeekMode = mode;
             var btnCurr = document.getElementById('pcToggleCurrent');
             var btnNext = document.getElementById('pcToggleNext');
+            var btnOggi = document.getElementById('pcToggleOggi');
             if (btnCurr) {
                 btnCurr.style.background = mode === 'current' ? 'var(--accent)' : 'transparent';
                 btnCurr.style.color      = mode === 'current' ? '#000' : 'rgba(255,255,255,0.4)';
@@ -7994,9 +8602,20 @@
                 btnNext.style.background = mode === 'next' ? '#a78bfa' : 'transparent';
                 btnNext.style.color      = mode === 'next' ? '#000' : 'rgba(167,139,250,0.6)';
             }
+            if (btnOggi) {
+                btnOggi.style.background = mode === 'oggi' ? '#00d2b4' : 'transparent';
+                btnOggi.style.color      = mode === 'oggi' ? '#000' : 'rgba(0,210,180,0.7)';
+            }
+            // In modalità oggi — filtra solo i viaggi di oggi
+            if (mode === 'oggi') {
+                var todayStr = new Date().toISOString().split('T')[0];
+                _desktopDayFilter = todayStr;
+            } else {
+                _desktopDayFilter = '';
+            }
             // Evidenzia sfondo toolbar
             var pcBody = document.getElementById('desktopBody');
-            if (pcBody) pcBody.style.borderTop = mode === 'next' ? '2px solid rgba(167,139,250,0.4)' : '';
+            if (pcBody) pcBody.style.borderTop = mode === 'next' ? '2px solid rgba(167,139,250,0.4)' : mode === 'oggi' ? '2px solid rgba(0,210,180,0.4)' : '';
             renderDesktopView();
         }
         // _desktopChrono dichiarato in cima come var
@@ -10787,22 +11406,41 @@
 
         // Modale nuova settimana V2
         function showNewWeekModalV2() {
-            const now = new Date();
-            const weekNum = getWeekNumber(now);
-            const monday = getMonday(now);
-            const nextMon = new Date(monday); nextMon.setDate(monday.getDate() + 7);
-            const nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
-            const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-            const nextWeekNum = getWeekNumber(nextMon);
-            const autoTitle = `Settimana ${nextWeekNum}/${nextMon.getFullYear()} (Lun. ${fmt(nextMon)} - Ven. ${fmt(nextFri)})`;
+            var now = new Date();
+            var weekNum = getWeekNumber(now);
+            var monday  = getMonday(now);
+            var nextMon = new Date(monday); nextMon.setDate(monday.getDate() + 7);
+            var nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
+            var fmt = function(d) { return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'); };
+            var nextWeekNum = getWeekNumber(nextMon);
+            var autoTitle = 'Settimana ' + nextWeekNum + '/' + nextMon.getFullYear() + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
 
-            const elTitle = document.getElementById('nwv2CurrentTitle');
-            const elCount = document.getElementById('nwv2CurrentCount');
-            const elInput = document.getElementById('nwv2NewTitle');
-            const elModal = document.getElementById('newWeekModalV2');
+            var elTitle = document.getElementById('nwv2CurrentTitle');
+            var elCount = document.getElementById('nwv2CurrentCount');
+            var elInput = document.getElementById('nwv2NewTitle');
+            var elModal = document.getElementById('newWeekModalV2');
             if (elTitle) elTitle.textContent = weekTitle || 'Settimana corrente';
             if (elCount) elCount.textContent = trips.length + ' viaggi da archiviare';
             if (elInput) elInput.value = autoTitle;
+
+            // Mostra copia settimana precedente se c'è archivio
+            var wrapPrev = document.getElementById('nwv2CopyPrevWrap');
+            if (wrapPrev) {
+                try {
+                    var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                    if (arch.length > 0) {
+                        var last = arch[arch.length - 1];
+                        var prevTitle = document.getElementById('nwv2PrevTitle');
+                        var prevCount = document.getElementById('nwv2PrevCount');
+                        if (prevTitle) prevTitle.textContent = last.title || 'Settimana precedente';
+                        if (prevCount) prevCount.textContent = (last.trips ? last.trips.length : 0) + ' viaggi';
+                        wrapPrev.style.display = 'block';
+                    } else {
+                        wrapPrev.style.display = 'none';
+                    }
+                } catch(e) { wrapPrev.style.display = 'none'; }
+            }
+
             if (elModal) elModal.classList.add('active');
         }
 
@@ -10811,14 +11449,56 @@
         }
 
         function nwv2AutoTitle() {
-            const now = new Date();
-            const monday = getMonday(now);
-            const nextMon = new Date(monday); nextMon.setDate(monday.getDate() + 7);
-            const nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
-            const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
-            const nextWeekNum = getWeekNumber(nextMon);
+            var now = new Date();
+            var monday = getMonday(now);
+            var nextMon = new Date(monday); nextMon.setDate(monday.getDate() + 7);
+            var nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
+            var fmt = function(d) { return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'); };
+            var nextWeekNum = getWeekNumber(nextMon);
             document.getElementById('nwv2NewTitle').value =
-                `Settimana ${nextWeekNum}/${nextMon.getFullYear()} (Lun. ${fmt(nextMon)} - Ven. ${fmt(nextFri)})`;
+                'Settimana ' + nextWeekNum + '/' + nextMon.getFullYear() + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
+        }
+
+        function nwv2CopyPrev() {
+            try {
+                var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                if (arch.length === 0) { showStatus('Nessuna settimana precedente in archivio', 'info'); return; }
+                var last = arch[arch.length - 1];
+                if (!last.trips || last.trips.length === 0) { showStatus('La settimana precedente non ha viaggi', 'info'); return; }
+                // Copia i viaggi rimuovendo le date (saranno da impostare) e azzerando stati
+                var copied = last.trips.map(function(t) {
+                    return {
+                        data: '',
+                        trasportatore: t.trasportatore || '',
+                        partenza:      t.partenza      || '',
+                        arrivo:        t.arrivo        || '',
+                        prodotto:      t.prodotto      || '',
+                        note:          t.note          || '',
+                        daConfermare:  true,
+                        confermato:    false
+                    };
+                });
+                if (!confirm('Copiare ' + copied.length + ' rotte dalla settimana precedente?\n\nLe date saranno azzerate — dovrai impostarle.\nI viaggi saranno marcati "da confermare".')) return;
+                // Archivia prima la corrente se ha viaggi
+                if (trips.length > 0) {
+                    var arch2 = JSON.parse(localStorage.getItem('weekArchive') || '[]');
+                    arch2.push({title: weekTitle || 'Settimana', trips: JSON.parse(JSON.stringify(trips)), archivedAt: new Date().toISOString()});
+                    localStorage.setItem('weekArchive', JSON.stringify(arch2));
+                }
+                trips = copied;
+                saveToLocalStorage();
+                filteredTrips = trips.slice();
+                filterApply();
+                updateStats();
+                filterPopulateDropdowns();
+                renderTrips();
+                if (driveAccessToken) autoSaveDrive();
+                closeNewWeekModalV2();
+                haptic('success');
+                showStatus('✅ ' + copied.length + ' rotte copiate — imposta le date', 'success');
+            } catch(e) {
+                showStatus('⚠️ Errore durante la copia', 'warning');
+            }
         }
 
         // Archivia settimana corrente e pulisce per la nuova
@@ -11173,6 +11853,20 @@
     <!-- ═══════════════════════════════════════════════════════════════
          MODAL MULTI-TRATTA
          ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══ MODAL PULIZIA DB APPRESI ═══ -->
+    <div id="dbCleanModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3600;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
+        <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #a78bfa;border-radius:18px;width:100%;max-width:500px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div>
+                    <div style="font-size:16px;font-weight:800;color:#a78bfa;">🗃️ Database Appresi</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px;">Rimuovi voci errate o non più utili</div>
+                </div>
+                <button onclick="closeDbClean()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;padding:6px 10px;">✕</button>
+            </div>
+            <div style="padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px;" id="dbCleanBody"></div>
+        </div>
+    </div>
+
     <div id="multiTrattaModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3500;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
         <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #ff6b35;border-radius:18px;width:100%;max-width:660px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
 
@@ -11255,6 +11949,18 @@
                 <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Settimana da archiviare</div>
                 <div style="font-size:15px;font-weight:700;color:var(--text);" id="nwv2CurrentTitle">—</div>
                 <div style="font-size:12px;color:var(--text-dim);margin-top:4px;" id="nwv2CurrentCount">—</div>
+            </div>
+
+            <!-- Copia dalla settimana precedente -->
+            <div id="nwv2CopyPrevWrap" style="display:none;margin-bottom:16px;">
+                <div style="background:rgba(0,210,180,0.05);border:1px solid rgba(0,210,180,0.2);border-radius:10px;padding:12px 14px;">
+                    <div style="font-size:11px;color:rgba(0,210,180,0.7);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">📋 Settimana precedente disponibile</div>
+                    <div style="font-size:13px;color:var(--text);font-weight:600;" id="nwv2PrevTitle">—</div>
+                    <div style="font-size:11px;color:var(--text-dim);margin-top:2px;" id="nwv2PrevCount">—</div>
+                    <button onclick="nwv2CopyPrev()" style="margin-top:10px;width:100%;padding:9px;background:rgba(0,210,180,0.1);border:1px solid rgba(0,210,180,0.3);border-radius:8px;color:#00d2b4;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer;">
+                        📋 Usa come base per la nuova settimana
+                    </button>
+                </div>
             </div>
 
             <!-- Titolo nuova settimana -->
