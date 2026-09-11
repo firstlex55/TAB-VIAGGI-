@@ -1489,6 +1489,10 @@
         /* ===== TEMA G — Vista PC (Fil è astigmatico: sfondo chiaro, testo scuro, zero neon) ===== */
         .desktop-view-active {
             --bg: #dde4ec;
+            --primary: #eef2f7;
+            --secondary: #e4e9f0;
+            --border: rgba(16,32,64,0.16);
+            --accent-dim: rgba(255,107,53,0.10);
             --text: #1a2540;
             --text-dim: #506080;
             --text-muted: #506080;
@@ -1511,6 +1515,24 @@
         }
         .desktop-view-active .transporter-clp     { background: var(--t-clp-bg); color: var(--t-clp); border: 1px solid var(--t-clp); }
         .desktop-view-active .transporter-default { background: var(--t-default-bg); color: var(--t-default); border: 1px solid var(--t-default); }
+
+        /* Alcuni popup condivisi (Multi-Tratta, DB appresi, conferma Excel, popup data,
+           conflitto Drive, riepilogo import) hanno lo sfondo scuro scritto a mano
+           invece di var(--primary)/--secondary, quindi restano scuri anche in vista PC.
+           Qui ripristiniamo i valori scuri per testo/stato SOLO dentro questi popup,
+           così restano leggibili (sfondo scuro + testo chiaro) indipendentemente dalla vista. */
+        .desktop-view-active #multiTrattaModal,
+        .desktop-view-active #dbCleanModal,
+        .desktop-view-active #summaryModal,
+        .desktop-view-active #excelConfirmModal,
+        .desktop-view-active #desktopDatePopup,
+        .desktop-view-active #driveConflictModal {
+            --text: #f2f4f8;
+            --text-dim: #9aa2b0;
+            --text-muted: #6b7484;
+            --success: #3ecb96;
+            --warning: #e0c05a;
+        }
 
         /* Badge trasportatore (card + compact + medium) */
         .transporter-cevolo   { background: var(--t-cevolo-fill);   color: var(--t-cevolo-ink); }
@@ -3642,7 +3664,7 @@
         <div class="pcvs-sep"></div>
         <button class="pcvs-add" onclick="toggleAddForm()">＋ Aggiungi</button>
         <button class="pcvs-add" onclick="openMultiTratta()" style="background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.3);color:#ff6b35;">🚛 Multi</button>
-        <button class="pcvs-add" onclick="openDbClean()" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" title="Gestisci database appresi">🗃️</button>
+        <button class="pcvs-add" onclick="openDbClean()" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);color:#a78bfa;" title="Gestisci il database (trasportatori, partenze, arrivi, prodotti)">🗃️</button>
         <button class="pcvs-add" onclick="toggleQuickStats()" id="statsToggleBtn" style="background:rgba(0,210,180,0.08);border-color:rgba(0,210,180,0.25);color:#00d2b4;" title="Statistiche settimana">📊</button>
     </div>
 
@@ -4285,6 +4307,7 @@
         
         let partenzaList = ["Bientina (INCONTRATO)", "S.Felice (CAI-BF)", "Dosolo (ARDENGHI)", "Grezzana (TACCHELLA)", "Mercatino (COVI)", "Tirano (ILT)", "Jolanda (Bonifiche)", "Mezzocorona (VENDER)", "Castel S. Nicolò (Tosco imballaggi)"];
         let arrivoList = ["Ponzano Romano (SICEM)", "Verolavecchia (AGROGI)", "Mezzano RA (SICEM Srl)", "Tarmassia (TRUCIOLI)"];
+        let prodottiList = ["Cippato", "Sfarinato", "Segatura", "Pula"];
 
         // ── Utility: numero settimana ISO 8601 ──
         function getWeekNumber(date) {
@@ -4520,24 +4543,51 @@
                 transportersList.sort();
                 saveTransportersList();
             } catch(e) {}
-            updateTransporterDatalist();
-            
+
             // Load locations
             const savedPartenza = localStorage.getItem('partenzaList');
             if (savedPartenza) {
-                partenzaList = JSON.parse(savedPartenza);
-                updatePartenzaDatalist();
+                try { partenzaList = JSON.parse(savedPartenza); } catch(e) {}
             }
-            
             const savedArrivo = localStorage.getItem('arrivoList');
             if (savedArrivo) {
-                arrivoList = JSON.parse(savedArrivo);
-                updateArrivoDatalist();
+                try { arrivoList = JSON.parse(savedArrivo); } catch(e) {}
+            }
+            const savedProdotti = localStorage.getItem('prodottiList');
+            if (savedProdotti) {
+                try { prodottiList = JSON.parse(savedProdotti); } catch(e) {}
             }
 
-            // Carica i 4 database appresi e aggiorna tutti i datalist
+            // Database unico — recupera qualunque voce rimasta nel vecchio sistema
+            // "database appresi" (learnedPartenze/Arrivi/Trasportatori/Prodotti) e la
+            // fonde nelle liste canoniche qui sopra. Da qui in avanti c'è UN SOLO
+            // database per categoria — niente più due liste scollegate.
             loadLearnedDB();
+            _mergeInto(partenzaList,     learnedPartenze);
+            _mergeInto(arrivoList,        learnedArrivi);
+            _mergeInto(transportersList,  learnedTrasportatori);
+            _mergeInto(prodottiList,      learnedProdotti);
+            saveTransportersList();
+            saveLocationLists();
+            saveProdottiList();
+
+            updateTransporterDatalist();
+            updatePartenzaDatalist();
+            updateArrivoDatalist();
             _refreshAllDatalistsLearn();
+        }
+
+        // Aggiunge a 'target' ogni voce di 'source' non già presente (confronto senza
+        // maiuscole/spazi). Usata per fondere il vecchio sistema "appresi" nell'unico
+        // database canonico.
+        function _mergeInto(target, source) {
+            (source || []).forEach(function(v) {
+                if (!v || !v.trim()) return;
+                var low = v.trim().toLowerCase();
+                var exists = target.some(function(t){ return t.toLowerCase() === low; });
+                if (!exists) target.push(v.trim());
+            });
+            target.sort(function(a,b){ return a.toLowerCase().localeCompare(b.toLowerCase()); });
         }
 
         function saveTransportersList() {
@@ -4549,17 +4599,26 @@
             localStorage.setItem('arrivoList', JSON.stringify(arrivoList));
         }
 
+        function saveProdottiList() {
+            localStorage.setItem('prodottiList', JSON.stringify(prodottiList));
+        }
+
         function updatePartenzaDatalist() {
             const datalist = document.getElementById('partenzaList');
-            datalist.innerHTML = partenzaList.map(function(l){ return '<option value="' + l + '">'; }).join('');
+            if (datalist) datalist.innerHTML = partenzaList.map(function(l){ return '<option value="' + l + '">'; }).join('');
         }
 
         function updateArrivoDatalist() {
             const datalist = document.getElementById('arrivoList');
-            datalist.innerHTML = arrivoList.map(function(l){ return '<option value="' + l + '">'; }).join('');
+            if (datalist) datalist.innerHTML = arrivoList.map(function(l){ return '<option value="' + l + '">'; }).join('');
         }
 
-        // ── 4 DATABASE APPRESI ──────────────────────────────────────────────
+        // ── DATABASE UNICO — trasportatori/partenze/arrivi/prodotti ─────────
+        // Le vecchie liste "learnedXxx" restano solo per compatibilità con dati
+        // pregressi (fuse nelle liste canoniche a caricamento, vedi _mergeInto).
+        // Da qui in avanti c'è una lista sola per categoria: transportersList,
+        // partenzaList, arrivoList, prodottiList — quella mostrata nel pannello
+        // Database ed è la stessa usata per l'autocompletamento ovunque.
         var learnedPartenze     = [];
         var learnedArrivi       = [];
         var learnedProdotti     = [];
@@ -4572,7 +4631,9 @@
             try { learnedTrasportatori = JSON.parse(localStorage.getItem('learnedTrasportatori') || '[]'); } catch(e) { learnedTrasportatori = []; }
         }
 
-        function _learnValue(arr, key, val) {
+        // Aggiunge 'val' alla lista canonica se non già presente (confronto senza
+        // maiuscole/spazi), salva su localStorage e ritorna true se aggiunta.
+        function _addToDb(arr, key, val) {
             if (!val || !val.trim()) return false;
             var v = val.trim();
             var low = v.toLowerCase();
@@ -4585,21 +4646,21 @@
             return true;
         }
 
-        function learnPartenza(val)      { _learnValue(learnedPartenze,      'learnedPartenze',      val); _refreshAllDatalistsLearn(); }
-        function learnArrivo(val)        { _learnValue(learnedArrivi,         'learnedArrivi',        val); _refreshAllDatalistsLearn(); }
-        function learnProdotto(val)      { _learnValue(learnedProdotti,       'learnedProdotti',      val); _refreshAllDatalistsLearn(); }
-        function learnTrasportatore(val) { _learnValue(learnedTrasportatori,  'learnedTrasportatori', val); _refreshAllDatalistsLearn(); }
+        function learnPartenza(val)      { if (_addToDb(partenzaList,    'partenzaList',    val)) _refreshAllDatalistsLearn(); }
+        function learnArrivo(val)        { if (_addToDb(arrivoList,       'arrivoList',       val)) _refreshAllDatalistsLearn(); }
+        function learnProdotto(val)      { if (_addToDb(prodottiList,     'prodottiList',     val)) _refreshAllDatalistsLearn(); }
+        function learnTrasportatore(val) { if (_addToDb(transportersList, 'transportersList', val)) _refreshAllDatalistsLearn(); }
 
         function learnFromTrip(t) {
             var changed = false;
-            if (t.partenza)      changed = _learnValue(learnedPartenze,      'learnedPartenze',      t.partenza)      || changed;
-            if (t.arrivo)        changed = _learnValue(learnedArrivi,         'learnedArrivi',        t.arrivo)        || changed;
-            if (t.prodotto)      changed = _learnValue(learnedProdotti,       'learnedProdotti',      t.prodotto)      || changed;
-            if (t.trasportatore) changed = _learnValue(learnedTrasportatori,  'learnedTrasportatori', t.trasportatore) || changed;
+            if (t.partenza)      changed = _addToDb(partenzaList,    'partenzaList',    t.partenza)      || changed;
+            if (t.arrivo)        changed = _addToDb(arrivoList,       'arrivoList',       t.arrivo)        || changed;
+            if (t.prodotto)      changed = _addToDb(prodottiList,     'prodottiList',     t.prodotto)      || changed;
+            if (t.trasportatore) changed = _addToDb(transportersList, 'transportersList', t.trasportatore) || changed;
             if (changed) _refreshAllDatalistsLearn();
         }
 
-        // Scansiona TUTTI i viaggi (correnti + prossima + archivio) e popola i DB appresi
+        // Scansiona TUTTI i viaggi (correnti + prossima + archivio) e popola il database
         // Chiamata all'avvio — silenziosamente impara tutto lo storico
         function bulkLearnFromAllTrips() {
             var changed = false;
@@ -4617,70 +4678,33 @@
             } catch(e) {}
 
             allTrips.forEach(function(t) {
-                if (t.partenza)      changed = _learnValue(learnedPartenze,      'learnedPartenze',      t.partenza)      || changed;
-                if (t.arrivo)        changed = _learnValue(learnedArrivi,         'learnedArrivi',        t.arrivo)        || changed;
-                if (t.prodotto)      changed = _learnValue(learnedProdotti,       'learnedProdotti',      t.prodotto)      || changed;
-                if (t.trasportatore) changed = _learnValue(learnedTrasportatori,  'learnedTrasportatori', t.trasportatore) || changed;
+                if (t.partenza)      changed = _addToDb(partenzaList,    'partenzaList',    t.partenza)      || changed;
+                if (t.arrivo)        changed = _addToDb(arrivoList,       'arrivoList',       t.arrivo)        || changed;
+                if (t.prodotto)      changed = _addToDb(prodottiList,     'prodottiList',     t.prodotto)      || changed;
+                if (t.trasportatore) changed = _addToDb(transportersList, 'transportersList', t.trasportatore) || changed;
             });
             if (changed) _refreshAllDatalistsLearn();
         }
 
-        // Aggiorna tutti i datalist presenti nel DOM con le voci apprese
+        // Aggiorna tutti i datalist presenti nel DOM con le voci del database unico
         function _refreshAllDatalistsLearn() {
-            // Form aggiunta + form modifica (condividono gli stessi datalist)
-            var dlP = document.getElementById('partenzaList');
-            if (dlP) {
-                var optP = partenzaList.concat(learnedPartenze.filter(function(v){ return partenzaList.indexOf(v) === -1; }));
-                dlP.innerHTML = optP.map(function(l){ return '<option value="' + l + '">'; }).join('');
-            }
-            var dlA = document.getElementById('arrivoList');
-            if (dlA) {
-                var optA = arrivoList.concat(learnedArrivi.filter(function(v){ return arrivoList.indexOf(v) === -1; }));
-                dlA.innerHTML = optA.map(function(l){ return '<option value="' + l + '">'; }).join('');
-            }
-            var dlT = document.getElementById('transporterList');
-            if (dlT) {
-                var optT = transportersList.concat(learnedTrasportatori.filter(function(v){ return transportersList.indexOf(v) === -1; }));
-                dlT.innerHTML = optT.map(function(l){ return '<option value="' + l + '">'; }).join('');
-            }
+            updatePartenzaDatalist();
+            updateArrivoDatalist();
+            updateTransporterDatalist();
             var dlPr = document.getElementById('prodottoList');
-            if (dlPr) {
-                var baseProd = ['Cippato','Sfarinato','Segatura','Pula'];
-                var optPr = baseProd.concat(learnedProdotti.filter(function(v){ return baseProd.indexOf(v) === -1; }));
-                dlPr.innerHTML = optPr.map(function(l){ return '<option value="' + l + '">'; }).join('');
-            }
-            // Vista PC: dfrom, dto, dprod, dtransp (rigenerati da renderDesktopView — qui forziamo solo se già presenti)
+            if (dlPr) dlPr.innerHTML = prodottiList.map(function(l){ return '<option value="' + l + '">'; }).join('');
+            // Vista PC: dfrom, dto, dprod, dtransp (rigenerati anche da renderDesktopView)
             var dlDF = document.getElementById('dfrom');
-            if (dlDF) {
-                var currF = [];
-                dlDF.querySelectorAll('option').forEach(function(o){ currF.push(o.value); });
-                learnedPartenze.forEach(function(v){ if (currF.indexOf(v) === -1) { var o = document.createElement('option'); o.value = v; dlDF.appendChild(o); } });
-            }
+            if (dlDF) dlDF.innerHTML = partenzaList.map(function(l){ return '<option value="' + l + '">'; }).join('');
             var dlDT = document.getElementById('dto');
-            if (dlDT) {
-                var currA = [];
-                dlDT.querySelectorAll('option').forEach(function(o){ currA.push(o.value); });
-                learnedArrivi.forEach(function(v){ if (currA.indexOf(v) === -1) { var o = document.createElement('option'); o.value = v; dlDT.appendChild(o); } });
-            }
+            if (dlDT) dlDT.innerHTML = arrivoList.map(function(l){ return '<option value="' + l + '">'; }).join('');
             var dlDPr = document.getElementById('dprod');
-            if (dlDPr) {
-                var currPr = [];
-                dlDPr.querySelectorAll('option').forEach(function(o){ currPr.push(o.value); });
-                learnedProdotti.forEach(function(v){ if (currPr.indexOf(v) === -1) { var o = document.createElement('option'); o.value = v; dlDPr.appendChild(o); } });
-            }
+            if (dlDPr) dlDPr.innerHTML = prodottiList.map(function(l){ return '<option value="' + l + '">'; }).join('');
             var dlDTr = document.getElementById('dtransp');
-            if (dlDTr) {
-                var currTr = [];
-                dlDTr.querySelectorAll('option').forEach(function(o){ currTr.push(o.value); });
-                learnedTrasportatori.forEach(function(v){ if (currTr.indexOf(v) === -1) { var o = document.createElement('option'); o.value = v; dlDTr.appendChild(o); } });
-            }
+            if (dlDTr) dlDTr.innerHTML = transportersList.map(function(l){ return '<option value="' + l + '">'; }).join('');
             // Popup multi-giorno desktop
             var dlMProd = document.getElementById('dmProdList');
-            if (dlMProd) {
-                var baseProd2 = ['Cippato','Sfarinato','Segatura','Pula'];
-                var optMP = baseProd2.concat(learnedProdotti.filter(function(v){ return baseProd2.indexOf(v) === -1; }));
-                dlMProd.innerHTML = optMP.map(function(l){ return '<option value="' + l + '">'; }).join('');
-            }
+            if (dlMProd) dlMProd.innerHTML = prodottiList.map(function(l){ return '<option value="' + l + '">'; }).join('');
         }
         // ── FINE DATABASE APPRESI ───────────────────────────────────────────
 
@@ -4843,7 +4867,7 @@
 
         function updateTransporterDatalist() {
             const datalist = document.getElementById('transporterList');
-            datalist.innerHTML = transportersList.map(t => `<option value="${t}">`).join('');
+            if (datalist) datalist.innerHTML = transportersList.map(t => `<option value="${t}">`).join('');
         }
 
         function addTransporterToList() {
@@ -6490,16 +6514,11 @@
             });
             const allRoutes = Object.values(routeMap).sort((a,b) => b.uses - a.uses);
 
-            // Unique lists per datalist — include i 4 database appresi
-            var _lP  = learnedPartenze      || [];
-            var _lA  = learnedArrivi        || [];
-            var _lPr = learnedProdotti      || [];
-            var _lTr = learnedTrasportatori || [];
-            const allT = [...new Set([...transportersList, ..._lTr, ...trips.map(t=>t.trasportatore), ...tripsNext.map(t=>t.trasportatore)].filter(Boolean))].sort();
-            const allF = [...new Set([..._lP, ...trips.map(t=>t.partenza), ...["Bientina (INCONTRATO)","S.Felice (CAI-BF)","Dosolo (ARDENGHI)","Grezzana (TACCHELLA)","Mercatino (COVI)","Tirano (ILT)","Jolanda (Bonifiche)","Mezzocorona (VENDER)"]].filter(Boolean))];
-            const allA = [...new Set([..._lA, ...trips.map(t=>t.arrivo), ...["Ponzano Romano (SICEM)","Verolavecchia (AGROGI)","Mezzano RA (SICEM Srl)","Tarmassia (TRUCIOLI)"]].filter(Boolean))];
-            var baseProdotti = ['Cippato','Sfarinato','Segatura','Pula'];
-            var allPr = [...new Set([...baseProdotti, ..._lPr].filter(Boolean))];
+            // Unique lists per datalist — database unico (transportersList/partenzaList/arrivoList/prodottiList)
+            const allT = [...new Set([...transportersList, ...trips.map(t=>t.trasportatore), ...tripsNext.map(t=>t.trasportatore)].filter(Boolean))].sort();
+            const allF = [...new Set([...partenzaList, ...trips.map(t=>t.partenza)].filter(Boolean))];
+            const allA = [...new Set([...arrivoList, ...trips.map(t=>t.arrivo)].filter(Boolean))];
+            const allPr = [...new Set([...prodottiList, ...trips.map(t=>t.prodotto)].filter(Boolean))];
 
             // Applica filtro giorno PC se attivo
             const dayMap = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
@@ -6633,13 +6652,15 @@
                     // PARTENZA — input + codice inline a fianco
                     '<td style="padding:5px 6px;">' +
                     '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
-                    '<input type="text" value="' + fromName + '" list="dfrom"' +
+                    '<input type="text" value="' + _pcShortName(fromName) + '" list="dfrom"' +
+                    ' data-fullname="' + fromName.replace(/"/g,'&quot;') + '"' +
                     ' data-fullval="' + (trip.partenza||'').replace(/"/g,'&quot;') + '"' +
+                    ' title="' + fromName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'partenza\',full);"' +
                     ' placeholder="Partenza..."' +
                     ' style="' + inpStyle + 'font-weight:700;color:#1a2540;font-size:14px;flex:1;min-width:80px;"' +
-                    ' onfocus="' + inpFocus + '"' +
-                    ' onblur="' + inpBlur + '"' +
+                    ' onfocus="' + inpFocus + ';this.value=this.dataset.fullname||this.value;"' +
+                    ' onblur="' + inpBlur + ';this.value=_pcShortName(this.value);"' +
                     ' onkeydown="' + tabNav + '">' +
                     (fromCode ? ('<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:800;letter-spacing:1px;pointer-events:none;white-space:nowrap;text-transform:uppercase;flex-shrink:0;padding:2px 6px;border-radius:5px;' + (function(){ var c = _locationCodeColorPC(fromCode); return 'background:' + c.bg + ';border:1px solid ' + c.bd + ';color:' + c.tx + ';'; })() + '">' + fromCode + '</span>') : '') +
                     '</div>' +
@@ -6648,13 +6669,15 @@
                     // ARRIVO — input + codice inline a fianco
                     '<td style="padding:5px 6px;">' +
                     '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
-                    '<input type="text" value="' + toName + '" list="dto"' +
+                    '<input type="text" value="' + _pcShortName(toName) + '" list="dto"' +
+                    ' data-fullname="' + toName.replace(/"/g,'&quot;') + '"' +
                     ' data-fullval="' + (trip.arrivo||'').replace(/"/g,'&quot;') + '"' +
+                    ' title="' + toName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
                     ' placeholder="Arrivo..."' +
                     ' style="' + inpStyle + 'font-weight:700;color:#085040;font-size:14px;flex:1;min-width:80px;"' +
-                    ' onfocus="' + inpFocus + '"' +
-                    ' onblur="' + inpBlur + '"' +
+                    ' onfocus="' + inpFocus + ';this.value=this.dataset.fullname||this.value;"' +
+                    ' onblur="' + inpBlur + ';this.value=_pcShortName(this.value);"' +
                     ' onkeydown="' + tabNav + '">' +
                     (toCode ? ('<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:800;letter-spacing:1px;pointer-events:none;white-space:nowrap;text-transform:uppercase;flex-shrink:0;padding:2px 6px;border-radius:5px;' + (function(){ var c = _locationCodeColorPC(toCode); return 'background:' + c.bg + ';border:1px solid ' + c.bd + ';color:' + c.tx + ';'; })() + '">' + toCode + '</span>') : '') +
                     '</div>' +
@@ -7286,6 +7309,18 @@
             var col = _locationCodeColor(code);
             if (!col) return null;
             return _liftColor(col.bd, 7, 14);
+        }
+
+        // Accorcia un nome luogo troppo lungo per la colonna PC — preferisce tenere
+        // solo la prima parola (es. "Ponzano Romano" -> "Ponzano") invece di tagliare
+        // a metà parola. Il nome completo resta sempre disponibile per la modifica
+        // (data-fullname) e al passaggio del mouse (title).
+        function _pcShortName(name, maxLen) {
+            maxLen = maxLen || 13;
+            if (!name || name.length <= maxLen) return name || '';
+            var firstWord = name.split(' ')[0];
+            if (firstWord.length <= maxLen) return firstWord;
+            return name.substring(0, maxLen - 1) + '…';
         }
 
         // Colori FISSI codice azienda — Tema G (vista PC, sfondo chiaro/testo scuro)
@@ -8228,28 +8263,48 @@
             if (modal) modal.style.display = 'none';
             document.body.style.overflow = '';
         }
+        // Normalizza una voce per il confronto doppioni (minuscolo, spazi ridotti)
+        function _dbNorm(v) {
+            return (v || '').toLowerCase().trim().replace(/\s+/g, ' ');
+        }
         function _dbCleanRender() {
             var body = document.getElementById('dbCleanBody');
             if (!body) return;
             var dbs = [
-                {key:'learnedPartenze',      arr:learnedPartenze,      label:'📍 Partenze',      color:'#f0f4ff'},
-                {key:'learnedArrivi',         arr:learnedArrivi,         label:'🏁 Arrivi',        color:'#86efac'},
-                {key:'learnedTrasportatori',  arr:learnedTrasportatori,  label:'🚛 Trasportatori', color:'#ff8c5a'},
-                {key:'learnedProdotti',        arr:learnedProdotti,       label:'📦 Prodotti',      color:'#b0bcd0'},
+                {key:'transportersList', arr:transportersList, label:'🚛 Trasportatori', color:'#ff8c5a', ph:'Es. CEVOLO'},
+                {key:'partenzaList',     arr:partenzaList,      label:'📍 Partenze',      color:'#8ec0ec', ph:'Es. Bientina (INCONTRATO)'},
+                {key:'arrivoList',       arr:arrivoList,        label:'🏁 Arrivi',        color:'#7fc49a', ph:'Es. Ponzano Romano (SICEM)'},
+                {key:'prodottiList',     arr:prodottiList,      label:'📦 Prodotti',      color:'#c7cdd8', ph:'Es. Segatura'},
             ];
             var html = '';
             dbs.forEach(function(db) {
+                // Conta i doppioni esatti (stessa voce salvata più volte con maiuscole/spazi diversi)
+                var counts = {};
+                db.arr.forEach(function(v){ var n = _dbNorm(v); counts[n] = (counts[n]||0) + 1; });
+                var dupCount = Object.keys(counts).filter(function(n){ return counts[n] > 1; }).length;
+
                 html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;">';
                 html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
                 html += '<span style="font-size:12px;font-weight:800;color:' + db.color + ';">' + db.label + '</span>';
-                html += '<span style="font-size:10px;color:rgba(255,255,255,0.25);">' + db.arr.length + ' voci</span>';
+                html += '<span style="font-size:10px;color:rgba(255,255,255,0.3);">' + db.arr.length + ' voci' + (dupCount ? ' · <span style="color:var(--warning);">⚠ ' + dupCount + ' doppion' + (dupCount===1?'e':'i') + '</span>' : '') + '</span>';
                 html += '</div>';
+
+                // Riga di aggiunta manuale
+                html += '<div style="display:flex;gap:6px;margin-bottom:10px;">';
+                html += '<input type="text" id="dbAdd_' + db.key + '" placeholder="' + db.ph + '" onkeydown="if(event.key===\'Enter\'){dbCleanAdd(\'' + db.key + '\');event.preventDefault();}" style="flex:1;padding:7px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text);font-family:\'Outfit\',sans-serif;font-size:12px;outline:none;">';
+                html += '<button onclick="dbCleanAdd(\'' + db.key + '\')" style="padding:7px 14px;background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.35);border-radius:8px;color:var(--accent);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">+ Aggiungi</button>';
+                html += '</div>';
+
                 if (db.arr.length === 0) {
                     html += '<div style="font-size:11px;color:rgba(255,255,255,0.2);font-style:italic;">Nessuna voce salvata</div>';
                 } else {
                     html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
                     db.arr.forEach(function(val, idx) {
-                        html += '<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:3px 10px 3px 12px;">';
+                        var isDup = counts[_dbNorm(val)] > 1;
+                        var chipBorder = isDup ? '1px solid rgba(224,192,90,0.6)' : '1px solid rgba(255,255,255,0.1)';
+                        var chipBg = isDup ? 'rgba(224,192,90,0.1)' : 'rgba(255,255,255,0.05)';
+                        html += '<div style="display:inline-flex;align-items:center;gap:5px;background:' + chipBg + ';border:' + chipBorder + ';border-radius:20px;padding:3px 10px 3px 12px;" title="' + (isDup ? 'Possibile doppione' : '') + '">';
+                        if (isDup) html += '<span style="font-size:10px;">⚠</span>';
                         html += '<span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);">' + val + '</span>';
                         html += '<button onclick="dbCleanRemove(\'' + db.key + '\',' + idx + ')" style="background:none;border:none;color:rgba(255,80,80,0.6);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;transition:color 0.15s;" onmouseover="this.style.color=\'#ff6b6b\'" onmouseout="this.style.color=\'rgba(255,80,80,0.6)\'">×</button>';
                         html += '</div>';
@@ -8261,25 +8316,53 @@
             });
             body.innerHTML = html;
         }
+        // Mappa nome-lista → array vero + funzione di salvataggio, usata da add/remove/clear
+        function _dbListMap() {
+            return {
+                transportersList: { arr: transportersList, save: saveTransportersList },
+                partenzaList:     { arr: partenzaList,      save: saveLocationLists },
+                arrivoList:       { arr: arrivoList,        save: saveLocationLists },
+                prodottiList:     { arr: prodottiList,      save: saveProdottiList }
+            };
+        }
+        function dbCleanAdd(key) {
+            var input = document.getElementById('dbAdd_' + key);
+            if (!input) return;
+            var map = _dbListMap();
+            var entry = map[key];
+            if (!entry) return;
+            var added = _addToDb(entry.arr, key, input.value);
+            if (!added) {
+                if (input.value.trim()) showStatus('⚠️ Voce già presente', 'warning');
+                return;
+            }
+            entry.save();
+            _refreshAllDatalistsLearn();
+            _dbCleanRender();
+            haptic('success');
+        }
         function dbCleanRemove(key, idx) {
-            var map = {learnedPartenze:learnedPartenze, learnedArrivi:learnedArrivi, learnedTrasportatori:learnedTrasportatori, learnedProdotti:learnedProdotti};
-            if (!map[key]) return;
-            map[key].splice(idx, 1);
-            localStorage.setItem(key, JSON.stringify(map[key]));
+            var map = _dbListMap();
+            var entry = map[key];
+            if (!entry) return;
+            entry.arr.splice(idx, 1);
+            entry.save();
             _refreshAllDatalistsLearn();
             _dbCleanRender();
         }
         function dbCleanClearAll(key) {
-            if (!confirm('Svuotare tutto il database "' + key.replace('learned','') + '"?')) return;
-            var map = {learnedPartenze:learnedPartenze, learnedArrivi:learnedArrivi, learnedTrasportatori:learnedTrasportatori, learnedProdotti:learnedProdotti};
-            if (!map[key]) return;
-            map[key].length = 0;
-            localStorage.setItem(key, '[]');
+            var labels = {transportersList:'Trasportatori', partenzaList:'Partenze', arrivoList:'Arrivi', prodottiList:'Prodotti'};
+            if (!confirm('Svuotare tutto il database "' + (labels[key]||key) + '"?')) return;
+            var map = _dbListMap();
+            var entry = map[key];
+            if (!entry) return;
+            entry.arr.length = 0;
+            entry.save();
             _refreshAllDatalistsLearn();
             _dbCleanRender();
         }
         // ═══════════════════════════════════════════════════════════════
-        //  FINE PULIZIA DB APPRESI
+        //  FINE DATABASE
         // ═══════════════════════════════════════════════════════════════
 
         function desktopEditNote(idx) {
@@ -11676,8 +11759,8 @@
         <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #a78bfa;border-radius:18px;width:100%;max-width:500px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
                 <div>
-                    <div style="font-size:16px;font-weight:800;color:#a78bfa;">🗃️ Database Appresi</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px;">Rimuovi voci errate o non più utili</div>
+                    <div style="font-size:16px;font-weight:800;color:#a78bfa;">🗃️ Database</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px;">Aggiungi, correggi o rimuovi le voci — un'unica lista per categoria</div>
                 </div>
                 <button onclick="closeDbClean()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;padding:6px 10px;">✕</button>
             </div>
