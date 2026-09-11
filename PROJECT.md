@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 09/09/2026 · Versione attuale: **v28**
+> Aggiornato: 09/09/2026 · Versione attuale: **v30**
 
 ---
 
@@ -8,7 +8,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v28.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v30.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -56,7 +56,7 @@
 - `viaggiLogisticaNext` — viaggi settimana prossima
 - `weekArchive` — settimane archiviate
 - `weekTitle` — titolo settimana corrente
-- `learnedPartenze/Arrivi/Prodotti/Trasportatori` — 4 DB appresi
+- `transportersList`, `partenzaList`, `arrivoList`, `prodottiList` — **database unico** per categoria (v30). `learnedPartenze/Arrivi/Prodotti/Trasportatori` sono legacy: caricate una volta e fuse nelle liste sopra (`_mergeInto`), non più scritte da nessuna funzione.
 - `transportersList`, `preferredView`, `savedAt`, `driveConnected`
 
 ### Oggetto viaggio
@@ -142,6 +142,77 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v30 (non reimplementare)
+
+Fil segnalava: "tante partenze/arrivi non li trova più". Causa trovata: **tre sistemi
+paralleli e scollegati** che gestivano le stesse liste (trasportatori/partenze/arrivi/
+prodotti), sincronizzati male tra loro:
+1. `transportersList`/`partenzaList`/`arrivoList` — persistite, auto-crescono dai viaggi
+2. `learnedPartenze/Arrivi/Prodotti/Trasportatori` — i "4 database appresi", persistiti
+   separatamente, gestibili dal pannello 🗃️ (solo questi erano editabili)
+3. Dentro `renderDesktopView()` stesso: una **quarta copia hardcoded** dei nomi via
+   arrivoList/partenzaList seed, usata SOLO per i datalist della tabella PC — se
+   modificavi qualcosa dal pannello 🗃️, la tabella PC continuava a suggerire i vecchi
+   nomi hardcoded lo stesso.
+
+**Fix — database unico**: ora esiste UNA sola lista per categoria
+(`transportersList`, `partenzaList`, `arrivoList`, nuova `prodottiList` — quest'ultima
+prima non esisteva come lista persistita, solo 4 valori hardcoded + learnedProdotti).
+- Al caricamento, `_mergeInto()` fonde una volta le vecchie liste "learnedXxx" dentro
+  quelle canoniche (recupera qualsiasi voce rimasta intrappolata nel sistema secondario
+  — non si perde nulla di quanto già salvato).
+- `learnPartenza/Arrivo/Prodotto/Trasportatore`, `learnFromTrip`, `bulkLearnFromAllTrips`
+  ora scrivono TUTTI nella stessa lista canonica (helper `_addToDb`), non più nei
+  `learnedXxx` separati.
+- `renderDesktopView()`: rimossa la quarta copia hardcoded — la tabella PC ora legge
+  `partenzaList`/`arrivoList`/`prodottiList`/`transportersList`, le stesse di tutto
+  il resto dell'app.
+- `_refreshAllDatalistsLearn()` semplificata: aggiorna tutti i datalist (mobile + PC)
+  dalle stesse 4 liste, niente più merge/filter tra due fonti.
+
+**Pannello Database rifatto** (era "Pulizia DB appresi", bottone 🗃️ in toolbar PC):
+- **Aggiunta manuale** — campo di testo + bottone "+ Aggiungi" per ogni categoria
+  (prima si poteva solo rimuovere).
+- **Doppioni evidenziati** — se due voci nella stessa lista risultano uguali ignorando
+  maiuscole/spazi, vengono segnalate con bordo giallo + ⚠ e contate nell'intestazione
+  ("⚠ 2 doppioni"), così Fil può vederle e decidere quale tenere.
+- Restano: rimozione singola voce (×), svuota categoria.
+- Il pannello ora mostra le 4 liste canoniche (Trasportatori/Partenze/Arrivi/Prodotti),
+  non più i 4 "appresi" separati.
+
+## Novità v29 (non reimplementare)
+
+Due bug segnalati da Fil con screenshot da PC:
+
+1. **Testo invisibile nei popup condivisi (bug di v25/Tema G)** — quando la vista PC è
+   attiva, `.desktop-view-active` scurisce `--text`/`--text-dim` (Tema G) ma i popup
+   condivisi (Nuova Settimana, Multi-Tratta, DB appresi, conferma Excel, popup data,
+   conflitto Drive) usavano ancora lo sfondo scuro della vista mobile → testo scuro su
+   sfondo scuro, illeggibile. Due cause distinte, due fix:
+   - Popup che usano `var(--primary)`/`var(--secondary)` come sfondo (es. Nuova Settimana):
+     aggiunte le stesse variabili a `.desktop-view-active` con valori chiari coerenti col
+     Tema G (`--primary:#eef2f7`, `--secondary:#e4e9f0`, `--border:rgba(16,32,64,0.16)`),
+     così si schiariscono automaticamente in vista PC.
+   - Popup con sfondo scuro scritto a mano (`#0f1220`/`#1c2430`, non una variabile) — es.
+     **Multi-Tratta, apribile anche da PC** — non beneficiano del fix sopra. Per questi
+     (`#multiTrattaModal`, `#dbCleanModal`, `#summaryModal`, `#excelConfirmModal`,
+     `#desktopDatePopup`, `#driveConflictModal`) è stata aggiunta una regola scoped che
+     ripristina i valori scuri di `--text`/`--text-dim`/`--success`/`--warning` SOLO al
+     loro interno, indipendentemente dalla vista attiva — restano scuri e leggibili sempre.
+   - Prima di aggiungere qualunque nuovo popup/modale condiviso: se ha sfondo scuro scritto
+     a mano invece di `var(--primary)`, va aggiunto alla lista scoped sopra o rischia lo
+     stesso bug.
+
+2. **Nomi troppo lunghi tagliati a metà in tabella PC** (es. "Ponzano Romano" mostrato come
+   "Ponzano Rom" illeggibile) — l'input HTML non mostra i "..." quando il testo non ci
+   sta, taglia e basta. Aggiunta `_pcShortName(name, maxLen=13)`: se il nome supera 13
+   caratteri prova a tenere solo la prima parola (es. "Ponzano Romano" → "Ponzano"); se
+   anche la prima parola è troppo lunga, taglia a 12 caratteri + "…". Il nome completo
+   resta sempre disponibile per la modifica (attributo `data-fullname`, ripristinato
+   al focus dell'input) e al passaggio del mouse (`title`). Nessuna perdita di dati:
+   l'`onchange` che salva il viaggio scatta sempre col valore intero digitato dall'utente,
+   la versione corta si applica solo dopo, sul blur.
 
 ## Novità v28 (non reimplementare)
 
@@ -314,9 +385,12 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 - `toggleArchiveSearch()`, `runArchiveSearch()`
 - `asToggleScope(which)`, `asSetPeriod(period)`
 
-### DB appresi
-- `openDbClean()` / `closeDbClean()`
-- `dbCleanRemove(key, idx)`, `dbCleanClearAll(key)`
+### Database (v30 — unico, non più "appresi" separato)
+- `openDbClean()` / `closeDbClean()` — apre/chiude il pannello (bottone 🗃️ in toolbar PC)
+- `dbCleanAdd(key)` — aggiunge una voce manualmente
+- `dbCleanRemove(key, idx)`, `dbCleanClearAll(key)` — rimuovi singola voce / svuota categoria
+- `_addToDb(arr, key, val)` — helper add+dedup+persist condiviso da `learnPartenza/Arrivo/Prodotto/Trasportatore` e da `dbCleanAdd`
+- `key` è uno tra: `transportersList`, `partenzaList`, `arrivoList`, `prodottiList`
 
 ### Stampa/Export
 - `window.printPlanning()` — stampa premium
