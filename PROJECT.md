@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 09/09/2026 · Versione attuale: **v30**
+> Aggiornato: 09/09/2026 · Versione attuale: **v35**
 
 ---
 
@@ -8,7 +8,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v30.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v35.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -142,6 +142,84 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v35 (non reimplementare)
+
+Due correzioni al layout "C" (v34) su feedback di Fil da screenshot:
+- **"Fornitore" invece di "Cliente" sul lato Partenza** — semanticamente corretto
+  (partenza = da dove ritiri/fornitore, arrivo = a chi consegni/cliente). Il lato
+  Arrivo resta "Cliente".
+- **Colori codice troppo simili tra loro** ("è tutto uguale") — la colonna Cliente/
+  Fornitore usava `_locationCodeColorPC(code).tx`, pensato per stare come testo scuro
+  SOPRA uno sfondo pastello colorato (contrasto), quindi tutti i codici risultavano
+  tonalità scure simili (marrone/verde scuro/blu scuro) senza sfondo a differenziarli.
+  Cambiato in `.bd` (il colore pieno/vivace, es. rame per SICEM, verde per AGROGI,
+  ciano per TRUCIOLI) usato direttamente come colore del testo — molto più
+  distinguibile a colpo d'occhio senza bisogno di uno sfondo colorato.
+
+## Novità v34 (non reimplementare)
+
+**Layout Partenza/Arrivo in tabella PC — opzione "C" scelta da Fil** dopo preview di
+3 alternative (due righe impilate / pallino colorato / sotto-etichette esplicite).
+Ogni cella ora è divisa in due sotto-blocchi affiancati con etichette piccole:
+"CLIENTE" (codice, colorato con `_locationCodeColorPC`, sola lettura — "—" se assente)
+a sinistra, separatore verticale, "LOCALITÀ" (input editabile, invariato nella logica:
+`_pcShortName`, `data-fullname`/`data-fullval`, autocompletamento datalist) a destra.
+L'input non ha più bordo/sfondo proprio (trasparente, eredita dal contenitore) —
+il bordo marcato (v31) ora è sul contenitore dell'intera cella, non sull'input.
+Il focus-highlight della riga (`tr.style.outline`) è gestito a mano nell'onfocus/onblur
+dell'input dato che non usa più `inpFocus`/`inpBlur` condivisi.
+Occhio in futuro: quando si tocca questo blocco, gli apici dentro `onfocus`/`onblur`
+vanno escapati con `\'` perché sono annidati dentro una stringa JS con apici singoli
+(bug preso e corretto in questa stessa versione).
+
+## Novità v33 (non reimplementare)
+
+**Archivio introvabile da PC — mancava del tutto** — Fil non riusciva a trovare il
+pulsante archivio in vista PC perché non esisteva: `archiveSection` (lista archivio)
+è dentro `.section`, nascosta in blocco da `.desktop-view-active .section:not(:has
+(#desktopView))`. Da PC l'archivio era semplicemente irraggiungibile, non un problema
+di posizione del pulsante.
+- Nuovo pulsante `🗄️ Archivio` nella toolbar PC (gruppo `pcvs-add`, accanto a 📊)
+- Nuovo pannello `#pcArchiveModal` in stile Tema G (chiaro, coerente col resto della
+  vista PC) — funzioni `openPcArchive()` / `closePcArchive()` / `_pcArchiveRender()`
+- Riusa le funzioni già esistenti invariate: `loadArchive()`, `archiveDownloadExcel(idx)`,
+  `archiveRestore(idx)`, `archiveDelete(idx)` — stessa logica del pannello mobile,
+  solo presentazione diversa. Dopo "Riapri" forza anche `renderDesktopView()` per
+  aggiornare subito la tabella PC (il pannello mobile non ne aveva bisogno).
+- `archiveDelete`/`archiveRestore` chiedono già conferma internamente — il pannello PC
+  non duplica il `confirm()`.
+
+## Novità v32 (non reimplementare)
+
+**Nomi ancora tagliati in tabella PC nonostante `_pcShortName` (v29)** — causa reale:
+le colonne Partenza/Arrivo non avevano una larghezza minima garantita (`widths.partenza`/
+`widths.arrivo` erano vuote in `renderDesktopView`), quindi su schermo stretto o con
+zoom di Windows alto si strizzavano sotto la soglia utile — anche nomi corti a una
+parola ("Tarmassia") finivano tagliati, perché il problema non era la lunghezza del
+nome ma lo spazio della colonna.
+- `widths.partenza`/`widths.arrivo`: da `''` a `'170px'` (minimo garantito)
+- Input partenza/arrivo: `min-width` da `80px` a `150px`
+- `<table>`: `min-width` da `800px` a `1050px` — se la finestra è più stretta di così,
+  ora compare lo scroll orizzontale sul contenitore (`#desktopTableScroll`, già
+  `overflow-x:auto`) invece di tagliare il testo — molto meglio di un nome illeggibile.
+- `_pcShortName()`: soglia di troncamento da 13 a 16 caratteri (coerente con le colonne
+  più larghe — tronca solo i nomi davvero lunghi, es. "Castel S. Nicolò").
+
+## Novità v31 (non reimplementare)
+
+**Bordi celle tabella PC più marcati** — su richiesta di Fil dopo preview di 3 opzioni
+(bordo attuale / bordo marcato / bordo marcato+sfondo bianco), scelta l'opzione
+intermedia. `inpStyle` condiviso (trasportatore/partenza/arrivo/prodotto/note nella
+tabella PC): sfondo `#eef2f7`, bordo `1.5px solid #a8b4c4` (era `rgba(16,32,64,0.05)`
+bg + `1px solid rgba(16,32,64,0.10)` bordo — quasi invisibile). Aggiornato anche
+`inpBlur` per ripristinare questi stessi colori dopo il focus.
+
+**Icona app rifatta** — `logo.png` (usato da favicon + apple-touch-icon via manifest),
+camion stilizzato piatto, sfondo scuro con leggero sheen premium + bordo sottile,
+ombra morbida sotto il camion. File consegnati a parte (non nell'HTML): `logo.png`
+512×512 da sostituire nel repo GitHub (stesso nome, nessuna modifica al codice
+necessaria), più `logo_1024.png` (sorgente alta risoluzione) e `logo_192.png`.
 
 ## Novità v30 (non reimplementare)
 
