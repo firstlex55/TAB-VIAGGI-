@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 09/09/2026 · Versione attuale: **v35**
+> Aggiornato: 09/09/2026 · Versione attuale: **v39**
 
 ---
 
@@ -8,7 +8,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v35.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v39.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -142,6 +142,110 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v39 (non reimplementare)
+
+**Export Excel — foglio "Viaggi" reso più pulito e premium**, su richiesta di Fil:
+- Rimosso ANCHE il conteggio viaggi dal banner colorato del giorno (Fil: "guardiamo
+  dopo se serve altrove") — il banner ora è una fascia piena A:J, senza testo a destra
+  in colonna I. Altezza banner 24→28, font 11→12.
+- **Trasportatore ora è un badge pieno colorato** (sfondo = colore identità
+  trasportatore da `_xlsColors()`, testo bianco) invece di solo testo colorato su
+  sfondo bianco — riconoscibile a colpo d'occhio scorrendo la colonna, stesso
+  principio già usato nell'app per i trasportatori.
+- Zebra striping più coerente con la palette dell'app: righe alterne `#EEF2F7` (era
+  `#F8FAFC`, grigio neutro) invece di grigio puro.
+- Altezza righe dati 19→21 per un po' più di respiro.
+
+## Novità v38 (non reimplementare)
+
+**Separatori giorno tabella PC ingranditi** — coerenti con la scala più grande
+introdotta in v37 (padding, font, badge conteggio).
+
+**Rimossa funzione morta `desktopAddEmpty_OLD`** e le 4 funzioni collegate
+(`desktopPopupUpdateChips`, `desktopPopupToggleDay`, `desktopCloseDatePopup`,
+`desktopAddEmptyConfirm`) più le variabili `_deskPopupDays`/`_deskPopupDayColors` —
+tutte irraggiungibili (nessun pulsante le chiamava più). **Occhio**: durante la
+rimozione è stato introdotto per un attimo un `_fmtDesktopDate` duplicato/spezzato —
+capitato perché la sostituzione ha tagliato a metà una funzione invece che alla fine
+esatta. Controllare sempre con `grep -n "function nomeFunzione"` che compaia UNA sola
+volta dopo una rimozione di più funzioni consecutive, non fidarsi solo di `node --check`
+(la sintassi può restare valida anche con codice duplicato/spezzato in modo innocuo).
+
+**Scansione mirata sfondi scuri scritti a mano** — cercati tutti gli hex molto scuri
+usati come `background` nel file. Trovate 2 righe a rischio non ancora coperte:
+`select option` e `.filter-select option` (regole CSS globali per dropdown nativi)
+usavano `color:var(--text)` su sfondo scuro fisso `#1c2430` — in vista PC sarebbe
+diventato testo scuro su sfondo scuro. Scollegate da `var(--text)`, ora `color:#f2f4f8`
+fisso. Tutto il resto trovato dalla scansione era già coperto dai fix precedenti
+(modali v25/v29/v33/v37) o in zone sicure: viste mobile-only, la finestra di stampa
+isolata (`window.open` con proprio `<style>`, non eredita le CSS var dell'app), o
+elementi già nascosti in modalità PC (`.pc-view-switcher`, `.stats`, ecc.).
+
+**Export Excel — rimossa riga "Totale: X viaggi" dopo ogni giorno** nel foglio
+"Viaggi" (Fil: rompeva editing/tracking manuale nel file scaricato, le righe si
+spostavano). L'informazione non si perde: il conteggio resta nell'intestazione
+colorata del giorno stesso, e nel Foglio 2 "Riepilogo" esiste già una sezione
+dedicata "TOTALI PER GIORNO". Mobile e PC usano la STESSA funzione di esportazione
+(`downloadExcel()` → `_buildAndDownloadExcel()`) — non sono due sistemi diversi,
+solo la fonte dei viaggi da esportare cambia in base a filtri/vista attiva.
+
+## Novità v37 (non reimplementare)
+
+**Sidebar "Rotte Rapide" rimossa** — su richiesta di Fil (ridondante con Multi-Tratta).
+Layout `renderDesktopView()` da grid `270px 1fr` a `1fr` (colonna singola, piena
+larghezza). Rimosso insieme tutto il codice diventato morto:
+- `routeCard()`, calcolo `routeMap`/`allRoutes`/`manualRoutes` dentro `renderDesktopView`
+- `desktopOpenAddModal(ri)`, `desktopFilterRoutes()`, `desktopNewRouteModal()`,
+  `desktopSaveRoute()`, `desktopCloseRouteModal()` — tutte raggiungibili SOLO dai
+  pulsanti della sidebar rimossa
+- Modale HTML `#desktopRouteModal` ("Nuova rotta manuale")
+- **Nota**: `_dmPopulateRoutes()`/`_dmApplyRoute()` (chip rotte rapide dentro al modale
+  "Aggiungi viaggio") sono un sistema SEPARATO e restano intatti — non centrano con
+  la sidebar, non toccare per errore in futuro pensando siano la stessa cosa.
+
+**Bug critico trovato ed evitato durante la rimozione**: restava un `window.
+_desktopRoutes = allRoutes;` a fine funzione — con `allRoutes` non più dichiarata
+avrebbe lanciato un errore JS ad ogni render della vista PC, rompendola per intero.
+Rimosso insieme al resto.
+
+**Bug "testo invisibile" trovato per la seconda volta**: `#desktopTotalsPanel` (pannello
+"Totali per trasportatore") aveva sfondo scritto a mano `#090c14` (praticamente nero),
+mai passato a `var(--primary)`/`var(--secondary)` quando abbiamo introdotto Tema G —
+stesso bug di v29/v33 ma in un pannello diverso, sfuggito ai controlli precedenti
+perché non fa parte della lista di modali già verificata. **Prima di dichiarare "tutto
+ok" su un giro di controllo del genere, cercare ANCHE hex scuri scritti a mano fuori
+dalla lista nota di modali** — non fidarsi solo della lista già controllata.
+Sistemato: sfondo portato a `#e4e9f0` (chiaro, coerente).
+
+**Tutto ingrandito** (toolbar, tabs, pulsanti, ricerca, intestazioni tabella, colonne,
+celle Trasportatore/Prodotto/Stato/Azioni, filtri giorno) — respiro maggiore ovunque
+ora che la sidebar non occupa più spazio. Larghezze colonna aggiornate: data 100px,
+trasportatore 150px, partenza/arrivo 190px, prodotto 130px, note 110px; `<table
+min-width>` da 1050px a 1150px.
+
+Verifiche fatte dopo tutte le modifiche: `node --check` su tutti i blocchi script,
+bilanciamento parentesi CSS, bilanciamento tag HTML, funzioni duplicate, `onclick`
+orfani, `getElementById` verso ID inesistenti — tutto pulito.
+
+## Novità v36 (non reimplementare)
+
+**Etichette Fornitore/Cliente evidenziate** — scelta tra 4 varianti (pillola colorata /
+icona+colore ruolo / sottolineatura / sfondo blocco colorato), Fil ha scelto "D1":
+pillola piena. "Fornitore" ora è testo bianco su sfondo blu (#4a6ed4), "Cliente" testo
+bianco su sfondo corallo (#c8501a) — colore FISSO per ruolo (non per singolo
+fornitore/cliente, quello resta il colore del codice sotto). "Località" resta
+invariata (etichetta grigia semplice) — la richiesta era solo su Fornitore/Cliente,
+"il cuore di tutto".
+
+**Nota per la prossima sessione — redesign più ampio in corso**: Fil ha chiesto di
+togliere la sidebar "Rotte Rapide" (ridondante con Multi-Tratta) e dare più spazio/
+impatto al resto (toolbar riorganizzata a gruppi, righe viaggio più grandi). Concetto
+approvato a livello di mockup ma **non ancora portato nel codice** — solo l'etichetta
+D1 di questa voce è stata implementata finora. Da fare: rimuovere il pannello sidebar
+sinistro in `renderDesktopView()`/CSS `.desktop-layout`, allargare `#desktopView`,
+riorganizzare la toolbar in gruppi (vista / azioni settimana / strumenti), ingrandire
+padding e font delle righe tabella.
 
 ## Novità v35 (non reimplementare)
 
