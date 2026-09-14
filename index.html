@@ -6588,8 +6588,8 @@
                     '</td>' +
 
                     // DATA — solo testo grande, picker nascosto al click
-                    '<td style="padding:7px 8px;white-space:nowrap;width:90px;position:relative;">' +
-                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:6px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(16,32,64,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
+                    '<td style="padding:7px 8px;white-space:nowrap;width:100px;position:relative;">' +
+                    '<span data-dateval onclick="this.nextElementSibling.showPicker?this.nextElementSibling.showPicker():this.nextElementSibling.click()" style="font-family:\'JetBrains Mono\',monospace;font-size:14px;font-weight:800;color:' + (dayRgb ? 'rgba(' + dayRgb + ',0.9)' : tColorVar) + ';letter-spacing:0.5px;cursor:pointer;display:block;padding:6px 4px;border-radius:5px;transition:background 0.15s;" onmouseover="this.style.background=\'rgba(16,32,64,0.05)\'" onmouseout="this.style.background=\'transparent\'">' + _fmtDesktopDate(trip.data) + '</span>' +
                     '<input type="date" value="' + (trip.data||'') + '"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'data\',this.value);this.previousElementSibling.textContent=_fmtDesktopDate(this.value);_validateTripDate(this.value,this.previousElementSibling);"' +
                     ' style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;pointer-events:none;"' +
@@ -6612,21 +6612,21 @@
 
                     // PARTENZA — sotto-etichette "Cliente" / "Località" (opzione C)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:#eef2f7;border:1.5px solid #a8b4c4;border-radius:6px;padding:6px 10px;min-width:190px;">' +
-                    '<div style="flex-shrink:0;max-width:78px;overflow:hidden;">' +
-                    '<div style="display:inline-block;font-size:8px;font-weight:800;letter-spacing:0.5px;color:#fff;background:#4a6ed4;padding:2px 7px;border-radius:5px;text-transform:uppercase;">Fornitore</div>' +
-                    '<div style="font-size:10px;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' + (fromCode ? ('color:' + _locationCodeColorPC(fromCode).bd + ';') : 'color:#a8b4c4;') + '">' + (fromCode || '—') + '</div>' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:#eef2f7;border:1.5px solid #a8b4c4;border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="flex-shrink:0;max-width:92px;overflow:hidden;">' +
+                    '<div style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.5px;color:#fff;background:#4a6ed4;padding:3px 9px;border-radius:6px;text-transform:uppercase;">Fornitore</div>' +
+                    '<div title="' + (fromCode||'').replace(/"/g,'&quot;') + '" style="font-size:12px;font-weight:800;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' + (fromCode ? ('color:' + _locationCodeColorPC(fromCode).bd + ';') : 'color:#a8b4c4;') + '">' + (fromCode ? _pcShortName(fromCode, 11) : '—') + '</div>' +
                     '</div>' +
-                    '<div style="width:1px;background:#c8d2e0;flex-shrink:0;"></div>' +
+                    '<div style="width:2px;background:rgba(74,110,212,0.35);flex-shrink:0;border-radius:1px;"></div>' +
                     '<div style="flex:1;min-width:0;">' +
-                    '<div style="font-size:8px;font-weight:800;letter-spacing:0.6px;color:#8090a8;text-transform:uppercase;">Località</div>' +
+                    '<div style="font-size:10px;font-weight:800;letter-spacing:0.6px;color:#384860;text-transform:uppercase;">Località</div>' +
                     '<input type="text" value="' + _pcShortName(fromName) + '" list="dfrom"' +
                     ' data-fullname="' + fromName.replace(/"/g,'&quot;') + '"' +
                     ' data-fullval="' + (trip.partenza||'').replace(/"/g,'&quot;') + '"' +
                     ' title="' + fromName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'partenza\',full);"' +
                     ' placeholder="Partenza..."' +
-                    ' style="border:none;background:transparent;padding:0;margin-top:1px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#1a2540;font-size:14px;"' +
+                    ' style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#1a2540;font-size:15px;"' +
                     ' onfocus="this.value=this.dataset.fullname||this.value;this.closest(\'tr\').style.outline=\'1px solid rgba(255,107,53,0.3)\';"' +
                     ' onblur="this.value=_pcShortName(this.value);this.closest(\'tr\').style.outline=\'\';"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6636,21 +6636,21 @@
 
                     // ARRIVO — sotto-etichette "Cliente" / "Località" (opzione C)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:#eef2f7;border:1.5px solid #a8b4c4;border-radius:6px;padding:6px 10px;min-width:190px;">' +
-                    '<div style="flex-shrink:0;max-width:78px;overflow:hidden;">' +
-                    '<div style="display:inline-block;font-size:8px;font-weight:800;letter-spacing:0.5px;color:#fff;background:#c8501a;padding:2px 7px;border-radius:5px;text-transform:uppercase;">Cliente</div>' +
-                    '<div style="font-size:10px;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' + (toCode ? ('color:' + _locationCodeColorPC(toCode).bd + ';') : 'color:#a8b4c4;') + '">' + (toCode || '—') + '</div>' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:#eef2f7;border:1.5px solid #a8b4c4;border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="flex-shrink:0;max-width:92px;overflow:hidden;">' +
+                    '<div style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.5px;color:#fff;background:#c8501a;padding:3px 9px;border-radius:6px;text-transform:uppercase;">Cliente</div>' +
+                    '<div title="' + (toCode||'').replace(/"/g,'&quot;') + '" style="font-size:12px;font-weight:800;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' + (toCode ? ('color:' + _locationCodeColorPC(toCode).bd + ';') : 'color:#a8b4c4;') + '">' + (toCode ? _pcShortName(toCode, 11) : '—') + '</div>' +
                     '</div>' +
-                    '<div style="width:1px;background:#c8d2e0;flex-shrink:0;"></div>' +
+                    '<div style="width:2px;background:rgba(200,80,26,0.35);flex-shrink:0;border-radius:1px;"></div>' +
                     '<div style="flex:1;min-width:0;">' +
-                    '<div style="font-size:8px;font-weight:800;letter-spacing:0.6px;color:#8090a8;text-transform:uppercase;">Località</div>' +
+                    '<div style="font-size:10px;font-weight:800;letter-spacing:0.6px;color:#384860;text-transform:uppercase;">Località</div>' +
                     '<input type="text" value="' + _pcShortName(toName) + '" list="dto"' +
                     ' data-fullname="' + toName.replace(/"/g,'&quot;') + '"' +
                     ' data-fullval="' + (trip.arrivo||'').replace(/"/g,'&quot;') + '"' +
                     ' title="' + toName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
                     ' placeholder="Arrivo..."' +
-                    ' style="border:none;background:transparent;padding:0;margin-top:1px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#085040;font-size:14px;"' +
+                    ' style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#085040;font-size:15px;"' +
                     ' onfocus="this.value=this.dataset.fullname||this.value;this.closest(\'tr\').style.outline=\'1px solid rgba(255,107,53,0.3)\';"' +
                     ' onblur="this.value=_pcShortName(this.value);this.closest(\'tr\').style.outline=\'\';"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6918,13 +6918,13 @@
                         </div>
                     </div>
                     <div style="flex:1;overflow-y:auto;overflow-x:auto;" id="desktopTableScroll">
-                        <table style="width:100%;border-collapse:collapse;min-width:1150px;">
+                        <table style="width:100%;border-collapse:collapse;min-width:1210px;">
                             <thead style="position:sticky;top:0;z-index:10;background:#c0cad8;box-shadow:0 1px 0 rgba(16,32,64,0.08);">
                                 <tr>
                                     <th style="width:22px;padding:10px 4px;"></th>
                                     ${['data','trasportatore','partenza','arrivo','prodotto','note'].map((f,i) => {
                                         const labels = {data:'Data',trasportatore:'Trasp.',partenza:'Partenza',arrivo:'Arrivo',prodotto:'Prodotto',note:'Note'};
-                                        const widths = {data:'100px',trasportatore:'150px',partenza:'190px',arrivo:'190px',prodotto:'130px',note:'110px'};
+                                        const widths = {data:'100px',trasportatore:'150px',partenza:'220px',arrivo:'220px',prodotto:'130px',note:'110px'};
                                         const isActive = _desktopSort.field === f;
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
                                         const clr = isActive ? '#c8501a' : 'rgba(16,32,64,0.55)';
