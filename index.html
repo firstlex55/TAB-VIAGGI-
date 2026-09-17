@@ -3944,6 +3944,14 @@
                     </div>
                 </div>
 
+                <!-- N. DDT -->
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">N. DDT</div>
+                    <input type="text" id="ddt" placeholder="Numero DDT (facoltativo)..."
+                        style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:border-color 0.15s;"
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                </div>
+
                 <!-- STEP 3: Data + chip giorni settimana -->
                 <div style="margin-bottom:16px;">
                     <div style="font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">3 — Quando</div>
@@ -5161,6 +5169,7 @@
                 arrivo:        document.getElementById('arrivo').value.trim(),
                 prodotto:      document.getElementById('prodotto').value,
                 note:          document.getElementById('note').value.trim(),
+                ddt:           document.getElementById('ddt') ? document.getElementById('ddt').value.trim() : '',
                 daConfermare:  document.getElementById('daConfermare').checked,
                 confermato:    false
             };
@@ -7096,10 +7105,19 @@
                             </div>
                         </div>
 
-                        <div style="margin-bottom:16px;">
-                            <input id="dmNote" type="text" placeholder="Note interne (opzionale)..."
-                                style="width:100%;padding:9px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
-                                onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.06)'">
+                        <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:16px;">
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">N. DDT</div>
+                                <input id="dmDDT" type="text" placeholder="Es. 4521..."
+                                    style="width:100%;padding:9px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.06);border-radius:9px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.06)'">
+                            </div>
+                            <div>
+                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Note</div>
+                                <input id="dmNote" type="text" placeholder="Note interne (opzionale)..."
+                                    style="width:100%;padding:9px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.06)'">
+                            </div>
                         </div>
 
                         <!-- SEPARATORE -->
@@ -8822,7 +8840,7 @@
             if (!dam) return;
 
             // Svuota campi
-            ['dmTransp','dmFrom','dmTo','dmProd','dmNote'].forEach(id => {
+            ['dmTransp','dmFrom','dmTo','dmProd','dmNote','dmDDT'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = prefill && prefill[id.replace('dm','')] ? prefill[id.replace('dm','')] : '';
             });
@@ -9325,6 +9343,7 @@
                 arrivo:        document.getElementById('dmTo')     ? document.getElementById('dmTo').value.trim()     : '',
                 prodotto:      document.getElementById('dmProd')   ? document.getElementById('dmProd').value           : '',
                 note:          document.getElementById('dmNote')   ? document.getElementById('dmNote').value.trim()   : '',
+                ddt:           document.getElementById('dmDDT')    ? document.getElementById('dmDDT').value.trim()    : '',
                 daConfermare:  document.getElementById('dmDaConf') ? document.getElementById('dmDaConf').checked       : false,
                 confermato:    false
             };
