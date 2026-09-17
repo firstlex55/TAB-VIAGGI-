@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 09/09/2026 · Versione attuale: **v39**
+> Aggiornato: 09/09/2026 · Versione attuale: **v45**
 
 ---
 
@@ -8,7 +8,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v39.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v45.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -142,6 +142,179 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v45 (non reimplementare)
+
+**Menu suggerimenti nostro esteso a tutti i campi mobile/touch** (Fil: "danno lo
+stesso fastidio" su modifica ed multi-tratta). Aggiunto a: `editTrasportatore`,
+`editPartenza`, `editArrivo` (modale modifica), `mtTrasp` (Multi-Tratta, campo
+in alto), `mt-from-*`/`mt-to-*`/`mt-prod-*` (Multi-Tratta, campi per-riga —
+agganciati dentro `mtAddRow()` appena la riga viene creata, dato che sono
+dinamici). `editProdotto` non serviva: è un `<select>`, non un campo di testo
+con datalist.
+
+**Fix di posizionamento trovato durante l'estensione**: `_customAutocomplete`
+posizionava il menu relativo al genitore dell'input (`position:relative` +
+`top:100%`) — funzionava nel form principale (ogni campo ha il suo contenitore),
+ma nella Multi-Tratta più campi (partenza/arrivo/prodotto) stanno nella STESSA
+riga flex, quindi il menu si sarebbe allargato su tutta la riga invece che sotto
+il campo giusto. Riscritta per posizionarsi con `getBoundingClientRect()` in
+`position:fixed` agganciato al bordo esatto dell'input, aggiunto a `document.body`
+— funziona ovunque, indipendentemente da come è strutturato il contenitore.
+
+**Pulizia memoria**: righe Multi-Tratta rimosse (`mtRemoveRow`) o l'intero elenco
+svuotato alla riapertura (`openMultiTratta`) ora rimuovono anche i menu a tendina
+orfani associati (altrimenti restavano nel DOM invisibili ma accumulati ad ogni
+uso ripetuto della Multi-Tratta).
+
+Colori corretti in Multi-Tratta: `#f0f4ff`/`#86efac` (bianco/verde quasi neon,
+residuo del vecchio tema) → `#e4e8f0`/`#7fd6ac` (stessa palette anti-alone usata
+ovunque nel resto dell'app).
+
+**Verificato con una scansione completa di ogni `list="..."` nel file**: tutti i
+campi mobile/touch ora usano il menu nostro; quelli rimasti nativi sono solo
+nella vista PC (dfrom/dto/dprod/dtransp/dmTransp/dmProd/dmFrom/dmTo), dove va
+bene così — col mouse il datalist nativo non ha lo stesso problema.
+
+## Novità v44 (non reimplementare)
+
+**Menu suggerimenti nativo del telefono sostituito con uno nostro** — Fil ha
+segnalato (screenshot) che il menu a tendina di Trasportatore nel form mobile
+"Nuovo Viaggio" era il `<datalist>` **nativo del browser Android**: righe enormi,
+impossibile toccare quella giusta, pieno di doppioni storici (es. "ASCHIERI" e
+"Aschieri", "C.M TRASP" e "C.M TRASPORTI" — dati reali, non un bug: da ripulire
+dal pannello 🗃️ Database). Il menu nativo non è stilizzabile via CSS, quindi
+l'unico modo per renderlo "premium" e usabile era sostituirlo del tutto.
+
+Nuova funzione `_customAutocomplete(inputId, getList)`: rimuove l'attributo
+`list` dall'input, crea un menu a tendina nostro (div assoluto sotto il campo,
+stile navy scuro coerente col resto), filtrato in tempo reale mentre si scrive,
+righe compatte e toccabili (12px padding, non le righe enormi native), chiusura
+al tap fuori. Applicata a **Trasportatore, Partenza, Arrivo, Prodotto** nel form
+mobile "Nuovo Viaggio" (`_setupCustomAutocompletes()`, chiamata in init dopo
+`loadTransportersList()`).
+**Non ancora estesa** a `editTrasportatore` (modale di modifica mobile) né a
+`mtTrasp`/campi riga Multi-Tratta — usano ancora il datalist nativo, stesso
+problema lì se Fil lo segnala di nuovo.
+
+## Novità v43 (non reimplementare) — redesign completo vista PC, tema navy scuro
+
+Grosso lavoro su richiesta esplicita di Fil ("modifica al 100%, 360 gradi"), dopo
+molte iterazioni di mockup approvate una per una. Tema G (chiaro) **sostituito** da
+un tema navy scuro premium per la vista PC, con gli stessi accorgimenti anti-alone
+già validati sul tema scuro mobile (v27): navy non nerissimo, testo bianco caldo
+non puro, niente neon.
+
+**Variabili CSS** (`.desktop-view-active`): `--bg:#0f1420`, `--primary:#1a2540`
+(header/modali condivisi), `--secondary:#242b3d` (righe/card), `--text:#e4e8f0`,
+`--accent:#e8623f` (arancio "F3", meno acceso dell'originale `#ff6b35` — scelto tra
+5 varianti). Colori `--t-*` (trasportatori) e `_locationCodeColorPC()` (Fornitore/
+Cliente) schiariti/vivacizzati per leggersi bene su sfondo scuro invece che chiaro.
+
+**Righe tabella → schede**: `border-collapse:separate` + `border-spacing:0 8px` +
+angoli arrotondati su primo/ultimo `<td>` di ogni riga (non `.day-sep-row`) +
+`box-shadow`. Bordo laterale ora indica **stato** (ambra se "da confermare", non
+più il colore trasportatore — quello ha la sua pillola dedicata). Hover riga
+schiarisce leggermente lo sfondo.
+
+**Trasportatore**: da testo colorato su input chiaro a **pillola piena colorata**
+editabile (sfondo = colore identità, testo quasi nero per contrasto uniforme su
+tutti i colori).
+
+**Fornitore/Cliente**: mantenuta struttura approvata (didascalia scura + nome come
+pillola colorata piena, "E1"), ricolorata per sfondo scuro. Località: bianco caldo
+(partenza) / verde chiaro `#7fd6ac` (arrivo, era verde scuro illeggibile su navy).
+
+**Stato/Azioni → "G3"**: bordo laterale della riga = stato (niente più badge
+sempre visibile), duplica/elimina (icone `⧉`/`🗑`) opacità 0.35 a riposo → 1 al
+hover (classe `.pc-row-actions`, regola in `.desktop-view-active`). **"Aggiungi
+nota" rimossa su richiesta di Fil** — `desktopEditNote(idx)` ora è irraggiungibile
+da PC (nessun bottone la chiama più); le note restano modificabili solo da mobile.
+
+**Indicatore OGGI**: badge "● OGGI" sotto la data nelle righe del giorno corrente.
+
+**Separatori giorno**: ricolorati da pastello chiaro a tinte scure trasparenti con
+testo brillante (stessa logica di http Tema G capovolta).
+
+**Toolbar**: ricolorata in navy (sostituzione in blocco `rgba(16,32,64,` →
+`rgba(255,255,255,` nell'area toolbar, più hex puntuali). Aggiunta nuova fascia
+("Riga 1b") con **numeri grandi** (viaggi totali, da confermare) e **riepilogo
+trasportatori** come pillole piene — sostituisce il vecchio blocco "mini totali
+inline" che era la causa ESATTA del problema originale di Fil ("i trasportatori
+sopra Corrente/Prossima/Oggi, non si capisce niente") — rimosso.
+
+**Pulsanti con icona a cerchietto** (stile scelto da Fil): Salva, Carica, Excel,
+Stampa, Stats, Archivio, Database — stesso linguaggio visivo, ognuno con colore
+identità proprio, testo sempre presente accanto all'icona (mai solo icona nuda).
+
+**Due bug reali trovati e corretti durante il lavoro** (non richiesti, scoperti
+controllando il codice):
+1. Le funzioni che aggiornano lo stato del pulsante Salva durante il salvataggio
+   (`updateDriveBtns`, `driveSave`) usavano `.textContent =`, che avrebbe cancellato
+   la nuova icona a cerchietto ad ogni salvataggio. Cambiate in `.innerHTML =` con
+   lo stesso markup dell'icona, in tutti e 5 i punti dove succedeva.
+2. **I pulsanti Database e Archivio (aggiunti in v29/v30) non sono mai stati
+   davvero raggiungibili dalla vista PC**: vivevano dentro `#pcViewSwitcher`
+   (`.pc-view-switcher`), una barra che si nasconde con `display:none !important`
+   proprio quando `.desktop-view-active` è attivo — cioè esattamente quando sei
+   nella tabella PC vera. Spostati dentro la toolbar reale di `renderDesktopView()`,
+   accanto a Stats, con lo stesso stile a cerchietto.
+
+**Pulizia variabili morte** trovate durante il lavoro: `colorClass`, `isConf`,
+`inpStyle`/`inpFocus`/`inpBlur` (dentro `tripRow`), `dayBg`/`rowBg` (idem) — tutte
+dichiarate ma non più usate dopo il redesign, rimosse.
+
+**Non ancora fatto**: "Prossima settimana" resta come terzo tab alla pari di
+Corrente/Oggi nel toggle principale — nei mockup era stata spostata a link
+secondario ma non ho ancora portato questo pezzo specifico nel codice reale, per
+limiti di tempo in questa sessione. Segnare come prossimo passo se richiesto.
+
+Verifiche fatte a fine lavoro: `node --check` su tutti i blocchi script, funzioni
+duplicate, `onclick` orfani, `getElementById` verso ID inesistenti, bilanciamento
+tag HTML e parentesi CSS — tutto pulito.
+
+## Novità v42 (non reimplementare)
+
+**Gerarchia Fornitore/Cliente invertita ("opzione E1")** — su feedback di Fil: nella
+v41/v40 l'etichetta "FORNITORE"/"CLIENTE" (il ruolo) era più in evidenza del nome
+vero (Assofrutti, Poggio, CAI-BF), rendendo il nome "poco riconoscibile a colpo
+d'occhio". Invertito:
+- "Fornitore"/"Cliente" ora è una didascalia piccola e scura (`#506080`, non più
+  pillola bianca su blu/arancio) sopra al nome.
+- Il **nome** (fromCode/toCode, es. "ASSOFRUTTI") è ora la pillola piena colorata
+  (`background:` invece di `color:`, usando `_locationCodeColorPC(...).bd` come
+  sfondo, testo bianco) — è lui il protagonista ora, coerente con come i
+  trasportatori sono già identificati nell'app.
+- Troncatura (`_pcShortName(..., 11)`) e tooltip (`title`) sul nome invariati.
+
+## Novità v41 (non reimplementare)
+
+Le 3 migliorie proposte dopo v40, tutte fatte:
+1. **Troncatura intelligente sui codici Fornitore/Cliente** — stessa logica di
+   `_pcShortName` già usata per Località, ora anche su `fromCode`/`toCode` (soglia
+   11 invece di 16, box più stretto). "POGGIO DEL FARRO" → "POGGIO". Nome completo
+   sempre disponibile via `title` al passaggio del mouse.
+2. **Divisore verticale colorato** — da grigio piatto (`#c8d2e0`, 1px) a tinta
+   abbinata alla pillola: blu per Fornitore (`rgba(74,110,212,0.35)`), arancio per
+   Cliente (`rgba(200,80,26,0.35)`), 2px.
+3. **Bilanciamento colonne** — colonna Data era rimasta piccola (12px) rispetto a
+   Trasportatore/Località (15px) e Prodotto (14px): portata a 14px, larghezza
+   corretta da 90px a 100px (non coincideva più con la mappa `widths`).
+
+Controllo completo del codice dopo le modifiche: `node --check` su tutti i blocchi
+script, funzioni duplicate, `onclick` orfani, `getElementById` verso ID inesistenti,
+bilanciamento tag HTML e parentesi CSS — tutto pulito (l'unico "sbilanciamento"
+segnalato dall'audit su `<input>` è un falso positivo: sono tag che si autochiudono,
+non serve `</input>`).
+
+## Novità v40 (non reimplementare)
+
+**Celle Fornitore/Cliente/Località in tabella PC ingrandite** — Fil: "non si vedono
+proprio". Aumentati: pillola Fornitore/Cliente (font 8→10px, padding), testo codice
+sotto la pillola (10→12px), etichetta "Località" (8→10px, colore da `#8090a8` chiaro
+a `#384860` scuro — era illeggibile). Input località 14→15px. Colonne
+partenza/arrivo 190px→220px, tabella min-width 1150→1210px, box max-width interno
+78→92px per fare spazio ai codici cliente più lunghi.
 
 ## Novità v39 (non reimplementare)
 
