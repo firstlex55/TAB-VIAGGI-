@@ -4111,11 +4111,15 @@
 
         <!-- ===== ARCHIVIO SETTIMANE ===== -->
         <div class="archive-section" id="archiveSection" style="display:none;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                <div style="font-size:12px;font-weight:700;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">📂 Archivio</div>
+            <button type="button" id="archiveToggleBtn" onclick="toggleArchiveExpanded()"
+                style="width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;margin-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span id="archiveChevron" style="font-size:11px;color:var(--text-dim);display:inline-block;transition:transform 0.2s;">▶</span>
+                    <span style="font-size:12px;font-weight:700;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">📂 Archivio</span>
+                </div>
                 <span id="archiveCount" style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,255,255,0.25);">0 settimane</span>
-            </div>
-            <div id="archiveList"></div>
+            </button>
+            <div id="archiveList" style="display:none;"></div>
         </div>
 
     <!-- Edit Modal -->
@@ -4163,6 +4167,11 @@
                     <div class="form-group">
                         <label for="editNote">Note interne (opzionale)</label>
                         <textarea id="editNote" placeholder="Note interne..." style="width:100%;padding:10px;background:var(--primary);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'Outfit',sans-serif;min-height:60px;resize:vertical;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editDDT">N. DDT (opzionale)</label>
+                        <input type="text" id="editDDT" placeholder="Numero DDT..." style="width:100%;padding:10px;background:var(--primary);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'JetBrains Mono',monospace;">
                     </div>
 
                     <div class="form-group">
@@ -5882,6 +5891,7 @@
             document.getElementById('editArrivo').value = trip.arrivo || '';
             document.getElementById('editProdotto').value = trip.prodotto || '';
             document.getElementById('editNote').value = trip.note || '';
+            document.getElementById('editDDT').value = trip.ddt || '';
             document.getElementById('editDaConfermare').checked = trip.daConfermare || false;
             // Salva indice next nel modal
             document.getElementById('editModal').setAttribute('data-next-idx', idx);
@@ -9512,6 +9522,7 @@
             document.getElementById('editArrivo').value = trip.arrivo;
             document.getElementById('editProdotto').value = trip.prodotto || '';
             document.getElementById('editNote').value = trip.note || '';
+            document.getElementById('editDDT').value = trip.ddt || '';
             document.getElementById('editDaConfermare').checked = trip.daConfermare || false;
             
             document.getElementById('editModal').classList.add('active');
@@ -9534,6 +9545,7 @@
                 arrivo: document.getElementById('editArrivo').value.trim(),
                 prodotto: document.getElementById('editProdotto').value,
                 note: document.getElementById('editNote').value.trim(),
+                ddt: document.getElementById('editDDT') ? document.getElementById('editDDT').value.trim() : '',
                 daConfermare: document.getElementById('editDaConfermare').checked
             };
             // Se il viaggio è completamente vuoto (aperto per sbaglio, niente compilato), non salvare nulla
@@ -9551,11 +9563,14 @@
             learnFromTrip(updatedTrip);
 
             if (isNext) {
+                // Mantiene "confermato" del viaggio originale — il modale non lo espone come campo
+                updatedTrip.confermato = tripsNext[nextIdx] ? tripsNext[nextIdx].confermato : false;
                 tripsNext[nextIdx] = updatedTrip;
                 tripsNext.sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
                 saveNextToLocalStorage();
                 renderNextView();
             } else if (editingIndex !== null) {
+                updatedTrip.confermato = trips[editingIndex] ? trips[editingIndex].confermato : false;
                 trips[editingIndex] = updatedTrip;
                 trips.sort((a, b) => new Date(a.data) - new Date(b.data));
                 saveToLocalStorage();
@@ -9563,6 +9578,7 @@
                 filterApply();
                 updateStats();
                 filterPopulateDropdowns();
+                if (driveAccessToken) autoSaveDrive();
             }
         }
 
@@ -9618,21 +9634,38 @@
             _buildAndDownloadExcel(toExport, label, suffix);
         }
 
-        // ── Colore testo trasportatore (fedele all'originale) ──
-        // ── Colori vivaci per trasportatore: { bg: ARGB sfondo, txt: ARGB testo } ──
-        function _xlsColors(name) {
-            const u = (name||'').toUpperCase();
-            if (u.includes('CEVOLO'))                              return { bg:'FFFF6B00', txt:'FFFFFFFF' }; // arancio
-            if (u.includes('COAP'))                                return { bg:'FF7C3AED', txt:'FFFFFFFF' }; // viola
-            if (u.includes('CONSAR'))                              return { bg:'FF16A34A', txt:'FFFFFFFF' }; // verde
-            if (u.includes('CONECO') || u.includes('CON ECO'))     return { bg:'FFDC2626', txt:'FFFFFFFF' }; // rosso
-            if (u.includes('CIRIONI'))                             return { bg:'FF059669', txt:'FFFFFFFF' }; // smeraldo
-            if (u.includes('LINO') || u.includes('BRANCHINI'))     return { bg:'FFEC4899', txt:'FFFFFFFF' }; // fucsia
-            if (u.includes('AVIO'))                                return { bg:'FF0891B2', txt:'FFFFFFFF' }; // azzurro cielo
-            if (u.includes('ALB') || u.includes('A.L.B'))          return { bg:'FFD97706', txt:'FFFFFFFF' }; // ambra
-            if (u.includes('STEGAGNO'))                            return { bg:'FF475569', txt:'FFFFFFFF' }; // grigio blu
-            if (u.includes('CLP'))                                 return { bg:'FFCA8A04', txt:'FFFFFFFF' }; // oro
-            return { bg:'FF37474F', txt:'FFFFFFFF' }; // grigio scuro default
+        // ── Palette trasportatore Tema G (bg pastello + testo scuro, coerente col resto app) ──
+        function _transporterColorPC(name) {
+            if (!name) return { bg:'#e5e7eb', tx:'#374151' };
+            const n = name.toUpperCase().trim();
+            const map = {
+                'CONECO':   { bg:'#b8a8e0', tx:'#1a0858' },
+                'CON ECO':  { bg:'#b8a8e0', tx:'#1a0858' },
+                'COAP':     { bg:'#90b8e8', tx:'#021848' },
+                'CEVOLO':   { bg:'#e8b870', tx:'#402000' },
+                'ASCHIERI': { bg:'#80d0a8', tx:'#022818' },
+                'LINO BRA': { bg:'#e890b8', tx:'#400028' },
+                'AVIO':     { bg:'#d8c840', tx:'#302800' },
+                'CONSAR':   { bg:'#e08888', tx:'#380008' },
+                'STEGAGNO': { bg:'#60c8d8', tx:'#003040' },
+                'CIRIONI':  { bg:'#a0d870', tx:'#183000' },
+                'CLP':      { bg:'#c090d8', tx:'#280848' }
+            };
+            if (map[n]) return map[n];
+            // Fallback deterministico — stessa logica di _locationCodeColorPC
+            let hash = 0;
+            for (let i = 0; i < n.length; i++) hash = ((hash<<5)-hash)+n.charCodeAt(i);
+            const hue = Math.abs(hash) % 360;
+            return { bg: 'hsl('+hue+',55%,78%)', tx: 'hsl('+hue+',60%,20%)' };
+        }
+
+        // ── Converte hex ('#rrggbb') o hsl('hsl(h,s%,l%)') in hex a 6 cifre senza cancelletto ──
+        function _toHex6(c) {
+            if (!c) return '000000';
+            if (c.charAt(0) === '#') return c.substring(1).toUpperCase();
+            const m = c.match(/hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)/);
+            if (m) return _hslToHex(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])).substring(1).toUpperCase();
+            return '000000';
         }
 
         // ── Formatta data: "LUN 16/03" (senza anno) ──
@@ -9656,358 +9689,213 @@
             return `${fmt(first)} al ${fmt(last)}`;
         }
 
-        // Colori giorno per separatori Excel
-        const _DAY_COLORS = {
-            1:{bg:'FF0F2547',border:'FF3B82F6',txt:'FF60A5FA',label:'LUNEDI'},
-            2:{bg:'FF052E1A',border:'FF059669',txt:'FF34D399',label:'MARTEDI'},
-            3:{bg:'FF1E0A3C',border:'FF7C3AED',txt:'FFA78BFA',label:'MERCOLEDI'},
-            4:{bg:'FF2D1A00',border:'FFD97706',txt:'FFFBBF24',label:'GIOVEDI'},
-            5:{bg:'FF2D0A1E',border:'FFDB2777',txt:'FFF472B6',label:'VENERDI'},
-            6:{bg:'FF1A1F2E',border:'FF64748B',txt:'FF94A3B8',label:'SABATO'},
-            0:{bg:'FF1A1F2E',border:'FF64748B',txt:'FF94A3B8',label:'DOMENICA'}
+        // ── Chip giorno (sfondo tinta chiara + testo scuro della stessa famiglia) e striscia laterale ──
+        const _DAY_CHIP = {
+            1:{bg:'DCEBFF',tx:'0B3D91'}, 2:{bg:'DBF5E8',tx:'0B6B3F'}, 3:{bg:'EFE3FF',tx:'5B21B6'},
+            4:{bg:'FFF2D6',tx:'92620A'}, 5:{bg:'FDE2EE',tx:'9D174D'}, 6:{bg:'E7EAF0',tx:'475569'},
+            0:{bg:'E7EAF0',tx:'475569'}
         };
+        const _DAY_STRIPE = { 1:'3B82F6', 2:'10B981', 3:'8B5CF6', 4:'F59E0B', 5:'EC4899', 6:'64748B', 0:'64748B' };
+
+        // ── Scrive Luogo + Codice cliente/sito (2 celle: nome semplice + chip colorato fisso) ──
+        function _xlsWriteLoc(wr, colIdx, locText, bg, inkArgb) {
+            let place = (locText||'').trim();
+            let code = '';
+            const m = place.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+            if (m) { place = m[1].trim(); code = m[2].trim(); }
+            const lc = wr.getCell(colIdx);
+            lc.value = place;
+            lc.font = { size:9.5, color:{argb:inkArgb}, name:'Calibri' };
+            lc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+            lc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+            const cc = wr.getCell(colIdx+1);
+            if (code) {
+                const col = _locationCodeColorPC(code);
+                const bgHex = 'FF'+_toHex6(col.bg), bdHex = 'FF'+_toHex6(col.bd), txHex = 'FF'+_toHex6(col.tx);
+                cc.value = code;
+                cc.font = { bold:true, size:8, color:{argb:txHex}, name:'Calibri' };
+                cc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:bgHex} };
+                cc.border = { top:{style:'thin',color:{argb:bdHex}}, bottom:{style:'thin',color:{argb:bdHex}},
+                              left:{style:'thin',color:{argb:bdHex}}, right:{style:'thin',color:{argb:bdHex}} };
+            } else {
+                cc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+            }
+            cc.alignment = { vertical:'center', horizontal:'center' };
+        }
 
         async function _buildAndDownloadExcel(tripsData, title, filenameSuffix) {
             try {
                 showStatus('Preparazione Excel...', 'info');
                 const sorted = [...tripsData].sort((a,b) => new Date(a.data) - new Date(b.data));
-                const byDay  = {};
-                sorted.forEach(t => { if (!byDay[t.data]) byDay[t.data]=[]; byDay[t.data].push(t); });
-                const days   = Object.keys(byDay).sort();
 
                 const wb = new ExcelJS.Workbook();
                 wb.creator = 'Planning Viaggi';
 
-                // === FOGLIO 1 — VIAGGI ===
-                const ws = wb.addWorksheet('Viaggi');
+                const ws = wb.addWorksheet('Planning');
                 ws.pageSetup = { orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0,
-                    paperSize:9, margins:{left:0.5,right:0.5,top:0.75,bottom:0.75,header:0.3,footer:0.3} };
+                    paperSize:9, margins:{left:0.4,right:0.4,top:0.6,bottom:0.6,header:0.3,footer:0.3} };
                 ws.columns = [
-                    {width:1.5},{width:14},{width:16},{width:28},{width:26},
-                    {width:14},{width:30},{width:7},{width:7},{width:1.5}
+                    {width:2},{width:13},{width:3},{width:17},{width:17},{width:11},
+                    {width:17},{width:11},{width:15},{width:10},{width:13},{width:20}
                 ];
 
-                const thin   = {style:'thin',  color:{argb:'FFD1D5DB'}};
-                const medium = {style:'medium', color:{argb:'FF6B7280'}};
-                const thick  = {style:'medium', color:{argb:'FF1A2340'}};
-                const bdr    = {top:thin,left:thin,bottom:thin,right:thin};
-                const bdrMed = {top:medium,left:medium,bottom:medium,right:medium};
+                const INK='FF1A2340', ACCENT='FF2F6FED', LIGHTBG='F6F8FB', WHITE='FFFFFF';
+                const GREEN='FF0F9D58', GREENBG='FFE6F6EC', AMBER='FFB7791F', AMBERBG='FFFDF3D9';
 
-                // Intestazione settimana
+                // Titolo
+                ws.mergeCells('B1:L1');
+                const r1 = ws.getRow(1);
+                r1.getCell(2).value = 'Planning Viaggi';
+                r1.getCell(2).font = { bold:true, size:17, color:{argb:INK}, name:'Calibri' };
+                r1.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
+                r1.height = 32;
+
                 const weekRange = _xlsWeekRange(sorted);
-                const r1 = ws.addRow(['PLANNING VIAGGI  ·  Pro Trasporti','','','','','','','','','']);
-                r1.height = 40;
-                for (let c=1; c<=10; c++) {
-                    r1.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FF0F172A'}};
-                    r1.getCell(c).border = {top:{style:'medium',color:{argb:'FFFF6B35'}},bottom:{style:'medium',color:{argb:'FFFF6B35'}},left:thin,right:thin};
-                }
-                r1.getCell(1).font      = {bold:true,size:16,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                r1.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
-                ws.mergeCells('A1:J1');
+                ws.mergeCells('B2:L2');
+                const r2 = ws.getRow(2);
+                r2.getCell(2).value = 'Pro Trasporti  ·  ' + weekRange;
+                r2.getCell(2).font = { size:10, color:{argb:'FF6B7280'}, name:'Calibri' };
+                r2.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
+                r2.height = 16;
 
-                const r2 = ws.addRow([weekRange,'','','','','','','','','']);
-                r2.height = 20;
-                for (let c=1; c<=10; c++) {
-                    r2.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FFEFF6FF'}};
-                    r2.getCell(c).border = bdr;
-                }
-                r2.getCell(1).font      = {bold:true,size:11,color:{argb:'FF1E3A5F'},name:'Calibri'};
-                r2.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
-                ws.mergeCells('A2:J2');
-
-                // Header colonne
-                const HDRS = ['','Data','Trasportatore','Partenza da','Arrivo a','Prodotto','Note / DDT','!','OK',''];
-                const r3 = ws.addRow(HDRS);
-                r3.height = 26;
-                HDRS.forEach((h,i) => {
-                    const cell = r3.getCell(i+1);
-                    cell.fill      = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
-                    cell.font      = {bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                    cell.alignment = {vertical:'middle',horizontal:(i===7||i===8)?'center':'left',indent:(i===0||i===9)?0:1};
-                    cell.border    = {top:{style:'medium',color:{argb:'FF1E3A5F'}},bottom:{style:'medium',color:{argb:'FF1E3A5F'}},left:thin,right:thin};
-                });
-                ws.views = [{state:'frozen',xSplit:0,ySplit:3}];
-
-                // Righe dati per giorno
-                let rowIdx = 0;
-                days.forEach(function(day) {
-                    const d        = new Date(day + 'T12:00:00');
-                    const dayNum   = d.getDay();
-                    const dc       = _DAY_COLORS[dayNum] || _DAY_COLORS[0];
-                    const dayTrips = byDay[day];
-                    const dd       = String(d.getDate()).padStart(2,'0');
-                    const mm       = String(d.getMonth()+1).padStart(2,'0');
-                    const dayLabel = dc.label + '  ' + dd + '/' + mm;
-
-                    // Separatore giorno colorato — banner pieno, senza conteggio
-                    const sepR = ws.addRow([dayLabel,'','','','','','','','','']);
-                    sepR.height = 28;
-                    for (let c=1; c<=10; c++) {
-                        sepR.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:dc.bg}};
-                        sepR.getCell(c).border = {
-                            top:{style:'medium',color:{argb:dc.border}},
-                            bottom:{style:'medium',color:{argb:dc.border}},
-                            left:{style:'thin',color:{argb:dc.border}},
-                            right:{style:'thin',color:{argb:dc.border}}
-                        };
-                    }
-                    sepR.getCell(1).font      = {bold:true,size:12,color:{argb:dc.txt},name:'Calibri'};
-                    sepR.getCell(1).alignment = {vertical:'middle',horizontal:'left',indent:2};
-                    ws.mergeCells('A'+sepR.number+':J'+sepR.number);
-
-                    // Righe viaggio (zebra)
-                    dayTrips.forEach(function(trip) {
-                        rowIdx++;
-                        var zebraFg = (rowIdx%2===0) ? 'FFEEF2F7' : 'FFFFFFFF';
-                        var colors  = _xlsColors(trip.trasportatore);
-                        var ddt     = trip.daConfermare ? 'DA CONFERMARE' : (trip.note||'').trim();
-
-                        var row = ws.addRow([
-                            '', _xlsFmtDate(trip.data), trip.trasportatore||'',
-                            trip.partenza||'', trip.arrivo||'',
-                            (trip.prodotto||'').trim(), ddt,
-                            trip.daConfermare ? '!' : '',
-                            trip.confermato   ? 'SI' : '',
-                            ''
-                        ]);
-                        row.height = 21;
-
-                        for (let c=1; c<=10; c++) {
-                            var cell = row.getCell(c);
-                            cell.fill      = {type:'pattern',pattern:'solid',fgColor:{argb:zebraFg}};
-                            cell.font      = {size:10,color:{argb:'FF1F2937'},name:'Calibri'};
-                            cell.alignment = {vertical:'middle',horizontal:'left',wrapText:false,indent:1};
-                            cell.border    = bdr;
-                        }
-                        // B Data: bold Calibri, blu scuro premium
-                        row.getCell(2).font      = {bold:true,size:10,color:{argb:'FF1E3A5F'},name:'Calibri'};
-                        row.getCell(2).alignment = {vertical:'middle',horizontal:'left',indent:1};
-                        // C Trasportatore: badge pieno colorato — riconoscibile a colpo d'occhio
-                        row.getCell(3).fill      = {type:'pattern',pattern:'solid',fgColor:{argb:colors.bg}};
-                        row.getCell(3).font      = {bold:true,size:10,color:{argb:colors.txt},name:'Calibri'};
-                        row.getCell(3).alignment = {vertical:'middle',horizontal:'center'};
-                        row.getCell(3).border    = {top:thin,left:thin,bottom:thin,right:thin};
-                        // D Partenza: bold
-                        row.getCell(4).font      = {bold:true,size:10,color:{argb:'FF111827'},name:'Calibri'};
-                        // E Arrivo: bold verde scuro
-                        row.getCell(5).font      = {bold:true,size:10,color:{argb:'FF065F46'},name:'Calibri'};
-                        // F Prodotto: bold grigio scuro
-                        row.getCell(6).font      = {bold:true,size:9,color:{argb:'FF374151'},name:'Calibri'};
-                        // G/H da confermare: rosso su giallo
-                        if (trip.daConfermare) {
-                            row.getCell(7).font = {bold:true,size:9,color:{argb:'FFDC2626'},name:'Calibri'};
-                            row.getCell(7).fill = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9C4'}};
-                            row.getCell(8).font = {bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
-                            row.getCell(8).fill = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF9C4'}};
-                            row.getCell(8).alignment = {vertical:'middle',horizontal:'center'};
-                        }
-                        // I confermato: verde
-                        if (trip.confermato) {
-                            row.getCell(9).font      = {bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
-                            row.getCell(9).alignment = {vertical:'middle',horizontal:'center'};
-                        }
-                    });
-                });
-
-                // Riga totale generale
-                ws.addRow([]);
-                var gtRow = ws.addRow(['','TOTALE SETTIMANA — '+sorted.length+' viaggi','','','','','',
-                    sorted.filter(function(t){return t.daConfermare;}).length+' da conf.',
-                    sorted.filter(function(t){return t.confermato;}).length+' conf.','']);
-                gtRow.height = 22;
-                for (let c=1; c<=10; c++) {
-                    gtRow.getCell(c).fill   = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1A2340'}};
-                    gtRow.getCell(c).border = bdrMed;
-                    gtRow.getCell(c).font   = {bold:true,size:11,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                    gtRow.getCell(c).alignment = {vertical:'middle',horizontal:'left',indent:1};
-                }
-                gtRow.getCell(8).font = {bold:true,size:10,color:{argb:'FFFFD966'},name:'Calibri'};
-                gtRow.getCell(9).font = {bold:true,size:10,color:{argb:'FF90EE90'},name:'Calibri'};
-                ws.mergeCells('B'+gtRow.number+':G'+gtRow.number);
-
-                // === FOGLIO 2 — RIEPILOGO ===
-                var ws2 = wb.addWorksheet('Riepilogo');
-                // Colonne: margin | label(28) | n(9) | conf(9) | daConf(9) | margin
-                // + colonne extra per sezioni partenze/arrivi/prodotti (stessa larghezza)
-                ws2.columns = [
-                    {width:2},{width:28},{width:9},{width:9},{width:9},{width:2},
-                    {width:2},{width:28},{width:9},{width:2}
+                // KPI cards
+                const tot = sorted.length;
+                const conf = sorted.filter(t => t.confermato).length;
+                const daconf = sorted.filter(t => t.daConfermare).length;
+                const nTransp = new Set(sorted.map(t => t.trasportatore||'?')).size;
+                const cards = [
+                    { label:'Viaggi totali',   val:tot,    color:ACCENT,    tint:'FFDCE7FE' },
+                    { label:'Confermati',      val:conf,   color:GREEN,     tint:GREENBG },
+                    { label:'Da confermare',   val:daconf, color:AMBER,     tint:AMBERBG },
+                    { label:'Trasportatori',   val:nTransp,color:'FF8B5CF6',tint:'FFEFE3FF' }
                 ];
-
-                // Numero colonne totali usate per fill/border nelle intestazioni
-                var WS2_COLS = 10;
-
-                function addR2Title(text, accent) {
-                    ws2.addRow([]);
-                    var r = ws2.addRow(['',text,'','','','','','','','']);
-                    r.height = 24;
-                    var bg = accent || 'FF0F172A';
-                    for (let c=1; c<=WS2_COLS; c++) {
-                        r.getCell(c).fill={type:'pattern',pattern:'solid',fgColor:{argb:bg}};
-                        r.getCell(c).border=bdrMed;
+                const rowKpi = 4;
+                cards.forEach((card, i) => {
+                    const sc = 2 + i*2, ec = sc+1;
+                    [rowKpi, rowKpi+1, rowKpi+2].forEach(rr => {
+                        ws.mergeCells(rr, sc, rr, ec);
+                        for (let cc = sc; cc <= ec; cc++) {
+                            ws.getRow(rr).getCell(cc).fill = {type:'pattern',pattern:'solid',fgColor:{argb:card.tint}};
+                        }
+                    });
+                    for (let cc = sc; cc <= ec; cc++) {
+                        ws.getRow(rowKpi).getCell(cc).border = { top:{style:'thick',color:{argb:card.color}} };
                     }
-                    r.getCell(2).font={bold:true,size:12,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                    r.getCell(2).alignment={vertical:'middle',horizontal:'left',indent:1};
-                    ws2.mergeCells('B'+r.number+':I'+r.number);
-                }
-                function addR2Header(cols, startCol) {
-                    startCol = startCol || 2;
-                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
-                    r.height = 18;
-                    cols.forEach(function(_,i) {
-                        var cell = r.getCell(startCol+i);
-                        cell.value = cols[i];
-                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
-                        cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
-                        cell.border=bdr;
-                    });
-                    return r;
-                }
-                function addR2DataRow(vals, startCol, zebraEven, colorCell2Argb) {
-                    startCol = startCol || 2;
-                    var zbg = zebraEven ? 'FFF8FAFC' : 'FFFFFFFF';
-                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
-                    r.height = 17;
-                    vals.forEach(function(v,i) {
-                        var cell = r.getCell(startCol+i);
-                        cell.value = v;
-                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:zbg}};
-                        cell.border=bdr;
-                        cell.font={size:10,name:'Calibri',color:{argb:'FF1F2937'}};
-                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
-                    });
-                    if (colorCell2Argb) {
-                        r.getCell(startCol).font={bold:true,size:10,color:{argb:colorCell2Argb},name:'Calibri'};
+                    const numCell = ws.getRow(rowKpi+1).getCell(sc);
+                    numCell.value = card.val;
+                    numCell.font = { bold:true, size:20, color:{argb:INK}, name:'Calibri' };
+                    numCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
+                    const labCell = ws.getRow(rowKpi+2).getCell(sc);
+                    labCell.value = card.label;
+                    labCell.font = { size:8.5, bold:true, color:{argb:INK}, name:'Calibri' };
+                    labCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
+                });
+                ws.getRow(rowKpi).height = 4;
+                ws.getRow(rowKpi+1).height = 22;
+                ws.getRow(rowKpi+2).height = 16;
+
+                // Header tabella
+                const headerRow = rowKpi + 4;
+                const headers = ['','Giorno','','Trasportatore','Partenza','Cod.','Arrivo','Cod.','Prodotto','DDT','Stato','Note'];
+                const hRow = ws.getRow(headerRow);
+                headers.forEach((h, i) => {
+                    const cell = hRow.getCell(i+1);
+                    cell.value = h;
+                    cell.font = { bold:true, size:9, color:{argb:'FF6B7280'}, name:'Calibri' };
+                    cell.border = { bottom:{style:'medium',color:{argb:INK}} };
+                    cell.alignment = { horizontal:'left', vertical:'center', indent:1 };
+                });
+                hRow.height = 18;
+                ws.views = [{ showGridLines:false, state:'frozen', xSplit:0, ySplit:headerRow }];
+
+                // Righe viaggio
+                let row = headerRow + 1;
+                let zebra = false;
+                sorted.forEach(t => {
+                    const d = t.data ? new Date(t.data + 'T12:00:00') : null;
+                    const dow = d ? d.getDay() : 1;
+                    zebra = !zebra;
+                    const bg = zebra ? LIGHTBG : WHITE;
+                    const stripe = _DAY_STRIPE[dow] || _DAY_STRIPE[1];
+                    const chip = _DAY_CHIP[dow] || _DAY_CHIP[1];
+
+                    const wr = ws.getRow(row);
+                    wr.getCell(1).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+stripe} };
+
+                    const gc = wr.getCell(2);
+                    gc.value = d ? _xlsFmtDate(t.data) : '';
+                    gc.font = { bold:true, size:8.5, color:{argb:'FF'+chip.tx}, name:'Calibri' };
+                    gc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+chip.bg} };
+                    gc.alignment = { vertical:'center', horizontal:'center' };
+
+                    const tCol = _transporterColorPC(t.trasportatore);
+                    wr.getCell(3).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+_toHex6(tCol.bg)} };
+                    const tc = wr.getCell(4);
+                    tc.value = t.trasportatore || '';
+                    tc.font = { bold:true, size:9.5, color:{argb:'FF'+_toHex6(tCol.tx)}, name:'Calibri' };
+                    tc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    tc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+
+                    _xlsWriteLoc(wr, 5, t.partenza, bg, INK);
+                    _xlsWriteLoc(wr, 7, t.arrivo, bg, INK);
+
+                    const pc = wr.getCell(9);
+                    pc.value = (t.prodotto||'').trim();
+                    pc.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
+                    pc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    pc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+
+                    const ddtCell = wr.getCell(10);
+                    if (t.ddt) {
+                        ddtCell.value = t.ddt;
+                        ddtCell.font = { name:'JetBrains Mono', size:9, bold:true, color:{argb:INK} };
+                    } else {
+                        ddtCell.value = '—';
+                        ddtCell.font = { size:9, color:{argb:'FFB0B7C3'} };
                     }
-                    return r;
-                }
-                function addR2TotalRow(vals, startCol) {
-                    startCol = startCol || 2;
-                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
-                    r.height = 19;
-                    vals.forEach(function(v,i) {
-                        var cell = r.getCell(startCol+i);
-                        cell.value = v;
-                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
-                        cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'},name:'Calibri'};
-                        cell.border=bdrMed;
-                        cell.alignment={vertical:'middle',horizontal:(i===0?'left':'center'),indent:(i===0?1:0)};
-                    });
-                    return r;
-                }
+                    ddtCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    ddtCell.alignment = { vertical:'center', horizontal:'center' };
 
-                // ── SEZIONE 1: PER TRASPORTATORE ──
-                addR2Title('TOTALI PER TRASPORTATORE');
-                addR2Header(['Trasportatore','Viaggi','Conf.','Da conf.']);
-                var countsByT = {};
-                sorted.forEach(function(t) {
-                    var k = t.trasportatore||'(?)';
-                    if (!countsByT[k]) countsByT[k]={tot:0,conf:0,daConf:0};
-                    countsByT[k].tot++;
-                    if (t.confermato)   countsByT[k].conf++;
-                    if (t.daConfermare) countsByT[k].daConf++;
-                });
-                var tEven = false;
-                Object.entries(countsByT).sort(function(a,b){return b[1].tot-a[1].tot;}).forEach(function(entry) {
-                    var name=entry[0], v=entry[1];
-                    tEven = !tEven;
-                    var colors = _xlsColors(name);
-                    var r = addR2DataRow([name, v.tot, v.conf>0?v.conf:'', v.daConf>0?v.daConf:''], 2, tEven, colors.bg);
-                    if (v.conf>0)   r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
-                    if (v.daConf>0) r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
-                });
-                addR2TotalRow(['TOTALE', sorted.length,
-                    sorted.filter(function(t){return t.confermato;}).length,
-                    sorted.filter(function(t){return t.daConfermare;}).length], 2);
+                    const statoCell = wr.getCell(11);
+                    if (t.daConfermare) {
+                        statoCell.value = 'Da confermare';
+                        statoCell.font = { bold:true, size:8.5, color:{argb:AMBER} };
+                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:AMBERBG} };
+                    } else if (t.confermato) {
+                        statoCell.value = 'Confermato';
+                        statoCell.font = { bold:true, size:8.5, color:{argb:GREEN} };
+                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:GREENBG} };
+                    } else {
+                        statoCell.value = 'In attesa';
+                        statoCell.font = { bold:true, size:8.5, color:{argb:'FF475569'} };
+                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFEEF1F5'} };
+                    }
+                    statoCell.alignment = { horizontal:'center', vertical:'center' };
 
-                // ── SEZIONE 2: PER GIORNO ──
-                addR2Title('TOTALI PER GIORNO');
-                addR2Header(['Giorno','Viaggi','Conf.','Da conf.']);
-                days.forEach(function(day) {
-                    var d = new Date(day+'T12:00:00');
-                    var dc = _DAY_COLORS[d.getDay()]||_DAY_COLORS[0];
-                    var dayTrips = byDay[day];
-                    var conf   = dayTrips.filter(function(t){return t.confermato;}).length;
-                    var daConf = dayTrips.filter(function(t){return t.daConfermare;}).length;
-                    var dd=String(d.getDate()).padStart(2,'0'), mm=String(d.getMonth()+1).padStart(2,'0');
-                    var label = dc.label + '  ' + dd+'/'+mm;
-                    var r = ws2.addRow(new Array(WS2_COLS+1).fill(''));
-                    r.height = 18;
-                    [[2,label],[3,dayTrips.length],[4,conf>0?conf:''],[5,daConf>0?daConf:'']].forEach(function(x){
-                        var cell = r.getCell(x[0]);
-                        cell.value = x[1];
-                        cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:dc.bg}};
-                        cell.border=bdr;
-                        cell.font={bold:(x[0]===2),size:10,color:{argb:dc.txt},name:'Calibri'};
-                        cell.alignment={vertical:'middle',horizontal:(x[0]===2?'left':'center'),indent:(x[0]===2?1:0)};
-                    });
-                    if (conf>0)   r.getCell(4).font={bold:true,size:10,color:{argb:'FF16A34A'},name:'Calibri'};
-                    if (daConf>0) r.getCell(5).font={bold:true,size:10,color:{argb:'FFDC2626'},name:'Calibri'};
-                });
-                addR2TotalRow(['TOTALE', sorted.length,
-                    sorted.filter(function(t){return t.confermato;}).length,
-                    sorted.filter(function(t){return t.daConfermare;}).length], 2);
+                    const noteCell = wr.getCell(12);
+                    noteCell.value = (t.note||'').trim();
+                    noteCell.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
+                    noteCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    noteCell.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
-                // ── SEZIONE 3: PARTENZE ──
-                addR2Title('PARTENZE PER LUOGO');
-                addR2Header(['Luogo di partenza','N° viaggi']);
-                var countsByP = {};
-                sorted.forEach(function(t) {
-                    var k = (t.partenza||'(?)').trim();
-                    countsByP[k] = (countsByP[k]||0) + 1;
+                    for (let cc = 1; cc <= 12; cc++) {
+                        const existing = wr.getCell(cc).border || {};
+                        wr.getCell(cc).border = Object.assign({}, existing, { bottom:{style:'hair',color:{argb:'FFE5E7EB'}} });
+                    }
+                    row++;
                 });
-                var pEven = false;
-                Object.entries(countsByP).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
-                    pEven = !pEven;
-                    addR2DataRow([entry[0], entry[1]], 2, pEven, null);
-                });
-                addR2TotalRow(['TOTALE PARTENZE', sorted.length], 2);
-
-                // ── SEZIONE 4: ARRIVI ──
-                addR2Title('ARRIVI PER LUOGO');
-                addR2Header(['Luogo di arrivo','N° viaggi']);
-                var countsByA = {};
-                sorted.forEach(function(t) {
-                    var k = (t.arrivo||'(?)').trim();
-                    countsByA[k] = (countsByA[k]||0) + 1;
-                });
-                var aEven = false;
-                Object.entries(countsByA).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
-                    aEven = !aEven;
-                    addR2DataRow([entry[0], entry[1]], 2, aEven, null);
-                });
-                addR2TotalRow(['TOTALE ARRIVI', sorted.length], 2);
-
-                // ── SEZIONE 5: PRODOTTI ──
-                var prodSorted = sorted.filter(function(t){return t.prodotto && t.prodotto.trim();});
-                if (prodSorted.length > 0) {
-                    addR2Title('PRODOTTI TRASPORTATI');
-                    addR2Header(['Prodotto','N° viaggi']);
-                    var countsByProd = {};
-                    prodSorted.forEach(function(t) {
-                        var k = (t.prodotto||'').trim();
-                        countsByProd[k] = (countsByProd[k]||0) + 1;
-                    });
-                    var prEven = false;
-                    Object.entries(countsByProd).sort(function(a,b){return b[1]-a[1];}).forEach(function(entry) {
-                        prEven = !prEven;
-                        addR2DataRow([entry[0], entry[1]], 2, prEven, null);
-                    });
-                    addR2TotalRow(['TOTALE CON PRODOTTO', prodSorted.length], 2);
-                }
 
                 // Scarica
-                var buffer = await wb.xlsx.writeBuffer();
-                var blob   = new Blob([buffer], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-                var url    = URL.createObjectURL(blob);
-                var a      = document.createElement('a');
-                var safe   = (title||'export').replace(/[\/\\:*?"<>|]/g,'_');
-                var filename = 'Planning_VIAGGI_' + safe + (filenameSuffix||'') + '.xlsx';
+                const buffer = await wb.xlsx.writeBuffer();
+                const blob   = new Blob([buffer], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                const url    = URL.createObjectURL(blob);
+                const a      = document.createElement('a');
+                const safe   = (title||'export').replace(/[\/\\:*?"<>|]/g,'_');
+                const filename = 'Planning_VIAGGI_' + safe + (filenameSuffix||'') + '.xlsx';
                 a.href     = url;
                 a.download = filename;
                 a.click();
-                setTimeout(function(){URL.revokeObjectURL(url);}, 3000);
+                setTimeout(() => URL.revokeObjectURL(url), 3000);
 
                 // Popup conferma download
                 showExcelDownloadConfirm(filename, sorted.length);
@@ -10034,7 +9922,7 @@
                 '<div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--success);border-radius:16px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.8);text-align:center;">'
                 + '<div style="font-size:48px;margin-bottom:12px;">📥</div>'
                 + '<div style="font-size:16px;font-weight:800;color:var(--success);margin-bottom:8px;">Excel scaricato!</div>'
-                + '<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;">' + count + ' ' + _pv(count) + ' · 2 fogli</div>'
+                + '<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;">' + count + ' ' + _pv(count) + '</div>'
                 + '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:20px;word-break:break-all;">' + filename + '</div>'
                 + '<button onclick="closeExcelConfirm()" style="width:100%;padding:12px;background:rgba(62,203,150,0.12);border:1px solid rgba(62,203,150,0.3);border-radius:10px;color:var(--success);font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">OK</button>'
                 + '</div>';
@@ -10056,6 +9944,7 @@
             saveToLocalStorage();
             filterApply();
             showStatus('✅ Viaggi riordinati!', 'success');
+            if (driveAccessToken) autoSaveDrive();
         }
 
         function clearData() {
@@ -10067,6 +9956,7 @@
                 updateStats();
                 filterPopulateDropdowns();
                 showStatus('🗑️ Tutti i dati sono stati cancellati', 'info');
+                if (driveAccessToken) autoSaveDrive();
             }
         }
 
@@ -10314,6 +10204,7 @@
 
                     const dc = nuoviViaggi.filter(t => t.daConfermare).length;
                     showStatus('✅ ' + nuoviViaggi.length + ' viaggi importati' + (dc ? ' · ' + dc + ' ⚠️ da confermare' : ''), 'success');
+                    if (driveAccessToken) autoSaveDrive();
 
                 } catch (err) {
                     const fi = document.getElementById('fileInput');
@@ -11130,6 +11021,17 @@
             localStorage.setItem('weekArchive', JSON.stringify(archive));
         }
 
+        // Espandi/collassa la lista archivio (stato ricordato tra le sessioni)
+        function toggleArchiveExpanded() {
+            var list = document.getElementById('archiveList');
+            var chevron = document.getElementById('archiveChevron');
+            if (!list) return;
+            var next = list.style.display === 'none';
+            list.style.display = next ? 'block' : 'none';
+            if (chevron) chevron.style.transform = next ? 'rotate(90deg)' : 'rotate(0deg)';
+            try { localStorage.setItem('archiveExpandedUI', next ? '1' : '0'); } catch(e) {}
+        }
+
         // Mostra/aggiorna la sezione archivio
         function renderArchive() {
             const archive = loadArchive();
@@ -11176,6 +11078,13 @@
                     + '<button onclick="archiveDelete(' + idx + ')" title="Elimina" style="padding:6px 8px;border-radius:7px;border:1px solid rgba(255,80,80,0.15);background:transparent;color:rgba(255,80,80,0.4);font-family:Outfit,sans-serif;font-size:12px;cursor:pointer;">🗑</button>'
                     + '</div></div>';
             }).join('');
+
+            // Applica lo stato espanso/collassato ricordato (default: collassato)
+            var expandedPref = false;
+            try { expandedPref = localStorage.getItem('archiveExpandedUI') === '1'; } catch(e) {}
+            list.style.display = expandedPref ? 'block' : 'none';
+            var chevron = document.getElementById('archiveChevron');
+            if (chevron) chevron.style.transform = expandedPref ? 'rotate(90deg)' : 'rotate(0deg)';
         }
 
         // Modale nuova settimana V2
