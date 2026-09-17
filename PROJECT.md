@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 09/09/2026 · Versione attuale: **v45**
+> Aggiornato: 17/09/2026 · Versione attuale: **v47**
 
 ---
 
@@ -8,7 +8,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v45.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v47.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -61,9 +61,16 @@
 
 ### Oggetto viaggio
 ```
-{ data, trasportatore, partenza, arrivo, prodotto, note, daConfermare, confermato }
+{ data, trasportatore, partenza, arrivo, prodotto, note, ddt, daConfermare, confermato }
 ```
-Partenza/arrivo includono il codice: `"Bientina (INCONTRATO)"`
+Partenza/arrivo includono il codice: `"Bientina (INCONTRATO)"`.
+`ddt` (v46) è il numero del Documento Di Trasporto, facoltativo, stringa libera.
+**Attenzione se in futuro si tocca ancora il modale di modifica mobile**: il
+form "✏️ Modifica Viaggio" ricostruisce l'INTERO oggetto viaggio da zero sui
+campi del form — qualsiasi campo che il form non espone esplicitamente (es.
+era successo con `confermato` e `ddt` prima del fix v47) va RIPRESO A MANO dal
+viaggio originale prima di sovrascrivere, altrimenti si perde silenziosamente
+ad ogni modifica. Vedi `_commitEditForm()`.
 
 ---
 
@@ -143,7 +150,97 @@ Confermato:    testo #085040  simbolo "✓ ok"
 
 ---
 
-## Novità v45 (non reimplementare)
+## Novità v46–v47 (non reimplementare)
+
+**Export Excel — redesign completo, foglio unico "Planning" (sostituisce il
+vecchio sistema a 2 fogli "Viaggi"+"Riepilogo" descritto più sotto in v38/v39,
+ormai storico)**. Motivo: Fil lo trovava "brutto, non funzionale, pagine che
+non c'entrano niente". Dopo diverse iterazioni di mockup (varianti Excel
+generate con `openpyxl`/Python fuori dall'app, solo per scegliere lo stile —
+il codice reale nell'app usa sempre `ExcelJS` lato browser) è stato scelto:
+
+- **Foglio unico**, niente più "Riepilogo" separato.
+- **KPI card in alto** (Viaggi totali / Confermati / Da confermare /
+  Trasportatori), 4 box con bordo superiore colorato, tinta chiara.
+- **Trasportatore stampa-safe**: NON più un tassello a sfondo pieno saturo
+  (in bianco/nero diventava un blocco grigio scuro illeggibile — verificato
+  esportando in PDF e convertendo in scala di grigi). Ora: piccolo quadratino
+  colorato (swatch, colonna a parte) + nome in **testo grassetto colorato**
+  su sfondo bianco/zebra. Palette in `_transporterColorPC()` — stessa identità
+  colore della sezione "Badge trasportatori" più sotto in questo file, con
+  fallback deterministico (hash→hue) per nomi non in lista.
+- **Codici cliente/sito a colonna separata** ("Cod.") accanto a Partenza/Arrivo,
+  chip a tinta chiara — riusa `_locationCodeColorPC()` già esistente (stessa
+  palette fissa della vista PC), quindi stesso colore ovunque nell'app.
+- **Colonna DDT** (nuova, v46) tra Prodotto e Stato — mostra `t.ddt` in
+  monospace grassetto, oppure "—" se assente.
+- Giorno: chip a tinta chiara + striscia laterale colorata sottile (non un
+  banner pieno come il vecchio sistema).
+- Funzioni nuove: `_transporterColorPC(name)`, `_toHex6(c)` (converte hex o
+  stringa `hsl(...)` in hex a 6 cifre per ExcelJS), `_xlsWriteLoc(wr, colIdx,
+  locText, bg, inkArgb)` (scrive luogo + chip codice), `_DAY_CHIP`/`_DAY_STRIPE`
+  (nuove palette leggere, sostituiscono `_DAY_COLORS` rimossa). **Rimosse**:
+  `_xlsColors()` e `_DAY_COLORS` (vecchia palette Excel-only, sfondi pieni
+  saturi) — non esistono più, non cercarle.
+- `_xlsFmtDate`/`_xlsWeekRange` invariate (riusate).
+- Popup di conferma download: rimosso il riferimento fisso "· 2 fogli" (ora è
+  un foglio unico).
+
+**Campo N. DDT aggiunto al modello dati e a TUTTI i punti di inserimento/
+modifica, sia mobile che PC** (richiesta esplicita di Fil):
+- Form mobile "Nuovo Viaggio" (`tripForm`): input `id="ddt"` dopo Prodotto/Note.
+- Modale desktop "Aggiungi viaggio PC": input `id="dmDDT"` accanto alle Note
+  (`desktopAddEmpty()` lo include nella lista campi da svuotare/precompilare,
+  `desktopConfirmAdd()` lo legge).
+- Modale mobile "✏️ Modifica Viaggio" (`editModal`, condiviso da `editTrip()` e
+  `editNextTrip()`): input `id="editDDT"` — **aggiunto durante un giro di
+  controllo del codice**, non era stato richiesto esplicitamente ma era
+  necessario: senza, ogni modifica di un viaggio esistente cancellava il DDT
+  già inserito (vedi bug sotto).
+
+**Archivio settimane — ora è un pulsante espandibile, non più una lista
+sempre visibile** (Fil, da screenshot: "non una lista infinita"). Header
+`#archiveSection` trasformato in `<button id="archiveToggleBtn">` con
+chevron `#archiveChevron` (▶/▼) che chiama `toggleArchiveExpanded()`; la
+lista `#archiveList` parte `display:none` e lo stato aperto/chiuso è
+ricordato in `localStorage.archiveExpandedUI` (applicato a fine
+`renderArchive()` ad ogni re-render, non solo al primo load).
+
+**Tre bug di mancata sincronizzazione automatica trovati e corretti**
+(Fil aveva chiesto un controllo generale del salvataggio automatico da
+mobile — nessuno di questi era stato segnalato esplicitamente, trovati
+scansionando tutti i punti che chiamano `saveToLocalStorage()` e verificando
+se seguiva `if (driveAccessToken) autoSaveDrive();` come negli altri punti
+equivalenti):
+1. **`_commitEditForm()`** (submit del modale "✏️ Modifica Viaggio", il più
+   grave) — non chiamava `autoSaveDrive()` dopo il salvataggio. Corretto.
+2. **`fixSortOrder()`** — idem, aggiunta la chiamata.
+3. **`clearData()`** — cancellare tutti i viaggi non sincronizzava la
+   cancellazione su Drive (rischio: il backup remoto restava con i vecchi
+   dati). Aggiunta la chiamata.
+   Anche l'handler di successo dell'**import da Excel** non sincronizzava —
+   aggiunta la chiamata a fine importazione.
+
+**Nota metodologica per sessioni future**: la funzione Excel reale
+(`_buildAndDownloadExcel`) era rimasta quella vecchia per diversi turni di
+conversazione mentre si iterava solo su MOCKUP esterni (file `.xlsx` generati
+con Python/openpyxl, mai collegati al codice dell'app) — Fil ha dovuto
+segnalare "perché mi viene ancora fuori questo?" caricando l'export reale
+prima che il codice venisse davvero aggiornato. **Quando si concorda un
+design a mockup, chiarire sempre esplicitamente quando si passa
+dall'anteprima all'implementazione reale nel file HTML**, non darlo per
+scontato.
+
+**Nota sui vincoli ES5**: la funzione Excel (sia la vecchia che la nuova)
+usa `const`/`let`/arrow functions/spread — **non rispetta i "Vincoli Android
+critici"** dichiarati più sotto in questo file. È così da prima di questa
+sessione (era già così nel codice v45 originale) ed evidentemente funziona
+lo stesso su Android, quindi non è stato riportato a ES5 puro per non
+introdurre rischi in codice già testato — mantenuta la convenzione locale
+già presente. Se in futuro Fil segnala problemi Excel specifici su Android,
+questo è il primo sospetto da controllare.
+
+
 
 **Menu suggerimenti nostro esteso a tutti i campi mobile/touch** (Fil: "danno lo
 stesso fastidio" su modifica ed multi-tratta). Aggiunto a: `editTrasportatore`,
@@ -749,7 +846,14 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 
 ### Stampa/Export
 - `window.printPlanning()` — stampa premium
-- `downloadExcel()` — Excel multi-foglio
+- `downloadExcel()` / `downloadExcelFiltered()` — entry point, chiamano sempre `_buildAndDownloadExcel(tripsData, title, filenameSuffix)`
+- `_buildAndDownloadExcel()` — foglio unico "Planning" (v46, vedi Novità v46–v47)
+- `_transporterColorPC(name)`, `_toHex6(c)`, `_xlsWriteLoc(wr, colIdx, locText, bg, inkArgb)` — helper Excel v46
+
+### Archivio
+- `renderArchive()`, `loadArchive()`, `saveArchive()`
+- `toggleArchiveExpanded()` (v46) — espande/collassa `#archiveList`, stato in `localStorage.archiveExpandedUI`
+- `archiveDownloadExcel(idx)`, `archiveRestore(idx)`, `archiveDelete(idx)`
 
 ### Utilità
 - `showStatus(msg, type)`, `haptic(type)`
@@ -766,3 +870,13 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 4. `mtDaConf` — RIMOSSO, ora per-riga con `mt-conf-{id}`
 5. Vista PC usa `_pcWeekMode` ('current'/'next') per switching settimana
 6. Colori trasportatori e clienti nella vista PC devono seguire TEMA G (v25+)
+7. **`_commitEditForm()` (modale "✏️ Modifica Viaggio") ricostruisce l'intero
+   oggetto viaggio da zero** — ogni campo non esposto nel form (es. `confermato`,
+   `ddt`) va riportato a mano dal viaggio originale prima di sovrascrivere, o si
+   perde silenziosamente ad ogni modifica (bug reale trovato e corretto in v47)
+8. `_buildAndDownloadExcel()` e i suoi helper (`_transporterColorPC`, `_xlsWriteLoc`,
+   ecc.) usano `const`/`let`/arrow functions — NON rispettano i Vincoli Android
+   sotto, ma è la convenzione già presente in quella funzione, non toccare
+9. Prima di dichiarare finita una richiesta di redesign export/UI: verificare che
+   sia stata *effettivamente* portata nella funzione reale e non solo in un
+   mockup esterno (successo con l'Excel in v46 — vedi Novità v46–v47)
