@@ -71,17 +71,17 @@
         }
 
         .top-bar {
-            background: #181f2a;
-            padding: 8px 14px 7px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 1px 0 rgba(255,107,53,0.35), 0 4px 20px rgba(0,0,0,0.5);
+            background: linear-gradient(180deg, #1c2430 0%, #161c26 100%);
+            padding: 9px 16px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 0 rgba(255,107,53,0.32), 0 6px 24px rgba(0,0,0,0.55);
             position: sticky;
             top: 0;
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 12px;
             will-change: transform;
             transform: translateZ(0);
         }
@@ -89,7 +89,7 @@
         .top-bar-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             min-width: 0;
             flex: 1;
         }
@@ -101,16 +101,27 @@
             align-items: center;
             justify-content: center;
         }
-        .top-bar-logo-img {
-            width: 36px;
-            height: 36px;
-            border-radius: 9px;
-            object-fit: cover;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
-            border: 1.5px solid rgba(255,107,53,0.5);
-            box-shadow: 0 0 12px rgba(255,107,53,0.15);
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
+        .top-bar-monogram {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(150deg, #262f42 0%, #12151d 100%);
+            border: 1px solid rgba(255,107,53,0.4);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, 0 2px 6px rgba(0,0,0,0.4), 0 0 14px rgba(255,107,53,0.14);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        .top-bar-monogram span {
+            background: linear-gradient(90deg, #ff9a5c 0%, #ff6b35 60%, #ff5520 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .top-bar-titles {
@@ -118,46 +129,57 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 2px;
         }
 
         .logo {
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .logo-planning-text {
             display: none;
         }
         .logo-badge {
-            display: inline-block;
-            background: rgba(255,107,53,0.18);
-            border: 1px solid rgba(255,107,53,0.4);
-            color: rgba(255,107,53,0.9);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.16), rgba(255,107,53,0.05));
+            border: 1px solid rgba(255,107,53,0.38);
+            color: rgba(255,165,120,0.95);
             font-size: 7px;
             font-weight: 800;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.6px;
             text-transform: uppercase;
             font-family: 'JetBrains Mono', monospace;
-            padding: 1px 5px;
-            border-radius: 4px;
+            padding: 2px 6px 2px 5px;
+            border-radius: 5px;
+        }
+        .logo-badge::before {
+            content: '';
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ff8a50;
+            box-shadow: 0 0 4px rgba(255,107,53,0.9);
+            flex-shrink: 0;
         }
 
         /* "VIAGGI" — compatto inline */
         .logo-viaggi {
             display: inline;
             font-weight: 900;
-            letter-spacing: 3px;
-            font-size: 22px;
-            background: linear-gradient(90deg, #ff7a40 0%, #ff6b35 50%, #ff5520 100%);
+            letter-spacing: 2.5px;
+            font-size: 21px;
+            background: linear-gradient(90deg, #ff9a5c 0%, #ff6b35 45%, #ff4f1f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-transform: uppercase;
             line-height: 1;
-            filter: drop-shadow(0 0 10px rgba(255,107,53,0.4));
+            filter: drop-shadow(0 0 8px rgba(255,107,53,0.35));
         }
 
         /* Riepilogo compatto nell'header */
@@ -187,16 +209,33 @@
         .week-info {
             font-family: 'JetBrains Mono', monospace;
             font-size: 10px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.4);
+            font-weight: 700;
+            color: rgba(255,255,255,0.8);
             letter-spacing: 0.3px;
-            margin-top: 0;
-            display: block;
+            margin-top: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            width: fit-content;
+            max-width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 1;
             font-variant-numeric: tabular-nums;
+            padding: 3px 9px 3px 7px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 999px;
+        }
+        .week-info::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 6px rgba(62,203,150,0.7);
+            flex-shrink: 0;
         }
 
 
@@ -1533,7 +1572,8 @@
         .desktop-view-active #summaryModal,
         .desktop-view-active #excelConfirmModal,
         .desktop-view-active #desktopDatePopup,
-        .desktop-view-active #driveConflictModal {
+        .desktop-view-active #driveConflictModal,
+        .desktop-view-active #desktopAddModal {
             --text: #f2f4f8;
             --text-dim: #9aa2b0;
             --text-muted: #6b7484;
@@ -3630,7 +3670,7 @@
 <body>
     <div class="top-bar">
         <div class="top-bar-left">
-            <div class="top-bar-truck"><img src="logo.png" class="top-bar-logo-img" alt="Pro Trasporti"></div>
+            <div class="top-bar-truck"><div class="top-bar-monogram" title="Pro Trasporti"><span>FC</span></div></div>
             <div class="top-bar-titles">
                 <div class="logo">
                     <div style="line-height:1; margin-bottom:2px;">
@@ -6839,21 +6879,21 @@
                                 📦 Nuova sett.
                             </button>
 
-                            <!-- ＋ Nuova riga — azione primaria -->
+                            <!-- ＋ Nuova riga — azione primaria, piena -->
                             <button onclick="desktopAddEmpty()"
-                                style="padding:11px 22px;background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:10px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;box-shadow:0 2px 10px rgba(255,107,53,0.15);"
-                                onmouseover="this.style.background='rgba(255,107,53,0.28)';this.style.boxShadow='0 4px 16px rgba(255,107,53,0.25)'"
-                                onmouseout="this.style.background='rgba(255,107,53,0.15)';this.style.boxShadow='0 2px 10px rgba(255,107,53,0.15)'">
+                                style="padding:11px 22px;background:linear-gradient(135deg,#e05c25,#e8754a);border:1.5px solid rgba(255,107,53,0.6);border-radius:10px;color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;box-shadow:0 3px 14px rgba(255,107,53,0.35);"
+                                onmouseover="this.style.boxShadow='0 5px 20px rgba(255,107,53,0.5)'" onmouseout="this.style.boxShadow='0 3px 14px rgba(255,107,53,0.35)'">
                                 ＋ Nuova riga
                             </button>
 
-                            <!-- 🚛 Multi-Tratta -->
+                            <!-- 🚛 Multi-Tratta — azione secondaria, outline -->
                             <button onclick="openMultiTratta()"
-                                style="padding:11px 20px;background:rgba(255,107,53,0.08);border:1.5px solid rgba(255,107,53,0.3);border-radius:10px;color:#ff8c5a;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(255,107,53,0.18)';this.style.borderColor='rgba(255,107,53,0.5)'"
-                                onmouseout="this.style.background='rgba(255,107,53,0.08)';this.style.borderColor='rgba(255,107,53,0.3)'">
+                                style="padding:11px 20px;background:transparent;border:1.5px solid rgba(255,107,53,0.3);border-radius:10px;color:#ff8c5a;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;"
+                                onmouseover="this.style.background='rgba(255,107,53,0.1)';this.style.borderColor='rgba(255,107,53,0.5)'"
+                                onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,107,53,0.3)'">
                                 🚛 Multi-Tratta
                             </button>
+
 
                             <!-- Spacer -->
                             <div style="flex:1;"></div>
@@ -6866,47 +6906,6 @@
                                 onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
                             <button id="desktopSortChronoBtn" onclick="desktopToggleChrono()" title="Ordine cronologico"
                                 style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;">⏱ Data</button>
-
-                            <!-- Bottone shortcut ⌨ con tooltip -->
-                            <div style="position:relative;flex-shrink:0;" id="shortcutHintWrap">
-                                <button onmouseenter="document.getElementById('shortcutTooltip').style.display='block'"
-                                        onmouseleave="document.getElementById('shortcutTooltip').style.display='none'"
-                                        style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;line-height:1;transition:all 0.15s;"
-                                        title="Tasti rapidi">⌨</button>
-                                <div id="shortcutTooltip" style="display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:500;background:var(--primary);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;width:230px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
-                                    <div style="font-size:9px;font-weight:800;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Tasti rapidi</div>
-                                    <div style="display:flex;flex-direction:column;gap:6px;">
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Nuova riga</span>
-                                            <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">N</kbd>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Duplica riga</span>
-                                            <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">D</kbd>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Elimina riga</span>
-                                            <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">Canc</kbd>
-                                        </div>
-                                        <div style="height:1px;background:rgba(255,255,255,0.06);margin:2px 0;"></div>
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Campo successivo</span>
-                                            <div style="display:flex;gap:3px;">
-                                                <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">Tab</kbd>
-                                                <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">↵</kbd>
-                                            </div>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Annulla</span>
-                                            <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">Ctrl+Z</kbd>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                                            <span style="font-size:11px;color:var(--text-dim);">Cerca</span>
-                                            <kbd style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 7px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text);">Ctrl+F</kbd>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- Separatore -->
                             <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
@@ -6923,7 +6922,7 @@
                                 <button onclick="window.printPlanning()" title="Stampa planning"
                                     style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(148,120,255,0.1);border:1.5px solid rgba(148,120,255,0.3);border-radius:9px;color:#c3b0ff;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
                                     ><span style="width:20px;height:20px;border-radius:50%;background:rgba(148,120,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🖨️</span>Stampa</button>
-                                <button onclick="desktopToggleTotals()" id="btnTotals" title="Totali per trasportatore"
+                                <button onclick="desktopToggleTotals()" id="btnTotals" title="Statistiche settimana: trasportatori, partenze, arrivi, prodotti"
                                     style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(0,210,180,0.1);border:1.5px solid rgba(0,210,180,0.3);border-radius:9px;color:#7fe0d4;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
                                     ><span style="width:20px;height:20px;border-radius:50%;background:rgba(0,210,180,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">📊</span>Stats</button>
                                 <button onclick="openPcArchive()" title="Archivio settimane passate"
@@ -6981,24 +6980,49 @@
                         </div>
                     </div>
                     <div id="desktopTotalsPanel" style="display:none;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.08);flex-shrink:0;">
-                        <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px;">📊 Totali per trasportatore — settimana corrente</div>
-                        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                            <div style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;">📊 Statistiche — settimana corrente</div>
+                            <span style="display:flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);border-radius:20px;flex-shrink:0;">
+                                <span style="font-size:9px;font-weight:800;color:var(--accent);letter-spacing:0.5px;">TOTALE VIAGGI</span>
+                                <span style="font-size:13px;font-weight:800;color:var(--text);">${total}</span>
+                            </span>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:12px;">
                             ${(() => {
-                                const counts = {};
-                                _workingTrips.forEach(t => { const k = t.trasportatore||'?'; counts[k]=(counts[k]||0)+1; });
-                                return Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,n]) => {
-                                    const cc = getTransporterColorClass(name);
-                                    return `<span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;">
-                                        <span class="${cc}" style="font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;">${name}</span>
-                                        <span style="font-size:13px;font-weight:700;color:var(--text);">${n}</span>
-                                        <span style="font-size:10px;color:var(--text-dim);">${_pv(n)}</span>
-                                    </span>`;
+                                const sections = [
+                                    { label: '🚚 Trasportatori', field: 'trasportatore', colored: true },
+                                    { label: '📍 Partenze',      field: 'partenza',      colored: false },
+                                    { label: '🏁 Arrivi',        field: 'arrivo',        colored: false },
+                                    { label: '📦 Prodotti',      field: 'prodotto',      colored: false }
+                                ];
+                                return sections.map(sec => {
+                                    const counts = {};
+                                    _workingTrips.forEach(t => { const k = (t[sec.field] || '').trim() || '—'; counts[k] = (counts[k]||0) + 1; });
+                                    const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+                                    if (entries.length === 0) return '';
+                                    const chips = entries.map(([name, n]) => {
+                                        if (sec.colored) {
+                                            const cc = getTransporterColorClass(name);
+                                            return `<span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;">
+                                                <span class="${cc}" style="font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;">${name}</span>
+                                                <span style="font-size:13px;font-weight:700;color:var(--text);">${n}</span>
+                                                <span style="font-size:10px;color:var(--text-dim);">${_pv(n)}</span>
+                                            </span>`;
+                                        }
+                                        return `<span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:20px;">
+                                            <span style="font-size:11px;font-weight:700;color:var(--text);">${name}</span>
+                                            <span style="font-size:13px;font-weight:700;color:var(--text-dim);">${n}</span>
+                                        </span>`;
+                                    }).join('');
+                                    return `<div>
+                                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                                            <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;">${sec.label}</div>
+                                            <button onclick="printStatsSection('${sec.field}','${sec.label}',${sec.colored})" title="Stampa questa statistica" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);font-size:11px;padding:2px 7px;border-radius:5px;cursor:pointer;line-height:1.4;">🖨️</button>
+                                        </div>
+                                        <div style="display:flex;flex-wrap:wrap;gap:8px;">${chips}</div>
+                                    </div>`;
                                 }).join('');
                             })()}
-                            <span style="display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:20px;">
-                                <span style="font-size:10px;font-weight:800;color:var(--accent);">TOTALE</span>
-                                <span style="font-size:13px;font-weight:700;color:var(--text);">${total}</span>
-                            </span>
                         </div>
                     </div>
                     <div style="flex:1;overflow-y:auto;overflow-x:auto;" id="desktopTableScroll">
@@ -7064,12 +7088,12 @@
 
             <!-- MODAL aggiungi da rotta (desktop) -->
             <div id="desktopAddModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;">
-                <div style="background:#eef2f7;border:1px solid rgba(16,32,64,0.07);border-top:3px solid var(--accent);border-radius:18px;padding:0;width:580px;max-width:96vw;max-height:92vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);display:flex;flex-direction:column;">
+                <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid var(--accent);border-radius:18px;padding:0;width:580px;max-width:96vw;max-height:92vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.8);display:flex;flex-direction:column;">
 
                     <!-- Header -->
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(16,32,64,0.06);">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);">
                         <div style="font-size:15px;font-weight:800;color:var(--accent);letter-spacing:0.3px;">➕ Nuovo viaggio</div>
-                        <button onclick="desktopCloseAddModal()" style="background:rgba(16,32,64,0.06);border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px 9px;border-radius:7px;line-height:1;">✕</button>
+                        <button onclick="desktopCloseAddModal()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;padding:4px 9px;border-radius:7px;line-height:1;">✕</button>
                     </div>
 
                     <div style="overflow-y:auto;padding:18px 22px 20px;flex:1;">
@@ -7080,19 +7104,19 @@
                         <!-- TRATTA -->
                         <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;margin-bottom:12px;">
                             <div>
-                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Trasportatore</div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Trasportatore</div>
                                 <input id="dmTransp" type="text" list="dtransp" placeholder="es. COAP" autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(16,32,64,0.08)'">
+                                    style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,107,53,0.35);border-radius:9px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,107,53,0.35)'">
                             </div>
                             <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
                             <div>
-                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Prodotto</div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Prodotto</div>
                                 <input type="text" id="dmProd" placeholder="Cippato, Sfarinato..." list="dmProdList" autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.08);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.08)'">
+                                    style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:#e4e8f0;font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
                                 <datalist id="dmProdList"><option value="Cippato"><option value="Sfarinato"><option value="Segatura"><option value="Pula"></datalist>
                             </div>
                         </div>
@@ -7102,39 +7126,39 @@
                                 <div style="font-size:9px;font-weight:700;color:rgba(255,107,53,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Da</div>
                                 <input id="dmFrom" type="text" list="dfrom" placeholder="Partenza..." autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#eef2f7;border:1.5px solid rgba(255,107,53,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,107,53,0.2)'">
+                                    style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,107,53,0.3);border-radius:9px;color:#e4e8f0;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='rgba(255,107,53,0.3)'">
                             </div>
                             <div style="padding-bottom:2px;color:rgba(255,107,53,0.5);font-size:18px;font-weight:300;text-align:center;">→</div>
                             <div>
                                 <div style="font-size:9px;font-weight:700;color:rgba(62,203,150,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">A</div>
                                 <input id="dmTo" type="text" list="dto" placeholder="Arrivo..." autocomplete="off"
                                     oninput="desktopUpdateSummary()"
-                                    style="width:100%;padding:10px 12px;background:#eef2f7;border:1.5px solid rgba(62,203,150,0.2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='var(--success)'" onblur="this.style.borderColor='rgba(62,203,150,0.2)'">
+                                    style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(62,203,150,0.3);border-radius:9px;color:#e4e8f0;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='var(--success)'" onblur="this.style.borderColor='rgba(62,203,150,0.3)'">
                             </div>
                         </div>
 
                         <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:16px;">
                             <div>
-                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">N. DDT</div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">N. DDT</div>
                                 <input id="dmDDT" type="text" placeholder="Es. 4521..."
-                                    style="width:100%;padding:9px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.06);border-radius:9px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.06)'">
+                                    style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:#e4e8f0;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
                             </div>
                             <div>
-                                <div style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Note</div>
+                                <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Note</div>
                                 <input id="dmNote" type="text" placeholder="Note interne (opzionale)..."
-                                    style="width:100%;padding:9px 12px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.06);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
-                                    onfocus="this.style.borderColor='rgba(16,32,64,0.2)'" onblur="this.style.borderColor='rgba(16,32,64,0.06)'">
+                                    style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;color:#e4e8f0;font-family:'Outfit',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;"
+                                    onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
                             </div>
                         </div>
 
                         <!-- SEPARATORE -->
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-                            <div style="flex:1;height:1px;background:rgba(16,32,64,0.06);"></div>
-                            <span style="font-size:9px;font-weight:700;color:rgba(16,32,64,0.2);letter-spacing:1.5px;text-transform:uppercase;">Quando</span>
-                            <div style="flex:1;height:1px;background:rgba(16,32,64,0.06);"></div>
+                            <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+                            <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;">Quando</span>
+                            <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
                         </div>
 
                         <!-- CHIP GIORNI -->
@@ -7144,27 +7168,27 @@
                                 const cols = {lun:'96,165,250',mar:'52,211,153',mer:'167,139,250',gio:'251,191,36',ven:'244,114,182'};
                                 const col = cols[d];
                                 return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">'
-                                    + '<div style="display:flex;align-items:stretch;border:1.5px solid rgba(16,32,64,0.07);border-radius:9px;overflow:hidden;width:100%;" id="dpk-' + d + '">'
+                                    + '<div style="display:flex;align-items:stretch;border:1.5px solid rgba(255,255,255,0.1);border-radius:9px;overflow:hidden;width:100%;" id="dpk-' + d + '">'
                                     + '<button type="button" onclick="desktopDayDec(\'' + d + '\')"'
-                                    + ' style="padding:9px 8px;background:#e4e9f0;border:none;color:rgba(16,32,64,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + ' style="padding:9px 8px;background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.35);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
                                     + '>−</button>'
                                     + '<button type="button" data-day="' + d + '" onclick="desktopDayInc(\'' + d + '\')"'
-                                    + ' style="flex:1;padding:9px 4px;background:#e4e9f0;border:none;border-left:1px solid rgba(16,32,64,0.05);border-right:1px solid rgba(16,32,64,0.05);color:rgba(16,32,64,0.3);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;">'
+                                    + ' style="flex:1;padding:9px 4px;background:rgba(255,255,255,0.05);border:none;border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;">'
                                     + label + '</button>'
                                     + '<button type="button" onclick="desktopDayInc(\'' + d + '\')"'
-                                    + ' style="padding:9px 8px;background:#e4e9f0;border:none;color:rgba(16,32,64,0.25);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
+                                    + ' style="padding:9px 8px;background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.35);font-size:14px;font-weight:700;cursor:pointer;line-height:1;flex-shrink:0;"'
                                     + '>+</button>'
                                     + '</div>'
-                                    + '<span id="dpk-cnt-' + d + '" style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:rgba(16,32,64,0.2);">—</span>'
+                                    + '<span id="dpk-cnt-' + d + '" style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);">—</span>'
                                     + '</div>';
                             }).join('')}
                         </div>
 
                         <!-- DATA SPECIFICA -->
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-                            <span style="font-size:11px;color:var(--text-dim);white-space:nowrap;">o data specifica:</span>
+                            <span style="font-size:11px;color:rgba(255,255,255,0.4);white-space:nowrap;">o data specifica:</span>
                             <input type="date" id="dmDate" oninput="desktopUpdateSummary()"
-                                style="flex:1;padding:7px 10px;background:#eef2f7;border:1.5px solid rgba(16,32,64,0.07);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;outline:none;">
+                                style="flex:1;padding:7px 10px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;color:#e4e8f0;font-family:'Outfit',sans-serif;font-size:12px;outline:none;color-scheme:dark;">
                         </div>
 
                         <!-- DA CONFERMARE -->
@@ -7178,8 +7202,8 @@
                     </div>
 
                     <!-- Footer -->
-                    <div style="padding:14px 22px 18px;border-top:1px solid rgba(16,32,64,0.06);display:flex;gap:10px;">
-                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:transparent;border:1px solid rgba(16,32,64,0.08);border-radius:9px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
+                    <div style="padding:14px 22px 18px;border-top:1px solid rgba(255,255,255,0.08);display:flex;gap:10px;">
+                        <button onclick="desktopCloseAddModal()" style="flex:1;padding:11px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:rgba(255,255,255,0.5);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Annulla</button>
                         <button onclick="desktopConfirmAdd()" style="flex:3;padding:11px;background:linear-gradient(135deg,#e05c25,#e8754a);border:none;border-radius:9px;color:white;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(255,107,53,0.35);letter-spacing:0.3px;">✅ Aggiungi viaggi</button>
                     </div>
                 </div>
@@ -8675,6 +8699,62 @@
             if (u.indexOf('C.M') !== -1)     return {bg:'#f5f3ff', txt:'#5b21b6', acc:'#a78bfa'};
             if (u.indexOf('CLP') !== -1)     return {bg:'#fefce8', txt:'#854d0e', acc:'#ca8a04'};
             return {bg:'#f1f5f9', txt:'#334155', acc:'#94a3b8'};
+        }
+
+        // Stampa di una singola sezione statistiche (trasportatori/partenze/arrivi/prodotti)
+        function printStatsSection(field, label, colored) {
+            var counts = {};
+            _workingTrips.forEach(function(t) {
+                var k = (t[field] || '').toString().trim() || '—';
+                counts[k] = (counts[k] || 0) + 1;
+            });
+            var total = _workingTrips.length;
+            var names = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+
+            var rows = names.map(function(name) {
+                var n = counts[name];
+                var pct = total ? Math.round((n / total) * 100) : 0;
+                var c = colored ? _printColor(name) : {bg:'#f8fafc', txt:'#1e293b', acc:'#cbd5e1'};
+                return '<tr style="border-bottom:1px solid #f1f5f9;">'
+                    + '<td style="padding:10px 14px;border-left:4px solid ' + c.acc + ';font-size:13px;font-weight:700;color:' + (colored ? c.txt : '#1e293b') + ';">' + name + '</td>'
+                    + '<td style="padding:10px 14px;text-align:right;font-family:monospace;font-size:14px;font-weight:800;color:#0f172a;">' + n + '</td>'
+                    + '<td style="padding:10px 14px;text-align:right;font-family:monospace;font-size:11px;color:#94a3b8;">' + pct + '%</td>'
+                    + '</tr>';
+            }).join('');
+
+            var printDate = new Date().toLocaleDateString('it-IT', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+            var win = window.open('', '_blank');
+            if (!win) { showStatus('⚠️ Pop-up bloccato — consenti i pop-up per la stampa', 'warning'); return; }
+
+            win.document.write('<!DOCTYPE html>\n<html lang="it"><head><meta charset="UTF-8">\n'
+                + '<title>Statistiche — ' + label + '</title>\n'
+                + '<style>\n'
+                + '*{margin:0;padding:0;box-sizing:border-box}\n'
+                + 'body{font-family:Inter,Arial,sans-serif;font-size:12px;color:#1e293b;background:#fff}\n'
+                + 'table{width:100%;border-collapse:collapse}\n'
+                + 'thead th{background:#1e293b;color:rgba(255,255,255,0.55);padding:9px 14px;text-align:left;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:2px;}\n'
+                + '.no-print{display:block;margin:16px;}\n'
+                + '@media print{ .no-print{display:none!important} }\n'
+                + '@page{size:A4 portrait;margin:1.2cm}\n'
+                + '</style></head><body>\n'
+                + '<div class="no-print"><button onclick="window.print()" style="padding:9px 22px;background:#ff6b35;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(255,107,53,0.3);">🖨️ Stampa / Salva PDF</button></div>\n'
+                + '<div style="background:#0f172a;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;">\n'
+                + '  <div>\n'
+                + '    <div style="font-size:8px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,107,53,0.8);margin-bottom:3px;">Statistiche settimana</div>\n'
+                + '    <div style="font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.3px;line-height:1;">' + label + '</div>\n'
+                + '    <div style="font-family:monospace;font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;">' + (weekTitle || '') + '</div>\n'
+                + '  </div>\n'
+                + '  <div style="text-align:right;font-size:9px;color:rgba(255,255,255,0.3);">Stampato il ' + printDate + '</div>\n'
+                + '</div>\n'
+                + '<table>\n'
+                + '<thead><tr><th>Nome</th><th style="text-align:right;">Viaggi</th><th style="text-align:right;">% del totale</th></tr></thead>\n'
+                + '<tbody>' + rows + '</tbody>\n'
+                + '</table>\n'
+                + '<div style="background:#f8fafc;border-top:2px solid #e2e8f0;padding:12px 14px;display:flex;justify-content:flex-end;">\n'
+                + '  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:4px;background:#0f172a;color:#fff;font-size:11px;font-weight:800;"><strong style="font-size:15px;">' + total + '</strong> viaggi totali</span>\n'
+                + '</div>\n'
+                + '</body></html>');
+            win.document.close();
         }
 
         // Stampa planning — stessi colori dell'Excel, con filtri attivi
@@ -11310,25 +11390,27 @@
         });
 
         // ── Reminder salvataggio Drive ──
-        // Ogni minuto controlla: se sono passati 20 min dall'ultimo salvataggio Drive
-        // e ci sono dati → mostra un toast discreto che sparisce da solo
+        // L'autosalvataggio (autoSaveDrive) gira da solo dopo ogni modifica quando
+        // Drive è connesso, quindi qui NON contiamo più i minuti dall'ultimo save:
+        // avvisiamo solo quando Drive risulta VERAMENTE disconnesso (era stato
+        // collegato in passato — driveConnected in localStorage — ma il token
+        // attivo non c'è più, es. sessione scaduta o rinnovo silenzioso fallito).
+        // Se Drive non è mai stato usato, non insistiamo.
         let _saveReminderInterval = null;
         let _saveReminderSnoozed = false;
 
         function startSaveReminder() {
             if (_saveReminderInterval) clearInterval(_saveReminderInterval);
             _saveReminderInterval = setInterval(() => {
-                // Non disturbare se non ci sono viaggi o se l'utente ha appena salvato
                 if (!trips || trips.length === 0) return;
                 if (_saveReminderSnoozed) return;
 
-                const lastSaved = localStorage.getItem('savedAt');
-                if (!lastSaved) return; // mai salvato su Drive → non insistere
+                if (!localStorage.getItem('driveConnected')) return; // mai usato Drive → non insistere
+                if (driveAccessToken) return; // connesso e attivo → ci pensa l'autosave
 
-                const minsSince = (Date.now() - new Date(lastSaved).getTime()) / 60000;
-                if (minsSince >= 20) {
-                    showSaveReminder(Math.round(minsSince));
-                }
+                const lastSaved = localStorage.getItem('savedAt');
+                const minsSince = lastSaved ? Math.round((Date.now() - new Date(lastSaved).getTime()) / 60000) : 0;
+                showSaveReminder(minsSince);
             }, 60 * 1000); // controlla ogni minuto
         }
 
