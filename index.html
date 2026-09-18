@@ -4871,7 +4871,7 @@
                 var to   = (t.arrivo||'—').split('(')[0].trim();
                 return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">'
                     + '<span style="font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;color:' + col + ';flex-shrink:0;min-width:58px;">' + dateLabel + '</span>'
-                    + '<span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.8);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+                    + '<span title="' + (t.trasportatore||'').replace(/"/g,'&quot;') + '" style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.8);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                     + (t.trasportatore || '<span style="opacity:0.3">—</span>') + '</span>'
                     + '<span style="font-size:10px;color:var(--accent);flex-shrink:0;">' + from + '</span>'
                     + '<span style="color:var(--accent);font-size:12px;flex-shrink:0;">→</span>'
@@ -5870,9 +5870,9 @@
                     // Riga 1: badge + partenza → arrivo + stato
                     html += '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">';
                     html += '<span class="' + colorClass + '" style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0;">' + (trip.trasportatore||'—') + '</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + fromName + '</span>';
+                    html += '<span title="' + (fromName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:#eef2fa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + fromName + '</span>';
                     html += '<span style="color:rgba(255,107,53,0.5);font-size:14px;flex-shrink:0;">›</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">' + toName + '</span>';
+                    html += '<span title="' + (toName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">' + toName + '</span>';
                     if (statoHtml) html += '<span style="flex-shrink:0;margin-left:4px;">' + statoHtml + '</span>';
                     html += '</div>';
 
@@ -6143,9 +6143,9 @@
 
             // Riga rotta
             card += '<div style="display:flex;align-items:center;gap:5px;min-width:0;">';
-            card += '<span style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%;">' + fromName + '</span>';
+            card += '<span title="' + (fromName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:#eef2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%;">' + fromName + '</span>';
             card += '<span style="font-size:11px;color:rgba(255,107,53,0.5);flex-shrink:0;">→</span>';
-            card += '<span style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
+            card += '<span title="' + (toName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">' + toName + '</span>';
             card += '</div>';
 
             // Riga sottotitolo: codici + prodotto
@@ -6300,10 +6300,10 @@
                         + (t.trasportatore||'') + '</span>'
                         // Rotta — prende tutto lo spazio rimanente
                         + '<div style="flex:1;min-width:0;">'
-                        + '<div style="font-size:12px;font-weight:700;color:#eef2fa;'
+                        + '<div title="' + fromN.replace(/"/g,'&quot;') + '" style="font-size:12px;font-weight:700;color:#eef2fa;'
                         + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                         + fromN + '</div>'
-                        + '<div style="font-size:11px;font-weight:600;color:#86efac;'
+                        + '<div title="' + toN.replace(/"/g,'&quot;') + '" style="font-size:11px;font-weight:600;color:#86efac;'
                         + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                         + toN + '</div>'
                         + '</div>'
@@ -6629,6 +6629,18 @@
             const todayStr = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
             const todayCount = _workingTrips.filter(t => t.data === todayStr).length;
 
+            // Ranking clienti (codice tra parentesi nell'arrivo) per volume settimanale —
+            // i 2 con più viaggi ricevono un trattamento visivo speciale (icona + alone)
+            // così restano riconoscibili anche se il colore assegnato fosse simile ad un altro
+            const _clientCodeCounts = {};
+            _workingTrips.forEach(t => {
+                const m = (t.arrivo || '').match(/\(([^)]+)\)/);
+                if (m) { const code = m[1].toUpperCase().trim(); _clientCodeCounts[code] = (_clientCodeCounts[code] || 0) + 1; }
+            });
+            const _topClientCodes = new Set(
+                Object.keys(_clientCodeCounts).sort((a, b) => _clientCodeCounts[b] - _clientCodeCounts[a]).slice(0, 2)
+            );
+
             // Unique lists per datalist — database unico (transportersList/partenzaList/arrivoList/prodottiList)
             const allT = [...new Set([...transportersList, ...trips.map(t=>t.trasportatore), ...tripsNext.map(t=>t.trasportatore)].filter(Boolean))].sort();
             const allF = [...new Set([...partenzaList, ...trips.map(t=>t.partenza)].filter(Boolean))];
@@ -6730,7 +6742,7 @@
 
                     // PARTENZA — sotto-etichette "Fornitore" / "Località" (opzione C + E1)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:7px 11px;min-width:250px;">' +
                     '<div style="flex-shrink:0;max-width:92px;overflow:hidden;">' +
                     '<div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#8590aa;text-transform:uppercase;">Fornitore</div>' +
                     '<div title="' + (fromCode||'').replace(/"/g,'&quot;') + '" style="display:inline-block;font-size:12px;font-weight:800;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff;padding:3px 9px;border-radius:6px;' + (fromCode ? ('background:' + _locationCodeColorPC(fromCode).bd + ';') : 'background:rgba(255,255,255,0.1);') + '">' + (fromCode ? _pcShortName(fromCode, 11) : '—') + '</div>' +
@@ -6744,7 +6756,7 @@
                     ' title="' + fromName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'partenza\',full);"' +
                     ' placeholder="Partenza..."' +
-                    ' style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#e4e8f0;font-size:15px;"' +
+                    ' style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:#e4e8f0;font-size:15px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;"' +
                     ' onfocus="this.value=this.dataset.fullname||this.value;this.closest(\'tr\').style.outline=\'1px solid rgba(232,98,63,0.4)\';"' +
                     ' onblur="this.value=_pcShortName(this.value);this.closest(\'tr\').style.outline=\'\';"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6754,10 +6766,10 @@
 
                     // ARRIVO — sotto-etichette "Cliente" / "Località" (opzione C + E1)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:7px 11px;min-width:250px;">' +
                     '<div style="flex-shrink:0;max-width:92px;overflow:hidden;">' +
                     '<div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#8590aa;text-transform:uppercase;">Cliente</div>' +
-                    '<div title="' + (toCode||'').replace(/"/g,'&quot;') + '" style="display:inline-block;font-size:12px;font-weight:800;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff;padding:3px 9px;border-radius:6px;' + (toCode ? ('background:' + _locationCodeColorPC(toCode).bd + ';') : 'background:rgba(255,255,255,0.1);') + '">' + (toCode ? _pcShortName(toCode, 11) : '—') + '</div>' +
+                    '<div title="' + (toCode||'').replace(/"/g,'&quot;') + '" style="display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:800;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff;padding:3px 9px;border-radius:6px;' + (toCode ? ('background:' + _locationCodeColorPC(toCode).bd + ';' + (_topClientCodes.has(toCode.toUpperCase().trim()) ? 'box-shadow:0 0 0 2px rgba(255,255,255,0.85),0 0 9px rgba(255,255,255,0.4);' : '')) : 'background:rgba(255,255,255,0.1);') + '">' + (toCode && _topClientCodes.has(toCode.toUpperCase().trim()) ? '⭐' : '') + (toCode ? _pcShortName(toCode, 11) : '—') + '</div>' +
                     '</div>' +
                     '<div style="width:2px;background:rgba(217,113,61,0.4);flex-shrink:0;border-radius:1px;"></div>' +
                     '<div style="flex:1;min-width:0;">' +
@@ -6874,8 +6886,8 @@
 
                             <!-- Archivia e nuova settimana -->
                             <button onclick="showNewWeekModalV2()" title="Archivia settimana corrente e inizia da zero"
-                                style="padding:9px 16px;background:rgba(62,203,150,0.1);border:1px solid rgba(62,203,150,0.3);border-radius:9px;color:var(--success);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(62,203,150,0.2)'" onmouseout="this.style.background='rgba(62,203,150,0.1)'">
+                                style="padding:9px 16px;background:rgba(62,203,150,0.16);border:1.5px solid rgba(62,203,150,0.5);border-radius:9px;color:#5ee0ac;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;"
+                                onmouseover="this.style.background='rgba(62,203,150,0.28)'" onmouseout="this.style.background='rgba(62,203,150,0.16)'">
                                 📦 Nuova sett.
                             </button>
 
@@ -7367,23 +7379,25 @@
         }
 
         // Colori FISSI codice azienda — Tema G (vista PC, sfondo chiaro/testo scuro)
+        // Tonalità distanziate di 30° sulla ruota cromatica: nessuna coppia può
+        // risultare simile (prima AGROGI #d9633d e SICEM #d9713d erano quasi identici)
         function _locationCodeColorPC(code) {
             if (!code) return null;
             var c = code.toUpperCase().trim();
             var map = {
-                'CAI-BF':      {bg:'#f0e898', bd:'#c9a030', tx:'#3a3000'},
-                'SICEM SRL':   {bg:'#f8d8b0', bd:'#d9713d', tx:'#401800'},
-                'SICEM':       {bg:'#f8d8b0', bd:'#d9713d', tx:'#401800'},
-                'AGROGI':      {bg:'#f8c8a8', bd:'#d9633d', tx:'#401000'},
-                'INCONTRATO':  {bg:'#b8d0f8', bd:'#4a6ed4', tx:'#041840'},
-                'ZIGNAGO':     {bg:'#e0c0f8', bd:'#9d5ed4', tx:'#280058'},
-                'ASSOFRUTTI':  {bg:'#b0e8c8', bd:'#3aa860', tx:'#043018'},
-                'CFP':         {bg:'#ccc0f8', bd:'#7a5ed4', tx:'#180050'},
-                'ARDENGHI':    {bg:'#f8b8d8', bd:'#d94f9a', tx:'#500020'},
-                'SICEM SAGA':  {bg:'#f8d890', bd:'#d9a030', tx:'#402000'},
-                'TACCHELLA':   {bg:'#f8b8b8', bd:'#d94f4f', tx:'#500000'},
-                'TRUCIOLI':    {bg:'#a8d8f8', bd:'#4ab8d4', tx:'#001848'},
-                'VENDER':      {bg:'#e8b8f8', bd:'#c04fd9', tx:'#380058'}
+                'CAI-BF':      {bg:'hsl(0,58%,85%)',   bd:'hsl(0,60%,50%)',   tx:'hsl(0,60%,22%)'},
+                'SICEM SRL':   {bg:'hsl(30,58%,85%)',  bd:'hsl(30,60%,50%)',  tx:'hsl(30,60%,22%)'},
+                'SICEM':       {bg:'hsl(30,58%,85%)',  bd:'hsl(30,60%,50%)',  tx:'hsl(30,60%,22%)'},
+                'AGROGI':      {bg:'hsl(60,58%,82%)',  bd:'hsl(60,60%,42%)',  tx:'hsl(60,60%,18%)'},
+                'INCONTRATO':  {bg:'hsl(90,58%,85%)',  bd:'hsl(90,60%,40%)',  tx:'hsl(90,60%,18%)'},
+                'ZIGNAGO':     {bg:'hsl(120,58%,85%)', bd:'hsl(120,60%,38%)', tx:'hsl(120,60%,16%)'},
+                'ASSOFRUTTI':  {bg:'hsl(150,58%,85%)', bd:'hsl(150,60%,38%)', tx:'hsl(150,60%,16%)'},
+                'CFP':         {bg:'hsl(180,58%,85%)', bd:'hsl(180,60%,38%)', tx:'hsl(180,60%,16%)'},
+                'ARDENGHI':    {bg:'hsl(210,58%,85%)', bd:'hsl(210,60%,50%)', tx:'hsl(210,60%,20%)'},
+                'SICEM SAGA':  {bg:'hsl(240,58%,88%)', bd:'hsl(240,60%,58%)', tx:'hsl(240,60%,24%)'},
+                'TACCHELLA':   {bg:'hsl(270,58%,88%)', bd:'hsl(270,60%,55%)', tx:'hsl(270,60%,24%)'},
+                'TRUCIOLI':    {bg:'hsl(300,58%,88%)', bd:'hsl(300,60%,50%)', tx:'hsl(300,60%,22%)'},
+                'VENDER':      {bg:'hsl(330,58%,86%)', bd:'hsl(330,60%,50%)', tx:'hsl(330,60%,22%)'}
             };
             if (map[c]) return map[c];
             // Fallback deterministico — colore vivace utilizzabile come sfondo pieno di pillola
@@ -7795,7 +7809,7 @@
                 html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
                 html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;font-weight:800;color:' + col + ';flex-shrink:0;min-width:52px;">' + _mtDayShort[e.dayKey] + ' ' + dd + '/' + mm + '</span>';
                 html += '<span style="font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;">' + trasp + '</span>';
-                html += '<span style="font-size:11px;color:rgba(255,255,255,0.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+                html += '<span title="' + (e.from.split('(')[0].trim() + ' → ' + e.to.split('(')[0].trim()).replace(/"/g,'&quot;') + '" style="font-size:11px;color:rgba(255,255,255,0.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
                       + e.from.split('(')[0].trim()
                       + ' <span style="color:rgba(255,107,53,0.6);">→</span> '
                       + e.to.split('(')[0].trim()
@@ -8159,9 +8173,9 @@
                     html += '<div style="flex:1;min-width:0;">';
                     html += '<div style="font-size:11px;font-weight:900;color:' + tColor + ';margin-bottom:3px;">' + hl(t.trasportatore||'') + '</div>';
                     html += '<div style="display:flex;align-items:center;gap:5px;">';
-                    html += '<span style="font-size:13px;font-weight:700;color:#f0f4ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(fromName) + '</span>';
+                    html += '<span title="' + (fromName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:#f0f4ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(fromName) + '</span>';
                     html += '<span style="color:rgba(255,107,53,0.4);font-size:11px;flex-shrink:0;">→</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(toName) + '</span>';
+                    html += '<span title="' + (toName||'').replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(toName) + '</span>';
                     html += '</div>';
                     if (fromCode || toCode) {
                         var fcObj = fromCode ? _locationCodeColor(fromCode) : null;
@@ -8262,7 +8276,7 @@
                 var c   = getTransporterColorVar(t);
                 var pct = Math.round((byTrasp[t] / maxV) * 100);
                 html += '<div style="display:flex;align-items:center;gap:8px;">';
-                html += '<span style="font-size:10px;font-weight:800;color:' + c + ';width:80px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + t + '</span>';
+                html += '<span title="' + (t||'').replace(/"/g,'&quot;') + '" style="font-size:10px;font-weight:800;color:' + c + ';width:80px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + t + '</span>';
                 html += '<div style="flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">';
                 html += '<div style="width:' + pct + '%;height:100%;background:' + c + ';border-radius:3px;transition:width 0.4s ease;"></div>';
                 html += '</div>';
@@ -8332,7 +8346,7 @@
                 var title = week.title || 'Settimana';
                 return '<div style="display:flex;align-items:center;gap:14px;padding:13px 16px;background:#eef2f7;border:1.5px solid #c8d2e0;border-radius:10px;margin-bottom:8px;">'
                     + '<div style="flex:1;min-width:0;">'
-                    + '<div style="font-size:14px;font-weight:700;color:#1a2540;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + title + '</div>'
+                    + '<div title="' + title.replace(/"/g,'&quot;') + '" style="font-size:14px;font-weight:700;color:#1a2540;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + title + '</div>'
                     + '<div style="display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap;">'
                     + '<span style="font-family:JetBrains Mono,monospace;font-size:11px;color:#c8501a;font-weight:700;">' + week.trips.length + ' ' + _pv(week.trips.length) + '</span>'
                     + (dc > 0 ? '<span style="font-size:11px;color:#806000;">⚠️ ' + dc + ' da conf.</span>' : '')
@@ -8703,12 +8717,14 @@
 
         // Stampa di una singola sezione statistiche (trasportatori/partenze/arrivi/prodotti)
         function printStatsSection(field, label, colored) {
+            var isNext = (typeof _pcWeekMode !== 'undefined' && _pcWeekMode === 'next');
+            var workingTrips = isNext ? tripsNext : trips;
             var counts = {};
-            _workingTrips.forEach(function(t) {
+            workingTrips.forEach(function(t) {
                 var k = (t[field] || '').toString().trim() || '—';
                 counts[k] = (counts[k] || 0) + 1;
             });
-            var total = _workingTrips.length;
+            var total = workingTrips.length;
             var names = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
 
             var rows = names.map(function(name) {
@@ -9368,17 +9384,17 @@
             const col  = _dpkColors[d] || '255,107,53';
             const active = cnt > 0;
             if (wrap) {
-                wrap.style.borderColor = active ? 'rgba(' + col + ',0.6)' : 'rgba(16,32,64,0.15)';
+                wrap.style.borderColor = active ? 'rgba(' + col + ',0.6)' : 'rgba(255,255,255,0.1)';
             }
             if (btn) {
-                btn.style.background = active ? 'rgba(' + col + ',0.2)' : '#e4e9f0';
-                btn.style.color      = active ? 'rgb(' + col + ')' : 'rgba(16,32,64,0.35)';
+                btn.style.background = active ? 'rgba(' + col + ',0.2)' : 'rgba(255,255,255,0.05)';
+                btn.style.color      = active ? 'rgb(' + col + ')' : 'rgba(255,255,255,0.5)';
                 const label = d.charAt(0).toUpperCase() + d.slice(1);
                 btn.textContent = active && cnt > 1 ? label + ' ×' + cnt : label;
             }
             if (lbl) {
                 lbl.textContent = active ? cnt + '×' : '—';
-                lbl.style.color = active ? 'rgba(' + col + ',0.8)' : 'rgba(16,32,64,0.25)';
+                lbl.style.color = active ? 'rgba(' + col + ',0.8)' : 'rgba(255,255,255,0.3)';
             }
             desktopUpdateSummary();
         }
@@ -11146,7 +11162,7 @@
 
                 return '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--secondary);border-radius:12px;margin-bottom:8px;border-left:3px solid rgba(255,107,53,0.3);">'
                     + '<div style="flex:1;min-width:0;">'
-                    + '<div style="font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + shortTitle + '</div>'
+                    + '<div title="' + title.replace(/"/g,'&quot;') + '" style="font-size:13px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + shortTitle + '</div>'
                     + '<div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap;">'
                     + '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent);font-weight:700;">' + week.trips.length + ' ' + _pv(week.trips.length) + '</span>'
                     + (dc > 0 ? '<span style="font-size:10px;color:var(--warning);">⚠️ ' + dc + '</span>' : '')
