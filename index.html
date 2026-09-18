@@ -1573,7 +1573,8 @@
         .desktop-view-active #excelConfirmModal,
         .desktop-view-active #desktopDatePopup,
         .desktop-view-active #driveConflictModal,
-        .desktop-view-active #desktopAddModal {
+        .desktop-view-active #desktopAddModal,
+        .desktop-view-active #desktopSearchDetailModal {
             --text: #f2f4f8;
             --text-dim: #9aa2b0;
             --text-muted: #6b7484;
@@ -6916,6 +6917,11 @@
                                 onfocus="this.style.borderColor='var(--accent)';this.style.background='rgba(255,255,255,0.08)'"
                                 onblur="this.style.borderColor='rgba(255,255,255,0.12)';this.style.background='rgba(255,255,255,0.06)'"
                                 onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
+                            <button onclick="openSearchDetail()" title="Vedi dettaglio: trasportatore, giorno e arrivo per ogni corrispondenza"
+                                style="padding:9px 12px;background:rgba(96,165,250,0.12);border:1.5px solid rgba(96,165,250,0.35);border-radius:9px;color:#a8c8f5;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;white-space:nowrap;"
+                                onmouseover="this.style.background='rgba(96,165,250,0.22)'" onmouseout="this.style.background='rgba(96,165,250,0.12)'">
+                                📋 Dettaglio
+                            </button>
                             <button id="desktopSortChronoBtn" onclick="desktopToggleChrono()" title="Ordine cronologico"
                                 style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;">⏱ Data</button>
 
@@ -7220,6 +7226,29 @@
                     </div>
                 </div>
             </div>
+
+            <!-- MODAL dettaglio ricerca: trasportatore / giorno / arrivo per ogni corrispondenza -->
+            <div id="desktopSearchDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);z-index:2100;align-items:center;justify-content:center;">
+                <div style="background:#0f1220;border:1px solid rgba(255,255,255,0.1);border-top:3px solid #60a5fa;border-radius:18px;padding:0;width:560px;max-width:96vw;max-height:86vh;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.8);display:flex;flex-direction:column;">
+
+                    <!-- Header -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <div>
+                            <div style="font-size:15px;font-weight:800;color:#a8c8f5;letter-spacing:0.3px;">📋 Dettaglio ricerca</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px;">Trasportatore · Giorno · Arrivo — settimana corrente e prossima</div>
+                        </div>
+                        <button onclick="closeSearchDetail()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;padding:4px 9px;border-radius:7px;line-height:1;">✕</button>
+                    </div>
+
+                    <div style="padding:16px 22px 0;">
+                        <input id="sdInput" type="text" placeholder="Nome fornitore o cliente..." oninput="renderSearchDetailResults()" autocomplete="off"
+                            style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(96,165,250,0.35);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s;"
+                            onfocus="this.style.borderColor='#60a5fa'" onblur="this.style.borderColor='rgba(96,165,250,0.35)'">
+                    </div>
+
+                    <div id="sdResults" style="overflow-y:auto;padding:14px 22px 20px;flex:1;display:flex;flex-direction:column;gap:6px;"></div>
+                </div>
+            </div>
             `;
 
             // Tab navigation tra input nella tabella
@@ -7233,6 +7262,8 @@
             // Chiudi modal cliccando fuori
             const dam = document.getElementById('desktopAddModal');
             if (dam) dam.addEventListener('click', e => { if(e.target===dam) desktopCloseAddModal(); });
+            const sdm = document.getElementById('desktopSearchDetailModal');
+            if (sdm) sdm.addEventListener('click', e => { if(e.target===sdm) closeSearchDetail(); });
         }
 
         // ── DESKTOP HELPERS ──────────────────────────────────────
@@ -8697,7 +8728,77 @@
             }
         }
 
-        // Helper colori trasportatori per stampa (stesso schema Excel)
+        // ── Pannello "Dettaglio ricerca" — mostra Trasportatore/Giorno/Arrivo
+        // per ogni viaggio che corrisponde al nome cercato, unendo settimana
+        // corrente e prossima (a differenza del filtro tabella, che agisce solo
+        // sulla settimana visualizzata in quel momento).
+        function openSearchDetail() {
+            const modal = document.getElementById('desktopSearchDetailModal');
+            if (!modal) return;
+            const mainQuery = document.getElementById('desktopQuickSearch');
+            const sdInput = document.getElementById('sdInput');
+            if (sdInput) sdInput.value = mainQuery ? mainQuery.value : '';
+            modal.style.display = 'flex';
+            renderSearchDetailResults();
+            setTimeout(() => { if (sdInput) sdInput.focus(); }, 80);
+        }
+
+        function closeSearchDetail() {
+            const modal = document.getElementById('desktopSearchDetailModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function renderSearchDetailResults() {
+            const resultsEl = document.getElementById('sdResults');
+            if (!resultsEl) return;
+            const input = document.getElementById('sdInput');
+            const query = input ? input.value.toLowerCase().trim() : '';
+            const terms = query ? query.split(/\s+/).filter(Boolean) : [];
+
+            if (terms.length === 0) {
+                resultsEl.innerHTML = '<div style="text-align:center;padding:30px 10px;color:rgba(255,255,255,0.3);font-size:12px;">Scrivi il nome di un fornitore o cliente per vedere i viaggi corrispondenti.</div>';
+                return;
+            }
+
+            const tagged = trips.map(t => ({ t: t, sett: 'Corrente' })).concat(tripsNext.map(t => ({ t: t, sett: 'Prossima' })));
+            const matches = tagged.filter(function(row) {
+                const t = row.t;
+                const vals = [t.trasportatore, t.partenza, t.arrivo, t.prodotto].join(' ').toLowerCase();
+                return terms.every(function(term) { return vals.indexOf(term) !== -1; });
+            });
+
+            if (matches.length === 0) {
+                resultsEl.innerHTML = '<div style="text-align:center;padding:30px 10px;color:rgba(255,255,255,0.3);font-size:12px;">Nessun viaggio trovato per "' + query.replace(/</g,'&lt;') + '".</div>';
+                return;
+            }
+
+            matches.sort(function(a, b) {
+                if (a.sett !== b.sett) return a.sett === 'Corrente' ? -1 : 1;
+                return (a.t.data || '').localeCompare(b.t.data || '');
+            });
+
+            const dayNames = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+            resultsEl.innerHTML = matches.map(function(row) {
+                const t = row.t;
+                const d = t.data ? new Date(t.data + 'T12:00:00') : null;
+                const dayLabel = d ? dayNames[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') : '—';
+                const toName = (t.arrivo || '').split('(')[0].trim() || '—';
+                const toCode = ((t.arrivo || '').match(/\(([^)]+)\)/) || [])[1] || '';
+                const cc = getTransporterColorClass(t.trasportatore);
+                const settBadge = row.sett === 'Corrente'
+                    ? '<span style="font-size:8px;font-weight:800;color:rgba(255,255,255,0.35);letter-spacing:0.5px;text-transform:uppercase;">Corrente</span>'
+                    : '<span style="font-size:8px;font-weight:800;color:#a78bfa;letter-spacing:0.5px;text-transform:uppercase;">Prossima</span>';
+                return '<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;">'
+                    + '<span class="' + cc + '" style="font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;flex-shrink:0;white-space:nowrap;">' + (t.trasportatore || '—') + '</span>'
+                    + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:700;color:rgba(255,255,255,0.55);flex-shrink:0;white-space:nowrap;">' + dayLabel + '</span>'
+                    + '<span style="color:rgba(255,107,53,0.5);font-size:12px;flex-shrink:0;">→</span>'
+                    + '<span title="' + toName.replace(/"/g,'&quot;') + (toCode ? ' ('+toCode+')' : '') + '" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700;color:#e4e8f0;">' + toName + (toCode ? ' <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);">(' + toCode + ')</span>' : '') + '</span>'
+                    + settBadge
+                    + '</div>';
+            }).join('');
+        }
+
+
         function _printColor(name) {
             var u = (name||'').toUpperCase();
             if (u.indexOf('CEVOLO') !== -1)  return {bg:'#fff3ec', txt:'#c2410c', acc:'#ff8c5a'};
@@ -9801,7 +9902,7 @@
             if (m) { place = m[1].trim(); code = m[2].trim(); }
             const lc = wr.getCell(colIdx);
             lc.value = place;
-            lc.font = { size:9.5, color:{argb:inkArgb}, name:'Calibri' };
+            lc.font = { bold:true, size:11, color:{argb:inkArgb}, name:'Calibri' };
             lc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
             lc.alignment = { vertical:'center', horizontal:'left', indent:1 };
             const cc = wr.getCell(colIdx+1);
@@ -9809,7 +9910,7 @@
                 const col = _locationCodeColorPC(code);
                 const bgHex = 'FF'+_toHex6(col.bg), bdHex = 'FF'+_toHex6(col.bd), txHex = 'FF'+_toHex6(col.tx);
                 cc.value = code;
-                cc.font = { bold:true, size:8, color:{argb:txHex}, name:'Calibri' };
+                cc.font = { bold:true, size:9, color:{argb:txHex}, name:'Calibri' };
                 cc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:bgHex} };
                 cc.border = { top:{style:'thin',color:{argb:bdHex}}, bottom:{style:'thin',color:{argb:bdHex}},
                               left:{style:'thin',color:{argb:bdHex}}, right:{style:'thin',color:{argb:bdHex}} };
@@ -9831,8 +9932,8 @@
                 ws.pageSetup = { orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0,
                     paperSize:9, margins:{left:0.4,right:0.4,top:0.6,bottom:0.6,header:0.3,footer:0.3} };
                 ws.columns = [
-                    {width:2},{width:13},{width:3},{width:17},{width:17},{width:11},
-                    {width:17},{width:11},{width:15},{width:10},{width:13},{width:20}
+                    {width:2},{width:14},{width:3},{width:19},{width:19},{width:12},
+                    {width:19},{width:12},{width:16},{width:11},{width:14},{width:22}
                 ];
 
                 const INK='FF1A2340', ACCENT='FF2F6FED', LIGHTBG='F6F8FB', WHITE='FFFFFF';
@@ -9842,17 +9943,17 @@
                 ws.mergeCells('B1:L1');
                 const r1 = ws.getRow(1);
                 r1.getCell(2).value = 'Planning Viaggi';
-                r1.getCell(2).font = { bold:true, size:17, color:{argb:INK}, name:'Calibri' };
+                r1.getCell(2).font = { bold:true, size:20, color:{argb:INK}, name:'Calibri' };
                 r1.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
-                r1.height = 32;
+                r1.height = 36;
 
                 const weekRange = _xlsWeekRange(sorted);
                 ws.mergeCells('B2:L2');
                 const r2 = ws.getRow(2);
                 r2.getCell(2).value = 'Pro Trasporti  ·  ' + weekRange;
-                r2.getCell(2).font = { size:10, color:{argb:'FF6B7280'}, name:'Calibri' };
+                r2.getCell(2).font = { size:11, color:{argb:'FF6B7280'}, name:'Calibri' };
                 r2.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
-                r2.height = 16;
+                r2.height = 18;
 
                 // KPI cards
                 const tot = sorted.length;
@@ -9879,16 +9980,16 @@
                     }
                     const numCell = ws.getRow(rowKpi+1).getCell(sc);
                     numCell.value = card.val;
-                    numCell.font = { bold:true, size:20, color:{argb:INK}, name:'Calibri' };
+                    numCell.font = { bold:true, size:23, color:{argb:INK}, name:'Calibri' };
                     numCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
                     const labCell = ws.getRow(rowKpi+2).getCell(sc);
                     labCell.value = card.label;
-                    labCell.font = { size:8.5, bold:true, color:{argb:INK}, name:'Calibri' };
+                    labCell.font = { size:9.5, bold:true, color:{argb:INK}, name:'Calibri' };
                     labCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
                 });
                 ws.getRow(rowKpi).height = 4;
-                ws.getRow(rowKpi+1).height = 22;
-                ws.getRow(rowKpi+2).height = 16;
+                ws.getRow(rowKpi+1).height = 25;
+                ws.getRow(rowKpi+2).height = 18;
 
                 // Header tabella
                 const headerRow = rowKpi + 4;
@@ -9897,11 +9998,11 @@
                 headers.forEach((h, i) => {
                     const cell = hRow.getCell(i+1);
                     cell.value = h;
-                    cell.font = { bold:true, size:9, color:{argb:'FF6B7280'}, name:'Calibri' };
+                    cell.font = { bold:true, size:10, color:{argb:'FF6B7280'}, name:'Calibri' };
                     cell.border = { bottom:{style:'medium',color:{argb:INK}} };
                     cell.alignment = { horizontal:'left', vertical:'center', indent:1 };
                 });
-                hRow.height = 18;
+                hRow.height = 20;
                 ws.views = [{ showGridLines:false, state:'frozen', xSplit:0, ySplit:headerRow }];
 
                 // Righe viaggio
@@ -9916,11 +10017,12 @@
                     const chip = _DAY_CHIP[dow] || _DAY_CHIP[1];
 
                     const wr = ws.getRow(row);
+                    wr.height = 23;
                     wr.getCell(1).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+stripe} };
 
                     const gc = wr.getCell(2);
                     gc.value = d ? _xlsFmtDate(t.data) : '';
-                    gc.font = { bold:true, size:8.5, color:{argb:'FF'+chip.tx}, name:'Calibri' };
+                    gc.font = { bold:true, size:10, color:{argb:'FF'+chip.tx}, name:'Calibri' };
                     gc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+chip.bg} };
                     gc.alignment = { vertical:'center', horizontal:'center' };
 
@@ -9928,7 +10030,7 @@
                     wr.getCell(3).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+_toHex6(tCol.bg)} };
                     const tc = wr.getCell(4);
                     tc.value = t.trasportatore || '';
-                    tc.font = { bold:true, size:9.5, color:{argb:'FF'+_toHex6(tCol.tx)}, name:'Calibri' };
+                    tc.font = { bold:true, size:11, color:{argb:'FF'+_toHex6(tCol.tx)}, name:'Calibri' };
                     tc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
                     tc.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
@@ -9937,17 +10039,17 @@
 
                     const pc = wr.getCell(9);
                     pc.value = (t.prodotto||'').trim();
-                    pc.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
+                    pc.font = { size:10.5, color:{argb:INK}, name:'Calibri' };
                     pc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
                     pc.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
                     const ddtCell = wr.getCell(10);
                     if (t.ddt) {
                         ddtCell.value = t.ddt;
-                        ddtCell.font = { name:'JetBrains Mono', size:9, bold:true, color:{argb:INK} };
+                        ddtCell.font = { name:'JetBrains Mono', size:10, bold:true, color:{argb:INK} };
                     } else {
                         ddtCell.value = '—';
-                        ddtCell.font = { size:9, color:{argb:'FFB0B7C3'} };
+                        ddtCell.font = { size:10, color:{argb:'FFB0B7C3'} };
                     }
                     ddtCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
                     ddtCell.alignment = { vertical:'center', horizontal:'center' };
@@ -9955,22 +10057,22 @@
                     const statoCell = wr.getCell(11);
                     if (t.daConfermare) {
                         statoCell.value = 'Da confermare';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:AMBER} };
+                        statoCell.font = { bold:true, size:9.5, color:{argb:AMBER} };
                         statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:AMBERBG} };
                     } else if (t.confermato) {
                         statoCell.value = 'Confermato';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:GREEN} };
+                        statoCell.font = { bold:true, size:9.5, color:{argb:GREEN} };
                         statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:GREENBG} };
                     } else {
                         statoCell.value = 'In attesa';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:'FF475569'} };
+                        statoCell.font = { bold:true, size:9.5, color:{argb:'FF475569'} };
                         statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFEEF1F5'} };
                     }
                     statoCell.alignment = { horizontal:'center', vertical:'center' };
 
                     const noteCell = wr.getCell(12);
                     noteCell.value = (t.note||'').trim();
-                    noteCell.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
+                    noteCell.font = { size:10.5, color:{argb:INK}, name:'Calibri' };
                     noteCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
                     noteCell.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
