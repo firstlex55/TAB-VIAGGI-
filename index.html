@@ -5238,14 +5238,14 @@
             const thumb = document.getElementById('dmDaConfThumb');
             if (!cb || !row || !sw || !thumb) return;
             if (cb.checked) {
-                row.style.background = 'rgba(224,192,90,0.2)';
-                row.style.borderColor = 'var(--warning)';
-                sw.style.background = 'var(--warning)';
+                row.style.background = '#2E2510';
+                row.style.borderColor = '#E0C05A';
+                sw.style.background = '#E0C05A';
                 thumb.style.transform = 'translateX(18px)';
             } else {
-                row.style.background = 'rgba(224,192,90,0.08)';
-                row.style.borderColor = 'rgba(224,192,90,0.3)';
-                sw.style.background = 'rgba(255,255,255,0.14)';
+                row.style.background = '#1E2530';
+                row.style.borderColor = 'rgba(224,192,90,0.4)';
+                sw.style.background = 'rgba(255,255,255,0.16)';
                 thumb.style.transform = 'translateX(0)';
             }
         }
@@ -7266,13 +7266,13 @@
 
                         <!-- DA CONFERMARE -->
                         <div id="dmDaConfRow" onclick="toggleDmDaConfermareUI()"
-                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:rgba(224,192,90,0.08);border:2px solid rgba(224,192,90,0.3);border-radius:10px;cursor:pointer;margin-bottom:14px;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.15s,border-color 0.15s;">
+                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#1E2530;border:2px solid rgba(224,192,90,0.4);border-radius:10px;cursor:pointer;margin-bottom:14px;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.15s,border-color 0.15s;">
                             <div style="display:flex;align-items:center;gap:9px;">
                                 <span style="font-size:19px;line-height:1;">⚠️</span>
-                                <span style="font-size:13.5px;color:var(--warning);font-weight:800;">Da confermare</span>
+                                <span style="font-size:13.5px;color:#E0C05A;font-weight:800;">Da confermare</span>
                             </div>
-                            <div id="dmDaConfSwitch" style="position:relative;width:44px;height:26px;background:rgba(255,255,255,0.14);border-radius:999px;flex-shrink:0;transition:background 0.2s;">
-                                <div id="dmDaConfThumb" style="position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.35);transition:transform 0.2s;"></div>
+                            <div id="dmDaConfSwitch" style="position:relative;width:44px;height:26px;background:rgba(255,255,255,0.16);border-radius:999px;flex-shrink:0;transition:background 0.2s;">
+                                <div id="dmDaConfThumb" style="position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform 0.2s;"></div>
                             </div>
                             <input type="checkbox" id="dmDaConf" style="display:none;">
                         </div>
