@@ -1,5 +1,93 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 17/09/2026 · Versione attuale: **v47**
+> Aggiornato: 29/09/2026 · Versione attuale: **v56**
+
+---
+
+# 🎯 PROSSIME COSE DA FARE — ROADMAP (partire da qui nella nuova chat)
+
+> Questa sezione è il punto di ripartenza. Elenco in ordine di priorità, redatto a fine
+> sessione v52 dopo un giro di controllo sul codice (non un audit completo). Le priorità
+> 1–3 sono piccole e ad alto valore: consigliato farle per prime, in una chat pulita.
+
+## 🔴 Priorità alta
+
+**1. Un solo punto di salvataggio (`saveAndSync()` con debounce)** — 🟡 parzialmente
+risolta in v53, resta da finire
+- Fatto in v53: riconnessione Drive silenziosa vera all'avvio (`silentDriveInit`,
+  prima non funzionava mai a freddo), stato onesto quando non sincronizza, e — la
+  parte più importante — il controllo anti-conflitto ora gira ANCHE nei salvataggi
+  automatici silenziosi (prima veniva saltato apposta). Se trova un conflitto, non
+  sovrascrive più alla cieca: unisce i viaggi locali con quelli trovati su Drive
+  (`_mergeTripArrays`, chiave composita data+trasportatore+partenza+arrivo+prodotto,
+  dato che non c'è ancora un id — vedi punto 2). Copre il caso più comune (aggiungere
+  viaggi nuovi da due dispositivi), non ancora la modifica dello STESSO viaggio da
+  entrambi nella stessa finestra di tempo.
+- Ancora da fare: resta una funzione unica `saveAndSync()` che sostituisca le ~20
+  chiamate sparse a `saveToLocalStorage()`/`autoSaveDrive()` — oggi funzionano meglio
+  ma restano duplicate riga per riga. Non urgente quanto prima: il rischio reale
+  (sovrascrittura cieca) è già stato tolto.
+
+**2. ID univoco per ogni viaggio**
+- Problema: modifica/elimina/conferma lavorano su **indici** dell'array `trips`
+  (`editingIndex`, `deleteTrip(index)`, `realIdx`…). Con filtri e riordini è fragile: si
+  rischia di toccare il viaggio sbagliato.
+- Da fare: aggiungere `id` (es. timestamp+random) a ogni viaggio alla creazione, con
+  migrazione una tantum per i viaggi esistenti (anche archivio e `tripsNext`), e passare
+  gli id al posto degli indici. Da fare con molta cura e con backup: tocca quasi tutto.
+
+**3. Annulla / backup automatico prima delle azioni distruttive**
+- "Cancella tutti i dati" oggi si ferma a un `confirm()`. Aggiungere backup automatico
+  in localStorage prima di `clearData()`, import Excel che sostituisce tutto, ecc., e/o
+  un toast "Annulla" di qualche secondo.
+
+## 🟠 Priorità media
+
+**4. Colori centralizzati + audit dei popup rimasti a tema chiaro**
+- Causa dei bug di colore di questa sessione: colori scritti a mano negli `style=""`
+  inline, mescolati a variabili CSS. Portare i colori dei modali in variabili.
+- **Audit da fare a schermo** — residui di Tema G chiaro (v25) sopravvissuti al redesign
+  navy scuro (v43), probabilmente non tutti intenzionali. Cercare `#eef2f7`,
+  `rgba(16,32,64`, `#c0cad8`, `#dde4ec`: sospetti a fine v52 → intestazione tabella PC
+  (`<thead>` ~riga 7103, sfondo `#c0cad8`), riga separatore giorno ~8413, pulsanti
+  switch settimana PC ~8670, `#pcArchiveModal` (~11646, tutto chiaro). Verificare in vista
+  PC se stonano col navy scuro, e uniformare.
+- Valutare un interruttore chiaro/scuro (utile anche per la stampa).
+
+**5. Funzioni nuove**
+- Ricerca/filtro per **numero DDT** e avviso se si inserisce lo stesso DDT due volte.
+- Dal vecchio backlog: Export PDF diretto (senza popup) · click su risultato ricerca
+  archivio → apre la settimana archiviata · statistiche multi-settimana con grafico ·
+  Service Worker per uso offline · PIN/password lato client (hash in localStorage).
+
+**5b. `desktopToggleConfermato()` è codice morto** — trovato in v56: non è collegato
+a nessun pulsante e cerca un `[data-conf-cell]` che non esiste più nel markup. Oggi in
+tabella PC un viaggio è solo "da confermare" o "normale" — manca il terzo stato
+"Confermato" (verde) che invece esiste nell'export Excel. Da decidere con Fil: se gli
+serve davvero in tabella PC, collegarlo a un pulsante vero; altrimenti togliere la
+funzione morta.
+
+## 🟡 Priorità bassa / per ultimo
+
+**6. Spezzare `index.html`** (~11.900 righe) in file separati (CSS/JS/moduli). Rende ogni
+modifica meno costosa (token) e meno rischiosa, ma va testato bene su GitHub Pages e
+Android. Farlo solo a fine lavori.
+
+## ✅ Da verificare subito (appena aperta la nuova chat)
+
+- **Export Excel reale**: MAI verificato a schermo in nessuna sessione (v46→v56) — non
+  posso eseguire ExcelJS nella sandbox (rete disabilitata). Verificato solo sintassi e
+  rilettura del codice. Fil deve esportare una settimana vera e confrontare coi mockup
+  (foglio unico, chip codici, colonna DDT, trasportatore stampa-safe). Se qualcosa esce
+  storto: guardare `_buildAndDownloadExcel`, `_xlsWriteLoc`, `_toHex6`.
+- **Tabella PC v54–v56 — mai vista a schermo, solo sintassi controllata**: colonne
+  riallineate (Note tolta, era disallineata da tempo), badge Fornitore/Cliente a 2 righe,
+  icona nota 🗒️/📝 col popover, popover duplica multi-giorno (pulsante ⧉ o Ctrl+D).
+  Controllare che si aprano nel punto giusto (sono `position:fixed`, ancorati al
+  pulsante cliccato) e che non escano dallo schermo su finestre strette.
+- **Salvataggio automatico v53**: aprire l'app da telefono E PC in sequenza, modificare
+  su uno, controllare che l'altro recuperi la modifica senza doverla rifare a mano.
+- Toggle "Da confermare" (v48–v49): verificato visivamente da Fil, ok.
+- Modale "Nuovo viaggio" PC in scuro (v52): verificato visivamente da Fil, ok.
 
 ---
 
@@ -8,7 +96,7 @@
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v47.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v56.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -28,10 +116,15 @@
 
 ## ACCESSIBILITÀ — FIL È ASTIGMATICO
 
-> Regola fondamentale per qualsiasi UI: sfondo chiaro + testo scuro.
-> Mai testo chiaro su sfondo scuro (causa effetto "alazione"/halo).
-> Evitare colori neon, preferire pastello con testo scuro della stessa famiglia.
-> La vista PC usa il Tema G (ardesia blu) — vedi sezione dedicata.
+> Fil è astigmatico: evitare l'effetto "alazione"/halo (testo bianco puro su nero puro,
+> colori neon). **Stato reale attuale (aggiornato v52)**: mobile = tema scuro anti-alone
+> (v27); vista PC = tema **navy scuro** (v43, ha sostituito il Tema G chiaro). In entrambi:
+> navy non nerissimo, testo bianco caldo non puro, niente neon. Fil ha chiesto
+> esplicitamente in questa sessione che i popup PC siano scuri come il resto della vista PC.
+> **Stampa ed Excel restano invece chiari** (foglio bianco, stampa-safe, niente riempimenti
+> pieni saturi — vedi Novità v46–v47).
+> Regola pratica: in un popup scuro, mai usare sfondi chiari con `var(--text)` (che è
+> chiaro): dà testo chiaro su sfondo chiaro, invisibile (bug reale trovato in v52).
 
 ---
 
@@ -74,7 +167,10 @@ ad ogni modifica. Vedi `_commitEditForm()`.
 
 ---
 
-## TEMA G — Vista PC (IMPLEMENTATO in v25)
+## TEMA G — Vista PC (IMPLEMENTATO in v25 — ⚠️ SOSTITUITO in v43 dal tema navy scuro)
+
+> Sezione storica. La vista PC oggi usa il tema navy scuro descritto in "Novità v43".
+> Restano in giro alcuni residui chiari di Tema G (vedi Roadmap punto 4).
 
 Vista PC ridisegnata con il Tema G. Fil è astigmatico: sfondo chiaro, testo scuro, zero neon.
 Implementazione: CSS var scoped su `.desktop-view-active` (--bg, --text, --text-dim, --success,
@@ -149,6 +245,96 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v53–v56 (non reimplementare)
+
+**v53 — Salvataggio/sync Drive, causa reale trovata**: Fil segnalava disallineamenti
+frequenti PC/telefono. Causa: `tryAutoReconnectDrive()` richiedeva un token già presente
+per partire, ma a ogni ricarica pagina `driveAccessToken` riparte `null` — quindi il
+"tentativo automatico" scritto nel `window.onload` non faceva letteralmente nulla finché
+non si premeva "Salva" a mano almeno una volta a sessione. In più `autoSaveDrive()`
+saltava apposta il controllo anti-conflitto (`silent=true`), quindi quando funzionava
+sovrascriveva alla cieca. Aggiunte: `silentDriveInit()` (riconnessione vera a freddo,
+poi lancia `driveSmartSync()` — esisteva già ma non era mai stata collegata a nulla),
+stato onesto (`driveStatusText`/`driveStatusDot`) invece del log invisibile, controllo
+conflitto anche in automatico con merge silenzioso (`_mergeTripArrays`, `_tripMergeKey`)
+invece di sovrascrittura cieca.
+
+**v54 — Tabella PC: bug di disallineamento colonne + toggle mancante**. L'intestazione
+aveva una colonna "Note" senza la cella corrispondente nella riga: tutto scivolava di
+una posizione e restava una colonna fantasma vuota fino al bordo destro (lo screenshot
+di Fil "manca spazio a destra" era letteralmente questo bug, non solo estetica). Le note
+non comparivano mai in tabella PC. Corretto l'allineamento, ingranditi i font
+(trasportatore, prodotto, badge codice), badge Fornitore/Cliente passati da ellissi su
+una riga a wrap su 2 righe (`-webkit-line-clamp:2`) invece di tagliare la parola.
+Aggiunta `desktopSetPending(idx)`: `desktopToggleConf` sapeva solo confermare (imposta
+`daConfermare=false`), mancava la direzione opposta per marcare "da confermare" un
+viaggio già in lista senza aprire il modale — ora il placeholder "—" nella cella Stato è
+cliccabile ("— segna").
+
+**v55 — Colonna Note tolta, sostituita da icona + popover** (Fil: le note si usano
+raramente, non ha senso tenerle una colonna fissa sempre vuota). Rimossa dalla tabella,
+spazio ridato a Partenza/Arrivo/Prodotto. Al suo posto, nella cella Stato: icona 🗒️/📝
+(piena solo se il viaggio ha già una nota), click apre un piccolo popover fisso
+(`desktopToggleNotePopover`, ancorato con `getBoundingClientRect`) con una textarea —
+Invio salva, Esc annulla, click fuori salva e chiude. **Bug trovato e corretto nello
+stesso giro**: sia `desktopToggleConf` che `desktopSetPending` ricostruivano la cella
+Stato a modo loro perdendo pezzi (una perdeva i bottoni duplica/elimina, l'altra pure);
+centralizzato tutto in `_desktopRebuildStatoCell(idx)`, unica fonte di verità per
+com'è fatta quella cella.
+
+**v56 — Duplica viaggio su più giorni**. Prima "⧉ Duplica" creava subito una copia
+identica nello stesso giorno. Ora apre un popover (stesso pattern del v55: `position:
+fixed`, ancorato al pulsante) con i 5 giorni Lun–Ven della settimana DEL VIAGGIO
+(calcolati con `getMonday(t.data)`, quindi funziona identico in vista Corrente e
+Prossima) — il giorno originale parte già selezionato, si possono aggiungere gli altri,
+"✓ Duplica" crea una copia identica (stesso trasportatore/partenza/arrivo/prodotto/note/
+ddt) per ciascun giorno scelto. Funzioni: `desktopDup(idx, btnEl)`, `_pcDupToggleDay`,
+`_pcDupConfirm`, `_pcDupCancel`, `_isoDate(d)`. La scorciatoia Ctrl+D è stata adattata
+allo stesso flusso (prima assumeva la creazione immediata e ci spostava il focus sopra).
+
+**Nota di pattern per sessioni future**: v55 e v56 usano lo STESSO schema di popover
+leggero (elemento `position:fixed` creato al volo, appeso a `document.body`, posizionato
+via `getBoundingClientRect()` del pulsante cliccato, chiuso da click-fuori/Esc). Se serve
+un altro popover simile in tabella PC, riusare questo pattern invece di inventarne uno
+nuovo — sono quasi identici e si potrebbero anche accorpare in un helper comune, non
+ancora fatto per non rischiare inutilmente codice che già funziona.
+
+## Novità v48–v52 (non reimplementare)
+
+**Toggle "Da confermare" premium** (Fil: "non c'è più la possibilità di mettere da
+confermare" — il checkbox c'era ancora ma era piccolo e con colori tenui, sembrava sparito).
+Sostituito il checkbox con una riga cliccabile con interruttore stile iOS, in 3 punti:
+- **v48 — form mobile "Nuovo Viaggio"**: `#daConfermareRow` (riga), `#daConfermareSwitch` +
+  `#daConfermareThumb` (interruttore), checkbox reale nascosto `#daConfermare` (resta la
+  fonte del valore letta dal submit). Funzioni `toggleDaConfermareUI()` /
+  `_syncDaConfermareUI()`; `_syncDaConfermareUI()` richiamata dopo `tripForm.reset()`.
+- **v49 — modale "✏️ Modifica Viaggio"** (`#editDaConfermareRow`, `toggleEditDaConfermareUI()`,
+  `_syncEditDaConfermareUI()`, richiamata in `editTrip()` e `editNextTrip()` dopo aver
+  impostato `.checked`) **e modale PC "Nuovo viaggio"** (`#dmDaConfRow`,
+  `toggleDmDaConfermareUI()`, `_syncDmDaConfermareUI()`, richiamata in `desktopAddEmpty()`).
+- Regola da ricordare: ogni volta che il codice imposta `.checked` di questi checkbox
+  nascosti va richiamata la relativa `_sync…UI()`, altrimenti l'aspetto non segue lo stato.
+- v50–v51: nel modale PC il primo tentativo usava trasparenze (`rgba(224,192,90,0.08)`)
+  pensate per stare sopra sfondi scuri → su bianco erano invisibili. Poi rifatto in chiaro
+  contro il desiderio di Fil. Versione finale: sfondo **pieno** `#1E2530` (ON `#2E2510`),
+  bordo/testo oro `#E0C05A`. Lezione: non riusare stili con trasparenze fuori dal loro tema.
+
+**v52 — modale PC "Nuovo viaggio" reso completamente scuro** (bug reale, non solo estetico):
+`#desktopAddModal` era rimasto coi colori del vecchio Tema G chiaro (`#eef2f7`,
+`rgba(16,32,64,…)`, `#e4e9f0`) dopo il redesign navy v43, ma il testo usava
+`color:var(--text)` che è **chiaro** → scritte quasi bianche su sfondo quasi bianco,
+invisibili (Trasportatore, Prodotto, Partenza, Arrivo, ecc.). Ora: card `#0f1220` (stesso
+di Multi-Tratta), campi `rgba(255,255,255,0.05)`, bordi `rgba(255,255,255,0.12)`, header/
+footer/bottoni riallineati, e anche i **chip giorno Lun–Ven** (sia nel markup iniziale sia
+in `_dpkUpdate()`) e il campo `#dmDate`. Il riquadro "Da confermare" resta come approvato.
+Verificato con grep che nel modale non restino colori chiari; **non verificato a schermo**.
+
+**Nota di metodo**: nei turni v50–v52 ho frainteso due volte la richiesta (pensavo si
+trattasse solo del riquadro "Da confermare", poi ho letto "scuro" come "adatto al tema
+chiaro"). Quando Fil manda una foto e dice "ancora il problema", guardare **tutta** la
+schermata, non solo l'elemento appena toccato; e prima di scegliere i colori verificare la
+palette reale del tema (v43 = navy scuro), non quella descritta nelle sezioni storiche.
 
 ## Novità v46–v47 (non reimplementare)
 
@@ -773,7 +959,7 @@ condiviso (righe ~6200) non ha ancora il colore impatto sull'arrivo (non estrae 
 
 ---
 
-## Backlog (prossime sessioni)
+## Backlog (prossime sessioni) — ⚠️ integrato nella ROADMAP in cima al file
 
 - PIN/password di accesso lato client (localStorage con hash)
 - Click risultato ricerca → apre settimana archiviata
@@ -789,7 +975,7 @@ condiviso (righe ~6200) non ha ancora il colore impatto sull'arrivo (non estrae 
 - `oggi` — solo viaggi di oggi
 - `medium` — per trasportatore
 - `next` — settimana prossima
-- `desktop` — tabella PC ← TEMA G DA IMPLEMENTARE
+- `desktop` — tabella PC (tema navy scuro v43)
 - `card` — vista card
 
 In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e nav mobile.
@@ -807,6 +993,9 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 
 ### Dati
 - `saveToLocalStorage()`, `saveNextToLocalStorage()`, `autoSaveDrive()`
+- `silentDriveInit()` (v53) — riconnessione Drive silenziosa vera all'avvio, poi lancia `driveSmartSync()`
+- `driveSmartSync()` — scarica se Drive è più recente, altrimenti salva (esisteva da prima, collegata solo in v53)
+- `_mergeTripArrays(local, drive)`, `_tripMergeKey(t)` (v53) — merge anti-sovrascrittura per il salvataggio silenzioso
 - `learnFromTrip(t)`, `bulkLearnFromAllTrips()`
 - `filterApply()`, `filterPopulateDropdowns()`
 
@@ -828,8 +1017,14 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 
 ### Vista PC
 - `pcSetWeek(mode)` — corrente / prossima / oggi
-- `desktopSetField(idx, field, val)`, `desktopDel(idx)`, `desktopDup(idx)`
-- `desktopToggleConf(idx)` — conferma + flash verde
+- `desktopSetField(idx, field, val)`, `desktopDel(idx)`
+- `desktopDup(idx, btnEl)` (v56) — apre popover scelta giorni, NON duplica più subito;
+  `_pcDupToggleDay`, `_pcDupConfirm`, `_pcDupCancel`, `_isoDate(d)`
+- `desktopToggleConf(idx)` — conferma (imposta `daConfermare=false`) + flash verde
+- `desktopSetPending(idx)` (v54) — direzione opposta: marca "da confermare" un viaggio già in lista
+- `_desktopRebuildStatoCell(idx)` (v55) — unica fonte di verità per la cella Stato (flag + icona nota + azioni); usata da `desktopToggleConf` e `desktopSetPending`, non ricostruire quella cella a mano altrove
+- `desktopToggleNotePopover(idx, btnEl)` (v55) — popover nota, vedi Novità v53–v56
+- `desktopToggleConfermato(idx)` — ⚠️ CODICE MORTO, non collegata a nulla (vedi Roadmap 5b)
 - `desktopAddEmpty()`, `desktopGetNextWeekday(dayName)` (fix v24)
 - `desktopConfirmAdd()`, `desktopCloseAddModal()`
 
@@ -869,7 +1064,7 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 3. `updateWeekProgress()` — legge `t.data` (non `t.giorno`)
 4. `mtDaConf` — RIMOSSO, ora per-riga con `mt-conf-{id}`
 5. Vista PC usa `_pcWeekMode` ('current'/'next') per switching settimana
-6. Colori trasportatori e clienti nella vista PC devono seguire TEMA G (v25+)
+6. Colori trasportatori e clienti nella vista PC seguono il tema navy scuro (v43+); il Tema G chiaro (v25) è storico
 7. **`_commitEditForm()` (modale "✏️ Modifica Viaggio") ricostruisce l'intero
    oggetto viaggio da zero** — ogni campo non esposto nel form (es. `confermato`,
    `ddt`) va riportato a mano dal viaggio originale prima di sovrascrivere, o si
@@ -880,3 +1075,18 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 9. Prima di dichiarare finita una richiesta di redesign export/UI: verificare che
    sia stata *effettivamente* portata nella funzione reale e non solo in un
    mockup esterno (successo con l'Excel in v46 — vedi Novità v46–v47)
+10. Popup/modali PC: palette scura (card `#0f1220`, campi `rgba(255,255,255,0.05)`, bordi
+    `rgba(255,255,255,0.12)`). Mai `var(--text)` su sfondo chiaro (testo invisibile, bug v52).
+    Dopo ogni impostazione via codice di un checkbox-toggle nascosto, richiamare la sua `_sync…UI()`
+11. **La riga della tabella PC (`renderDesktopView`) e il suo `<thead>` devono avere
+    LO STESSO NUMERO di celle** — in v54 non era così (mancava il `<td>` Note) e la
+    tabella scivolava di una colonna. Se si aggiunge/toglie una colonna, aggiornare
+    ANCHE gli indici `td:nth-child(N)` usati altrove per aggiornare quella cella al volo
+    (oggi: `nth-child(7)` = cella Stato, cambiato due volte già, v54→v55 — se si tocca
+    ancora questa tabella, ricontare prima di riusare quell'indice a memoria)
+12. Residui di Tema G chiaro non ancora sistemati (vedi Roadmap punto 4): `<thead>` della
+    tabella PC (`#c0cad8`) e `#pcArchiveModal` (`#dde4ec`) — confermato ancora presenti
+    a fine v56, non toccati in questa sessione
+13. Pattern popover leggero (v55/v56, vedi Novità v53–v56): `position:fixed`, ancorato
+    con `getBoundingClientRect()`, chiusura su click-fuori/Esc. Riusarlo per qualsiasi
+    altro popover in tabella PC invece di inventarne uno nuovo
