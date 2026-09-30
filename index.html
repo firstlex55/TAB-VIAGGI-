@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Viaggi">
     <meta name="application-name" content="Viaggi">
-    <meta name="theme-color" content="#2f3136">
+    <meta name="theme-color" content="#25272b">
     <script>
     // Tema scelto da Fil (v60): applicato PRIMA del primo paint per evitare il lampo di colore sbagliato.
     (function(){ try { var t = localStorage.getItem('appTheme'); document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark'); var m = document.querySelector('meta[name="theme-color"]'); if (m && t === 'light') m.setAttribute('content', '#e8e6e2'); } catch(e) { document.documentElement.setAttribute('data-theme', 'dark'); } })();
@@ -48,22 +48,22 @@
            --shade-rgb (ombre/overlay), --surface-*, --text*, --ac-* (accenti testuali). */
         :root, html[data-theme="dark"] {
             color-scheme: dark;
-            --bg: #2f3136;
-            --primary: #383a3f;
-            --secondary: #383a3f;
-            --surface-1: #383a3f;
-            --surface-2: #42454a;
-            --pchead: #42454a;
-            --toggle-on-bg: #46422f;
-            --text: #dcdad5;
-            --text-soft: #bdbbb5;
-            --text-dim: #9b9a93;
-            --text-muted: #7f7e78;
-            --border: #46484d;
+            --bg: #25272b;
+            --primary: #2e3035;
+            --secondary: #2e3035;
+            --surface-1: #2e3035;
+            --surface-2: #383a3f;
+            --pchead: #383a3f;
+            --toggle-on-bg: #3d3a2a;
+            --text: #d6d4cf;
+            --text-soft: #b5b3ad;
+            --text-dim: #94938c;
+            --text-muted: #77766f;
+            --border: #3b3d42;
             --border-warm: rgba(232, 98, 63, 0.14);
             --veil-rgb: 255, 255, 255;
             --shade-rgb: 0, 0, 0;
-            --surface-rgb: 56, 58, 63;
+            --surface-rgb: 46, 48, 53;
             --accent-rgb: 232, 98, 63;
             --accent: #e8623f;
             --accent-dim: rgba(232, 98, 63, 0.14);
@@ -76,6 +76,7 @@
             --ac-blue: #60a5fa;
             --ac-violet: #a78bfa;
             --ac-pink: #f472b6;
+            --well-bg: rgba(0, 0, 0, 0.2);
             --ink: #262624;
             --success-rgb: 62, 203, 150;
             --warning-rgb: 224, 192, 90;
@@ -116,6 +117,7 @@
             --ac-blue: #2a64b8;
             --ac-violet: #6a47c2;
             --ac-pink: #b1346f;
+            --well-bg: rgba(84, 82, 76, 0.07);
             --ink: #262624;
             --success-rgb: 31, 138, 98;
             --warning-rgb: 138, 106, 12;
@@ -1591,16 +1593,16 @@
         /* Vista PC: stessa palette tema del mobile (v60: prima aveva un navy proprio).
            Qui restano solo le tinte trasportatore tarate per le pillole piene con testo scuro. */
         .desktop-view-active {
-            --t-cevolo:   #d69a1a; --t-cevolo-bg:   rgba(214,154,26,0.16);
-            --t-coap:     #5a9fd4; --t-coap-bg:     rgba(90,159,212,0.16);
-            --t-coneco:   #8a6fe0; --t-coneco-bg:   rgba(138,111,224,0.16);
-            --t-consar:   #d9505f; --t-consar-bg:   rgba(217,80,95,0.16);
-            --t-avio:     #a8c030; --t-avio-bg:     rgba(168,192,48,0.16);
-            --t-alb:      #3aa860; --t-alb-bg:      rgba(58,168,96,0.16);
-            --t-lino:     #d94f9a; --t-lino-bg:     rgba(217,79,154,0.16);
-            --t-stegagno: #4ab8c9; --t-stegagno-bg: rgba(74,184,201,0.16);
-            --t-cirioni:  #7ac95a; --t-cirioni-bg:  rgba(122,201,90,0.16);
-            --t-clp:      #b070d9; --t-clp-bg:      rgba(176,112,217,0.16);
+            --t-cevolo:   #d69a1a; --t-cevolo-bg:   rgba(214,154,26,0.22);
+            --t-coap:     #5a9fd4; --t-coap-bg:     rgba(90,159,212,0.22);
+            --t-coneco:   #8a6fe0; --t-coneco-bg:   rgba(138,111,224,0.22);
+            --t-consar:   #d9505f; --t-consar-bg:   rgba(217,80,95,0.22);
+            --t-avio:     #a8c030; --t-avio-bg:     rgba(168,192,48,0.22);
+            --t-alb:      #3aa860; --t-alb-bg:      rgba(58,168,96,0.22);
+            --t-lino:     #d94f9a; --t-lino-bg:     rgba(217,79,154,0.22);
+            --t-stegagno: #4ab8c9; --t-stegagno-bg: rgba(74,184,201,0.22);
+            --t-cirioni:  #7ac95a; --t-cirioni-bg:  rgba(122,201,90,0.22);
+            --t-clp:      #b070d9; --t-clp-bg:      rgba(176,112,217,0.22);
             --t-default:  #8590aa; --t-default-bg:  rgba(133,144,170,0.18);
             --pctoolbar: var(--primary);
             --pctoolbar-bd: rgba(var(--veil-rgb), 0.1);
@@ -1619,17 +1621,17 @@
             --t-default: #5d636f; --t-default-bg: rgba(93,99,111,0.14);
         }
         html[data-theme="light"] .desktop-view-active {
-            --t-cevolo: #d69a1a; --t-cevolo-bg: rgba(214,154,26,0.16);
-            --t-coap: #3d8ecc; --t-coap-bg: rgba(61,142,204,0.16);
-            --t-coneco: #5b36d4; --t-coneco-bg: rgba(91,54,212,0.16);
-            --t-consar: #d33647; --t-consar-bg: rgba(211,54,71,0.16);
-            --t-avio: #a8c030; --t-avio-bg: rgba(168,192,48,0.16);
-            --t-alb: #3aa860; --t-alb-bg: rgba(58,168,96,0.16);
-            --t-lino: #d4368b; --t-lino-bg: rgba(212,54,139,0.16);
-            --t-stegagno: #42b5c7; --t-stegagno-bg: rgba(66,181,199,0.16);
-            --t-cirioni: #6ac347; --t-cirioni-bg: rgba(106,195,71,0.16);
-            --t-clp: #943ecc; --t-clp-bg: rgba(148,62,204,0.16);
-            --t-default: #6f7c9a; --t-default-bg: rgba(111,124,154,0.16);
+            --t-cevolo: #b68316; --t-cevolo-bg: rgba(182,131,22,0.18);
+            --t-coap: #2a6ea2; --t-coap-bg: rgba(42,110,162,0.18);
+            --t-coneco: #4424a8; --t-coneco-bg: rgba(68,36,168,0.18);
+            --t-consar: #a82433; --t-consar-bg: rgba(168,36,51,0.18);
+            --t-avio: #8fa329; --t-avio-bg: rgba(143,163,41,0.18);
+            --t-alb: #349857; --t-alb-bg: rgba(52,152,87,0.18);
+            --t-lino: #a8246c; --t-lino-bg: rgba(168,36,108,0.18);
+            --t-stegagno: #2f8e9d; --t-stegagno-bg: rgba(47,142,157,0.18);
+            --t-cirioni: #509a32; --t-cirioni-bg: rgba(80,154,50,0.18);
+            --t-clp: #732ba1; --t-clp-bg: rgba(115,43,161,0.18);
+            --t-default: #545f78; --t-default-bg: rgba(84,95,120,0.18);
         }
         .desktop-view-active .transporter-clp     { background: var(--t-clp-bg); color: var(--t-clp); border: 1px solid var(--t-clp); }
         .desktop-view-active .transporter-default { background: var(--t-default-bg); color: var(--t-default); border: 1px solid var(--t-default); }
@@ -3051,7 +3053,7 @@
             right: 0;
             bottom: 0;
             overflow: hidden;
-            z-index: 50;
+            z-index: 150;
             background: var(--bg);
         }
         .desktop-view-active #desktopBody {
@@ -3928,7 +3930,12 @@
             </div>
             <div id="desktopView" style="display:none;">
                 <div id="desktopBody"></div>
-                <div id="pcRubricaPanel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:460px;background:var(--surface-1);border-left:3px solid var(--accent);box-shadow:-32px 0 64px rgba(var(--shade-rgb),0.4);z-index:1500;flex-direction:column;overflow:hidden;"></div>
+                <button id="pcRubricaTab" type="button" onclick="pcToggleRubrica()" title="Rubrica: fornitori, clienti, trasportatori"
+                    style="position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:1400;width:38px;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-left:none;border-right:3px solid var(--accent);border-radius:0 12px 12px 0;cursor:pointer;box-shadow:4px 0 16px rgba(var(--shade-rgb),0.25);font-family:'Outfit',sans-serif;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="17" rx="2"/><path d="M17 8h4v13h-4"/><path d="M7 9h6M7 13h6"/></svg>
+                    <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">Rubrica</span>
+                </button>
+                <div id="pcRubricaPanel" style="display:none;position:fixed;top:0;left:0;bottom:0;width:460px;background:var(--surface-1);border-right:3px solid var(--accent);box-shadow:32px 0 64px rgba(var(--shade-rgb),0.4);z-index:1500;flex-direction:column;overflow:hidden;"></div>
                 <div id="pcRubricaOverlay" onclick="pcToggleRubrica()" style="display:none;position:fixed;inset:0;z-index:1499;"></div>
             </div>
             <div id="nextView" style="display:none;">
@@ -4453,7 +4460,7 @@
         document.documentElement.setAttribute('data-theme', _APP_THEME);
         try { localStorage.setItem('appTheme', _APP_THEME); } catch (e) {}
         var m = document.querySelector('meta[name="theme-color"]');
-        if (m) m.setAttribute('content', _APP_THEME === 'light' ? '#e8e6e2' : '#2f3136');
+        if (m) m.setAttribute('content', _APP_THEME === 'light' ? '#e8e6e2' : '#25272b');
         var b = document.getElementById('themeToggleBtn');
         if (b) b.setAttribute('title', _APP_THEME === 'light' ? 'Passa al tema scuro' : 'Passa al tema chiaro');
     }
@@ -6955,7 +6962,7 @@
                     '<input type="text" value="' + (trip.trasportatore||'') + '" list="dtransp"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'trasportatore\',this.value);"' +
                     ' placeholder="Trasp."' +
-                    ' style="border:none;border-radius:8px;padding:8px 12px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.3px;background:' + tColorVar + ';color:#0b0e14;transition:all 0.15s;"' +
+                    ' style="border:1.5px solid ' + tColorVar + ';border-radius:8px;padding:7px 11px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.3px;background:var(--t-' + transporterKey + '-bg);color:' + tColorVar + ';transition:all 0.15s;"' +
                     ' onfocus="this.style.outline=\'2px solid rgba(var(--veil-rgb),0.5)\';"' +
                     ' onblur="this.style.outline=\'none\';"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -6963,7 +6970,7 @@
 
                     // PARTENZA — sotto-etichette "Fornitore" / "Località" (opzione C + E1)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:var(--well-bg);border:1px solid rgba(var(--veil-rgb),0.1);border-radius:6px;padding:7px 11px;min-width:220px;">' +
                     '<div style="flex-shrink:0;width:118px;overflow:hidden;">' +
                     '<div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-dim);text-transform:uppercase;">Fornitore</div>' +
                     '<div style="display:flex;align-items:flex-start;gap:6px;margin-top:4px;">' +
@@ -6990,7 +6997,7 @@
 
                     // ARRIVO — sotto-etichette "Cliente" / "Località" (opzione C + E1)
                     '<td style="padding:5px 6px;">' +
-                    '<div style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div style="display:flex;align-items:stretch;gap:10px;background:var(--well-bg);border:1px solid rgba(var(--veil-rgb),0.1);border-radius:6px;padding:7px 11px;min-width:220px;">' +
                     '<div style="flex-shrink:0;width:118px;overflow:hidden;">' +
                     '<div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-dim);text-transform:uppercase;">Cliente</div>' +
                     '<div style="display:flex;align-items:flex-start;gap:6px;margin-top:4px;">' +
@@ -7238,7 +7245,7 @@
                             <div style="flex:1;display:flex;gap:6px;flex-wrap:wrap;min-width:100px;">
                                 ${_transpSummary.map(name => {
                                     const key = getTransporterKey(name);
-                                    return '<span style="padding:5px 12px;border-radius:6px;background:var(--t-' + key + ');color:#0b0e14;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.2px;">' + name + ' ' + _transpCounts[name] + '</span>';
+                                    return '<span style="padding:5px 12px;border-radius:6px;background:var(--t-' + key + '-bg);border:1px solid var(--t-' + key + ');color:var(--t-' + key + ');font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.2px;">' + name + ' ' + _transpCounts[name] + '</span>';
                                 }).join('')}
                             </div>
                         </div>
@@ -9093,14 +9100,17 @@
             var overlay = document.getElementById('pcRubricaOverlay');
             if (!panel) return;
             var opening = panel.style.display === 'none' || !panel.style.display;
+            var tab = document.getElementById('pcRubricaTab');
             if (opening) {
                 panel.style.display = 'flex';
                 overlay.style.display = 'block';
+                if (tab) tab.style.display = 'none';
                 _pcRubricaSelected = null;
                 pcRubricaSetTab(_pcRubricaTab);
             } else {
                 panel.style.display = 'none';
                 overlay.style.display = 'none';
+                if (tab) tab.style.display = 'flex';
             }
         }
 
@@ -9134,7 +9144,7 @@
                 var isSel = g.key === _pcRubricaSelected;
                 var place = tab === 'trasportatori' ? g.key : g.key.replace(/\s*\([^)]+\)\s*$/, '');
                 var code = tab === 'trasportatori' ? '' : _pcRubricaCode(g.key);
-                return '<div onclick="pcRubricaSelectEntity(' + JSON.stringify(g.key) + ')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;margin-bottom:8px;cursor:pointer;border-radius:11px;transition:all 0.15s;'
+                return '<div onclick="pcRubricaSelectEntity(' + JSON.stringify(g.key).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;') + ')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;margin-bottom:8px;cursor:pointer;border-radius:11px;transition:all 0.15s;'
                     + (isSel
                         ? 'background:' + col.border + '22;border:2.5px solid ' + col.border + ';'
                         : 'background:rgba(var(--veil-rgb),0.045);border:2px solid rgba(var(--veil-rgb),0.1);')
@@ -9185,7 +9195,7 @@
                     otherText = (t.partenza || '').replace(/\s*\([^)]+\)\s*$/, '') + ' → ' + (t.arrivo || '').replace(/\s*\([^)]+\)\s*$/, '');
                 }
                 return '<div style="display:flex;gap:14px;align-items:center;padding:13px 16px;background:rgba(var(--veil-rgb),0.05);border:1.5px solid rgba(var(--veil-rgb),0.1);border-radius:10px;margin-bottom:8px;">'
-                    + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:800;color:' + col.text + ';width:60px;flex-shrink:0;">' + dLabel + '</span>'
+                    + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:800;color:' + col.text + ';width:92px;flex-shrink:0;white-space:nowrap;">' + dLabel + '</span>'
                     + '<span style="font-size:13.5px;flex:1;color:var(--text);">' + otherText + '</span>'
                     + '</div>';
             }).join('');
