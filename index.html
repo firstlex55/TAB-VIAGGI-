@@ -3930,11 +3930,6 @@
             </div>
             <div id="desktopView" style="display:none;">
                 <div id="desktopBody"></div>
-                <button id="pcRubricaTab" type="button" onclick="pcToggleRubrica()" title="Rubrica: fornitori, clienti, trasportatori"
-                    style="position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:1400;width:38px;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-left:none;border-right:3px solid var(--accent);border-radius:0 12px 12px 0;cursor:pointer;box-shadow:4px 0 16px rgba(var(--shade-rgb),0.25);font-family:'Outfit',sans-serif;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="17" rx="2"/><path d="M17 8h4v13h-4"/><path d="M7 9h6M7 13h6"/></svg>
-                    <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">Rubrica</span>
-                </button>
                 <div id="pcRubricaPanel" style="display:none;position:fixed;top:0;left:0;bottom:0;width:460px;background:var(--surface-1);border-right:3px solid var(--accent);box-shadow:32px 0 64px rgba(var(--shade-rgb),0.4);z-index:1500;flex-direction:column;overflow:hidden;"></div>
                 <div id="pcRubricaOverlay" onclick="pcToggleRubrica()" style="display:none;position:fixed;inset:0;z-index:1499;"></div>
             </div>
@@ -7252,6 +7247,11 @@
 
                         <!-- Riga 2: filtri giorno con contatori -->
                         <div style="display:flex;align-items:center;gap:8px;padding:11px 20px;">
+                            <button id="pcRubricaTab" type="button" onclick="pcToggleRubrica()" title="Rubrica: fornitori, clienti, trasportatori"
+                                style="display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:9px;background:var(--accent-dim);border:1.5px solid var(--accent);color:var(--accent);font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:800;cursor:pointer;flex-shrink:0;margin-right:8px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="17" rx="2"/><path d="M17 8h4v13h-4"/><path d="M7 9h6M7 13h6"/></svg>
+                                Rubrica
+                            </button>
                             <span style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;flex-shrink:0;margin-right:2px;">FILTRA</span>
                             <div style="display:flex;gap:6px;flex-wrap:wrap;" id="desktopDayFilters">
                                 ${(function() {
