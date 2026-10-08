@@ -1,13 +1,46 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 29/09/2026 · Versione attuale: **v56**
+> Aggiornato: 08/10/2026 · Versione attuale: **v74** (file `app_viaggi_v74.html` = `index.html`)
 
 ---
 
 # 🎯 PROSSIME COSE DA FARE — ROADMAP (partire da qui nella nuova chat)
 
-> Questa sezione è il punto di ripartenza. Elenco in ordine di priorità, redatto a fine
-> sessione v52 dopo un giro di controllo sul codice (non un audit completo). Le priorità
+> Questa sezione è il punto di ripartenza. Elenco in ordine di priorità. Le priorità
 > 1–3 sono piccole e ad alto valore: consigliato farle per prime, in una chat pulita.
+
+## 🔴🔴 PRIORITÀ MASSIMA — fare questa PER PRIMA nella nuova chat
+
+**0. Tema "grigetto" chiaro/scuro + interruttore per sceglierlo**
+- **Perché prima di tutto il resto**: Fil è astigmatico. Non è chiaro-vs-scuro il problema,
+  è il **contrasto troppo netto** (nero pieno contro bianco pieno) che gli affatica gli
+  occhi — l'ha spiegato mostrando TuneIn come riferimento di un grigio che non dà fastidio.
+  Vuole POTER SCEGLIERE lui chiaro/scuro a seconda del momento, non uno fisso. Un
+  interruttore senza le due palette vere sotto è inutile — è per questo che va fatto
+  come prima cosa, non aggiunto dopo: tutto il resto del lavoro sui colori (vedi Novità
+  v57–v59) va rifatto sopra queste due palette, non prima.
+- **Colori validati con Fil su mockup** (dati reali, confrontati fianco a fianco — non
+  ancora portati nel codice):
+  - Chiaro: sfondo pagina `#e8e6e2`, card `#f2f0ec`, testo `#2e2e2c`, bordi `#d6d3ce`,
+    testo secondario `#78786f` — MAI bianco puro `#fff`.
+  - Scuro: sfondo pagina `#2f3136`, card `#383a3f`, testo `#dcdad5`, bordi `#46484d`,
+    testo secondario `#9b9a93` — MAI nero puro `#000`.
+  - I colori identità (trasportatore/fornitore/cliente, vedi Novità v59) restano
+    riconoscibili in entrambe le palette, solo con luminosità calibrata diversa
+    (più scuri/saturi su sfondo chiaro, più chiari/tenui su sfondo scuro — vedi i
+    valori accoppiati nel mockup "Grigetto chiaro-scuro v2").
+- **Da fare, in ordine**:
+  1. Centralizzare i colori in variabili CSS (oggi sono scritti a mano dentro gli
+     `style=""` inline sparsi in tutto il file — causa diretta del bug "sono cambiati
+     tutti i colori" di questa sessione, che in realtà non erano cambiati per niente:
+     era solo la mancanza di un sistema unico a rendere impossibile capire cosa
+     stava succedendo).
+  2. Costruire le DUE palette (chiaro/scuro) come set di variabili, partendo dai valori
+     sopra.
+  3. Un interruttore visibile (mobile e PC) che scambia le variabili e salva la scelta
+     in localStorage.
+  4. **Tocca tutta l'app**, non solo la tabella PC su cui ci siamo concentrati finora —
+     mobile, popup, modali, tutto. È un lavoro grande: farlo con calma, non in coda ad
+     altro.
 
 ## 🔴 Priorità alta
 
@@ -42,21 +75,19 @@ risolta in v53, resta da finire
 
 ## 🟠 Priorità media
 
-**4. Colori centralizzati + audit dei popup rimasti a tema chiaro**
-- Causa dei bug di colore di questa sessione: colori scritti a mano negli `style=""`
-  inline, mescolati a variabili CSS. Portare i colori dei modali in variabili.
-- **Audit da fare a schermo** — residui di Tema G chiaro (v25) sopravvissuti al redesign
-  navy scuro (v43), probabilmente non tutti intenzionali. Cercare `#eef2f7`,
-  `rgba(16,32,64`, `#c0cad8`, `#dde4ec`: sospetti a fine v52 → intestazione tabella PC
-  (`<thead>` ~riga 7103, sfondo `#c0cad8`), riga separatore giorno ~8413, pulsanti
-  switch settimana PC ~8670, `#pcArchiveModal` (~11646, tutto chiaro). Verificare in vista
-  PC se stonano col navy scuro, e uniformare.
-- Valutare un interruttore chiaro/scuro (utile anche per la stampa).
+**4. Audit dei popup rimasti a tema chiaro** — ⚠️ la parte "colori centralizzati" di
+questo punto È DIVENTATA la Priorità 0 qui sopra, non rifarla due volte
+- Residui di Tema G chiaro (v25) sopravvissuti al redesign navy scuro (v43), probabilmente
+  non tutti intenzionali. Cercare `#eef2f7`, `rgba(16,32,64`, `#c0cad8`, `#dde4ec`
+  (sospetti a fine v52, non ancora verificati né toccati: intestazione tabella PC `<thead>`,
+  riga separatore giorno, pulsanti switch settimana PC, `#pcArchiveModal`). Quando si fa
+  la Priorità 0, controllare se questi rientrano automaticamente nel nuovo sistema di
+  variabili o vanno sistemati a mano uno per uno.
 
 **5. Funzioni nuove**
-- Ricerca/filtro per **numero DDT** e avviso se si inserisce lo stesso DDT due volte.
+- ~~Ricerca/filtro per **numero DDT**~~ — FATTO in v74 (lente generale). Resta: avviso se si inserisce lo stesso DDT due volte.
 - Dal vecchio backlog: Export PDF diretto (senza popup) · click su risultato ricerca
-  archivio → apre la settimana archiviata · statistiche multi-settimana con grafico ·
+  archivio → apre la settimana archiviata (FATTO in v74 nel nuovo pannello Storico) · statistiche multi-settimana con grafico ·
   Service Worker per uso offline · PIN/password lato client (hash in localStorage).
 
 **5b. `desktopToggleConfermato()` è codice morto** — trovato in v56: non è collegato
@@ -73,6 +104,23 @@ modifica meno costosa (token) e meno rischiosa, ma va testato bene su GitHub Pag
 Android. Farlo solo a fine lavori.
 
 ## ✅ Da verificare subito (appena aperta la nuova chat)
+
+- **v74 — cose che NON ho potuto provare da qui** (le ho provate in un browser vero con dati finti, ma non queste):
+  1. **Excel vero**: nella sandbox ExcelJS è sostituito da un finto che registra cosa verrebbe scritto. Fil deve esportare
+     (a) una settimana senza filtri, (b) con filtro Cliente → scegliere "Settimana corrente", (c) con filtro → "Tutto lo storico",
+     e controllare nome file (`Planning_Viaggi_Cliente_<valore>[_Storico].xlsx`), titolo e conteggi. Se qualcosa esce storto: `_srchFileName`, `_buildAndDownloadExcel(…, opts)`.
+  2. **Google Drive vero** (login, salvataggio, merge tra due dispositivi): non toccato dalla v74 se non per le date locali; testato solo `_mergeState` in locale.
+  3. **Aspetto su telefono/PC reali di Fil**: provato a 390px (Rapida) e 1280/1440px (PC) in Chromium, non su Android/Chrome reale. Controllare il foglio dal basso del filtro e la lente.
+  4. **Ctrl+F5 / ricaricare l'ultimo `index.html`** dopo il caricamento su GitHub Pages (la cache serve la versione vecchia).
+
+- **Tutto da v57 a v59 non è mai stato visto a schermo da me** — solo sintassi
+  controllata (`node --check`) e riletture di codice. Fil deve aprire davvero l'app e
+  controllare: popover duplica (colori trasportatore/fornitore/cliente nella riga di
+  riepilogo), pannello Rubrica (apertura/chiusura, click su un fornitore/cliente/
+  trasportatore, conteggi corretti), badge Fornitore/Cliente nella tabella (pallino +
+  testo colorato, non più blocco pieno).
+- **`app_viaggi_v58_backup.html`** è il punto di ripristino se qualcosa nella Priorità 0
+  (grigetto) va storto — è la versione subito prima di iniziare quel lavoro.
 
 - **Export Excel reale**: MAI verificato a schermo in nessuna sessione (v46→v56) — non
   posso eseguire ExcelJS nella sandbox (rete disabilitata). Verificato solo sintassi e
@@ -96,7 +144,7 @@ Android. Farlo solo a fine lavori.
 - **App**: App Viaggi — planning logistica settimanale per Pro Trasporti Srl
 - **Stack**: HTML/CSS/JS vanilla, single-file, GitHub Pages
 - **URL**: `firstlex55.github.io/TAB-VIAGGI-`
-- **File lavoro**: caricare `app_viaggi_v56.html` all'inizio della sessione
+- **File lavoro**: caricare `app_viaggi_v61.html` all'inizio della sessione
 - **Output**: sempre `app_viaggi_vN.html` con numero crescente
 
 ---
@@ -245,6 +293,204 @@ Confermato:    testo #085040  simbolo "✓ ok"
 ```
 
 ---
+
+## Novità v74 — Ricerca, filtro per tipo, storico a schede, Excel filtrato (non reimplementare)
+**Barra PC** (`#srchGroup`, dentro `renderDesktopView`):
+- **Lente generale** `#srchLens` a sinistra, piccola; al clic (o `/`, o Ctrl+F) si allarga a 390px. Cerca in trasportatore, partenza, arrivo, prodotto, "ddt N", note, date (più formati) e giorno. Più parole = AND, senza maiuscole/accenti (`_srchNorm`). Interruttore **Settimana / Storico** (`_srchScope`, ricordato in `localStorage.srchScope`).
+- **Filtro unico per tipo** `#srchTyped`: tasto `#srchKindBtn` (menu `#srchTypeMenu`) con **Tutti** (grigio chiaro `#c3c9d6`, 4 quadratini) · **Cliente** (verde `#5fd9ab`, persona = colonna **Arrivo**) · **Fornitore** (azzurro `#7eb8ff`, fabbrica = colonna **Partenza**) · **Trasportatore** (arancione `#ff8c5a`, camion). "Tutti" cerca sui tre insieme. Suggerimenti (datalist) per tipo. Tipo ricordato in `localStorage.srchKind`.
+- **Chip filtri attivi** `#srchChips` ("Cliente: X ✕", "Ricerca: Y ✕"): i filtri sono combinabili tra loro e col filtro giorno.
+- Stato in cima al file (accanto a `_desktopQuickQuery`): `SRCH_KINDS`, `_srchKind`, `_srchScope`, `_srchTypedQ`, `_srchLensQ`… Il filtro tipizzato è **condiviso PC/Rapida**; la lente PC usa `_srchLensQ`, la barra Rapida `searchQuery`.
+- `desktopQuickFilter()` riscritta: lavora sui DATI (`wt[idx]`), non sul testo delle celle; `renderDesktopView` chiama `_srchCaptureFocus()` all'inizio e `srchAfterRender()` alla fine → testo, filtri e focus **sopravvivono ai ridisegni** (sync Drive, modifica campi).
+**Storico a schede** (`#srchPanel`, variante D approvata): numeri in alto (viaggi / settimane / trasportatori / tratte diverse), giorno grande colorato, fornitore azzurro → cliente verde, testo trovato evidenziato (`_srchHl`), max 400 schede, raggruppate per lunedì (più recenti prima). Clic su scheda della settimana corrente → `srchGoToResult` (azzera i filtri e fa lampeggiare la riga); su scheda archiviata → `srchOpenWeek` → `archiveRestore` (con la sua conferma; se Fil annulla il pannello resta aperto).
+**Export Excel filtrato**: `downloadExcel(opts)` — con filtri attivi apre `#srchExpModal` (scelta *settimana corrente* o *tutto lo storico*, conteggi, anteprima nome file); `downloadExcel({all:true})` salta il dialog. Nome file `_srchFileName`: `Planning_Viaggi[_Tipo][_valore][_Ricerca_testo][_Storico].xlsx` (senza filtri resta il nome di sempre dal titolo settimana). Il filtro compare anche nel sottotitolo del foglio. `_getVisibleTrips()` applica anche tipo+lente. Il foglio si chiama sempre **"Planning"**; nel titolo solo "PLANNING VIAGGI".
+**Rapida**: riga `#srchRowM` nei Filtri Rapidi con lo stesso menu (foglio dal basso `_openMobSheet` se `innerWidth<=640`, popover sul PC); `filterApply` usa `_srchTypedMatch`/`_srchGenMatch`. La barra "Cerca…" ora cerca anche prodotto, DDT, note, date.
+**DDT finalmente visibile** (esisteva solo nel modale!): campo sotto il prodotto nella tabella PC (intestazione "Prodotto · DDT", `desktopSetField(idx,'ddt',…)`), riga "DDT n" sulle schede Rapida e nel riepilogo duplicazione (`_tripSummaryHtml`).
+**Difetti PREESISTENTI trovati e corretti controllando tutto il codice**:
+- DDT invisibile in tabella PC e schede Rapida (vedi sopra).
+- Pulsante **Oggi** in PC con 0 viaggi (già così in v73; ora `_srchDayOk` gestisce la data ISO della modalità Oggi).
+- **"Salva Excel e nuova settimana" con un filtro attivo** esportava solo i filtrati e poi svuotava tutta la settimana → ora usa `downloadExcel({all:true})` (esporta tutto).
+- Excel da PC **ignorava la ricerca testuale** (ora la applica).
+- `handleSearch` svuotava il campo di ricerca PC.
+- Date "oggi" calcolate in **UTC** (`toISOString().split('T')[0]`) → fuori di un giorno dopo mezzanotte/prima delle 2: sostituite in 9 punti con `_isoDate(d)` (ora locale).
+- `selectImportMode` era chiamata da `createNewWeek('import')` ma **non esisteva** → aggiunta.
+- Import Excel non svuotava il campo del filtro tipizzato (riferimento a un id vecchio `filterClienteQ`).
+- La vecchia ricerca archivio della Rapida (tasto 🗂) non guardava il DDT → aggiunto.
+**Resta**: la 🗂 *Ricerca avanzata archivio* della Rapida (`toggleArchiveSearch`, `runArchiveSearch`) è un doppione della nuova lente Storico: da decidere con Fil se toglierla.
+**Come è stato provato** (cartella `test_v74/`): `harness.js` apre l'app in Chromium (Playwright, `/opt/pw-browsers/chromium`) con dati finti e ExcelJS finto; `s2` filtro/lente (31 controlli), `s3` storico/export (40), `s4` Rapida (14), `s5/s6` Oggi e fuso orario (`s6` confronta due file: `APP_A=v73.html APP_B=v74.html node s6.js`; simula le 00:30 a Roma: in v73 "Oggi" mostrava 0 viaggi, in v74 sono giusti), `s8` regressione funzioni esistenti (40), `s9` interazioni sync/ricerca/form (8); `lint.js` (ESLint no-undef ecc.), `handlers.js` (ogni `onclick=` punta a una funzione esistente, id doppi). `patch.py` + `srch.js` + `srch.css` = come la v74 è stata ricavata dalla v73. Uso: `APP=/percorso/index.html node s8.js`.
+**Lezioni di metodo** (per non ripetere gli errori di questa sessione):
+- Il codice "letto a occhio" non basta: i difetti sopra (DDT invisibile, Oggi a 0, nuova settimana con filtro) c'erano da più versioni e nessuno li aveva mai provati. **Ogni funzione nuova va provata in un browser vero** (Playwright) e il risultato va letto, non solo `node --check`.
+- Test: calcolare le attese dai dati dell'app (`page.evaluate(() => trips)`), non dai dati del seed (l'app riordina `trips`).
+- Dire sempre onestamente **cosa non è stato provato** (Excel reale, Drive reale, dispositivo reale).
+- Mockup uno alla volta e grandi; mai emoji come icone nelle cose nuove (SVG a contorno); ogni cancellazione con conferma o Annulla.
+
+## Novità v73 (non reimplementare)
+- Vista PC: riga "da confermare" (`daConfermare`) con **barra gialla** `#f0b030` larga 8px a sinistra (le altre righe 4px) e sfondo caldo `#3a3527` (`#3d3828` se oggi). Approvata da Fil.
+- Restano non fatte: OGGI in evidenza nella fascia giorno, azioni riga solo in hover.
+
+## Novità v72 (non reimplementare)
+- Intestazione tabella PC scura "B" (grigio-blu #2d3447, scritte #d6dcea, linea #46506b, colonna ordinata arancione chiaro #ff8c5a).
+- Colori trasportatori vista PC (`.desktop-view-active --t-*`) con saturazione ridotta del 10% (S×0.9, in HSL). Stile blocco pieno invariato.
+- (La barra gialla è stata fatta in v73.)
+
+## Novità v70 — Excel layout "B" (non reimplementare)
+- `_buildAndDownloadExcel` riscritto: righe alte (31pt), titolo "PLANNING VIAGGI" con riquadri numeri, filo arancione, etichette trasportatori con conteggio, intestazione, **fascia tenue per giorno** (tinta `_DAY_CHIP` + barra colore `_DAY_STRIPE` in colonna A, con n. viaggi e da confermare), codici fornitore/cliente in celle colorate con bordo bianco thick (effetto pillola). Colonne: A barra | Giorno | Trasportatore | Fornitore(cod) | Partenza | Cliente(cod) | Arrivo | Prodotto | DDT | Stato | Note (compatibile con `importaExcel`: le fasce giorno sono righe senza trasportatore → saltate).
+- **Stampa**: A4 orizzontale, larghezza 1 pagina, intestazione ripetuta (`printTitlesRow`), piè di pagina "Pagina X di Y · Generato il …" (try/catch: se ExcelJS non li supporta l'export funziona comunque).
+- Nome azienda tolto dall'Excel (v71): solo "Planning Viaggi". Verifica: ExcelJS non installabile in sandbox (npm bloccato) → testato con shim che registra le chiamate + openpyxl + LibreOffice (anteprima_excel_v70.png). NON provato con ExcelJS vero né in Excel: da controllare da Fil.
+- Idee non ancora fatte: riga gialla per "da confermare", foglio per trasportatore, foglio Riepilogo, colonna Note condizionale.
+
+## Novità v69 — BUG CSS STORICO RISOLTO (non reimplementare)
+- Nel primo `<style>` mancava la `}` di chiusura di `@media (max-width: 640px)` (dopo la regola `.desktop-view-active .mobile-bottom-nav`), quindi TUTTO il CSS seguente (barra viste PC `.pc-view-switcher`, bottom nav, modali, ecc.) valeva solo su telefono: su PC i pulsanti "Vista/Aggiungi/Multi/Archivio" comparivano grezzi (bianchi, senza stile). Chiusa la graffa e riaperto `@media (max-width: 640px)` prima di "Da Confermare modal - mobile full screen" (il cui `}` finale era l'unica chiusura). Bilancio graffe = 0 in tutti e 3 gli `<style>`. Verifica: contare `{`/`}` fuori dai commenti.
+- Filtro Cliente (Rapida) ora rispettato anche da Rapida/Trasp./export Excel (`hasFilters` include `clienteQ`).
+- Possibile effetto collaterale (da guardare a schermo): altri stili ora attivi anche su PC (modali, bottom-sheet).
+
+## Novità v69 (non reimplementare)
+- Barra comandi PC ridisegnata in 3 righe con CSS dedicato `#pcBarStyle` (classi `.pcb*`) e icone linea `_PCI`: R1 = Rubrica | [Settimana|Oggi] | 📱 … Multi-tratta, ＋Nuova riga | gruppo [Salva|Carica|Excel] | ⋯; R2 = totale viaggi, pillola "N da confermare" (apre il modale) o "Tutto confermato", chip trasportatori tinte+pallino; R3 = filtri giorno + ricerca + Cliente + Crono + ⌨.
+- Toggle settimana ora con classe `.on` (non più stili inline); "Corrente"→"Settimana". `_setSyncBtnState`/`updateDriveBtns` aggiornano il bottone Salva con `_PCI.save`.
+- Nota: Fil guardava una versione VECCHIA (con Prossima/Sett. prossima): ricordare di caricare l'ultimo file su GitHub Pages.
+
+## Novità v68 (non reimplementare)
+- Rapida: swipe a destra NON elimina più subito → foglio di conferma (`_askDeleteTrip`: riepilogo viaggio, Annulla/Elimina); dopo l'eliminazione toast "ANNULLA" per 7s (`_showUndoToast`, ripristina il viaggio). Vale anche per la vista Prossima (codice residuo).
+- Rapida: pulsante ⧉ su ogni card → foglio "Duplica su questi giorni" (`mobileDup`, chip Lun–Ven, il giorno del viaggio preselezionato; copia identica con trasportatore). Helper `_openMobSheet/_closeMobSheet/_tripSummaryHtml`.
+- Sync: `_stampTrips` assegna nuovo id a copie con id duplicato e a viaggi cancellati poi rimessi (annulla/ripristina/copia settimana), così le lapidi non li ricancellano.
+- Test con touch simulati (CDP): duplica, swipe→conferma, annulla, elimina, ANNULLA toast → OK.
+
+## Novità v67 — SALVATAGGIO/SYNC UNICO (non reimplementare)
+- Ogni viaggio ha `id` + `ts`; cancellazioni = lapidi `_tombs` (localStorage `tripTombs`); `tripSigMap` = ultimo stato noto. `_stampTrips()` (in `saveToLocalStorage(skipSort)`) assegna id/ts e crea lapidi confrontando con la firma precedente → nessun punto di modifica deve ricordarsi di nulla.
+- `_mergeState` unisce per id (vince ts maggiore, lapide >= ts elimina). Viaggi vecchi senza id: id deterministico da `_tripMergeKey` (`_ensureIds`).
+- Drive: `_runSync(forceWrite)` → `_driveSyncCore` legge Drive, unisce, applica a UI (rinviato se si sta scrivendo in un campo), scrive se serve. Una sync alla volta (`_syncRunning/_syncPending`), debounce 1.5s in `autoSaveDrive`, retry 15s se errore, 401 → `silentDriveInit(true)`. `driveSave`, `driveSmartSync`, `driveSync`, `driveLoadData` sono ora wrapper; "Carica" UNISCE (non sovrascrive). Payload Drive: trips (con id/ts), tombs, weekTitle, weekArchive, savedAt, v:2.
+- Guardiano: ogni 1.5s se i viaggi sono cambiati rispetto all'ultimo salvataggio → `saveToLocalStorage(true)` (senza riordinare, per non spostare gli indici della tabella PC). Pull ogni 45s, al ritorno sull'app (visibilitychange), su `online`; flush su pagina nascosta.
+- `desktopSetField` e `debouncedDriveSave` ora passano dal sistema unico. Test con Drive simulato (2 dispositivi): aggiunte concorrenti, modifica, cancellazione senza risurrezione, reload → OK. Mai provato con Drive reale!
+- Rapida: "Nuova settimana" spostato dentro il pannello Filtri.
+- Non sincronizzati: tripsNext (vista Prossima rimossa), cartelle/altro.
+
+## Novità v66 (non reimplementare)
+- Rubrica PC: pulsante spostato a SINISTRA della barra; pannello `#pcRubricaPanel` ora si apre a sinistra (left:0, bordo destro); giorni in oro (#ffd98a, 16px, barretta) e testi secondari più chiari.
+- Rapida (mobile): "Filtri rapidi" chiuso di default (restano visibili ricerca + nuovo campo **Cliente** `#filterClienteQ`, `filterState.clienteQ`, match parziale su arrivo, datalist `#clienteList`); header: stato Drive con ellissi su schermi stretti (@media 600px).
+- (Falsi allarmi nei test: "0 viaggi" e logo rotto erano artefatti dell'ambiente di prova.)
+- v65: vista "Prossima" non più raggiungibile.
+
+## Novità v64 (non reimplementare)
+- Barra PC ridisegnata: riga 1 = [Corrente|Oggi] [←📱] [＋Nuova riga] [Multi-Tratta] … [Salva][Carica][Excel][Rubrica][⋯]. Menu `⋯` (`pcToggleMoreMenu`): Stampa, Totali, Archivio, Database, Nuova settimana. Tolti: "Prossima" (toggle e barra viste PC), "Sett. prossima", contatore doppio. Su mobile la tab "Prossima" resta.
+- Riga filtri: giorni + ricerca testo + **filtro Cliente** (`#desktopClientSearch`, datalist arrivi `dto`, filtra sul campo arrivo; combinato con la ricerca; ✕ per azzerare) + Crono + ⌨. Logica in `desktopQuickFilter`.
+- Il filtro si azzera quando la tabella si ridisegna (come la ricerca).
+- v65: vista "Prossima" non più raggiungibile da nessun pulsante (mobile e PC); se salvata come vista preferita riparte da Rapida. Codice e dati tripsNext lasciati intatti.
+- (v63) pinch-zoom bloccato in tutta l'app.
+
+## Novità v62 (non reimplementare)
+- v63: pinch-zoom disattivato in TUTTA l'app (meta viewport user-scalable=no + touch-action pan + preventDefault su touchmove multi-touch e gesture*).
+
+## Novità v61 (non reimplementare)
+
+**Rubrica, secondo giro dopo la foto di Fil ("non è fatto bene").** Dalla foto si vedeva che la v60,
+pur corretta nella logica, era scomoda da usare davvero:
+- **scorrendo si perdeva il contesto**: nome del fornitore, conteggio e "Seleziona tutti" uscivano
+  dallo schermo → ora l'intestazione della scheda (`top:0`, altezza fissa 56px) e la riga "Seleziona
+  tutti" (`top:56px`) sono `position:sticky`, con sfondo OPACO (`#161b28` + tinta in `linear-gradient`).
+  ⚠️ la scheda NON deve avere `overflow:hidden`: spezzerebbe lo sticky (per questo l'angolo in alto
+  è arrotondato sull'intestazione, non sulla scheda);
+- **metà di ogni riga era vuota** e si vedevano ~5 viaggi per schermata → Fornitori/Clienti ora
+  hanno **una riga sola a colonne** (46px): destinazione+codice | trasportatore (96px) | prodotto
+  (66px) | icona "da confermare" (18px, riga con tinta ambra). Trasportatori resta a due righe
+  (manca la colonna trasportatore: è l'entità aperta). Pannello 520 → **560px**;
+- spunte più piccole/discrete (18px, bordo tenue), si accendono al passaggio e da selezionate
+  (`.pcr-row`/`.pcr-cb`, stile iniettato una volta da `_pcRubricaEnsureStyle`); riga selezionata con
+  `box-shadow:inset` (non `border`, per non spostare il layout).
+
+**Bug mio della v53 trovato dalla stessa foto: "Riconnessione a Drive…" fermo per sempre.**
+`silentDriveInit` non aveva né `error_callback` né timeout. Con GIS gli errori "di sistema" (popup
+bloccato dal browser perché non c'è un gesto dell'utente — il caso normale a caricamento pagina)
+arrivano a `error_callback`, NON a `callback`: senza, la scritta gialla restava lì e Drive non si
+collegava. Ora: `error_callback` + timeout di sicurezza a 15s → messaggio onesto
+(`_driveSilentFail`), e se il popup è stato bloccato **riprova UNA volta al primo tocco/clic**
+(`pointerdown` una tantum, quando il popup è consentito) — mai cicli. Se riprova e fallisce:
+"premi Salva". **Da verificare nel browser vero**: non so se Brave+Google dopo il primo tocco
+riconnettano davvero senza interazione (testata solo la logica con un Google finto).
+
+**Verifica**: 50 controlli sul dettaglio Rubrica + 17 sulla riconnessione (popup bloccato / chiuso /
+negato / nessuna risposta / token tardivo / niente cicli) — **l'aspetto a schermo NON è stato visto**.
+
+## Novità v60 (non reimplementare)
+
+**Rubrica: dettaglio ridisegnato + cancellazione multipla con "Annulla".** Fil, guardando il
+dettaglio di Bientina (foto): "molto sterile, si capisce poco". Problemi reali: le righe dicevano
+solo data + destinazione (niente trasportatore né prodotto → due viaggi di venerdì identici),
+scatole grigie tutte dello stesso peso, nessuna azione possibile. Ora, cliccando un
+fornitore/cliente/trasportatore:
+- **una scheda sola**, nel colore dell'entità (`color-mix` per le tinte, funziona anche con
+  `var(--t-...)`), con intestazione "N viaggi";
+- **riepilogo** "DOVE VANNO" (fornitori e trasportatori → luoghi di arrivo) o "DA DOVE ARRIVANO"
+  (clienti), con ×conteggio per luogo — è il dato "dove vanno / quante volte" che Fil voleva estrarre;
+- viaggi **raggruppati per giorno**, ogni riga su due righe: destinazione + codice, sotto
+  trasportatore · prodotto; tag "Da conf." se da confermare;
+- **checkbox per riga + "Seleziona tutti"**; con una selezione compare in basso la barra
+  "N selezionati · Annulla · Elimina N viaggi".
+**Scelta di Fil sull'eliminazione**: cancella SUBITO (niente conferma), con toast **"Annulla"
+visibile 8 secondi** (barra che si consuma). Solo l'ULTIMA eliminazione è annullabile (una
+nuova sostituisce il buffer). Annulla rimette i viaggi nell'array giusto (corrente/prossima) anche
+se nel frattempo si è cambiata settimana, e il salvataggio li rimette in ordine di data.
+Funzioni nuove: `pcRubricaToggleRow`, `pcRubricaToggleAll`, `pcRubricaClearSelection`,
+`pcRubricaDeleteSelected`, `pcRubricaUndoDelete`, `_pcRubricaPersist`, `_pcRubricaShowUndo/HideUndo`,
+`_pcRubricaEntityTrips`, `_pcRubricaCheckbox`, `_pcEsc`. Stato: `_pcRubricaChecked`
+(indice-nell'array → true), `_pcRubricaUndo`.
+**Cose da sapere**:
+- La selezione usa **indici dell'array** (il progetto non ha ancora id per viaggio — Roadmap 2):
+  per sicurezza `pcRubricaDeleteSelected` ricontrolla che ogni indice esista ANCORA e che il viaggio
+  appartenga davvero all'entità aperta, altrimenti lo salta. Quando arriverà l'id per viaggio, passare
+  la selezione agli id.
+- `saveToLocalStorage()` e `saveNextToLocalStorage()` **ordinano l'array per data a ogni salvataggio**:
+  gli indici cambiano dopo ogni save, quindi non conservare indici tra un salvataggio e l'altro.
+- Il payload Drive contiene solo `trips` (non `tripsNext`): le eliminazioni in "settimana prossima"
+  non si sincronizzano su Drive (comportamento già esistente, non toccato).
+- Chiusura al click fuori dal pannello (overlay) → mentre è aperto non si può modificare la
+  tabella: il vecchio limite "i conteggi non si aggiornano" della v58 è di fatto superato.
+- Pannello allargato 460 → 520px (max 94vw).
+**Verifica**: logica provata con un test Node (41 controlli: selezione, cancellazione, annulla,
+selezione "sporca", settimana prossima + cambio vista, entità che si svuota, escaping HTML) —
+**l'aspetto a schermo NON è stato visto**: da controllare nel browser.
+
+## Novità v57–v59 (non reimplementare)
+
+**v57 — Popover duplica: riepilogo colorato + box più grande.** Nel popover "Duplica su
+questi giorni" (v56), la riga di riepilogo (trasportatore · partenza → arrivo) ora è
+colorata coi colori veri: trasportatore con `getTransporterKey()`/`var(--t-...)`,
+partenza/arrivo con `_locationCodeColorPC(...).bd` estratto dal codice tra parentesi.
+Popover allargato 260→300px.
+
+**v58 — Pannello "Rubrica" Fornitori/Clienti/Trasportatori (PC).** Nuova funzione vera,
+non più mockup: pulsante "Rubrica" in barra azioni PC apre un pannello fisso a destra
+(`#pcRubricaPanel`, `position:fixed`, chiude su click-fuori tramite `#pcRubricaOverlay`).
+3 schede (Fornitori/Clienti/Trasportatori), lista con conteggio viaggi della settimana
+corrente/prossima (`_pcRubricaGroups`, raggruppa per `partenza`/`arrivo`/`trasportatore`
+esatti — NON solo per codice, per il luogo+codice intero), colori identità veri
+(`_pcRubricaColor`, riusa `_locationCodeColorPC`/`getTransporterKey`). Click su una voce
+apre il dettaglio viaggi sotto, nello stesso pannello (non un secondo popup — scelta
+esplicita di Fil dopo aver confrontato le alternative). Funzioni: `pcToggleRubrica()`,
+`pcRubricaSetTab()`, `pcRubricaSelectEntity()`, `_pcRubricaRender()`,
+`_pcRubricaDetailHtml()`. **Limite noto**: se il pannello resta aperto e nel frattempo
+si modifica un viaggio altrove, i conteggi non si aggiornano da soli finché non si
+cambia scheda o si riapre — segnalato a Fil, non ancora sistemato.
+
+**v59 — Fornitore/Cliente: tolto il blocco di colore pieno.** Causa del "raffazzonamento"
+segnalato da Fil (screenshot con 18 blocchi di colore diversi in 6 righe): i badge
+Fornitore/Cliente nella tabella PC usavano `background:' + _locationCodeColorPC(code).bd`
+con testo bianco sopra — pieno e saturo, uno diverso per riga, senza gerarchia. Ora: solo
+un pallino 8px + testo in tinta (stessa idea già usata per il Trasportatore dal v54,
+finalmente coerente su tutta la riga). Anche le icone della Rubrica (v58) sono passate da
+emoji a SVG inline a contorno — le emoji come icone d'interfaccia sono "AI slop" per
+qualunque standard di design professionale, non solo per i mockup. **Non esteso al resto
+dell'app**: ci sono ancora ~40+ emoji usate come icone altrove (bottoni azione, stati,
+ecc.) — toccarle tutte è un lavoro a parte, non fatto in v59, probabilmente da abbinare
+alla Priorità 0 quando si mette mano ai colori comunque.
+
+**Nota di metodo — il bug che non c'era**: a metà sessione Fil ha segnalato "sono
+cambiati tutti i colori" dopo l'aggiunta della Rubrica (v58). Confronto riga per riga
+v57↔v58: zero righe toccate fuori dalla Rubrica stessa. Non era un bug — era la sensazione
+di incoerenza data dal fatto che i colori sono scritti a mano ovunque invece che in un
+sistema unico (motivo per cui la Priorità 0 qui sopra viene prima di tutto). **Lezione**:
+quando Fil segnala "è cambiato tutto" dopo una modifica piccola e mirata, il diff riga per
+riga va comunque fatto per essere sicuri — ma vale anche la pena capire se il problema
+reale è più a monte (mancanza di un sistema) invece di cercare una riga di codice che
+in realtà non esiste.
 
 ## Novità v53–v56 (non reimplementare)
 
@@ -1015,6 +1261,12 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 - `mtAddRow()` / `mtRemoveRow(id)` / `_mtGetRows()`
 - Checkbox da confermare: per-riga `mt-conf-{id}` (NON globale)
 
+### Ricerca (v74 — modulo `srch.js`, inserito prima di `// v69: icone linea…`)
+- Corrispondenza: `_srchNorm`, `_srchTypedMatch(t,kind,q)`, `_srchGenMatch(t,q)`, `_srchCriteria()`, `_srchTripPass(t,c)`, `_srchDayOk(t)`
+- UI: `srchToggleTypeMenu`, `srchSetKind`, `srchTypedInput`, `srchClearTyped`, `srchLensOpen/Input/Clear/Key`, `srchSetScope`, `_srchChipsHtml`, `srchAfterRender`, `_srchCaptureFocus`, `_srchSyncMobileUI`
+- Storico: `_srchCollect(c)`, `_srchRenderPanel`, `_srchCardHtml`, `srchGoToResult`, `srchOpenWeek`
+- Export: `srchOpenExportDialog`, `srchDoExport`, `_srchFileName`
+
 ### Vista PC
 - `pcSetWeek(mode)` — corrente / prossima / oggi
 - `desktopSetField(idx, field, val)`, `desktopDel(idx)`
@@ -1027,6 +1279,9 @@ In vista PC: `body` ha classe `desktop-view-active` che nasconde barra giorni e 
 - `desktopToggleConfermato(idx)` — ⚠️ CODICE MORTO, non collegata a nulla (vedi Roadmap 5b)
 - `desktopAddEmpty()`, `desktopGetNextWeekday(dayName)` (fix v24)
 - `desktopConfirmAdd()`, `desktopCloseAddModal()`
+- **Rubrica (v58)**: `pcToggleRubrica()`, `pcRubricaSetTab(tab)`, `pcRubricaSelectEntity(key)`,
+  `_pcRubricaRender()`, `_pcRubricaGroups(tab)`, `_pcRubricaColor(tab, key)`,
+  `_pcRubricaDetailHtml(tab, key, col)`, `_pcRubricaCode(locText)`, `_pcRubricaWeekTrips()`
 
 ### Ricerca archivio
 - `toggleArchiveSearch()`, `runArchiveSearch()`
