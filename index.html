@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>App Viaggi v2</title>
     <link rel="icon" type="image/png" href="logo.png">
@@ -708,12 +708,19 @@
             max-height: 400px;
         }
         .filter-panel.collapsed {
-            max-height: 44px;
-            padding-bottom: 0;
+            max-height: 150px;
+            padding-bottom: 6px;
         }
-        .filter-panel.collapsed > *:not(.filter-panel-header) {
+        .filter-panel.collapsed > *:not(.filter-panel-header):not(.filter-search-row) {
             opacity: 0;
             pointer-events: none;
+        }
+        .filter-panel.collapsed > #archSearchBtn, .filter-panel.collapsed #archSearchBtn { display:none; }
+        /* v66: header più compatto + stato Drive che non copre il titolo */
+        @media (max-width: 600px) {
+            .top-bar-titles { min-width: 0; }
+            #driveStatus { max-width: 38vw; overflow: hidden; }
+            #driveStatusText { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         }
         .filter-panel-header {
             cursor: pointer;
@@ -2229,6 +2236,7 @@
 
             /* Bottom nav */
             .desktop-view-active .mobile-bottom-nav { display: none !important; }
+        } /* v69: chiusura mancante del @media (max-width:640px) — senza di essa tutto il CSS seguente valeva solo su telefono */
 
         /* Barra viste per PC */
         .pc-view-switcher {
@@ -2459,6 +2467,7 @@
             transform: rotate(45deg);
         }
 
+        @media (max-width: 640px) { /* v69: apertura mancante — il blocco seguente è solo per telefono */
             /* Da Confermare modal - mobile full screen */
             .da-confermare-modal.active {
                 padding: 0;
@@ -3626,6 +3635,59 @@
             }
         }
     </style>
+    <style id="noPinchRapida">
+        html, body { touch-action: pan-x pan-y; }
+        /* v62: nella vista Rapida il pinch-zoom con due dita è disattivato (resta lo scroll) */
+        #compactView, #compactView * { touch-action: pan-x pan-y; }
+    </style>
+    <style id="pcBarStyle">
+        /* v69 — barra comandi vista PC: un solo linguaggio visivo */
+        .pcb-row1 { display:flex; align-items:center; gap:10px; padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.07); flex-wrap:wrap; }
+        .pcb-row2 { display:flex; align-items:center; gap:16px; padding:13px 20px; border-bottom:1px solid rgba(255,255,255,0.07); flex-wrap:wrap; background:rgba(255,255,255,0.015); }
+        .pcb-row3 { display:flex; align-items:center; gap:9px; padding:11px 20px; flex-wrap:wrap; }
+        .pcb { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:10px; font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .15s,border-color .15s,box-shadow .15s,transform .05s; border:1px solid transparent; flex-shrink:0; }
+        .pcb:active { transform:translateY(1px); }
+        .pcb svg { width:17px; height:17px; flex-shrink:0; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+        .pcb-primary { background:var(--accent); color:#fff; padding:0 20px; font-weight:800; box-shadow:0 4px 14px rgba(232,98,63,0.35); }
+        .pcb-primary:hover { background:#f0734f; box-shadow:0 6px 18px rgba(232,98,63,0.45); }
+        .pcb-accent { background:rgba(232,98,63,0.12); border-color:rgba(232,98,63,0.55); color:#ffb08a; }
+        .pcb-accent:hover { background:rgba(232,98,63,0.22); }
+        .pcb-ghost { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.14); color:var(--text); }
+        .pcb-ghost:hover { background:rgba(255,255,255,0.10); border-color:rgba(255,255,255,0.24); }
+        .pcb-icon { padding:0; width:40px; justify-content:center; }
+        .pcb-div { width:1px; height:26px; background:rgba(255,255,255,0.12); flex-shrink:0; }
+        .pcb-group { display:flex; border:1px solid rgba(255,255,255,0.14); border-radius:10px; overflow:hidden; background:rgba(255,255,255,0.05); flex-shrink:0; }
+        .pcb-g { border-radius:0; border:none; background:transparent; color:var(--text); height:38px; padding:0 15px; }
+        .pcb-g + .pcb-g { border-left:1px solid rgba(255,255,255,0.10); }
+        .pcb-g:hover { background:rgba(255,255,255,0.11); }
+        #desktopSyncBtn svg { color:#3ecb96; } #desktopLoadBtn svg { color:#4fc3f7; } .pcb-g:nth-child(3) svg { color:#7fd99a; }
+        .pcb-seg { display:flex; padding:3px; gap:2px; border-radius:11px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); flex-shrink:0; }
+        .pcb-seg-btn { height:32px; padding:0 18px; border:none; border-radius:8px; background:transparent; color:var(--text-dim); font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:700; cursor:pointer; }
+        .pcb-seg-btn:hover { color:var(--text); }
+        .pcb-seg-btn.on { background:var(--accent); color:#fff; box-shadow:0 2px 8px rgba(232,98,63,0.35); }
+        .pcb-warn { display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 14px; border-radius:16px; background:rgba(240,168,80,0.14); border:1px solid rgba(240,168,80,0.5); color:#f6bd72; font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; cursor:pointer; flex-shrink:0; }
+        .pcb-warn:hover { background:rgba(240,168,80,0.24); }
+        .pcb-warn svg, .pcb-ok svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; }
+        .pcb-ok { display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 14px; border-radius:16px; background:rgba(62,203,150,0.10); border:1px solid rgba(62,203,150,0.35); color:#5fd9ab; font-size:13px; font-weight:700; flex-shrink:0; }
+        .pcb-chip { display:inline-flex; align-items:center; gap:8px; height:30px; padding:0 12px 0 10px; border-radius:8px; font-size:12.5px; font-weight:800; letter-spacing:0.3px; text-transform:uppercase; color:#eef1f7;
+            background:color-mix(in srgb, var(--c) 16%, transparent); border:1px solid color-mix(in srgb, var(--c) 55%, transparent); }
+        .pcb-chip i { width:9px; height:9px; border-radius:50%; background:var(--c); flex-shrink:0; }
+        .pcb-chip b { font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--c); }
+        .pcb-lbl { font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); margin-right:2px; }
+        .pcb-count { font-size:12.5px; font-weight:800; background:rgba(79,195,247,0.12); border:1px solid rgba(79,195,247,0.35); color:#7fd0f5; padding:5px 12px; border-radius:16px; }
+        .pcb-field { position:relative; display:flex; align-items:center; flex-shrink:0; }
+        .pcb-field input { height:38px; width:270px; padding:0 14px 0 38px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:var(--text); font-family:'Outfit',sans-serif; font-size:13.5px; outline:none; }
+        .pcb-field input::placeholder { color:rgba(255,255,255,0.45); }
+        .pcb-field input:focus { border-color:var(--accent); background:rgba(255,255,255,0.09); }
+        .pcb-field-ic { position:absolute; left:12px; display:flex; pointer-events:none; color:rgba(255,255,255,0.55); }
+        .pcb-field-ic svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .pcb-field-cli input { width:190px; padding-right:30px; border-color:rgba(62,203,150,0.4); background:rgba(62,203,150,0.07); }
+        .pcb-field-cli input:focus { border-color:#3ecb96; }
+        .pcb-field-cli .pcb-field-ic { color:#5fd9ab; }
+        .pcb-field-x { position:absolute; right:11px; cursor:pointer; color:var(--text-dim); font-size:12px; }
+        #desktopDayFilters button { height:34px; }
+        #desktopSortChronoBtn, #shortcutHintWrap > button { height:38px !important; padding:0 13px !important; border-radius:10px !important; font-size:13px !important; border:1px solid rgba(255,255,255,0.15) !important; background:rgba(255,255,255,0.05); color:var(--text) !important; }
+    </style>
 </head>
 <body>
     <div class="top-bar">
@@ -3664,7 +3726,6 @@
     <!-- Barra navigazione viste per PC -->
     <div class="pc-view-switcher" id="pcViewSwitcher">
         <span class="pcvs-label">Vista</span>
-        <button class="pcvs-btn" onclick="switchView('next',this)" data-pcview="next">📅 Prossima</button>
         <button class="pcvs-btn" onclick="switchView('medium',this)" data-pcview="medium">👤 Trasp.</button>
         <button class="pcvs-btn active" onclick="switchView('compact',this)" data-pcview="compact">⚡ Rapida</button>
         <button class="pcvs-btn" onclick="switchView('desktop',this)" data-pcview="desktop">🖥 PC</button>
@@ -3687,7 +3748,7 @@
         </div>
 
         <!-- Filtri + Ricerca -->
-        <div class="filter-panel" id="filterPanel">
+        <div class="filter-panel collapsed" id="filterPanel">
             <div class="filter-panel-header" onclick="toggleFilterPanel()">
                 <span class="filter-panel-icon">⚡</span>
                 <span class="filter-panel-title">Filtri Rapidi</span>
@@ -3706,6 +3767,14 @@
                     style="flex-shrink:0;padding:6px 10px;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:8px;color:#60a5fa;font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.15s;margin-left:4px;">
                     🗂
                 </button>
+            </div>
+
+            <div class="filter-search-row filter-client-row">
+                <span class="filter-search-icon">👥</span>
+                <input type="text" id="filterClienteQ" class="filter-search-input" placeholder="Cliente (arrivo)..." list="clienteList" autocomplete="off"
+                    oninput="filterState.clienteQ=this.value.trim().toLowerCase();filterApply()">
+                <button class="clear-search" style="display:block;" onclick="var i=document.getElementById('filterClienteQ');i.value='';filterState.clienteQ='';filterApply();">✕</button>
+                <datalist id="clienteList"></datalist>
             </div>
 
             <!-- PANNELLO RICERCA ARCHIVIO -->
@@ -3791,6 +3860,7 @@
             <select id="filterArrivo" onchange="filterApply()" class="filter-select">
                 <option value="">🎯 Tutti gli arrivi</option>
             </select>
+            <button onclick="showNewWeekModalV2()" class="toolbar-btn-week" title="Archivia settimana corrente e inizia da zero" style="margin-top:10px;width:100%;">📦 Nuova settimana (archivia)</button>
         </div>
 
         <!-- Separatore decorativo con contatore integrato -->
@@ -3807,7 +3877,6 @@
             <div class="trips-toolbar">
                 <span class="trip-count" id="tripCount" style="display:none;">0 viaggi</span>
                 <div class="trips-toolbar-actions">
-                    <button onclick="showNewWeekModalV2()" class="toolbar-btn-week" title="Archivia settimana">📦 Nuova sett.</button>
                     <button onclick="toggleAddForm()" id="addTripBtn" class="toolbar-btn-add" title="Aggiungi viaggio" style="display:none;">+</button>
                 </div>
             </div>
@@ -3822,7 +3891,7 @@
             </div>
             <div id="desktopView" style="display:none;">
                 <div id="desktopBody"></div>
-                <div id="pcRubricaPanel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:520px;max-width:94vw;background:#161b28;border-left:3px solid var(--accent);box-shadow:-32px 0 64px rgba(0,0,0,0.4);z-index:1500;flex-direction:column;overflow:hidden;"></div>
+                <div id="pcRubricaPanel" style="display:none;position:fixed;top:0;left:0;bottom:0;width:560px;max-width:94vw;background:#161b28;border-right:3px solid var(--accent);box-shadow:32px 0 64px rgba(0,0,0,0.4);z-index:1500;flex-direction:column;overflow:hidden;"></div>
                 <div id="pcRubricaOverlay" onclick="pcToggleRubrica()" style="display:none;position:fixed;inset:0;z-index:1499;"></div>
             </div>
             <div id="nextView" style="display:none;">
@@ -4447,7 +4516,7 @@
             // Ripristina vista preferita (default: compact)
             var _sv = localStorage.getItem('preferredView') || 'compact';
             // Se era salvata 'card' (vecchia vista), passa a 'compact'
-            var savedView = _sv === 'card_old_unused' ? 'compact' : _sv;
+            var savedView = (_sv === 'card_old_unused' || _sv === 'next') ? 'compact' : _sv; // v65: vista Prossima rimossa
             switchView(savedView);
             // Auto-riconnessione Drive silenziosa se già connesso in precedenza.
             // (tryAutoReconnectDrive NON basta qui: richiede un token già presente,
@@ -5066,6 +5135,15 @@
             if (!wasExpanded) card.classList.add('expanded');
         }
 
+        // v62: blocca il pinch-zoom solo quando la vista Rapida è attiva
+        (function(){
+            function inRapida(e){ return true; /* v62b: pinch bloccato in tutta l'app */ }
+            document.addEventListener('touchmove', function(e){ if (e.touches && e.touches.length>1 && inRapida(e)) e.preventDefault(); }, {passive:false});
+            ['gesturestart','gesturechange','gestureend'].forEach(function(n){
+                document.addEventListener(n, function(e){ if (inRapida(e)) e.preventDefault(); }, {passive:false});
+            });
+        })();
+
         function switchView(view, el) {
             currentView = view;
             localStorage.setItem('preferredView', view); // ricorda la scelta
@@ -5087,9 +5165,9 @@
             if (view !== 'desktop' && typeof _pcWeekMode !== 'undefined') {
                 _pcWeekMode = 'current';
                 var btnC = document.getElementById('pcToggleCurrent');
-                var btnN = document.getElementById('pcToggleNext');
-                if (btnC) { btnC.style.background='var(--accent)'; btnC.style.color='#000'; }
-                if (btnN) { btnN.style.background='transparent'; btnN.style.color='rgba(167,139,250,0.6)'; }
+                var btnO = document.getElementById('pcToggleOggi');
+                if (btnC) btnC.classList.add('on');
+                if (btnO) btnO.classList.remove('on');
             }
             
             // Nascondi tutto
@@ -5163,16 +5241,7 @@
             }
         }
 
-        function saveToLocalStorage() {
-            // Mantieni sempre trips in ordine cronologico
-            trips.sort((a,b) => {
-                const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
-                const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
-                return da - db;
-            });
-            localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
-            autoSaveDrive();
-        }
+
 
         function haptic(type = 'light') {
             if (navigator.vibrate) {
@@ -6308,7 +6377,7 @@
         function renderCompactView() {
             const container = document.getElementById('compactBody');
             if (!container) return;
-            const hasFilters = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
+            const hasFilters = searchQuery || filterState.clienteQ || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
             const displayTrips = hasFilters ? filteredTrips : trips;
 
             if (displayTrips.length === 0) {
@@ -6485,12 +6554,100 @@
                     html += '</div>';
 
                     html += '</div>'; // fine rotta
+                    html += '<button type="button" onclick="mobileDup(' + actualIndex + ', event)" title="Duplica su altri giorni" style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:#c3c9d9;font-size:17px;line-height:1;cursor:pointer;">⧉</button>';
                     html += '</div>'; // fine .swipe-row
                     html += '</div>'; // fine .swipe-row-wrap
                 });
             });
 
             container.innerHTML = html;
+        }
+
+
+        // ═══ v68: conferma eliminazione (swipe), annulla, duplica su più giorni (mobile) ═══
+        function _escH(x) { return String(x == null ? '' : x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function _tripSummaryHtml(t) {
+            if (!t) return '';
+            var tKey = getTransporterKey(t.trasportatore || '');
+            var fl = (t.partenza||'—').split(' (')[0], tl = (t.arrivo||'—').split(' (')[0];
+            return '<div style="font-size:12px;color:#9aa4b8;margin-bottom:4px;">' + _escH(formatDateDisplay(t.data)) + '</div>'
+                + '<div style="font-size:15px;line-height:1.5;"><span style="color:var(--t-' + tKey + ');font-weight:800;">' + _escH(t.trasportatore||'—') + '</span><br>'
+                + '<span style="font-weight:700;color:#eef1f7;">' + _escH(fl) + '</span> <span style="color:var(--accent);">→</span> <span style="font-weight:700;color:#7fd6ac;">' + _escH(tl) + '</span>'
+                + (t.prodotto ? '<br><span style="color:#c3c9d9;font-size:13px;">' + _escH(t.prodotto) + '</span>' : '') + '</div>';
+        }
+        function _closeMobSheet() { var o = document.getElementById('mobSheet'); if (o) o.remove(); }
+        function _openMobSheet(innerHtml) {
+            _closeMobSheet();
+            var o = document.createElement('div');
+            o.id = 'mobSheet';
+            o.style.cssText = 'position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;';
+            o.innerHTML = '<div id="mobSheetBox" style="width:100%;max-width:520px;background:#1a2030;border-top:3px solid var(--accent);border-radius:18px 18px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px rgba(0,0,0,0.5);font-family:Outfit,sans-serif;color:#eef1f7;">' + innerHtml + '</div>';
+            document.body.appendChild(o);
+            return o;
+        }
+        function _askDeleteTrip(trip, onYes, onNo) {
+            var o = _openMobSheet('<div style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#ef6b5e;margin-bottom:10px;">ELIMINARE QUESTO VIAGGIO?</div>'
+                + '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:13px 14px;margin-bottom:16px;">' + _tripSummaryHtml(trip) + '</div>'
+                + '<div style="display:flex;gap:10px;">'
+                + '<button id="mobDelNo" style="flex:1;padding:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;color:#eef1f7;font-family:Outfit,sans-serif;font-size:15px;font-weight:800;">Annulla</button>'
+                + '<button id="mobDelYes" style="flex:1;padding:15px;background:#dc2626;border:none;border-radius:12px;color:#fff;font-family:Outfit,sans-serif;font-size:15px;font-weight:800;">🗑 Elimina</button></div>');
+            var done = false;
+            function fin(yes) { if (done) return; done = true; _closeMobSheet(); (yes ? onYes : onNo)(); }
+            document.getElementById('mobDelNo').onclick = function() { fin(false); };
+            document.getElementById('mobDelYes').onclick = function() { fin(true); };
+            o.addEventListener('click', function(e) { if (e.target === o) fin(false); });
+        }
+        var _undoToastTimer = null;
+        function _showUndoToast(msg, undoFn) {
+            var old = document.getElementById('undoToast'); if (old) old.remove();
+            if (_undoToastTimer) clearTimeout(_undoToastTimer);
+            var t = document.createElement('div');
+            t.id = 'undoToast';
+            t.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom));z-index:9400;background:#232b3d;border:1px solid rgba(255,255,255,0.18);border-radius:12px;padding:11px 14px 11px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 28px rgba(0,0,0,0.5);font-family:Outfit,sans-serif;font-size:14px;font-weight:700;color:#eef1f7;white-space:nowrap;';
+            t.innerHTML = '<span>' + msg + '</span><button style="background:var(--accent);border:none;border-radius:8px;padding:8px 14px;color:#fff;font-family:Outfit,sans-serif;font-size:13px;font-weight:800;">ANNULLA</button>';
+            t.querySelector('button').onclick = function() { t.remove(); if (_undoToastTimer) clearTimeout(_undoToastTimer); undoFn(); };
+            document.body.appendChild(t);
+            _undoToastTimer = setTimeout(function() { t.remove(); }, 7000);
+        }
+        // Duplica su più giorni (stessa idea della versione PC) — apre un foglio dal basso
+        function mobileDup(idx, ev) {
+            if (ev) ev.stopPropagation();
+            var t = trips[idx]; if (!t) return;
+            var monday = getMonday(t.data || new Date());
+            var LBL = ['LUN','MAR','MER','GIO','VEN'];
+            var chips = '';
+            for (var i = 0; i < 5; i++) {
+                var d = new Date(monday); d.setDate(d.getDate() + i);
+                var iso = _isoDate(d), on = (iso === t.data);
+                chips += '<button type="button" data-dup-day="' + iso + '" data-on="' + (on ? '1' : '0') + '" onclick="_mobDupToggle(this)" style="flex:1;padding:12px 2px;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:800;line-height:1.3;'
+                    + (on ? 'background:rgba(232,98,63,0.22);border:1.5px solid var(--accent);color:#ff8c5a;' : 'background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.55);') + '">'
+                    + LBL[i] + '<div style="font-size:10.5px;font-weight:600;opacity:0.8;">' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '</div></button>';
+            }
+            var o = _openMobSheet('<div style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#9aa4b8;margin-bottom:10px;">DUPLICA SU QUESTI GIORNI</div>'
+                + '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:13px 14px;margin-bottom:14px;">' + _tripSummaryHtml(t) + '</div>'
+                + '<div style="display:flex;gap:6px;margin-bottom:16px;">' + chips + '</div>'
+                + '<div style="display:flex;gap:10px;">'
+                + '<button id="mobDupNo" style="flex:1;padding:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;color:#eef1f7;font-family:Outfit,sans-serif;font-size:15px;font-weight:800;">Annulla</button>'
+                + '<button id="mobDupYes" style="flex:1.5;padding:15px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-family:Outfit,sans-serif;font-size:15px;font-weight:800;">⧉ Duplica</button></div>');
+            document.getElementById('mobDupNo').onclick = _closeMobSheet;
+            o.addEventListener('click', function(e) { if (e.target === o) _closeMobSheet(); });
+            document.getElementById('mobDupYes').onclick = function() {
+                var days = Array.prototype.slice.call(o.querySelectorAll('[data-dup-day]')).filter(function(b){ return b.getAttribute('data-on') === '1'; }).map(function(b){ return b.getAttribute('data-dup-day'); });
+                _closeMobSheet();
+                if (!days.length) { showStatus('Seleziona almeno un giorno', 'info'); return; }
+                days.forEach(function(iso) { var c = Object.assign({}, t); delete c.id; delete c.ts; c.data = iso; trips.push(c); });
+                saveToLocalStorage();
+                filterApply(); updateStats();
+                haptic('success');
+                showStatus('✅ Viaggio duplicato su ' + days.length + (days.length === 1 ? ' giorno' : ' giorni'), 'success');
+            };
+        }
+        function _mobDupToggle(el) {
+            var on = el.getAttribute('data-on') !== '1';
+            el.setAttribute('data-on', on ? '1' : '0');
+            el.style.background = on ? 'rgba(232,98,63,0.22)' : 'rgba(255,255,255,0.05)';
+            el.style.borderColor = on ? 'var(--accent)' : 'rgba(255,255,255,0.14)';
+            el.style.color = on ? '#ff8c5a' : 'rgba(255,255,255,0.55)';
         }
 
         // ── Swipe to delete — gestione touch su .swipe-row ──
@@ -6541,38 +6698,55 @@
                 _el.style.transition = 'transform 0.2s ease';
 
                 if (dx >= THRESHOLD) {
-                    // Conferma delete — anima fuori schermo
-                    _el.style.transform = 'translateX(110vw)';
+                    // v68: NON elimina subito — chiede conferma (swipe accidentali)
                     var idx = parseInt(_el.getAttribute('data-idx'));
                     var nextIdx = parseInt(_el.getAttribute('data-next-idx'));
                     var isNextSwipe = !isNaN(nextIdx) && nextIdx >= 0;
-                    var wrap = _wrap;
-                    setTimeout(function() {
-                        if (wrap) {
-                            wrap.style.transition = 'max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease';
-                            wrap.style.maxHeight = wrap.offsetHeight + 'px';
-                            wrap.style.overflow = 'hidden';
-                            requestAnimationFrame(function() {
-                                wrap.style.maxHeight = '0';
-                                wrap.style.opacity = '0';
-                                wrap.style.marginBottom = '0';
-                            });
-                            setTimeout(function() {
-                                if (isNextSwipe) {
-                                    tripsNext.splice(nextIdx, 1);
-                                    saveNextToLocalStorage();
-                                    renderNextView();
-                                } else {
-                                    trips.splice(idx, 1);
-                                    saveToLocalStorage();
-                                    filterApply();
-                                    updateStats();
-                                    if (driveAccessToken) autoSaveDrive();
-                                }
-                                haptic('heavy');
-                            }, 200);
-                        }
-                    }, 150);
+                    var wrap = _wrap, rowEl = _el;
+                    var tripObj = isNextSwipe ? tripsNext[nextIdx] : trips[idx];
+                    // la riga resta un po' "aperta" mentre si decide
+                    rowEl.style.transform = 'translateX(70px)';
+                    function springBack() {
+                        rowEl.style.transition = 'transform 0.32s cubic-bezier(0.34,1.12,0.64,1)';
+                        rowEl.style.transform = 'translateX(0)';
+                        var bg0 = wrap && wrap.querySelector('.swipe-delete-bg'); if (bg0) bg0.style.opacity = '0';
+                    }
+                    function reallyDelete() {
+                        rowEl.style.transform = 'translateX(110vw)';
+                        setTimeout(function() {
+                            if (wrap) {
+                                wrap.style.transition = 'max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease';
+                                wrap.style.maxHeight = wrap.offsetHeight + 'px';
+                                wrap.style.overflow = 'hidden';
+                                requestAnimationFrame(function() {
+                                    wrap.style.maxHeight = '0';
+                                    wrap.style.opacity = '0';
+                                    wrap.style.marginBottom = '0';
+                                });
+                                setTimeout(function() {
+                                    var removed = null;
+                                    if (isNextSwipe) {
+                                        tripsNext.splice(nextIdx, 1);
+                                        saveNextToLocalStorage();
+                                        renderNextView();
+                                    } else {
+                                        removed = trips.splice(idx, 1)[0];
+                                        saveToLocalStorage();
+                                        filterApply();
+                                        updateStats();
+                                        if (removed) _showUndoToast('🗑️ Viaggio eliminato', function() {
+                                            trips.push(removed);
+                                            saveToLocalStorage();
+                                            filterApply(); updateStats();
+                                            showStatus('↩️ Viaggio ripristinato', 'success');
+                                        });
+                                    }
+                                    haptic('heavy');
+                                }, 200);
+                            }
+                        }, 150);
+                    }
+                    _askDeleteTrip(tripObj, reallyDelete, springBack);
                 } else {
                     // Torna indietro con spring
                     _el.style.transition = 'transform 0.32s cubic-bezier(0.34,1.12,0.64,1)';
@@ -6588,7 +6762,7 @@
 
         function renderMediumView() {
             var container = document.getElementById('mediumBody');
-            var hasFilters = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
+            var hasFilters = searchQuery || filterState.clienteQ || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
             var displayTrips = hasFilters ? filteredTrips : trips;
 
             if (displayTrips.length === 0) {
@@ -6906,88 +7080,81 @@
                     <!-- ── TOOLBAR ── -->
                     <div style="display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,0.08);background:var(--primary);flex-shrink:0;">
 
-                        <!-- Riga 1: navigazione + stato + azioni principali -->
-                        <div style="display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;${_isNextMode ? 'background:rgba(167,139,250,0.04);' : ''}">
-
-                            <!-- Toggle Sett. corrente / prossima / oggi -->
-                            <div id="pcWeekToggle" style="display:flex;align-items:center;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.12);border-radius:11px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
-                                <button onclick="pcSetWeek('current',this)" id="pcToggleCurrent"
-                                    style="padding:10px 20px;border:none;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.15s;white-space:nowrap;letter-spacing:0.3px;">
-                                    ● Corrente
-                                </button>
-                                <button onclick="pcSetWeek('next',this)" id="pcToggleNext"
-                                    style="padding:10px 20px;border:none;background:transparent;color:rgba(167,139,250,0.7);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;">
-                                    ◎ Prossima
-                                </button>
-                                <button onclick="pcSetWeek('oggi',this)" id="pcToggleOggi"
-                                    style="padding:10px 20px;border:none;background:transparent;color:rgba(0,210,180,0.7);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;border-left:1px solid rgba(255,255,255,0.08);">
-                                    📅 Oggi
-                                </button>
+                        <!-- Riga 1: comandi (v69) -->
+                        <div class="pcb-row1">
+                            <button onclick="pcToggleRubrica()" id="btnRubrica" class="pcb pcb-accent" title="Fornitori, clienti e trasportatori della settimana">${_PCI.book}Rubrica</button>
+                            <div id="pcWeekToggle" class="pcb-seg">
+                                <button onclick="pcSetWeek('current',this)" id="pcToggleCurrent" class="pcb-seg-btn${_pcWeekMode === 'oggi' ? '' : ' on'}">Settimana</button>
+                                <button onclick="pcSetWeek('oggi',this)" id="pcToggleOggi" class="pcb-seg-btn${_pcWeekMode === 'oggi' ? ' on' : ''}">Oggi</button>
                             </div>
+                            <button onclick="switchView('compact', null)" class="pcb pcb-ghost pcb-icon" title="Torna alla vista smartphone">${_PCI.phone}</button>
+                            <div style="flex:1;min-width:8px;"></div>
+                            <button onclick="openMultiTratta()" class="pcb pcb-ghost" title="Più tratte in un colpo solo">${_PCI.truck}Multi-tratta</button>
+                            <button onclick="desktopAddEmpty()" class="pcb pcb-primary" title="Aggiungi una riga (N)">${_PCI.plus}Nuova riga</button>
+                            <div class="pcb-div"></div>
+                            <div class="pcb-group">
+                                <button onclick="driveSync()" id="desktopSyncBtn" class="pcb pcb-g" title="Sincronizza con Google Drive">${_PCI.save}Salva</button>
+                                <button onclick="driveLoad()" id="desktopLoadBtn" class="pcb pcb-g" title="Aggiorna da Google Drive">${_PCI.load}Carica</button>
+                                <button onclick="downloadExcel()" class="pcb pcb-g" title="Esporta Excel completo">${_PCI.excel}Excel</button>
+                            </div>
+                            <button onclick="pcToggleMoreMenu(this)" id="pcMoreBtn" class="pcb pcb-ghost pcb-icon" title="Altre funzioni: stampa, totali, archivio, database, nuova settimana">${_PCI.more}</button>
+                        </div>
 
-                            <!-- ← Torna mobile -->
-                            <button onclick="switchView('compact', null)" title="Torna alla vista smartphone"
-                                style="padding:5px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(255,255,255,0.11)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">← 📱</button>
-
-                            <!-- Separatore -->
-                            <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
-
-                            <!-- Contatore viaggi -->
-                            <span style="font-size:16px;font-weight:800;color:var(--text);flex-shrink:0;">${total}</span>
-                            <span style="font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;flex-shrink:0;">viaggi</span>
-
-                            <!-- Badge da confermare -->
+                        <!-- Riga 2: riepilogo -->
+                        <div class="pcb-row2">
+                            <div style="display:flex;align-items:baseline;gap:7px;flex-shrink:0;">
+                                <span style="font-size:26px;font-weight:800;color:var(--text);line-height:1;">${total}</span>
+                                <span style="font-size:11px;color:var(--text-dim);text-transform:uppercase;font-weight:700;letter-spacing:0.8px;">${_pv(total)}</span>
+                            </div>
                             ${daConfermare > 0
-                                ? `<span onclick="openDaConfermarModal()" style="font-size:11px;background:rgba(224,192,90,0.15);border:1px solid rgba(224,192,90,0.35);color:var(--warning);padding:4px 10px;border-radius:6px;font-weight:700;cursor:pointer;flex-shrink:0;transition:background 0.15s;" onmouseover="this.style.background='rgba(224,192,90,0.25)'" onmouseout="this.style.background='rgba(224,192,90,0.15)'">⚠️ ${daConfermare} da conf.</span>`
-                                : `<span style="font-size:11px;background:rgba(62,203,150,0.1);border:1px solid rgba(62,203,150,0.25);color:var(--success);padding:4px 10px;border-radius:6px;font-weight:700;flex-shrink:0;">✅ Tutto ok</span>`
-                            }
+                                ? `<button onclick="openDaConfermarModal()" class="pcb-warn" title="Mostra i viaggi da confermare">${_PCI.warn}${daConfermare} da confermare</button>`
+                                : `<span class="pcb-ok">${_PCI.check}Tutto confermato</span>`}
+                            <div class="pcb-div"></div>
+                            <div style="flex:1;display:flex;gap:7px;flex-wrap:wrap;min-width:100px;">
+                                ${_transpSummary.map(name => {
+                                    const key = getTransporterKey(name);
+                                    return '<span class="pcb-chip" style="--c:var(--t-' + key + ');"><i></i>' + name + '<b>' + _transpCounts[name] + '</b></span>';
+                                }).join('')}
+                            </div>
+                        </div>
 
-                            <!-- Separatore -->
-                            <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
-
-                            <!-- 🗓 Imposta settimana prossima -->
-                            <button onclick="desktopSetNextWeek()" title="Imposta le date della settimana prossima come riferimento"
-                                style="padding:9px 16px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);border-radius:9px;color:#a78bfa;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(167,139,250,0.22)'" onmouseout="this.style.background='rgba(167,139,250,0.12)'">
-                                🗓 Sett. prossima
-                            </button>
-
-                            <!-- Archivia e nuova settimana -->
-                            <button onclick="showNewWeekModalV2()" title="Archivia settimana corrente e inizia da zero"
-                                style="padding:9px 16px;background:rgba(62,203,150,0.1);border:1px solid rgba(62,203,150,0.3);border-radius:9px;color:var(--success);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(62,203,150,0.2)'" onmouseout="this.style.background='rgba(62,203,150,0.1)'">
-                                📦 Nuova sett.
-                            </button>
-
-                            <!-- ＋ Nuova riga — azione primaria -->
-                            <button onclick="desktopAddEmpty()"
-                                style="padding:11px 22px;background:rgba(255,107,53,0.15);border:1.5px solid rgba(255,107,53,0.5);border-radius:10px;color:var(--accent);font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;box-shadow:0 2px 10px rgba(255,107,53,0.15);"
-                                onmouseover="this.style.background='rgba(255,107,53,0.28)';this.style.boxShadow='0 4px 16px rgba(255,107,53,0.25)'"
-                                onmouseout="this.style.background='rgba(255,107,53,0.15)';this.style.boxShadow='0 2px 10px rgba(255,107,53,0.15)'">
-                                ＋ Nuova riga
-                            </button>
-
-                            <!-- 🚛 Multi-Tratta -->
-                            <button onclick="openMultiTratta()"
-                                style="padding:11px 20px;background:rgba(255,107,53,0.08);border:1.5px solid rgba(255,107,53,0.3);border-radius:10px;color:#ff8c5a;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;flex-shrink:0;transition:all 0.15s;"
-                                onmouseover="this.style.background='rgba(255,107,53,0.18)';this.style.borderColor='rgba(255,107,53,0.5)'"
-                                onmouseout="this.style.background='rgba(255,107,53,0.08)';this.style.borderColor='rgba(255,107,53,0.3)'">
-                                🚛 Multi-Tratta
-                            </button>
-
-                            <!-- Spacer -->
-                            <div style="flex:1;"></div>
-
-                            <!-- Cerca -->
-                            <input id="desktopQuickSearch" type="text" placeholder="🔍 Cerca trasportatore, luogo..." oninput="desktopQuickFilter()"
-                                style="padding:10px 15px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;width:320px;transition:all 0.15s;"
-                                onfocus="this.style.borderColor='var(--accent)';this.style.background='rgba(255,255,255,0.08)'"
-                                onblur="this.style.borderColor='rgba(255,255,255,0.12)';this.style.background='rgba(255,255,255,0.06)'"
-                                onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
+                        <!-- Riga 3: filtri -->
+                        <div class="pcb-row3">
+                            <span class="pcb-lbl">Giorno</span>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="desktopDayFilters">
+                                ${(function() {
+                                    const dayNums = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
+                                    return ['Tutti','Lun','Mar','Mer','Gio','Ven'].map(function(d,i) {
+                                        const dayNum = dayNums[d];
+                                        const cnt = d === 'Tutti' ? trips.length : _workingTrips.filter(function(t) { const dt = new Date((t.data||'')+'T12:00:00'); return dt.getDay() === dayNum; }).length;
+                                        const isActive = (i === 0 && (!_desktopDayFilter || _desktopDayFilter === 'Tutti')) || _desktopDayFilter === d;
+                                        const bg    = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.05)';
+                                        const bdr   = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.09)';
+                                        const clr   = isActive ? 'white' : 'var(--text-dim)';
+                                        const badge = (cnt > 0 && d !== 'Tutti')
+                                            ? '<span style="font-size:10px;background:' + (isActive ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.1)') + ';padding:1px 6px;border-radius:10px;">' + cnt + '</span>'
+                                            : '';
+                                        return '<button onclick="desktopDayFilter(\'' + d + '\')" data-dayfilter="' + d + '"'
+                                            + ' style="padding:7px 14px;background:' + bg + ';border:1px solid ' + bdr + ';border-radius:8px;color:' + clr + ';font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;">'
+                                            + d + badge + '</button>';
+                                    }).join('');
+                                })()}
+                            </div>
+                            <span id="desktopFilterCount" class="pcb-count" style="display:none;"></span>
+                            <div style="flex:1;min-width:8px;"></div>
+                            <div class="pcb-field">
+                                <span class="pcb-field-ic">${_PCI.search}</span>
+                                <input id="desktopQuickSearch" type="text" placeholder="Cerca trasportatore, luogo, DDT…" oninput="desktopQuickFilter()" autocomplete="off"
+                                    onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
+                            </div>
+                            <div class="pcb-field pcb-field-cli">
+                                <span class="pcb-field-ic">${_PCI.users}</span>
+                                <input id="desktopClientSearch" type="text" list="dto" placeholder="Cliente…" oninput="desktopQuickFilter()" autocomplete="off"
+                                    onkeydown="if(event.key==='Escape'){this.value='';desktopQuickFilter();}">
+                                <span class="pcb-field-x" onclick="var i=document.getElementById('desktopClientSearch');i.value='';desktopQuickFilter();i.focus();" title="Azzera cliente">✕</span>
+                            </div>
                             <button id="desktopSortChronoBtn" onclick="desktopToggleChrono()" title="Ordine cronologico"
                                 style="padding:5px 9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--text-dim);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;">⏱ Data</button>
-
                             <!-- Bottone shortcut ⌨ con tooltip -->
                             <div style="position:relative;flex-shrink:0;" id="shortcutHintWrap">
                                 <button onmouseenter="document.getElementById('shortcutTooltip').style.display='block'"
@@ -7028,80 +7195,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Separatore -->
-                            <div style="width:1px;height:20px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
-
-                            <!-- Gruppo azioni secondarie -->
-                            <div style="display:flex;gap:5px;flex-shrink:0;">
-                                <button onclick="driveSync()" id="desktopSyncBtn" title="Salva su Google Drive"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(62,203,150,0.1);border:1.5px solid rgba(62,203,150,0.3);border-radius:9px;color:var(--success);font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;min-width:80px;"><span style="width:20px;height:20px;border-radius:50%;background:rgba(62,203,150,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">☁️</span>Salva</button>
-                                <button onclick="driveLoad()" id="desktopLoadBtn" title="Carica da Google Drive"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(79,195,247,0.1);border:1.5px solid rgba(79,195,247,0.3);border-radius:9px;color:#4fc3f7;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;min-width:80px;"><span style="width:20px;height:20px;border-radius:50%;background:rgba(79,195,247,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">📥</span>Carica</button>
-                                <button onclick="downloadExcel()" title="Esporta Excel completo"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(16,163,74,0.1);border:1.5px solid rgba(16,163,74,0.3);border-radius:9px;color:#7fd99a;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(16,163,74,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">⬇️</span>Excel</button>
-                                <button onclick="window.printPlanning()" title="Stampa planning"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(148,120,255,0.1);border:1.5px solid rgba(148,120,255,0.3);border-radius:9px;color:#c3b0ff;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(148,120,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🖨️</span>Stampa</button>
-                                <button onclick="desktopToggleTotals()" id="btnTotals" title="Totali per trasportatore"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(0,210,180,0.1);border:1.5px solid rgba(0,210,180,0.3);border-radius:9px;color:#7fe0d4;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(0,210,180,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">📊</span>Stats</button>
-                                <button onclick="openPcArchive()" title="Archivio settimane passate"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(96,165,250,0.1);border:1.5px solid rgba(96,165,250,0.3);border-radius:9px;color:#a8c8f5;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(96,165,250,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🗄️</span>Archivio</button>
-                                <button onclick="pcToggleRubrica()" id="btnRubrica" title="Fornitori, clienti e trasportatori della settimana"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(232,98,63,0.14);border:1.5px solid rgba(232,98,63,0.4);border-radius:9px;color:#ffb08a;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(232,98,63,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffb08a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="17" rx="2"/><path d="M17 8h4v11a2 2 0 0 1-2 2h-2"/><line x1="7" y1="9" x2="13" y2="9"/><line x1="7" y1="13" x2="13" y2="13"/></svg></span>Rubrica</button>
-                                <button onclick="openDbClean()" title="Gestisci il database (trasportatori, partenze, arrivi, prodotti)"
-                                    style="display:flex;align-items:center;gap:7px;padding:6px 14px 6px 6px;background:rgba(167,139,250,0.1);border:1.5px solid rgba(167,139,250,0.3);border-radius:9px;color:#c9b3f0;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;"
-                                    ><span style="width:20px;height:20px;border-radius:50%;background:rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🗃️</span>Database</button>
-                            </div>
-                        </div>
-
-                        <!-- Riga 1b: numeri chiave + riepilogo trasportatori -->
-                        <div style="display:flex;align-items:center;gap:20px;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;">
-                            <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
-                                <span style="font-size:20px;font-weight:800;color:var(--text);">${total}</span>
-                                <span style="font-size:10px;color:var(--text-dim);text-transform:uppercase;font-weight:700;">${_pv(total)}</span>
-                            </div>
-                            ${daConfermare > 0 ? `
-                            <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0;">
-                                <span style="font-size:20px;font-weight:800;color:#f0a850;">${daConfermare}</span>
-                                <span style="font-size:10px;color:var(--text-dim);text-transform:uppercase;font-weight:700;">da confermare</span>
-                            </div>` : ''}
-                            <div style="width:1px;height:22px;background:rgba(255,255,255,0.1);flex-shrink:0;"></div>
-                            <div style="flex:1;display:flex;gap:6px;flex-wrap:wrap;min-width:100px;">
-                                ${_transpSummary.map(name => {
-                                    const key = getTransporterKey(name);
-                                    return '<span style="padding:5px 12px;border-radius:6px;background:var(--t-' + key + ');color:#0b0e14;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.2px;">' + name + ' ' + _transpCounts[name] + '</span>';
-                                }).join('')}
-                            </div>
-                        </div>
-
-                        <!-- Riga 2: filtri giorno con contatori -->
-                        <div style="display:flex;align-items:center;gap:8px;padding:11px 20px;">
-                            <span style="font-size:10px;font-weight:700;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase;flex-shrink:0;margin-right:2px;">FILTRA</span>
-                            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="desktopDayFilters">
-                                ${(function() {
-                                    const dayNums = {Lun:1,Mar:2,Mer:3,Gio:4,Ven:5,Sab:6};
-                                    return ['Tutti','Lun','Mar','Mer','Gio','Ven'].map(function(d,i) {
-                                        const dayNum = dayNums[d];
-                                        const cnt = d === 'Tutti' ? trips.length : _workingTrips.filter(function(t) { const dt = new Date((t.data||'')+'T12:00:00'); return dt.getDay() === dayNum; }).length;
-                                        const isActive = (i === 0 && (!_desktopDayFilter || _desktopDayFilter === 'Tutti')) || _desktopDayFilter === d;
-                                        const bg    = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.05)';
-                                        const bdr   = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.09)';
-                                        const clr   = isActive ? 'white' : 'var(--text-dim)';
-                                        const badge = (cnt > 0 && d !== 'Tutti')
-                                            ? '<span style="font-size:10px;background:' + (isActive ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.1)') + ';padding:1px 6px;border-radius:10px;">' + cnt + '</span>'
-                                            : '';
-                                        return '<button onclick="desktopDayFilter(\'' + d + '\')" data-dayfilter="' + d + '"'
-                                            + ' style="padding:7px 14px;background:' + bg + ';border:1px solid ' + bdr + ';border-radius:8px;color:' + clr + ';font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;">'
-                                            + d + badge + '</button>';
-                                    }).join('');
-                                })()}
-                            </div>
-                            <span id="desktopFilterCount" style="display:none;font-size:12px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#4fc3f7;padding:4px 12px;border-radius:7px;font-weight:700;margin-left:4px;"></span>
                         </div>
                     </div>
                     <div id="desktopTotalsPanel" style="display:none;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.08);flex-shrink:0;">
@@ -7514,8 +7607,8 @@
         // Debounce per Drive — evita 10 chiamate API per 10 modifiche rapide
         // _driveDebounceTimer dichiarato globalmente in cima
         function debouncedDriveSave() {
-            clearTimeout(_driveDebounceTimer);
-            _driveDebounceTimer = setTimeout(() => { if (driveAccessToken) driveSave(true); }, 2000);
+            // v67: stampa id/ts se serve e delega al sync unico (debounce 1.5s, una operazione alla volta)
+            try { if (_tripsSigAll() !== _lastPersistSig) saveToLocalStorage(true); else autoSaveDrive(); } catch(e) { autoSaveDrive(); }
         }
 
         function desktopSetField(idx, field, val) {
@@ -7529,10 +7622,9 @@
             if (_pcWeekMode === 'next') {
                 saveNextToLocalStorage();
             } else {
-                localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
+                saveToLocalStorage(true);   // v67: stampa id/ts e pianifica il sync Drive (senza riordinare)
                 updateStats();
                 filterPopulateDropdowns();
-                debouncedDriveSave();
             }
             // Aggiorna inline il chip codice sovrapposto in partenza/arrivo
             if (field === 'partenza' || field === 'arrivo') {
@@ -8948,15 +9040,26 @@
             var n = (name || '').trim();
             if (!n) return '';
             var c = _pcRubricaColor('trasportatori', n);
-            return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:' + c.border + ';"></span><span style="font-weight:800;color:' + c.text + ';">' + _pcEsc(n) + '</span></span>';
+            return '<span style="display:flex;align-items:center;gap:6px;min-width:0;"><span style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:' + c.border + ';"></span><span style="font-weight:800;color:' + c.text + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + _pcEsc(n) + '</span></span>';
         }
 
         // state: 0 vuota, 1 spuntata, 2 parziale
         function _pcRubricaCheckbox(state, color) {
-            if (!state) return '<div style="width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.28);flex-shrink:0;box-sizing:border-box;"></div>';
+            if (!state) return '<div class="pcr-cb" style="width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(255,255,255,0.24);flex-shrink:0;box-sizing:border-box;"></div>';
             var mark = state === 1 ? '<path d="M5 12l5 5 9-10"/>' : '<line x1="6" y1="12" x2="18" y2="12"/>';
-            return '<div style="width:20px;height:20px;border-radius:6px;background:' + color + ';border:2px solid ' + color + ';flex-shrink:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;">'
-                + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">' + mark + '</svg></div>';
+            return '<div style="width:18px;height:18px;border-radius:5px;background:' + color + ';border:1.5px solid ' + color + ';flex-shrink:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;">'
+                + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">' + mark + '</svg></div>';
+        }
+
+        // Stile per l'effetto al passaggio del mouse sulle righe (una volta sola)
+        function _pcRubricaEnsureStyle() {
+            if (document.getElementById('pcRubricaStyle')) return;
+            var st = document.createElement('style');
+            st.id = 'pcRubricaStyle';
+            st.textContent = '.pcr-row{transition:background .12s;}'
+                + '.pcr-row:not(.pcr-on):hover{background:rgba(255,255,255,0.08) !important;}'
+                + '.pcr-row:hover .pcr-cb{border-color:rgba(255,255,255,0.55) !important;}';
+            (document.head || document.body).appendChild(st);
         }
 
         // Viaggi (con il loro indice reale nell'array della settimana) dell'entità indicata, in ordine di data
@@ -9113,6 +9216,7 @@
         function _pcRubricaRender(resetScroll) {
             var panel = document.getElementById('pcRubricaPanel');
             if (!panel) return;
+            _pcRubricaEnsureStyle();
             var scEl = document.getElementById('pcRubricaScroll');
             var prevScroll = (scEl && !resetScroll) ? scEl.scrollTop : 0;
             var tab = _pcRubricaTab;
@@ -9139,9 +9243,10 @@
                         + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:15px;font-weight:800;color:#c3c9d9;">' + g.count + '</span>'
                         + '</div>';
                 }
-                // aperta: un'unica scheda, tutta nel colore dell'entità
-                return '<div style="border:2px solid ' + col.border + ';border-radius:14px;background:' + _pcRubricaTint(col.border, 6) + ';margin-bottom:10px;overflow:hidden;">'
-                    + '<div onclick="pcRubricaSelectEntityIdx(' + gi + ')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;background:' + _pcRubricaTint(col.border, 16) + ';">'
+                // aperta: un'unica scheda, tutta nel colore dell'entità; l'intestazione resta fissa mentre scorri
+                var t16 = _pcRubricaTint(col.border, 16);
+                return '<div style="border:2px solid ' + col.border + ';border-radius:14px;background:' + _pcRubricaTint(col.border, 6) + ';margin-bottom:10px;">'
+                    + '<div onclick="pcRubricaSelectEntityIdx(' + gi + ')" style="position:sticky;top:0;z-index:3;height:56px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 16px;cursor:pointer;border-radius:12px 12px 0 0;background-color:#161b28;background-image:linear-gradient(' + t16 + ',' + t16 + ');">'
                     + '<span style="font-size:18px;font-weight:800;color:#eef1f7;">' + nameHtml + '</span>'
                     + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:13px;font-weight:800;color:' + col.text + ';background:' + _pcRubricaTint(col.border, 24) + ';padding:5px 12px;border-radius:8px;">' + g.count + (g.count === 1 ? ' viaggio' : ' viaggi') + '</span>'
                     + '</div>'
@@ -9181,7 +9286,7 @@
             if (sc) sc.scrollTop = prevScroll;
         }
 
-        // Dettaglio dell'entità aperta: riepilogo, "seleziona tutti", viaggi raggruppati per giorno
+        // Dettaglio dell'entità aperta: riepilogo, "seleziona tutti" (fisso mentre scorri), viaggi per giorno
         function _pcRubricaDetailHtml(tab, key, col) {
             var list = _pcRubricaEntityTrips(tab, key);
             var otherField = (tab === 'clienti') ? 'partenza' : 'arrivo';   // fornitori e trasportatori: dove vanno; clienti: da dove arrivano
@@ -9207,16 +9312,19 @@
                     + '</div>';
             }).join('');
 
-            // seleziona tutti
+            // seleziona tutti: resta agganciato sotto l'intestazione mentre scorri i viaggi
             var nSel = 0;
             list.forEach(function(x) { if (_pcRubricaChecked[x.idx]) nSel++; });
             var allState = nSel === 0 ? 0 : (nSel === list.length ? 1 : 2);
-            var selAllHtml = '<div onclick="pcRubricaToggleAll()" style="display:flex;align-items:center;justify-content:space-between;margin:16px 2px 6px 2px;cursor:pointer;">'
-                + '<div style="display:flex;align-items:center;gap:10px;">' + _pcRubricaCheckbox(allState, col.border) + '<span style="font-size:13px;font-weight:700;color:#c3c9d9;">Seleziona tutti</span></div>'
+            var t6 = _pcRubricaTint(col.border, 6);
+            var selAllHtml = '<div onclick="pcRubricaToggleAll()" style="position:sticky;top:56px;z-index:2;display:flex;align-items:center;justify-content:space-between;margin:14px -16px 4px -16px;padding:9px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.07);background-color:#161b28;background-image:linear-gradient(' + t6 + ',' + t6 + ');">'
+                + '<div style="display:flex;align-items:center;gap:10px;">' + _pcRubricaCheckbox(allState, col.border) + '<span style="font-size:13px;font-weight:700;color:#e6eaf3;">Seleziona tutti</span></div>'
                 + (nSel > 0
                     ? '<span style="font-size:11.5px;font-weight:700;color:' + col.text + ';">' + nSel + ' di ' + list.length + ' selezionati</span>'
-                    : '<span style="font-size:11.5px;color:#6b7385;">in ordine di data</span>')
+                    : '<span style="font-size:11.5px;color:#a9b1c3;">in ordine di data</span>')
                 + '</div>';
+
+            var pendingIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e0b055" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 
             // viaggi, raggruppati per giorno
             var DAYS = ['DOMENICA', 'LUNEDÌ', 'MARTEDÌ', 'MERCOLEDÌ', 'GIOVEDÌ', 'VENERDÌ', 'SABATO'];
@@ -9232,39 +9340,47 @@
                         var d = new Date(dayKey + 'T12:00:00');
                         label = DAYS[d.getDay()] + ' ' + String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0');
                     }
-                    rowsHtml += '<div style="display:flex;align-items:center;gap:10px;margin:12px 0 7px 0;"><span style="font-size:11px;font-weight:800;letter-spacing:0.8px;color:#8590aa;">' + label + '</span><span style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></span></div>';
+                    rowsHtml += '<div style="display:flex;align-items:center;gap:12px;margin:18px 0 9px 0;"><span style="width:4px;height:20px;border-radius:2px;background:#f2c46d;flex-shrink:0;"></span><span style="font-size:16px;font-weight:800;letter-spacing:0.6px;color:#ffd98a;">' + label + '</span><span style="flex:1;height:1px;background:rgba(242,196,109,0.3);"></span></div>';
                 }
                 var on = !!_pcRubricaChecked[x.idx];
                 var prod = (t.prodotto || '').trim();
-                var line1, line2 = [];
-                if (tab === 'trasportatori') {
-                    line1 = '<span style="font-size:15.5px;font-weight:700;color:#eef1f7;">' + _pcEsc(_pcRubricaPlace(t.partenza) || '—') + ' <span style="color:#566074;font-weight:600;">→</span> ' + _pcEsc(_pcRubricaPlace(t.arrivo) || '—') + '</span>';
-                    var cf = _pcRubricaCodeHtml(t.partenza), ct = _pcRubricaCodeHtml(t.arrivo);
-                    if (cf) line2.push(cf);
-                    if (ct) line2.push(ct);
-                } else {
-                    var ov = (tab === 'clienti') ? t.partenza : t.arrivo;
-                    line1 = '<span style="font-size:15.5px;font-weight:700;color:#eef1f7;"><span style="color:' + (on ? col.text : '#566074') + ';font-weight:600;">' + (tab === 'clienti' ? '←' : '→') + '</span> ' + _pcEsc(_pcRubricaPlace(ov) || '—') + '</span>' + _pcRubricaCodeHtml(ov);
-                    var tr = _pcRubricaTransHtml(t.trasportatore);
-                    if (tr) line2.push(tr);
-                }
-                if (prod) line2.push('<span style="color:#9aa2b0;">' + _pcEsc(prod) + '</span>');
-                var line2Html = line2.join('<span style="color:#566074;">·</span>');
+                var rowBase = 'display:flex;align-items:center;gap:12px;padding:0 13px;border-radius:9px;cursor:pointer;margin-bottom:4px;'
+                    + (on ? 'background:' + _pcRubricaTint(col.border, 18) + ';box-shadow:inset 0 0 0 1.5px ' + col.border + ';'
+                          : (t.daConfermare ? 'background:rgba(224,176,85,0.09);' : 'background:rgba(255,255,255,0.04);'));
+                var pend = '<span ' + (t.daConfermare ? 'title="Da confermare" ' : '') + 'style="width:18px;flex-shrink:0;display:flex;justify-content:center;">' + (t.daConfermare ? pendingIcon : '') + '</span>';
+                var cls = 'pcr-row' + (on ? ' pcr-on' : '');
 
-                rowsHtml += '<div onclick="pcRubricaToggleRow(' + x.idx + ')" style="display:flex;align-items:center;gap:12px;padding:' + (on ? '9px 12px' : '10px 13px') + ';border-radius:10px;cursor:pointer;margin-bottom:6px;'
-                    + (on ? 'background:' + _pcRubricaTint(col.border, 18) + ';border:1.5px solid ' + col.border + ';' : 'background:rgba(255,255,255,0.04);')
-                    + '">'
-                    + _pcRubricaCheckbox(on ? 1 : 0, col.border)
-                    + '<div style="flex:1;min-width:0;">'
-                    + '<div style="display:flex;align-items:center;gap:9px;">' + line1 + '</div>'
-                    + (line2Html ? '<div style="display:flex;align-items:center;gap:7px;margin-top:4px;font-size:13px;">' + line2Html + '</div>' : '')
-                    + '</div>'
-                    + (t.daConfermare ? '<span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#e0b055;flex-shrink:0;"><span style="width:7px;height:7px;border-radius:50%;background:#e0b055;"></span>Da conf.</span>' : '')
-                    + '</div>';
+                if (tab === 'trasportatori') {
+                    // due righe: la colonna "trasportatore" non serve (è l'entità aperta)
+                    var l1 = '<span style="font-size:15px;font-weight:700;color:#eef1f7;">' + _pcEsc(_pcRubricaPlace(t.partenza) || '—') + ' <span style="color:#8f99ad;font-weight:600;">→</span> ' + _pcEsc(_pcRubricaPlace(t.arrivo) || '—') + '</span>';
+                    var l2 = [];
+                    var cf = _pcRubricaCodeHtml(t.partenza), ct = _pcRubricaCodeHtml(t.arrivo);
+                    if (cf) l2.push(cf);
+                    if (ct) l2.push(ct);
+                    if (prod) l2.push('<span style="color:#d0d6e4;">' + _pcEsc(prod) + '</span>');
+                    rowsHtml += '<div class="' + cls + '" onclick="pcRubricaToggleRow(' + x.idx + ')" style="' + rowBase + 'min-height:54px;">'
+                        + _pcRubricaCheckbox(on ? 1 : 0, col.border)
+                        + '<div style="flex:1;min-width:0;"><div>' + l1 + '</div>'
+                        + (l2.length ? '<div style="display:flex;align-items:center;gap:8px;margin-top:3px;font-size:13px;">' + l2.join('<span style="color:#8f99ad;">·</span>') + '</div>' : '')
+                        + '</div>' + pend + '</div>';
+                } else {
+                    // una riga sola, a colonne: destinazione | trasportatore | prodotto | stato
+                    var ov = (tab === 'clienti') ? t.partenza : t.arrivo;
+                    rowsHtml += '<div class="' + cls + '" onclick="pcRubricaToggleRow(' + x.idx + ')" style="' + rowBase + 'height:46px;">'
+                        + _pcRubricaCheckbox(on ? 1 : 0, col.border)
+                        + '<div style="flex:1;min-width:0;display:flex;align-items:center;gap:9px;">'
+                        +   '<span style="min-width:0;font-size:15px;font-weight:700;color:#eef1f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><span style="color:' + (on ? col.text : '#566074') + ';font-weight:600;">' + (tab === 'clienti' ? '←' : '→') + '</span> ' + _pcEsc(_pcRubricaPlace(ov) || '—') + '</span>'
+                        +   _pcRubricaCodeHtml(ov)
+                        + '</div>'
+                        + '<div style="width:96px;flex-shrink:0;display:flex;align-items:center;min-width:0;font-size:13px;">' + _pcRubricaTransHtml(t.trasportatore) + '</div>'
+                        + '<div title="' + _pcEsc(prod) + '" style="width:66px;flex-shrink:0;font-size:13px;color:#d0d6e4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + _pcEsc(prod) + '</div>'
+                        + pend
+                        + '</div>';
+                }
             });
 
             return '<div style="padding:14px 16px 10px 16px;">'
-                + (chips ? '<div style="font-size:10.5px;font-weight:800;letter-spacing:0.7px;color:#8590aa;margin-bottom:8px;">' + summaryLabel + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;">' + chips + '</div>' : '')
+                + (chips ? '<div style="font-size:10.5px;font-weight:800;letter-spacing:0.7px;color:#b4bccd;margin-bottom:8px;">' + summaryLabel + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;">' + chips + '</div>' : '')
                 + selAllHtml
                 + rowsHtml
                 + '</div>';
@@ -9296,23 +9412,64 @@
 
         // _desktopQuickQuery e _pcWeekMode dichiarati in cima come var
 
+
+        // v64: menu "Altro" della barra PC
+        function pcToggleMoreMenu(btn) {
+            var old = document.getElementById('pcMoreMenu');
+            if (old) { old.remove(); return; }
+            var r = btn.getBoundingClientRect();
+            var m = document.createElement('div');
+            m.id = 'pcMoreMenu';
+            m.style.cssText = 'position:fixed;top:' + (r.bottom + 6) + 'px;right:' + Math.max(8, window.innerWidth - r.right) + 'px;z-index:9000;background:#1a2236;border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:6px;min-width:220px;box-shadow:0 12px 36px rgba(0,0,0,0.55);';
+            var items = [
+                ['🖨️','Stampa planning','window.printPlanning()'],
+                ['📊','Totali per trasportatore','desktopToggleTotals()'],
+                ['🗄️','Archivio settimane','openPcArchive()'],
+                ['🗃️','Database (nomi e luoghi)','openDbClean()'],
+                ['📦','Nuova settimana (archivia)','showNewWeekModalV2()']
+            ];
+            m.innerHTML = items.map(function(it){
+                return '<div data-act="' + it[2] + '" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;cursor:pointer;color:#e6eaf3;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;" onmouseover="this.style.background=\'rgba(255,255,255,0.08)\'" onmouseout="this.style.background=\'transparent\'"><span style="width:20px;text-align:center;">' + it[0] + '</span>' + it[1] + '</div>';
+            }).join('');
+            m.addEventListener('click', function(e){
+                var d = e.target.closest('[data-act]'); if (!d) return;
+                m.remove();
+                try { (new Function(d.getAttribute('data-act')))(); } catch(err) { console.error(err); }
+            });
+            document.body.appendChild(m);
+            setTimeout(function(){
+                document.addEventListener('click', function h(e){
+                    var mm = document.getElementById('pcMoreMenu');
+                    if (mm && !mm.contains(e.target) && e.target !== btn) mm.remove();
+                    document.removeEventListener('click', h);
+                });
+            }, 0);
+        }
+
+
+        // v69: icone linea coerenti per la barra PC
+        var _PCI = {
+            book:  '<svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><line x1="9" y1="8" x2="15" y2="8"/></svg>',
+            phone: '<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><line x1="11" y1="18.5" x2="13" y2="18.5"/></svg>',
+            truck: '<svg viewBox="0 0 24 24"><path d="M2 6h11v10H2z"/><path d="M13 9h4.5l3 3.5V16H13z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+            plus:  '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+            save:  '<svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 7.97"/><polyline points="9 14 12 11 15 14"/><line x1="12" y1="11" x2="12" y2="20"/></svg>',
+            load:  '<svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 7.97"/><polyline points="9 16 12 19 15 16"/><line x1="12" y1="10" x2="12" y2="19"/></svg>',
+            excel: '<svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><polyline points="14 3 14 8 19 8"/><line x1="9.5" y1="12.5" x2="15.5" y2="18"/><line x1="15.5" y1="12.5" x2="9.5" y2="18"/></svg>',
+            more:  '<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>',
+            warn:  '<svg viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+            check: '<svg viewBox="0 0 24 24"><polyline points="5 12.5 10 17.5 19 7.5"/></svg>',
+            search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="21" y2="21"/></svg>',
+            users: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></svg>'
+        };
+        function _pcSyncBtnHtml(label) { return _PCI.save + label; }
+
         function pcSetWeek(mode, btn) {
             _pcWeekMode = mode;
             var btnCurr = document.getElementById('pcToggleCurrent');
-            var btnNext = document.getElementById('pcToggleNext');
             var btnOggi = document.getElementById('pcToggleOggi');
-            if (btnCurr) {
-                btnCurr.style.background = mode === 'current' ? 'var(--accent)' : 'transparent';
-                btnCurr.style.color      = mode === 'current' ? '#000' : 'rgba(16,32,64,0.5)';
-            }
-            if (btnNext) {
-                btnNext.style.background = mode === 'next' ? '#a78bfa' : 'transparent';
-                btnNext.style.color      = mode === 'next' ? '#000' : 'rgba(167,139,250,0.6)';
-            }
-            if (btnOggi) {
-                btnOggi.style.background = mode === 'oggi' ? '#00d2b4' : 'transparent';
-                btnOggi.style.color      = mode === 'oggi' ? '#000' : 'rgba(0,210,180,0.7)';
-            }
+            if (btnCurr) btnCurr.classList.toggle('on', mode !== 'oggi');
+            if (btnOggi) btnOggi.classList.toggle('on', mode === 'oggi');
             // In modalità oggi — filtra solo i viaggi di oggi
             if (mode === 'oggi') {
                 var todayStr = new Date().toISOString().split('T')[0];
@@ -9350,6 +9507,8 @@
 
             // Multi-termine: divide per spazio, ogni termine deve essere presente
             const terms = _desktopQuickQuery ? _desktopQuickQuery.split(/\s+/).filter(Boolean) : [];
+            const cli = (document.getElementById('desktopClientSearch') || {value:''}).value.toLowerCase().trim();
+            const hasFilter = terms.length > 0 || !!cli;
 
             const tbody = document.querySelector('#desktopBody tbody');
             if (!tbody) return;
@@ -9359,7 +9518,7 @@
             // Prima nascondi/mostra le righe viaggio (non i separatori)
             const tripRows = tbody.querySelectorAll('tr:not(.day-sep-row)');
             tripRows.forEach(row => {
-                if (terms.length === 0) {
+                if (!hasFilter) {
                     row.style.display = '';
                     visible++;
                     return;
@@ -9367,7 +9526,12 @@
                 // Cerca solo negli input values — non nel textContent (che include chip e separatori)
                 const inputs = row.querySelectorAll('input[type="text"], input[type="date"]');
                 const vals = Array.from(inputs).map(i => i.value.toLowerCase()).join(' ');
-                const match = terms.every(t => vals.includes(t));
+                let match = terms.every(t => vals.includes(t));
+                if (match && cli) {
+                    const ai = row.querySelector('input[onchange*="\'arrivo\'"]');
+                    const av = ai ? ((ai.dataset.fullname || '') + ' ' + ai.value).toLowerCase() : '';
+                    match = av.includes(cli);
+                }
                 row.style.display = match ? '' : 'none';
                 if (match) visible++;
             });
@@ -9390,7 +9554,7 @@
             // Aggiorna contatore
             const countEl = document.getElementById('desktopFilterCount');
             if (countEl) {
-                if (terms.length > 0) {
+                if (hasFilter) {
                     countEl.textContent = visible + ' ' + (visible === 1 ? 'risultato' : 'risultati');
                     countEl.style.display = 'inline';
                 } else {
@@ -10349,7 +10513,7 @@
                 }
             } else {
                 // Altre viste: rispetta filtri attivi (ricerca, trasportatore, data, ecc.)
-                var hasFilters = searchQuery || filterState.today || filterState.date ||
+                var hasFilters = searchQuery || filterState.clienteQ || filterState.today || filterState.date ||
                                  filterState.transporter || filterState.partenza || filterState.arrivo || filterState.giorno;
                 toExport = hasFilters ? [...filteredTrips] : [...trips];
                 toExport.sort((a,b) => new Date(a.data||0) - new Date(b.data||0));
@@ -10916,6 +11080,7 @@
                     filterState.transporter = '';
                     filterState.partenza = '';
                     filterState.arrivo = '';
+                    filterState.clienteQ = '';
                     filterState.giorno = null;
                     searchQuery = '';
                     const _fi = document.getElementById('filterDate');        if (_fi) _fi.value = '';
@@ -10923,6 +11088,7 @@
                     const _fp = document.getElementById('filterPartenza');    if (_fp) _fp.value = '';
                     const _fa = document.getElementById('filterArrivo');      if (_fa) _fa.value = '';
                     const _fs = document.getElementById('searchInput');       if (_fs) _fs.value = '';
+                    const _fc = document.getElementById('filterClienteQ');    if (_fc) _fc.value = '';
                     const _bt = document.getElementById('btnFilterToday');    if (_bt) _bt.classList.remove('active');
 
                     filteredTrips = trips.slice();
@@ -10951,6 +11117,8 @@
             const selectPart = document.getElementById('filterPartenza');
             const selectArr = document.getElementById('filterArrivo');
             if (!selectTrans || !selectPart || !selectArr) return;
+            var _cl = document.getElementById('clienteList');
+            if (_cl) _cl.innerHTML = [...new Set(trips.map(t => (t.arrivo||'').trim()).filter(Boolean))].sort().map(v => '<option value="' + v.replace(/"/g,'&quot;') + '">').join('');
 
             // Salva selezioni correnti
             const curTrans = selectTrans.value;
@@ -11001,7 +11169,7 @@
         function updateFilterBadge() {
             const badge = document.getElementById('filterActiveBadge');
             if (!badge) return;
-            const active = filterState.today || filterState.transporter || filterState.partenza || filterState.arrivo || filterState.date;
+            const active = filterState.clienteQ || filterState.today || filterState.transporter || filterState.partenza || filterState.arrivo || filterState.date;
             badge.style.display = active ? 'inline-block' : 'none';
         }
 
@@ -11022,6 +11190,7 @@
             const fa = document.getElementById('filterArrivo');       if (fa) fa.value = '';
             searchQuery = '';
             const si = document.getElementById('searchInput');   if (si) { si.value = ''; }
+            const sc = document.getElementById('filterClienteQ'); if (sc) sc.value = '';
             const ds = document.getElementById('desktopQuickSearch'); if (ds) { ds.value = ''; }
             const cs = document.getElementById('clearSearch');   if (cs) cs.classList.remove('visible');
             const sr = document.getElementById('searchResults'); if (sr) sr.classList.remove('visible');
@@ -11057,6 +11226,7 @@
                     trip.trasportatore.trim().toLowerCase() !== filterState.transporter.trim().toLowerCase()) return false;
                 if (filterState.partenza && 
                     trip.partenza.trim().toLowerCase() !== filterState.partenza.trim().toLowerCase()) return false;
+                if (filterState.clienteQ && (trip.arrivo||'').toLowerCase().indexOf(filterState.clienteQ) === -1) return false;
                 if (filterState.arrivo && 
                     trip.arrivo.trim().toLowerCase() !== filterState.arrivo.trim().toLowerCase()) return false;
                 if (searchQuery) {
@@ -11067,11 +11237,12 @@
             });
 
             const info = document.getElementById('searchResults');
-            const hasFilters = filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo || searchQuery;
+            const hasFilters = filterState.clienteQ || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo || searchQuery;
             
             if (hasFilters) {
                 let parts = [];
                 if (searchQuery) parts.push('"' + searchQuery + '"');
+                if (filterState.clienteQ) parts.push('cliente: ' + filterState.clienteQ);
                 if (filterState.today) parts.push('solo oggi');
                 if (filterState.date) { const d = new Date(filterState.date + 'T12:00:00'); parts.push(d.toLocaleDateString('it-IT')); }
                 if (filterState.transporter) parts.push(filterState.transporter);
@@ -11270,11 +11441,9 @@
             const deskSyncBtn = document.getElementById('desktopSyncBtn');
             const deskLoadBtn = document.getElementById('desktopLoadBtn');
             if (deskSyncBtn) {
-                deskSyncBtn.innerHTML = connected
-                    ? '<span style="width:20px;height:20px;border-radius:50%;background:rgba(62,203,150,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">☁️</span>Salva'
-                    : '<span style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">☁️</span>Login';
-                deskSyncBtn.style.borderColor = connected ? 'rgba(62,203,150,0.4)' : 'rgba(255,255,255,0.15)';
-                deskSyncBtn.style.color = connected ? 'var(--success)' : 'var(--text-dim)';
+                deskSyncBtn.innerHTML = _PCI.save + 'Salva';
+                deskSyncBtn.style.color = connected ? '' : 'var(--text-dim)';
+                deskSyncBtn.style.opacity = connected ? '1' : '0.75';
             }
             if (deskLoadBtn) {
                 deskLoadBtn.style.opacity = connected ? '1' : '0.5';
@@ -11319,17 +11488,7 @@
         }
 
         // driveSync = premuto manualmente dall'utente → può aprire il popup di login
-        async function driveSync() {
-            if (!driveAccessToken) {
-                driveLogin(async () => {
-                    await driveSave();
-                    showStatus(`☁️ ${trips.length} viaggi salvati su Google Drive!`, 'success');
-                });
-            } else {
-                await driveSave();
-                showStatus(`☁️ ${trips.length} viaggi salvati su Google Drive!`, 'success');
-            }
-        }
+
 
         function driveLogin(callbackAfterLogin) {
             const client = google.accounts.oauth2.initTokenClient({
@@ -11360,41 +11519,7 @@
             }
         }
 
-        async function driveLoadData() {
-            try {
-                showStatus('☁️ Cerco dati su Drive...', 'info');
-                const fileId = await driveFindFile();
-                if (!fileId) {
-                    showStatus('☁️ Nessun dato trovato su Drive', 'info');
-                    return;
-                }
-                driveFileId = fileId;
-                const res = await fetch(
-                    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-                    { headers: { Authorization: `Bearer ${driveAccessToken}` } }
-                );
-                const data = await res.json();
-                const hasData = (data.trips && data.trips.length > 0) ||
-                                (data.weekArchive && data.weekArchive.length > 0);
-                if (hasData) {
-                    const tripCount  = data.trips ? data.trips.length : 0;
-                    const driveDate  = data.savedAt
-                        ? new Date(data.savedAt).toLocaleString('it-IT') : '—';
-                    const ok = confirm(
-                        `☁️ Trovati dati su Google Drive:\n` +
-                        `• ${tripCount} viaggi correnti\n` +
-                        `• ${(data.weekArchive||[]).length} settimane in archivio\n` +
-                        `• Salvato: ${driveDate}\n\n` +
-                        `Vuoi caricarli? (sovrascrive i dati locali)`
-                    );
-                    if (ok) await _applyDriveData(data, false);
-                } else {
-                    showStatus('☁️ Nessun dato trovato su Drive', 'info');
-                }
-            } catch (e) {
-                showStatus('❌ Errore caricamento Drive: ' + e.message, 'info');
-            }
-        }
+
 
         async function driveFindFile() {
             const res = await fetch(
@@ -11477,6 +11602,8 @@
                 trips: trips,
                 weekTitle: weekTitle,
                 weekArchive: loadArchive(),
+                tombs: _tombs,
+                v: 2,
                 savedAt: nowIso
             });
 
@@ -11513,15 +11640,9 @@
             }
 
             if (!res.ok) {
-                if (res.status === 401 || res.status === 403) {
-                    driveAccessToken = null;
-                    driveFileId = null;
-                    updateDriveBtns(false);
-                    showStatus('⚠️ Sessione Drive scaduta — riconnettiti', 'info');
-                } else {
-                    throw new Error(`HTTP ${res.status}`);
-                }
-                return false;
+                var _we = new Error('HTTP ' + res.status);
+                _we.auth = (res.status === 401 || res.status === 403);
+                throw _we;
             }
 
             // Aggiorna il timestamp noto
@@ -11533,32 +11654,32 @@
         // ── driveSave: conflict check → scrittura ──
         // NON apre mai il popup di login automaticamente — lo fa solo se chiamata da driveSync() (manuale)
         function _setSyncBtnState(state) {
-            // Aggiorna entrambi i bottoni salva: mobile + desktop
+            // Aggiorna entrambi i bottoni salva: mobile + desktop (v69: desktop con icone linea)
             const syncBtn = document.getElementById('syncBtn');
             const deskBtn = document.getElementById('desktopSyncBtn');
+            const dk = function(label, color) {
+                if (!deskBtn) return;
+                deskBtn.innerHTML = _PCI.save + label;
+                deskBtn.style.color = color || '';
+                deskBtn.style.opacity = '1';
+            };
             if (state === 'saving') {
                 if (syncBtn) syncBtn.innerHTML = '<span style="font-size:20px;line-height:1;">⏳</span>SALVO...';
-                if (deskBtn) { deskBtn.innerHTML = '<span style="width:20px;height:20px;border-radius:50%;background:rgba(224,192,90,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">⏳</span>Salvo...'; deskBtn.style.opacity = '0.7'; }
+                dk('Salvo…', '#f0c15a'); if (deskBtn) deskBtn.style.opacity = '0.8';
             } else if (state === 'saved') {
                 if (syncBtn) {
                     syncBtn.innerHTML = '<span style="font-size:20px;line-height:1;">✅</span>SALVATO!';
                     syncBtn.style.background = 'linear-gradient(135deg,var(--success),#248762)';
                     syncBtn.style.opacity = '1';
                 }
-                if (deskBtn) {
-                    deskBtn.innerHTML = '<span style="width:20px;height:20px;border-radius:50%;background:rgba(62,203,150,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">✅</span>Salvato!';
-                    deskBtn.style.background = 'rgba(62,203,150,0.25)';
-                    deskBtn.style.borderColor = 'rgba(62,203,150,0.6)';
-                    deskBtn.style.color = 'var(--success)';
-                    deskBtn.style.opacity = '1';
-                }
+                dk('Salvato', '#3ecb96');
                 setTimeout(() => {
                     if (syncBtn) { syncBtn.innerHTML = '<span style="font-size:20px;line-height:1;">☁️</span>SALVA'; syncBtn.style.background = ''; }
-                    if (deskBtn) { deskBtn.innerHTML = '<span style="width:20px;height:20px;border-radius:50%;background:rgba(62,203,150,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">☁️</span>Salva'; deskBtn.style.background = 'rgba(62,203,150,0.1)'; deskBtn.style.borderColor = 'rgba(62,203,150,0.3)'; deskBtn.style.opacity = '1'; }
+                    dk('Salva', '');
                 }, 3000);
             } else if (state === 'error') {
                 if (syncBtn) syncBtn.innerHTML = '<span style="font-size:20px;line-height:1;">☁️</span>SALVA';
-                if (deskBtn) { deskBtn.innerHTML = '<span style="width:20px;height:20px;border-radius:50%;background:rgba(62,203,150,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">☁️</span>Salva'; deskBtn.style.opacity = '1'; }
+                dk('Salva', '#ef6b5e');
             }
         }
 
@@ -11573,102 +11694,302 @@
             return [t.data||'', t.trasportatore||'', t.partenza||'', t.arrivo||'', t.prodotto||'']
                 .join('|').toLowerCase();
         }
-        function _mergeTripArrays(localTrips, driveTrips) {
-            var map = {};
-            (driveTrips||[]).forEach(function(t){ map[_tripMergeKey(t)] = t; });
-            // I viaggi locali vincono sui duplicati (sono la modifica più intenzionale
-            // appena fatta su questo dispositivo); i viaggi presenti SOLO su Drive
-            // (aggiunti dall'altro dispositivo) restano, invece di sparire.
-            (localTrips||[]).forEach(function(t){ map[_tripMergeKey(t)] = t; });
-            var merged = [];
-            for (var k in map) merged.push(map[k]);
-            return merged;
-        }
 
-        async function driveSave(silent) {
-            if (!driveAccessToken) {
-                console.log('☁️ driveSave: nessun token, skip silenzioso');
-                updateDriveBtns(false);
-                return;
-            }
-            try {
-                _setSyncBtnState('saving');
 
-                // Assicurati di avere il fileId
-                if (!driveFileId) driveFileId = await driveFindFile();
 
-                // Conflict check SEMPRE (anche nei salvataggi automatici silenziosi) —
-                // prima era saltato se silent, ed è esattamente per questo che un
-                // salvataggio automatico poteva sovrascrivere alla cieca le modifiche
-                // fatte nel frattempo dall'altro dispositivo.
-                if (driveFileId && _driveLastKnownSavedAt) {
-                    const { conflict, driveData } = await driveCheckConflict();
-                    if (conflict) {
-                        if (silent) {
-                            // Salvataggio automatico: niente popup, ma niente sovrascrittura
-                            // cieca — unisce i viaggi locali con quelli trovati su Drive
-                            // (vedi _mergeTripArrays) e prosegue scrivendo il risultato unito.
-                            trips = _mergeTripArrays(trips, driveData.trips || []);
-                            trips.sort((a, b) => {
-                                const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
-                                const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
-                                return da - db;
-                            });
-                            saveToLocalStorage();
-                            filteredTrips = [...trips];
-                            filterApply();
-                            updateStats();
-                            filterPopulateDropdowns();
-                            console.log('☁️ Conflitto risolto automaticamente (merge silenzioso)');
-                        } else {
-                            _setSyncBtnState('error');
-                            driveShowConflictModal(driveData);
-                            return;
-                        }
-                    }
-                }
-
-                const ok = await _driveWriteData();
-                if (!ok) {
-                    _setSyncBtnState('error');
-                    return;
-                }
-
-                _setSyncBtnState('saved');
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
-                const txt = document.getElementById('driveStatusText');
-                if (txt) txt.textContent = `Drive ✓ — salvato alle ${timeStr}`;
-
-            } catch (e) {
-                _setSyncBtnState('error');
-                // Se il token è scaduto (401), disconnetti silenziosamente
-                if (e.message && (e.message.includes('401') || e.message.includes('403'))) {
-                    driveAccessToken = null;
-                    updateDriveBtns(false);
-                    console.log('☁️ Token scaduto, disconnesso');
-                } else {
-                    showStatus('❌ Errore salvataggio Drive: ' + e.message, 'info');
-                }
-            }
-        }
 
         // ── Auto-save: salva silenziosamente, nessun conflict modal ──
+
+
+        // ══════════════════════════════════════════════════════════════════
+        // v67 — SALVATAGGIO / SINCRONIZZAZIONE AUTOMATICA (unico sistema)
+        //  • ogni viaggio ha id + ts (ultima modifica); le cancellazioni sono "lapidi" (_tombs)
+        //  • salvataggio locale immediato; Drive: debounce 1.5s, una sola operazione alla volta
+        //  • prima di scrivere si LEGGE Drive e si UNISCE (id/ts) → niente sovrascritture,
+        //    niente viaggi cancellati che ritornano
+        //  • aggiornamento in arrivo dall'altro dispositivo: al ritorno sull'app e ogni 45s
+        //  • "guardiano": ogni 1.5s controlla se i viaggi sono cambiati e, se sì, salva da solo
+        // ══════════════════════════════════════════════════════════════════
+        var _tombs = {};
+        try { _tombs = JSON.parse(localStorage.getItem('tripTombs') || '{}') || {}; } catch(e) { _tombs = {}; }
+        var _sigMap = null;
+        try { _sigMap = JSON.parse(localStorage.getItem('tripSigMap') || 'null'); } catch(e) { _sigMap = null; }
+        var _syncRunning = false, _syncPending = false, _syncTimer = null, _syncRetryTimer = null;
+        var _lastPersistSig = null;
+        var _SYNC_FIELDS = ['data','trasportatore','partenza','arrivo','prodotto','note','ddt','daConfermare','confermato'];
+
+        function _tripSig(t) {
+            return _SYNC_FIELDS.map(function(f){ var v = t[f]; return (v === undefined || v === null || v === false) ? '' : String(v); }).join('␟');
+        }
+        function _hash(str) { var h = 5381; for (var i = 0; i < str.length; i++) { h = ((h << 5) + h + str.charCodeAt(i)) | 0; } return (h >>> 0).toString(36); }
+        function _newTripId() { return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+        // id deterministico per i viaggi "vecchi" (senza id): stesso id su tutti i dispositivi
+        function _ensureIds(arr) {
+            var seen = {};
+            (arr || []).forEach(function(t) {
+                if (t.id) return;
+                var base = 'l' + _hash(_tripMergeKey(t));
+                seen[base] = (seen[base] || 0) + 1;
+                t.id = base + '_' + seen[base];
+                if (!t.ts) t.ts = 0;
+            });
+            return arr;
+        }
+
+        // Aggiorna id/ts e lapidi confrontando con l'ultimo stato salvato
+        function _stampTrips() {
+            var now = Date.now();
+            _ensureIds(trips);
+            var ids = {};
+            trips.forEach(function(t) {
+                if (!t.id) t.id = _newTripId();
+                // copia con lo stesso id di un altro viaggio (duplica, copia settimana) → nuovo viaggio
+                if (ids[t.id]) { t.id = _newTripId(); t.ts = now; }
+                // viaggio cancellato e poi rimesso (annulla, ripristino) → nuovo id, altrimenti la lapide lo cancellerebbe di nuovo
+                else if (_sigMap && _sigMap[t.id] === undefined && _tombs[t.id] && _tombs[t.id] >= (t.ts || 0)) { t.id = _newTripId(); t.ts = now; }
+                ids[t.id] = 1;
+                if (_sigMap) {
+                    var s = _tripSig(t);
+                    if (_sigMap[t.id] === undefined) { t.ts = now; }         // nuovo viaggio
+                    else if (_sigMap[t.id] !== s) { t.ts = now; }             // modificato
+                }
+                if (!t.ts) t.ts = _sigMap ? now : (t.ts || 0);
+            });
+            if (_sigMap) {
+                for (var id in _sigMap) { if (!ids[id]) _tombs[id] = now; }   // cancellato
+            }
+            // una lapide non vale se il viaggio è stato (ri)creato dopo
+            trips.forEach(function(t) { if (_tombs[t.id] && _tombs[t.id] < t.ts) delete _tombs[t.id]; });
+            var lim = now - 60 * 86400000;
+            for (var k in _tombs) { if (_tombs[k] < lim) delete _tombs[k]; }
+            _sigMap = {};
+            trips.forEach(function(t) { _sigMap[t.id] = _tripSig(t); });
+            try {
+                localStorage.setItem('tripSigMap', JSON.stringify(_sigMap));
+                localStorage.setItem('tripTombs', JSON.stringify(_tombs));
+            } catch(e) {}
+        }
+
+        function _tripsSigAll() { return trips.map(function(t){ return (t.id || '') + '#' + _tripSig(t); }).join('\n'); }
+
+        function saveToLocalStorage(skipSort) {
+            _stampTrips();
+            if (skipSort !== true) trips.sort((a,b) => {
+                const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                return da - db;
+            });
+            localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
+            _lastPersistSig = _tripsSigAll();
+            autoSaveDrive();
+        }
+
+        // Unione viaggi: per id, vince l'ultima modifica; le lapidi rimuovono
+        function _mergeState(localTrips, localTombs, driveTrips, driveTombs) {
+            var tombs = {};
+            [localTombs || {}, driveTombs || {}].forEach(function(src) { for (var k in src) { if (!tombs[k] || src[k] > tombs[k]) tombs[k] = src[k]; } });
+            var map = {};
+            _ensureIds(driveTrips || []);
+            (driveTrips || []).forEach(function(t) { map[t.id] = t; });
+            (localTrips || []).forEach(function(t) {
+                var o = map[t.id];
+                if (!o || (t.ts || 0) >= (o.ts || 0)) map[t.id] = t;
+            });
+            var out = [];
+            for (var id in map) {
+                var t = map[id];
+                if (tombs[id] && tombs[id] >= (t.ts || 0)) continue;
+                out.push(t);
+            }
+            out.sort(function(a, b) {
+                var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
+                var db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
+                return da - db;
+            });
+            return { trips: out, tombs: tombs };
+        }
+        function _mergeTripArrays(localTrips, driveTrips) { return _mergeState(localTrips, _tombs, driveTrips, {}).trips; }
+
+        function _sameTripSet(a, b) {
+            if (a.length !== b.length) return false;
+            var m = {};
+            a.forEach(function(t) { m[t.id] = t.ts || 0; });
+            for (var i = 0; i < b.length; i++) { if (m[b[i].id] === undefined || m[b[i].id] !== (b[i].ts || 0)) return false; }
+            return true;
+        }
+
+        function _userIsTyping() {
+            var a = document.activeElement;
+            if (!a) return false;
+            var tag = (a.tagName || '').toUpperCase();
+            return (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') && !!a.closest('#desktopBody, #addForm, .modal, [id$="Modal"]');
+        }
+        var _uiRefreshDeferred = false;
+        function _refreshAllViews() {
+            filteredTrips = [...trips];
+            try { filterPopulateDropdowns(); } catch(e) {}
+            try { filterApply(); } catch(e) {}
+            try { updateStats(); } catch(e) {}
+            try { if (currentView === 'desktop') renderDesktopView(); } catch(e) {}
+            try { if (currentView === 'oggi') renderOggiView(); } catch(e) {}
+        }
+        function _applyMergedToUI() {
+            if (_userIsTyping()) {                   // non disturbare chi sta scrivendo
+                _uiRefreshDeferred = true;
+                return;
+            }
+            _uiRefreshDeferred = false;
+            _refreshAllViews();
+        }
+        document.addEventListener('focusout', function() {
+            if (_uiRefreshDeferred) setTimeout(function() { if (!_userIsTyping()) _applyMergedToUI(); }, 400);
+        });
+
+        function _setDriveText(txt, color) {
+            var t = document.getElementById('driveStatusText'); if (t) t.textContent = txt;
+            var d = document.getElementById('driveStatusDot'); if (d && color) d.style.background = color;
+            var ds = document.getElementById('driveStatus'); if (ds) ds.style.display = 'block';
+        }
+
+        // Cuore: legge Drive, unisce, applica in locale se serve, scrive su Drive se serve
+        async function _driveSyncCore(forceWrite) {
+            if (!driveAccessToken) return false;
+            if (!driveFileId) driveFileId = await driveFindFile();
+            var driveData = null;
+            if (driveFileId) {
+                var res = await fetch('https://www.googleapis.com/drive/v3/files/' + driveFileId + '?alt=media',
+                    { headers: { Authorization: 'Bearer ' + driveAccessToken } });
+                if (res.status === 401 || res.status === 403) { var e1 = new Error('HTTP ' + res.status); e1.auth = true; throw e1; }
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                driveData = await res.json();
+            }
+            var driveTrips = (driveData && driveData.trips) || [];
+            var m = _mergeState(trips, _tombs, driveTrips, driveData && driveData.tombs);
+            var changedLocal = !_sameTripSet(trips, m.trips);
+            _tombs = m.tombs;
+            if (changedLocal) {
+                trips = m.trips;
+                _sigMap = {}; trips.forEach(function(t) { _sigMap[t.id] = _tripSig(t); });
+                try { localStorage.setItem('tripSigMap', JSON.stringify(_sigMap)); } catch(e) {}
+            }
+            try { localStorage.setItem('tripTombs', JSON.stringify(_tombs)); } catch(e) {}
+            // titolo/archivio: vince la versione più recente su Drive solo se non abbiamo modifiche non inviate
+            if (driveData) {
+                var dT = driveData.savedAt ? new Date(driveData.savedAt).getTime() : 0;
+                var lT = localStorage.getItem('savedAt') ? new Date(localStorage.getItem('savedAt')).getTime() : 0;
+                if (dT > lT) {
+                    if (driveData.weekTitle && driveData.weekTitle !== weekTitle) {
+                        weekTitle = driveData.weekTitle; setText('weekInfo', weekTitle); localStorage.setItem('weekTitle', weekTitle);
+                    }
+                    if (Array.isArray(driveData.weekArchive)) { saveArchive(driveData.weekArchive); try { renderArchive(); } catch(e) {} }
+                }
+            }
+            if (changedLocal) {
+                localStorage.setItem('viaggiLogistica', JSON.stringify(trips));
+                _lastPersistSig = _tripsSigAll();
+                _applyMergedToUI();
+            }
+            var needWrite = forceWrite || !driveData || !_sameTripSet(m.trips, driveTrips) ||
+                            Object.keys(_tombs).length !== Object.keys((driveData && driveData.tombs) || {}).length;
+            if (needWrite) {
+                var ok = await _driveWriteData();
+                if (!ok) throw new Error('scrittura fallita');
+            } else if (driveData && driveData.savedAt) {
+                _driveLastKnownSavedAt = driveData.savedAt;
+                localStorage.setItem('savedAt', driveData.savedAt);
+            }
+            return true;
+        }
+
+        // Una sola sincronizzazione alla volta; se arrivano altre modifiche mentre gira, ne rifà una dopo
+        async function _runSync(forceWrite) {
+            if (!driveAccessToken) return false;
+            if (_syncRunning) { _syncPending = true; return false; }
+            _syncRunning = true;
+            var ok = false;
+            try {
+                _setSyncBtnState('saving');
+                _setDriveText('☁️ Sincronizzo…', '#e0c05a');
+                ok = await _driveSyncCore(forceWrite);
+                _setSyncBtnState('saved');
+                var tm = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+                _setDriveText('Drive ✓ — sincronizzato alle ' + tm, '#3ecb96');
+                if (_syncRetryTimer) { clearTimeout(_syncRetryTimer); _syncRetryTimer = null; }
+            } catch (e) {
+                _setSyncBtnState('error');
+                if (e && e.auth) {
+                    driveAccessToken = null; driveFileId = null; updateDriveBtns(false);
+                    _setDriveText('⚠️ Sessione Drive scaduta — riconnessione…', '#e0574a');
+                    try { silentDriveInit(true); } catch(e2) {}
+                } else {
+                    _setDriveText('⚠️ Non sincronizzato — riprovo tra poco', '#e0574a');
+                    if (!_syncRetryTimer) _syncRetryTimer = setTimeout(function() { _syncRetryTimer = null; _runSync(true); }, 15000);
+                }
+            } finally {
+                _syncRunning = false;
+                if (_syncPending) { _syncPending = false; setTimeout(function() { _runSync(true); }, 300); }
+            }
+            return ok;
+        }
+
         function autoSaveDrive() {
             if (driveAccessToken) {
-                driveSave(true);
+                if (_syncTimer) clearTimeout(_syncTimer);
+                _syncTimer = setTimeout(function() { _syncTimer = null; _runSync(true); }, 1500);
             } else if (localStorage.getItem('driveConnected')) {
-                // Era connesso ma ora non ha un token valido: il salvataggio locale
-                // (già fatto da saveToLocalStorage) è andato a buon fine, ma su Drive no.
-                // Meglio dirlo chiaramente che far credere che sia tutto sincronizzato.
-                const txt = document.getElementById('driveStatusText');
-                if (txt) txt.textContent = '⚠️ Salvato solo su questo dispositivo — riapri "Salva" per riconnettere Drive';
-                const dot = document.getElementById('driveStatusDot');
-                if (dot) dot.style.background = '#e0574a';
-                const ds = document.getElementById('driveStatus');
-                if (ds) ds.style.display = 'block';
+                _setDriveText('⚠️ Salvato solo su questo dispositivo — Drive si riconnette al prossimo tocco', '#e0574a');
+                try { if (typeof _driveSilentRetryArmed !== 'undefined' && !_driveSilentRetryArmed) silentDriveInit(true); } catch(e) {}
             }
         }
+        async function driveSave(silent) { if (_syncTimer) { clearTimeout(_syncTimer); _syncTimer = null; } return _runSync(true); }
+        async function driveSmartSync() { return _runSync(false); }
+        async function _applyDriveData(data, silent) {            // compatibilità: ora unisce, non sovrascrive
+            var m = _mergeState(trips, _tombs, data.trips || [], data.tombs);
+            trips = m.trips; _tombs = m.tombs;
+            if (data.weekTitle) { weekTitle = data.weekTitle; setText('weekInfo', weekTitle); localStorage.setItem('weekTitle', weekTitle); }
+            if (Array.isArray(data.weekArchive)) { saveArchive(data.weekArchive); try { renderArchive(); } catch(e) {} }
+            _sigMap = {}; trips.forEach(function(t) { _sigMap[t.id] = _tripSig(t); });
+            localStorage.setItem('tripSigMap', JSON.stringify(_sigMap)); localStorage.setItem('tripTombs', JSON.stringify(_tombs));
+            localStorage.setItem('viaggiLogistica', JSON.stringify(trips)); _lastPersistSig = _tripsSigAll();
+            if (data.savedAt) { localStorage.setItem('savedAt', data.savedAt); _driveLastKnownSavedAt = data.savedAt; }
+            _refreshAllViews();
+            if (!silent) showStatus('✅ ' + trips.length + ' viaggi aggiornati da Drive', 'success');
+        }
+
+        // Carica da Drive = scarica e UNISCE (non cancella niente di locale)
+        async function driveLoadData() {
+            showStatus('☁️ Aggiorno da Drive…', 'info');
+            var before = trips.length;
+            var ok = await _runSync(false);
+            if (ok) showStatus('✅ Aggiornato da Drive (' + trips.length + ' viaggi)', 'success');
+        }
+        async function driveSync() {
+            if (!driveAccessToken) {
+                driveLogin(async function() { var ok = await _runSync(true); if (ok) showStatus('☁️ ' + trips.length + ' viaggi sincronizzati con Drive', 'success'); });
+            } else {
+                var ok = await _runSync(true);
+                if (ok) showStatus('☁️ ' + trips.length + ' viaggi sincronizzati con Drive', 'success');
+            }
+        }
+
+        // ── Guardiano: qualsiasi modifica ai viaggi, anche dimenticata, viene salvata ──
+        setInterval(function() {
+            try {
+                if (_lastPersistSig === null) { _lastPersistSig = _tripsSigAll(); return; }
+                if (_tripsSigAll() !== _lastPersistSig) saveToLocalStorage(true);   // senza riordinare: gli indici della tabella restano validi
+            } catch(e) {}
+        }, 1500);
+        // ── Aggiornamenti dall'altro dispositivo ──
+        setInterval(function() { if (!document.hidden && driveAccessToken && !_syncRunning) _runSync(false); }, 45000);
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (_syncTimer) { clearTimeout(_syncTimer); _syncTimer = null; _runSync(true); }   // manda subito quello che manca
+            } else if (driveAccessToken) { _runSync(false); }
+            else if (localStorage.getItem('driveConnected')) { try { silentDriveInit(true); } catch(e) {} }
+        });
+        window.addEventListener('online', function() { if (driveAccessToken) _runSync(true); });
+        window.addEventListener('pagehide', function() { try { if (_tripsSigAll() !== _lastPersistSig) saveToLocalStorage(); } catch(e) {} });
 
         // Auto-reconnect silenzioso — solo per rinnovare un token già valido (chiamato ogni 50min)
         // NON viene mai chiamato all'apertura, NON mostra mai nulla all'utente
@@ -11677,8 +11998,32 @@
         // attivo ogni 50 min), questa funziona anche quando driveAccessToken è ancora null.
         // Dopo la riconnessione lancia driveSmartSync() per allinearsi subito col dato più
         // recente (locale o Drive), invece di partire alla cieca con dati potenzialmente vecchi.
-        function silentDriveInit() {
+        var _driveSilentRetryArmed = false;
+
+        // Stato onesto quando Drive non è collegato (mai più "Riconnessione..." fermo all'infinito)
+        function _driveSilentFail(armRetry) {
+            if (driveAccessToken) return;      // nel frattempo si è collegato
+            updateDriveBtns(false);
+            const txt = document.getElementById('driveStatusText');
+            if (txt) txt.textContent = armRetry
+                ? '⚠️ Drive non riconnesso — tocca un punto qualsiasi per riprovare'
+                : '⚠️ Drive non riconnesso — premi Salva per riconnettere';
+            const dot = document.getElementById('driveStatusDot');
+            if (dot) dot.style.background = '#e0574a';
+            const ds = document.getElementById('driveStatus');
+            if (ds) ds.style.display = 'block';
+        }
+
+        function silentDriveInit(isRetry) {
             if (!localStorage.getItem('driveConnected')) return;
+            if (isRetry === true) {
+                const t0 = document.getElementById('driveStatusText');
+                if (t0) t0.textContent = '☁️ Riconnessione a Drive...';
+                const d0 = document.getElementById('driveStatusDot');
+                if (d0) d0.style.background = '#e0c05a';
+            }
+            // rete di sicurezza: se dopo 15 secondi non è successo niente, lo dico
+            const failTimer = setTimeout(function() { _driveSilentFail(false); }, 15000);
             try {
                 const client = google.accounts.oauth2.initTokenClient({
                     client_id: DRIVE_CLIENT_ID,
@@ -11686,26 +12031,42 @@
                     prompt: 'none',
                     hint: '',
                     callback: (response) => {
+                        clearTimeout(failTimer);
                         if (response && !response.error && response.access_token) {
                             driveAccessToken = response.access_token;
                             updateDriveBtns(true);
-                            console.log('☁️ Riconnesso silenziosamente all\'avvio');
+                            console.log('☁️ Riconnesso silenziosamente');
                             driveSmartSync();
                         } else {
-                            // Onesto: se la riconnessione silenziosa fallisce, l'utente deve
-                            // saperlo — altrimenti pensa di essere sincronizzato e non lo è
-                            updateDriveBtns(false);
-                            const txt = document.getElementById('driveStatusText');
-                            if (txt) txt.textContent = '⚠️ Drive non riconnesso — premi Salva per riconnettere';
-                            const dot = document.getElementById('driveStatusDot');
-                            if (dot) dot.style.background = '#e0574a';
-                            console.log('☁️ Riconnessione silenziosa fallita all\'avvio');
+                            console.log('☁️ Riconnessione silenziosa rifiutata:', response && response.error);
+                            _driveSilentFail(false);
+                        }
+                    },
+                    // Gli errori "di sistema" (popup bloccato dal browser, chiuso...) arrivano QUI e non nel
+                    // callback: senza questo la scritta restava "Riconnessione..." per sempre (difetto v53)
+                    error_callback: (err) => {
+                        clearTimeout(failTimer);
+                        console.log('☁️ Riconnessione silenziosa non riuscita:', err && err.type);
+                        if (err && err.type === 'popup_failed_to_open' && isRetry !== true && !_driveSilentRetryArmed) {
+                            // il browser blocca il popup perché non c'è un gesto dell'utente:
+                            // riprovo UNA volta al primo tocco/clic, quando il popup è consentito
+                            _driveSilentRetryArmed = true;
+                            _driveSilentFail(true);
+                            const once = function() {
+                                document.removeEventListener('pointerdown', once, true);
+                                silentDriveInit(true);
+                            };
+                            document.addEventListener('pointerdown', once, true);
+                        } else {
+                            _driveSilentFail(false);
                         }
                     }
                 });
                 client.requestAccessToken({ prompt: 'none' });
             } catch(e) {
+                clearTimeout(failTimer);
                 console.log('☁️ silentDriveInit eccezione:', e.message);
+                _driveSilentFail(false);
             }
         }
 
@@ -11738,90 +12099,10 @@
         }
 
         // Sync intelligente: scarica da Drive se è più recente, altrimenti salva
-        async function driveSmartSync() {
-            if (!driveAccessToken) return;
-            try {
-                const fileId = await driveFindFile();
-                if (!fileId) {
-                    // Nessun file su Drive — salva i dati locali
-                    console.log('☁️ Nessun file su Drive, carico dati locali');
-                    await driveSave(true);
-                    return;
-                }
-                driveFileId = fileId;
 
-                // Scarica metadati per confrontare il timestamp
-                const res = await fetch(
-                    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-                    { headers: { Authorization: `Bearer ${driveAccessToken}` } }
-                );
-                const data = await res.json();
-
-                const driveTime  = data.savedAt  ? new Date(data.savedAt).getTime()  : 0;
-                const localTime  = localStorage.getItem('savedAt')
-                                 ? new Date(localStorage.getItem('savedAt')).getTime() : 0;
-
-                const localIsEmpty = trips.length === 0;
-                const driveHasData = (data.trips && data.trips.length > 0) ||
-                                     (data.weekArchive && data.weekArchive.length > 0);
-
-                if (localIsEmpty && driveHasData) {
-                    // Locale vuoto, Drive ha dati → carica silenziosamente
-                    console.log('☁️ Locale vuoto, carico da Drive silenziosamente');
-                    await _applyDriveData(data, true);
-                } else if (driveTime > localTime + 30000) {
-                    // Drive più recente → carica silenziosamente (nessun popup)
-                    console.log('☁️ Drive più recente, carico silenziosamente');
-                    await _applyDriveData(data, true);
-                } else {
-                    // Locale uguale o più recente → salva su Drive
-                    console.log('☁️ Dati locali più recenti, salvo su Drive');
-                    await driveSave(true);
-                }
-            } catch(e) {
-                console.warn('☁️ SmartSync fallito silenziosamente:', e.message);
-                // Fallisce silenziosamente — non disturba l'utente
-            }
-        }
 
         // Applica i dati scaricati da Drive (usato da smartSync e driveLoadData)
-        async function _applyDriveData(data, silent) {
-            if (data.trips && data.trips.length > 0) {
-                trips = data.trips;
-                trips.sort((a,b) => {
-                    const da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
-                    const db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
-                    return da - db;
-                });
-            }
-            if (data.weekTitle) {
-                weekTitle = data.weekTitle;
-                setText('weekInfo', weekTitle);
-                localStorage.setItem('weekTitle', weekTitle);
-            }
-            if (data.weekArchive && Array.isArray(data.weekArchive)) {
-                saveArchive(data.weekArchive);
-                renderArchive();
-            }
-            saveToLocalStorage();
-            // Aggiorna il timestamp noto — ora siamo allineati col Drive
-            if (data.savedAt) {
-                localStorage.setItem('savedAt', data.savedAt);
-                _driveLastKnownSavedAt = data.savedAt;
-            }
-            filteredTrips = [...trips];
-            filterApply();
-            updateStats();
-            filterPopulateDropdowns();
-            if (!silent) {
-                const archiveCount = (data.weekArchive || []).length;
-                const archiveNote = archiveCount > 0 ? ` · ${archiveCount} sett. in archivio` : '';
-                showStatus(`✅ ${trips.length} viaggi caricati da Drive!${archiveNote}`, 'success');
-            } else {
-                const txt = document.getElementById('driveStatusText');
-                if (txt) txt.textContent = `Drive ✓ — sync automatico OK`;
-            }
-        }
+
 
 
         // Close modal on backdrop click
