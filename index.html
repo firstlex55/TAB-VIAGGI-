@@ -7083,15 +7083,16 @@
                     'if(next){next.focus();next.select();}' +
                     '}';
 
-                var cardBg = isWarn ? (isToday ? '#3d3828' : '#3a3527') : (isToday ? '#2a2f3f' : '#242b3d');
-                var statusBorder = isWarn ? '#f0b030' : 'rgba(255,255,255,0.06)';
-                return '<tr style="background:' + cardBg + ';border-left:' + (isWarn ? '8px' : '4px') + ' solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
+                var cardBg = isToday ? '#2a2f3f' : '#242b3d';                 // v75: niente più riga gialla per "da confermare"
+                var statusBorder = 'rgba(255,255,255,0.06)';
+                return '<tr style="background:' + cardBg + ';border-left:4px solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
                     ' onfocusin="this.style.outline=\'1px solid rgba(232,98,63,0.35)\'"' +
                     ' onfocusout="this.style.outline=\'\'">' +
 
                     // Drag handle
-                    '<td style="padding:4px 3px;width:14px;text-align:center;opacity:0.2;cursor:default;user-select:none;">' +
-                    '<span style="font-size:11px;">⋮⋮</span>' +
+                    '<td style="padding:4px 3px;width:14px;text-align:center;cursor:default;user-select:none;">' +
+                    '<span style="font-size:11px;opacity:0.2;">⋮⋮</span>' +
+                    (isWarn ? '<span class="pc-pend-dot" title="Da confermare" style="display:block;width:9px;height:9px;border-radius:50%;background:#f0b030;margin:7px auto 0;"></span>' : '') +
                     '</td>' +
 
                     // DATA — testo grande + indicatore OGGI, picker nascosto al click
@@ -8862,6 +8863,17 @@
                 + '<button onclick="desktopDel(' + idx + ')" title="Elimina" style="width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:#8590aa;font-size:12px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background=\'rgba(232,98,63,0.18)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'#8590aa\'">🗑</button>'
                 + '</div>';
             cell.innerHTML = '<div style="display:flex;align-items:center;gap:10px;justify-content:space-between;">' + statoHtml + noteHtml + actionsHtml + '</div>';
+            // v75: il pallino "da confermare" segue lo stato (si accende/spegne senza ridisegnare la tabella)
+            var _h = document.querySelector('#drow-' + idx + ' td:first-child');
+            if (_h) {
+                var _d = _h.querySelector('.pc-pend-dot');
+                if (t.daConfermare && !_d) {
+                    _d = document.createElement('span');
+                    _d.className = 'pc-pend-dot'; _d.title = 'Da confermare';
+                    _d.style.cssText = 'display:block;width:9px;height:9px;border-radius:50%;background:#f0b030;margin:7px auto 0;';
+                    _h.appendChild(_d);
+                } else if (!t.daConfermare && _d) { _d.remove(); }
+            }
         }
 
         // Direzione mancante rispetto a desktopToggleConf (che sa solo confermare):
@@ -8871,16 +8883,7 @@
             if (!_wt[idx]) return;
             _wt[idx].daConfermare = true;
             if (_pcWeekMode === 'next') saveNextToLocalStorage(); else saveToLocalStorage();
-            var row = document.getElementById('drow-' + idx);
-            if (row) {
-                row.style.transition = 'background 0.15s';
-                row.style.background = 'rgba(224,160,48,0.18)';
-                row.style.borderLeftColor = '#e0a030';
-                setTimeout(function() {
-                    row.style.transition = 'background 0.6s';
-                    row.style.background = '';
-                }, 500);
-            }
+            // v75: niente lampo giallo sulla riga (cancellava anche lo sfondo della riga fino al ridisegno)
             _desktopRebuildStatoCell(idx);
             updateStats();
             haptic('light');
@@ -8944,18 +8947,7 @@
             if (!_wt[idx]) return;
             _wt[idx].daConfermare = false;
             if (_pcWeekMode === 'next') saveNextToLocalStorage(); else saveToLocalStorage();
-            // Animazione conferma — flash verde sulla riga
-            var row = document.getElementById('drow-' + idx);
-            if (row) {
-                row.style.transition = 'background 0.15s';
-                row.style.background = 'rgba(16,120,88,0.16)';
-                row.style.borderLeftColor = '#085040';
-                setTimeout(function() {
-                    row.style.transition = 'background 0.6s';
-                    row.style.background = '';
-                    row.style.borderLeftColor = '';
-                }, 500);
-            }
+            // v75: niente lampo sulla riga (azzerava lo sfondo della riga fino al ridisegno)
             // Aggiorna la cella stato (flag + icona nota + azioni) in modo coerente
             _desktopRebuildStatoCell(idx);
             updateStats();
