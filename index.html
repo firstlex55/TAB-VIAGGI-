@@ -1506,16 +1506,16 @@
             --success: #3ecb96;
             --warning: #e0c05a;
             --accent: #e8623f;
-            --t-cevolo:   #d69a1a; --t-cevolo-bg:   rgba(214,154,26,0.16);
-            --t-coap:     #5a9fd4; --t-coap-bg:     rgba(90,159,212,0.16);
-            --t-coneco:   #8a6fe0; --t-coneco-bg:   rgba(138,111,224,0.16);
-            --t-consar:   #d9505f; --t-consar-bg:   rgba(217,80,95,0.16);
-            --t-avio:     #a8c030; --t-avio-bg:     rgba(168,192,48,0.16);
-            --t-alb:      #3aa860; --t-alb-bg:      rgba(58,168,96,0.16);
-            --t-lino:     #d94f9a; --t-lino-bg:     rgba(217,79,154,0.16);
-            --t-stegagno: #4ab8c9; --t-stegagno-bg: rgba(74,184,201,0.16);
-            --t-cirioni:  #7ac95a; --t-cirioni-bg:  rgba(122,201,90,0.16);
-            --t-clp:      #b070d9; --t-clp-bg:      rgba(176,112,217,0.16);
+            --t-cevolo:   #cd9723; --t-cevolo-bg:   rgba(205,151,35,0.16);
+            --t-coap:     #609ece; --t-coap-bg:     rgba(96,158,206,0.16);
+            --t-coneco:   #8d75da; --t-coneco-bg:   rgba(141,117,218,0.16);
+            --t-consar:   #d25764; --t-consar-bg:   rgba(210,87,100,0.16);
+            --t-avio:     #a3b937; --t-avio-bg:     rgba(163,185,55,0.16);
+            --t-alb:      #3fa362; --t-alb-bg:      rgba(63,163,98,0.16);
+            --t-lino:     #d25699; --t-lino-bg:     rgba(210,86,153,0.16);
+            --t-stegagno: #50b3c3; --t-stegagno-bg: rgba(80,179,195,0.16);
+            --t-cirioni:  #7cc360; --t-cirioni-bg:  rgba(124,195,96,0.16);
+            --t-clp:      #af75d4; --t-clp-bg:      rgba(175,117,212,0.16);
             --t-default:  #8590aa; --t-default-bg:  rgba(133,144,170,0.18);
             --pctoolbar: #1a2540;
             --pctoolbar-bd: rgba(255,255,255,0.1);
@@ -6939,9 +6939,9 @@
                     'if(next){next.focus();next.select();}' +
                     '}';
 
-                var cardBg = isToday ? '#2a2f3f' : '#242b3d';
-                var statusBorder = isWarn ? '#e0a030' : 'rgba(255,255,255,0.06)';
-                return '<tr style="background:' + cardBg + ';border-left:4px solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
+                var cardBg = isWarn ? (isToday ? '#3d3828' : '#3a3527') : (isToday ? '#2a2f3f' : '#242b3d');
+                var statusBorder = isWarn ? '#f0b030' : 'rgba(255,255,255,0.06)';
+                return '<tr style="background:' + cardBg + ';border-left:' + (isWarn ? '8px' : '4px') + ' solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
                     ' onfocusin="this.style.outline=\'1px solid rgba(232,98,63,0.35)\'"' +
                     ' onfocusout="this.style.outline=\'\'">' +
 
@@ -7220,7 +7220,7 @@
                     </div>
                     <div style="flex:1;overflow-y:auto;overflow-x:auto;" id="desktopTableScroll">
                         <table style="width:100%;border-collapse:collapse;min-width:1230px;">
-                            <thead style="position:sticky;top:0;z-index:10;background:#c0cad8;box-shadow:0 1px 0 rgba(16,32,64,0.08);">
+                            <thead style="position:sticky;top:0;z-index:10;background:#2d3447;box-shadow:none;">
                                 <tr>
                                     <th style="width:22px;padding:10px 4px;"></th>
                                     ${['data','trasportatore','partenza','arrivo','prodotto'].map((f,i) => {
@@ -7228,11 +7228,11 @@
                                         const widths = {data:'100px',trasportatore:'160px',partenza:'300px',arrivo:'300px',prodotto:'170px'};
                                         const isActive = _desktopSort.field === f;
                                         const arrow = isActive ? (_desktopSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
-                                        const clr = isActive ? '#c8501a' : 'rgba(16,32,64,0.55)';
-                                        const bdr = isActive ? '2px solid var(--accent)' : '2px solid rgba(16,32,64,0.08)';
+                                        const clr = isActive ? '#ff8c5a' : '#d6dcea';
+                                        const bdr = isActive ? '2px solid var(--accent)' : '2px solid #46506b';
                                         return '<th onclick="desktopSortBy(\'' + f + '\')" style="padding:14px 12px;text-align:left;font-size:11px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:1px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:var(--accent);font-size:11px;\">' + arrow + '</span>' : '') + '</th>';
                                     }).join('')}
-                                    <th style="width:170px;padding:11px 8px;text-align:left;font-size:10px;font-weight:800;color:rgba(16,32,64,0.55);border-bottom:2px solid rgba(16,32,64,0.08);letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
+                                    <th style="width:170px;padding:11px 8px;text-align:left;font-size:10px;font-weight:800;color:#d6dcea;border-bottom:2px solid #46506b;letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -10623,160 +10623,205 @@
 
                 const wb = new ExcelJS.Workbook();
                 wb.creator = 'Planning Viaggi';
-
                 const ws = wb.addWorksheet('Planning');
-                ws.pageSetup = { orientation:'landscape', fitToPage:true, fitToWidth:1, fitToHeight:0,
-                    paperSize:9, margins:{left:0.4,right:0.4,top:0.6,bottom:0.6,header:0.3,footer:0.3} };
+
+                // ── v70: layout "B" — righe alte, fascia tenue per giorno, pronto per la stampa ──
+                // Colonne: A barra colore | B Giorno | C Trasportatore | D Fornitore(cod) | E Partenza | F Cliente(cod) | G Arrivo | H Prodotto | I DDT | J Stato | K Note
                 ws.columns = [
-                    {width:2},{width:13},{width:3},{width:17},{width:17},{width:11},
-                    {width:17},{width:11},{width:15},{width:10},{width:13},{width:20}
+                    {width:1.6},{width:16},{width:19},{width:16},{width:22},{width:16},{width:22},{width:17},{width:10},{width:17},{width:26}
                 ];
+                const LAST = 11;
+                const INK='FF111827', GREY='FF6B7280', LINE='FFE5E7EB', WHITE='FFFFFFFF', ORANGE='FFE8623F';
+                const GREEN='FF15803D', AMBER='FFB45309', AMBERBG='FFFEF3C7';
+                const solid = function(argb) { return { type:'pattern', pattern:'solid', fgColor:{argb:argb} }; };
+                const FONT = 'Calibri';
 
-                const INK='FF1A2340', ACCENT='FF2F6FED', LIGHTBG='F6F8FB', WHITE='FFFFFF';
-                const GREEN='FF0F9D58', GREENBG='FFE6F6EC', AMBER='FFB7791F', AMBERBG='FFFDF3D9';
-
-                // Titolo
-                ws.mergeCells('B1:L1');
-                const r1 = ws.getRow(1);
-                r1.getCell(2).value = 'Planning Viaggi';
-                r1.getCell(2).font = { bold:true, size:17, color:{argb:INK}, name:'Calibri' };
-                r1.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
-                r1.height = 32;
-
-                const weekRange = _xlsWeekRange(sorted);
-                ws.mergeCells('B2:L2');
-                const r2 = ws.getRow(2);
-                r2.getCell(2).value = 'Pro Trasporti  ·  ' + weekRange;
-                r2.getCell(2).font = { size:10, color:{argb:'FF6B7280'}, name:'Calibri' };
-                r2.getCell(2).alignment = { vertical:'center', horizontal:'left', indent:1 };
-                r2.height = 16;
-
-                // KPI cards
+                // Titolo + riquadri numeri (a destra)
                 const tot = sorted.length;
-                const conf = sorted.filter(t => t.confermato).length;
                 const daconf = sorted.filter(t => t.daConfermare).length;
                 const nTransp = new Set(sorted.map(t => t.trasportatore||'?')).size;
-                const cards = [
-                    { label:'Viaggi totali',   val:tot,    color:ACCENT,    tint:'FFDCE7FE' },
-                    { label:'Confermati',      val:conf,   color:GREEN,     tint:GREENBG },
-                    { label:'Da confermare',   val:daconf, color:AMBER,     tint:AMBERBG },
-                    { label:'Trasportatori',   val:nTransp,color:'FF8B5CF6',tint:'FFEFE3FF' }
-                ];
-                const rowKpi = 4;
-                cards.forEach((card, i) => {
-                    const sc = 2 + i*2, ec = sc+1;
-                    [rowKpi, rowKpi+1, rowKpi+2].forEach(rr => {
-                        ws.mergeCells(rr, sc, rr, ec);
-                        for (let cc = sc; cc <= ec; cc++) {
-                            ws.getRow(rr).getCell(cc).fill = {type:'pattern',pattern:'solid',fgColor:{argb:card.tint}};
-                        }
-                    });
-                    for (let cc = sc; cc <= ec; cc++) {
-                        ws.getRow(rowKpi).getCell(cc).border = { top:{style:'thick',color:{argb:card.color}} };
-                    }
-                    const numCell = ws.getRow(rowKpi+1).getCell(sc);
-                    numCell.value = card.val;
-                    numCell.font = { bold:true, size:20, color:{argb:INK}, name:'Calibri' };
-                    numCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
-                    const labCell = ws.getRow(rowKpi+2).getCell(sc);
-                    labCell.value = card.label;
-                    labCell.font = { size:8.5, bold:true, color:{argb:INK}, name:'Calibri' };
-                    labCell.alignment = { horizontal:'left', vertical:'center', indent:1 };
+                const r1 = ws.getRow(1), r2 = ws.getRow(2);
+                r1.height = 34; r2.height = 20;
+                ws.mergeCells(1, 2, 1, 6); ws.mergeCells(2, 2, 2, 6);
+                const tcell = r1.getCell(2);
+                tcell.value = { richText: [
+                    { text:'PLANNING ', font:{ bold:true, size:24, color:{argb:INK}, name:FONT } },
+                    { text:'VIAGGI',    font:{ bold:true, size:24, color:{argb:ORANGE}, name:FONT } }
+                ] };
+                tcell.alignment = { vertical:'bottom', horizontal:'left', indent:1 };
+                const scell = r2.getCell(2);
+                scell.value = _xlsWeekRange(sorted);
+                scell.font = { size:11, color:{argb:GREY}, name:FONT };
+                scell.alignment = { vertical:'top', horizontal:'left', indent:1 };
+                [ {c:8, v:tot, l:'VIAGGI', color:INK}, {c:9, v:daconf, l:'DA CONF.', color:AMBER}, {c:10, v:nTransp, l:'TRASPORTATORI', color:INK} ].forEach(function(k) {
+                    const nc = r1.getCell(k.c), lc = r2.getCell(k.c);
+                    nc.value = k.v; nc.font = { bold:true, size:20, color:{argb:k.color}, name:FONT };
+                    nc.alignment = { horizontal:'center', vertical:'center' };
+                    lc.value = k.l; lc.font = { bold:true, size:8, color:{argb:GREY}, name:FONT };
+                    lc.alignment = { horizontal:'center', vertical:'top' };
+                    nc.border = { top:{style:'thin',color:{argb:LINE}}, left:{style:'thin',color:{argb:LINE}}, right:{style:'thin',color:{argb:LINE}} };
+                    lc.border = { bottom:{style:'thin',color:{argb:LINE}}, left:{style:'thin',color:{argb:LINE}}, right:{style:'thin',color:{argb:LINE}} };
                 });
-                ws.getRow(rowKpi).height = 4;
-                ws.getRow(rowKpi+1).height = 22;
-                ws.getRow(rowKpi+2).height = 16;
+                // filo arancione sotto il titolo
+                for (let cc = 1; cc <= LAST; cc++) {
+                    const b = ws.getRow(3).getCell(cc);
+                    b.border = { top:{style:'thick', color:{argb:ORANGE}} };
+                }
+                ws.getRow(3).height = 6;
 
-                // Header tabella
-                const headerRow = rowKpi + 4;
-                const headers = ['','Giorno','','Trasportatore','Partenza','Cod.','Arrivo','Cod.','Prodotto','DDT','Stato','Note'];
+                // Etichette trasportatori con conteggio
+                const counts = {};
+                sorted.forEach(t => { const k = (t.trasportatore||'?').trim(); counts[k] = (counts[k]||0)+1; });
+                const names = Object.keys(counts).sort((a,b) => counts[b]-counts[a] || a.localeCompare(b));
+                let chipRow = 4;
+                const lab = ws.getRow(chipRow).getCell(2);
+                lab.value = 'PER TRASPORTATORE'; lab.font = { bold:true, size:8, color:{argb:GREY}, name:FONT };
+                lab.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                names.forEach(function(name, i) {
+                    const col = 3 + (i % 9), rr = chipRow + Math.floor(i / 9);
+                    ws.getRow(rr).height = 24;
+                    const tc = _transporterColorPC(name);
+                    const cell = ws.getRow(rr).getCell(col);
+                    cell.value = name + '  ·  ' + counts[name];
+                    cell.font = { bold:true, size:10, color:{argb:'FF'+_toHex6(tc.tx)}, name:FONT };
+                    cell.fill = solid('FF'+_toHex6(tc.bg));
+                    cell.alignment = { vertical:'center', horizontal:'center' };
+                    const w = { style:'thick', color:{argb:WHITE} };
+                    cell.border = { top:w, bottom:w, left:w, right:w };
+                });
+                const chipRows = Math.max(1, Math.ceil(names.length / 9));
+                const spacer = chipRow + chipRows;       // riga vuota
+                ws.getRow(spacer).height = 10;
+
+                // Intestazione tabella
+                const headerRow = spacer + 1;
+                const headers = ['','GIORNO','TRASPORTATORE','FORNITORE','PARTENZA','CLIENTE','ARRIVO','PRODOTTO','DDT','STATO','NOTE'];
                 const hRow = ws.getRow(headerRow);
                 headers.forEach((h, i) => {
                     const cell = hRow.getCell(i+1);
                     cell.value = h;
-                    cell.font = { bold:true, size:9, color:{argb:'FF6B7280'}, name:'Calibri' };
+                    cell.font = { bold:true, size:9.5, color:{argb:GREY}, name:FONT };
                     cell.border = { bottom:{style:'medium',color:{argb:INK}} };
-                    cell.alignment = { horizontal:'left', vertical:'center', indent:1 };
+                    cell.alignment = { horizontal: (i === 8 || i === 9) ? 'center' : 'left', vertical:'center', indent: (i === 8 || i === 9) ? 0 : 1 };
                 });
-                hRow.height = 18;
+                hRow.height = 24;
                 ws.views = [{ showGridLines:false, state:'frozen', xSplit:0, ySplit:headerRow }];
 
-                // Righe viaggio
+                // Righe: fascia tenue per giorno + viaggi
                 let row = headerRow + 1;
-                let zebra = false;
+                let lastDay = null;
+                const byDay = {};
+                sorted.forEach(t => { byDay[t.data||''] = (byDay[t.data||'']||0) + 1; });
+                const pendByDay = {};
+                sorted.forEach(t => { if (t.daConfermare) pendByDay[t.data||''] = (pendByDay[t.data||'']||0) + 1; });
+                const DAYNAMES = ['DOMENICA','LUNEDÌ','MARTEDÌ','MERCOLEDÌ','GIOVEDÌ','VENERDÌ','SABATO'];
+
                 sorted.forEach(t => {
                     const d = t.data ? new Date(t.data + 'T12:00:00') : null;
                     const dow = d ? d.getDay() : 1;
-                    zebra = !zebra;
-                    const bg = zebra ? LIGHTBG : WHITE;
-                    const stripe = _DAY_STRIPE[dow] || _DAY_STRIPE[1];
+                    const stripe = 'FF' + (_DAY_STRIPE[dow] || _DAY_STRIPE[1]);
                     const chip = _DAY_CHIP[dow] || _DAY_CHIP[1];
 
+                    if ((t.data||'') !== lastDay) {
+                        lastDay = t.data || '';
+                        const br = ws.getRow(row);
+                        br.height = 28;
+                        ws.mergeCells(row, 2, row, LAST);
+                        br.getCell(1).fill = solid(stripe);
+                        const bc = br.getCell(2);
+                        const n = byDay[lastDay], p = pendByDay[lastDay] || 0;
+                        let txt = d ? (DAYNAMES[dow] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0')) : 'SENZA DATA';
+                        txt += '     ·     ' + n + (n === 1 ? ' viaggio' : ' viaggi') + (p ? '     ·     ' + p + ' da confermare' : '');
+                        bc.value = txt;
+                        bc.font = { bold:true, size:12, color:{argb:'FF'+chip.tx}, name:FONT };
+                        bc.fill = solid('FF'+chip.bg);
+                        bc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                        row++;
+                    }
+
                     const wr = ws.getRow(row);
-                    wr.getCell(1).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+stripe} };
+                    wr.height = 31;
+                    wr.getCell(1).fill = solid(stripe);
 
                     const gc = wr.getCell(2);
                     gc.value = d ? _xlsFmtDate(t.data) : '';
-                    gc.font = { bold:true, size:8.5, color:{argb:'FF'+chip.tx}, name:'Calibri' };
-                    gc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+chip.bg} };
-                    gc.alignment = { vertical:'center', horizontal:'center' };
+                    gc.font = { size:11, color:{argb:GREY}, name:FONT };
+                    gc.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
                     const tCol = _transporterColorPC(t.trasportatore);
-                    wr.getCell(3).fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+_toHex6(tCol.bg)} };
-                    const tc = wr.getCell(4);
+                    const tc = wr.getCell(3);
                     tc.value = t.trasportatore || '';
-                    tc.font = { bold:true, size:9.5, color:{argb:'FF'+_toHex6(tCol.tx)}, name:'Calibri' };
-                    tc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
-                    tc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                    tc.font = { bold:true, size:11.5, color:{argb:'FF'+_toHex6(tCol.tx)}, name:FONT };
+                    tc.fill = solid('FF'+_toHex6(tCol.bg));
+                    tc.alignment = { vertical:'center', horizontal:'center' };
+                    const wb3 = { style:'thick', color:{argb:WHITE} };
+                    tc.border = { top:wb3, bottom:wb3, left:wb3, right:wb3 };
 
-                    _xlsWriteLoc(wr, 5, t.partenza, bg, INK);
-                    _xlsWriteLoc(wr, 7, t.arrivo, bg, INK);
+                    // codice (colorato) + luogo, per fornitore e cliente
+                    [[4, t.partenza],[6, t.arrivo]].forEach(function(pair) {
+                        let place = (pair[1]||'').trim(), code = '';
+                        const m = place.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+                        if (m) { place = m[1].trim(); code = m[2].trim(); }
+                        const cc = wr.getCell(pair[0]);
+                        if (code) {
+                            const col = _locationCodeColorPC(code);
+                            cc.value = code;
+                            cc.font = { bold:true, size:10.5, color:{argb:'FF'+_toHex6(col.tx)}, name:FONT };
+                            cc.fill = solid('FF'+_toHex6(col.bg));
+                            cc.border = { top:wb3, bottom:wb3, left:wb3, right:wb3 };
+                        }
+                        cc.alignment = { vertical:'center', horizontal:'center' };
+                        const lc = wr.getCell(pair[0]+1);
+                        lc.value = place;
+                        lc.font = { size:12, color:{argb:INK}, name:FONT };
+                        lc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                    });
 
-                    const pc = wr.getCell(9);
+                    const pc = wr.getCell(8);
                     pc.value = (t.prodotto||'').trim();
-                    pc.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
-                    pc.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    pc.font = { size:12, color:{argb:INK}, name:FONT };
                     pc.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
-                    const ddtCell = wr.getCell(10);
-                    if (t.ddt) {
-                        ddtCell.value = t.ddt;
-                        ddtCell.font = { name:'JetBrains Mono', size:9, bold:true, color:{argb:INK} };
-                    } else {
-                        ddtCell.value = '—';
-                        ddtCell.font = { size:9, color:{argb:'FFB0B7C3'} };
-                    }
-                    ddtCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
+                    const ddtCell = wr.getCell(9);
+                    if (t.ddt) { ddtCell.value = t.ddt; ddtCell.font = { name:'Consolas', size:11, bold:true, color:{argb:INK} }; }
+                    else       { ddtCell.value = '—';   ddtCell.font = { size:11, color:{argb:'FFB0B7C3'}, name:FONT }; }
                     ddtCell.alignment = { vertical:'center', horizontal:'center' };
 
-                    const statoCell = wr.getCell(11);
+                    const st = wr.getCell(10);
                     if (t.daConfermare) {
-                        statoCell.value = 'Da confermare';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:AMBER} };
-                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:AMBERBG} };
+                        st.value = '⚠ DA CONFERMARE';
+                        st.font = { bold:true, size:9.5, color:{argb:AMBER}, name:FONT };
+                        st.fill = solid(AMBERBG);
                     } else if (t.confermato) {
-                        statoCell.value = 'Confermato';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:GREEN} };
-                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:GREENBG} };
+                        st.value = '✓ Confermato';
+                        st.font = { bold:true, size:10.5, color:{argb:GREEN}, name:FONT };
                     } else {
-                        statoCell.value = 'In attesa';
-                        statoCell.font = { bold:true, size:8.5, color:{argb:'FF475569'} };
-                        statoCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFEEF1F5'} };
+                        st.value = '—';
+                        st.font = { size:11, color:{argb:'FFB0B7C3'}, name:FONT };
                     }
-                    statoCell.alignment = { horizontal:'center', vertical:'center' };
+                    st.alignment = { horizontal:'center', vertical:'center' };
 
-                    const noteCell = wr.getCell(12);
-                    noteCell.value = (t.note||'').trim();
-                    noteCell.font = { size:9.5, color:{argb:INK}, name:'Calibri' };
-                    noteCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF'+bg} };
-                    noteCell.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                    const nc2 = wr.getCell(11);
+                    nc2.value = (t.note||'').trim();
+                    nc2.font = { size:11, color:{argb:INK}, name:FONT };
+                    nc2.alignment = { vertical:'center', horizontal:'left', indent:1, wrapText:true };
 
-                    for (let cc = 1; cc <= 12; cc++) {
-                        const existing = wr.getCell(cc).border || {};
-                        wr.getCell(cc).border = Object.assign({}, existing, { bottom:{style:'hair',color:{argb:'FFE5E7EB'}} });
+                    for (let cc = 2; cc <= LAST; cc++) {
+                        const cell = wr.getCell(cc), ex = cell.border || {};
+                        cell.border = Object.assign({}, ex, { bottom: ex.bottom || { style:'thin', color:{argb:LINE} } });
                     }
                     row++;
                 });
+
+                // ── Stampa (v70): A4 orizzontale, larghezza = 1 pagina, intestazione ripetuta, piè di pagina ──
+                ws.pageSetup = { orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0,
+                    horizontalCentered:true, margins:{left:0.35,right:0.35,top:0.5,bottom:0.65,header:0.25,footer:0.3} };
+                try { ws.pageSetup.printTitlesRow = headerRow + ':' + headerRow; } catch(e) {}
+                try {
+                    const now = new Date();
+                    const stamp = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+                    ws.headerFooter = { oddFooter: '&L&8Planning Viaggi&C&8Pagina &P di &N&R&8Generato il ' + stamp };
+                } catch(e) {}
 
                 // Scarica
                 const buffer = await wb.xlsx.writeBuffer();
