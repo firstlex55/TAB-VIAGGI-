@@ -1,5 +1,5 @@
 # APP VIAGGI — PROJECT.md
-> Aggiornato: 08/10/2026 · Versione attuale: **v74** (file `app_viaggi_v74.html` = `index.html`)
+> Aggiornato: 08/10/2026 · Versione attuale: **v78** (file `app_viaggi_v78.html` = `index.html`)
 
 ---
 
@@ -8,39 +8,12 @@
 > Questa sezione è il punto di ripartenza. Elenco in ordine di priorità. Le priorità
 > 1–3 sono piccole e ad alto valore: consigliato farle per prime, in una chat pulita.
 
-## 🔴🔴 PRIORITÀ MASSIMA — fare questa PER PRIMA nella nuova chat
+## ✅ PRIORITÀ 0 — Tema "grigetto" chiaro/scuro + livelli: FATTO in v78
 
-**0. Tema "grigetto" chiaro/scuro + interruttore per sceglierlo**
-- **Perché prima di tutto il resto**: Fil è astigmatico. Non è chiaro-vs-scuro il problema,
-  è il **contrasto troppo netto** (nero pieno contro bianco pieno) che gli affatica gli
-  occhi — l'ha spiegato mostrando TuneIn come riferimento di un grigio che non dà fastidio.
-  Vuole POTER SCEGLIERE lui chiaro/scuro a seconda del momento, non uno fisso. Un
-  interruttore senza le due palette vere sotto è inutile — è per questo che va fatto
-  come prima cosa, non aggiunto dopo: tutto il resto del lavoro sui colori (vedi Novità
-  v57–v59) va rifatto sopra queste due palette, non prima.
-- **Colori validati con Fil su mockup** (dati reali, confrontati fianco a fianco — non
-  ancora portati nel codice):
-  - Chiaro: sfondo pagina `#e8e6e2`, card `#f2f0ec`, testo `#2e2e2c`, bordi `#d6d3ce`,
-    testo secondario `#78786f` — MAI bianco puro `#fff`.
-  - Scuro: sfondo pagina `#2f3136`, card `#383a3f`, testo `#dcdad5`, bordi `#46484d`,
-    testo secondario `#9b9a93` — MAI nero puro `#000`.
-  - I colori identità (trasportatore/fornitore/cliente, vedi Novità v59) restano
-    riconoscibili in entrambe le palette, solo con luminosità calibrata diversa
-    (più scuri/saturi su sfondo chiaro, più chiari/tenui su sfondo scuro — vedi i
-    valori accoppiati nel mockup "Grigetto chiaro-scuro v2").
-- **Da fare, in ordine**:
-  1. Centralizzare i colori in variabili CSS (oggi sono scritti a mano dentro gli
-     `style=""` inline sparsi in tutto il file — causa diretta del bug "sono cambiati
-     tutti i colori" di questa sessione, che in realtà non erano cambiati per niente:
-     era solo la mancanza di un sistema unico a rendere impossibile capire cosa
-     stava succedendo).
-  2. Costruire le DUE palette (chiaro/scuro) come set di variabili, partendo dai valori
-     sopra.
-  3. Un interruttore visibile (mobile e PC) che scambia le variabili e salva la scelta
-     in localStorage.
-  4. **Tocca tutta l'app**, non solo la tabella PC su cui ci siamo concentrati finora —
-     mobile, popup, modali, tutto. È un lavoro grande: farlo con calma, non in coda ad
-     altro.
+Vedi "Novità v78" più sotto (sistema colori, regole, file di build). Resta solo la verifica
+di Fil sui suoi dispositivi (sezione "Da verificare subito").
+Idee rimaste fuori e NON approvate: icone SVG al posto delle emoji (nell'altra linea v66 c'erano; qui NON portate,
+tranne l'icona "nota vuota" della tabella PC, perché l'emoji bianca spariva sul chiaro), OGGI in evidenza, azioni riga in hover.
 
 ## 🔴 Priorità alta
 
@@ -104,6 +77,14 @@ modifica meno costosa (token) e meno rischiosa, ma va testato bene su GitHub Pag
 Android. Farlo solo a fine lavori.
 
 ## ✅ Da verificare subito (appena aperta la nuova chat)
+
+- **v78 — tema chiaro/scuro: cose che NON ho potuto provare da qui** (provato in Chromium con dati finti, 6 stati × PC/Rapida/Trasp./Oggi/modali):
+  1. **Su telefono e PC veri di Fil**: aprire il menu (pulsante sole/luna in alto a destra) e provare i 6 stati. Controllare soprattutto
+     che il livello "Medio" scuro (`#25272b`) sia comodo: è il nuovo predefinito (prima era un blu-navy) e i valori dei livelli intermedi sono scelti a occhio.
+  2. **Barra di stato iPhone in tema chiaro** (solo se Fil usa la PWA su iPhone): la pagina dichiara `black-translucent`, cioè testo bianco
+     nella barra di stato; su sfondo chiaro potrebbe leggersi male. Su Android non si applica. Non verificabile da qui.
+  3. **Excel e stampa**: il codice è IDENTICO alla v77 (verificato confrontando i blocchi `@media print`, `_printColor…desktopAddEmpty`,
+     `_transporterColorPC…closeExcelConfirm`, `_locationCodeColorPC`), quindi escono con gli stessi colori in qualsiasi tema. Ma l'Excel vero resta da provare (vedi sotto).
 
 - **v74 — cose che NON ho potuto provare da qui** (le ho provate in un browser vero con dati finti, ma non queste):
   1. **Excel vero**: nella sandbox ExcelJS è sostituito da un finto che registra cosa verrebbe scritto. Fil deve esportare
@@ -294,6 +275,46 @@ Confermato:    testo #085040  simbolo "✓ ok"
 
 ---
 
+## Novità v78 — Tema chiaro/scuro × 3 livelli (non reimplementare)
+
+**Cosa vede Fil**: pulsante sole/luna nell'header (PC: accanto allo stato Drive; telefono: sopra lo stato Drive, per non rubare spazio al titolo).
+Apre il menu **Aspetto**: *Tema* Scuro/Chiaro e *Scurezza* Più chiaro / Medio / Più scuro (6 combinazioni). La scelta resta salvata e viene
+applicata nel `<head>` prima del primo paint (nessun lampo). Il tocco fuori dal menu lo chiude senza attivare quello che c'è sotto; Esc lo chiude.
+**Predefinito: Scuro · Medio** (`#25272b`, grigio) — cambia rispetto alla v77 (blu-navy). Chi aveva già scelto nella linea parallela (v60–v66) ritrova la scelta: stesse chiavi `appTheme`/`appTone`.
+
+**Come è fatto** (tutto in `index.html`, nessun file esterno):
+- `localStorage`: `appTheme` = `dark`|`light`; `appTone` = `1`|`2`|`3` (default 2). Attributi `html[data-theme]` e `html[data-tone]`; `<meta name="theme-color">` segue lo sfondo.
+- Palette in cima al CSS: `:root, html[data-theme="dark"]` (valori del livello 2), `html[data-theme="light"]`, poi `html[data-theme=..][data-tone="1"|"3"]` che cambiano SOLO le superfici
+  (`--bg --primary --secondary --surface-1 --surface-2 --pchead --border --surface-rgb`). Sfondi pagina: scuro 1/2/3 = `#2f3136 / #25272b / #1b1d20`; chiaro 1/2/3 = `#f0eeea / #e8e6e2 / #dcd9d3`.
+- **REGOLA D'ORO: non scrivere più colori a mano nell'interfaccia.** Variabili da usare: sfondi `--bg --surface-1 --surface-2 --pchead`; testi `--text --text-soft --text-dim --text-muted`;
+  bordi `--border`; veli `rgba(var(--veil-rgb),a)` (bianco nello scuro, inchiostro nel chiaro); ombre/overlay `rgba(var(--shade-rgb),a)`; **campi/input** `rgba(var(--well-rgb),a)` (scuro nello scuro,
+  CHIARO nel chiaro — usare shade per un input lo farebbe grigio scuro nel chiaro); accenti `--accent --success --warning --ac-red --ac-orange --ac-cyan --ac-blue --ac-violet --ac-pink` e le versioni `-rgb`;
+  testo su riempimento colorato `--ink`; su accento pieno `--on-accent`.
+- Trasportatori: `--t-<nome>` (testo/bordo; nel chiaro sono più scuri), `--t-<nome>-bg`, `--t-<nome>-fill/-ink` (badge pieni mobile, uguali in entrambi i temi), `--t-<nome>-pill` (riempimento della pillola
+  Trasportatore in tabella PC, uguale in entrambi i temi, testo `--ink`). La vista PC (`.desktop-view-active`) non ha più una palette sua: solo le tinte `--t-*`.
+- **Colori calcolati da JS** (non possono essere `var()`): passano da `_themeInk(hex|hsl)` (nel chiaro abbassa la luminosità, tetto 31–38%) e `_themeRgb('r,g,b')`. Già applicati a:
+  `getTransporterColorVar`, `_locationCodeColor` (`.tx`) e `_impactColor`, `dayColors` della tabella PC, `_mtDayColors` (Multi-Tratta, come proprietà con getter), `_pcRubricaColor`, `_dbCleanRender`,
+  `SRCH_KINDS[*].color` (getter), `_srchDayCol`. Quando cambia il tema `setTheme()` chiama `_themeRerender()` (ridisegna Rapida/Trasp./Oggi, tabella PC, Rubrica, Archivio, pannello Storico via `_srchThemeChanged`).
+- **NON toccati apposta** (stesso colore in ogni tema): `@media print`, stampa JS (`_printColor…`), Excel (`_transporterColorPC…closeExcelConfirm` e `_locationCodeColorPC`, usata anche dalla tabella PC solo per i pallini `.bd`).
+- Funzioni: `applyTheme(t)`, `applyTone(n)`, `setTheme(t)`, `setTone(n)`, `toggleThemeMenu(ev)`, `_closeThemeMenu`, `_syncThemeMenu`, `_themeRerender`, `_isLightTheme`.
+- Piccole correzioni fatte durante il lavoro: titoli dell'Archivio (testo `#1a2540` scuro su fondo scuro → illeggibile, residuo del vecchio Tema G); overlay dell'Archivio era bianco nello scuro (ora `shade`);
+  pulsante ⬇ dell'Archivio bianco fisso; bordo giorno inattivo; stato del pulsante Salva in tabella PC; toast promemoria salvataggio; icona nota vuota (emoji 🗒️ → icona a linea).
+
+**Come è stato costruito** (ripetibile, in `test_v74/theme_v78/`): `transform.py` (v77 → sostituzione automatica dei colori fissi con variabili, con zone protette), `theme_patch.py` (palette, menu, JS),
+`theme_patch2.py` (palette JS, residui). Partono da `src_v77.html`. Percorsi scritti per `/home/claude/theme/` (cambiare `SRC`/`DST` in cima agli script se si sposta tutto).
+Prove: `test_v74/th2.js` (screenshot per scena × 6 stati, `STATES=… ONLY=…`), `th5.js` (38 controlli sul pulsante: salvataggio, ricarica, Esc, clic fuori, mobile e PC), `th6.js` (popup minori), `montage.py` (foglio comparativo).
+Regressione sul file con tema: s2 31, s3 40, s4 14, s8 40, s9 8, s10 12, s11 17 → tutti ok; `node --check` sui 5 script inline ok; lint no-undef 0; id doppi: nessuno.
+
+## Novità v77 (non reimplementare)
+- **DDT non alza più le righe** (Fil: "righe troppo alte"; con la riga DDT sotto il prodotto erano 84px invece di 68). Ora il DDT è un'**etichetta piccola sovrapposta** a destra nella cella Prodotto (`label.pc-ddt`, `position:absolute`): "DDT 1010". Se il viaggio non ha DDT l'etichetta è invisibile e compare "+ DDT" solo passando il mouse sulla riga o entrandoci con Tab/Invio (`.pc-ddt.empty`, `tr:hover`, `:focus-within`). `_pcDdtSync(input)` accende/spegne l'etichetta e fa spazio al prodotto (`padding-right:74px`, con ellissi). Intestazione tornata "Prodotto"; colonna Prodotto 180px, `min-width` tabella 1240px. Righe con e senza DDT: stessa altezza (provato a 1280 e 1440, `test_v74/s11.js`, 17 controlli).
+- Invariati: DDT nel modulo di inserimento/modifica, nella ricerca/lente, nell'Excel, sulle schede Rapida (compare solo se c'è).
+- **Due linee di lavoro parallele**: il 1 ottobre una chat "Chiarimento su file caricati" ha costruito, partendo dalla stessa v59, un'altra v60–v66 con **tema chiaro/scuro (pulsante sole/luna, `toggleTheme`, `data-theme`), regolatore "Scurezza" a 3 livelli (`appTone`, menu "Aspetto") e icone SVG al posto delle emoji**. Quel codice NON è nei file di questa linea (v46–v77). Fil lo ricordava giustamente.
+
+## Novità v75–v76 (non reimplementare)
+- **Vista PC: tolta la riga gialla dei viaggi "da confermare"** (Fil: "non mi piace"). Prima: barra sinistra spessa 8px `#f0b030` + sfondo caldo `#3a3527`/`#3d3828`. Ora la riga è identica alle altre; il segnale resta la scritta **"⚠ DA CONF."** nella colonna Stato (clic = conferma, "— segna" = segna). Tolti anche i lampi giallo/verde che `desktopSetPending`/`desktopToggleConf` davano alla riga (azzeravano lo sfondo della riga fino al ridisegno: difetto vecchio). **v76**: Fil ha scelto "un pallino": pallino ambra `#f0b030` 9px (`.pc-pend-dot`) nella prima colonna sotto le maniglie ⋮⋮, acceso/spento da `_desktopRebuildStatoCell` quando si segna/conferma (senza ridisegnare). Non rimettere barra o sfondo giallo.
+- ⚠️ Il pulsante chiaro/scuro non è in questa linea di file (v46–v77): vedi la nota "Due linee di lavoro parallele" in v77. Fil l'ha cercato l'08/10 e ha ragione che esisteva (in un'altra chat).
+- Prova: `test_v74/s10.js` (12 controlli).
+
 ## Novità v74 — Ricerca, filtro per tipo, storico a schede, Excel filtrato (non reimplementare)
 **Barra PC** (`#srchGroup`, dentro `renderDesktopView`):
 - **Lente generale** `#srchLens` a sinistra, piccola; al clic (o `/`, o Ctrl+F) si allarga a 390px. Cerca in trasportatore, partenza, arrivo, prodotto, "ddt N", note, date (più formati) e giorno. Più parole = AND, senza maiuscole/accenti (`_srchNorm`). Interruttore **Settimana / Storico** (`_srchScope`, ricordato in `localStorage.srchScope`).
@@ -324,7 +345,7 @@ Confermato:    testo #085040  simbolo "✓ ok"
 - Mockup uno alla volta e grandi; mai emoji come icone nelle cose nuove (SVG a contorno); ogni cancellazione con conferma o Annulla.
 
 ## Novità v73 (non reimplementare)
-- Vista PC: riga "da confermare" (`daConfermare`) con **barra gialla** `#f0b030` larga 8px a sinistra (le altre righe 4px) e sfondo caldo `#3a3527` (`#3d3828` se oggi). Approvata da Fil.
+- (⚠ sostituito in v75: la barra gialla è stata tolta) Vista PC: riga "da confermare" (`daConfermare`) con **barra gialla** `#f0b030` larga 8px a sinistra (le altre righe 4px) e sfondo caldo `#3a3527` (`#3d3828` se oggi). Approvata da Fil.
 - Restano non fatte: OGGI in evidenza nella fascia giorno, azioni riga solo in hover.
 
 ## Novità v72 (non reimplementare)
