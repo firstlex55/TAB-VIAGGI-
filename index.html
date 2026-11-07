@@ -1754,6 +1754,23 @@
         .desktop-view-active .transporter-default { background: var(--t-default-bg); color: var(--t-default); border: 1px solid var(--t-default); }
         .desktop-view-active #desktopBody tbody tr:hover td { background: rgba(var(--veil-rgb),0.02); }
         .desktop-view-active #desktopBody tbody tr:hover .pc-row-actions { opacity: 1; }
+        /* ═══ v101 — pulsanti di riga (PC): stato · nota · duplica · elimina. Sempre ben visibili (prima erano al 18–35%), icone vere, colore al passaggio del mouse ═══ */
+        .pc-c-stato .pc-sbar { display:flex; align-items:center; gap:8px; justify-content:space-between; }
+        .pc-c-stato .pc-row-actions { display:flex; gap:6px; }
+        .pc-st, .pc-ib { font-family:'Outfit',sans-serif; cursor:pointer; transition:background .15s, border-color .15s, color .15s, box-shadow .15s; }
+        .pc-st { display:inline-flex; align-items:center; justify-content:center; min-width:98px; gap:5px; height:30px; padding:0 11px 0 9px; border-radius:15px; background:transparent; border:1.5px dashed color-mix(in srgb, var(--text-dim) 70%, transparent); color:var(--text-soft); font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; white-space:nowrap; }
+        .pc-st svg { width:14px; height:14px; flex:none; fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+        .pc-st:hover { border-style:solid; border-color:var(--warning); color:var(--warning); background:rgba(var(--warning-rgb),.14); }
+        .pc-st.on { border:1.5px solid var(--ac-orange); background:rgba(var(--accent-rgb),.16); color:var(--ac-orange); }
+        .pc-st.on:hover { box-shadow:0 0 0 3px rgba(var(--accent-rgb),.18); }
+        .pc-ib { width:32px; height:32px; flex:none; padding:0; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; background:rgba(var(--veil-rgb),.06); border:1.5px solid color-mix(in srgb, var(--text-dim) 55%, transparent); color:var(--text-soft); }
+        .pc-ib svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+        .pc-ib:hover, .pc-ib:focus-visible { outline:none; }
+        .pc-note:hover, .pc-note:focus-visible { background:rgba(var(--warning-rgb),.18); border-color:var(--warning); color:var(--warning); }
+        .pc-note.has { background:rgba(var(--warning-rgb),.18); border-color:var(--warning); color:var(--warning); position:relative; }
+        .pc-note.has::after { content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--warning); border:2px solid var(--surface-1); }
+        .pc-dup:hover, .pc-dup:focus-visible { background:rgba(var(--ac-blue-rgb),.18); border-color:var(--ac-blue); color:var(--ac-blue); }
+        .pc-del:hover, .pc-del:focus-visible { background:rgba(var(--ac-red-rgb),.18); border-color:var(--ac-red); color:var(--ac-red); }
         /* v77 — DDT: etichetta sovrapposta nella cella Prodotto, non cambia l'altezza della riga */
         .pc-ddt { position:absolute; right:14px; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:4px; margin:0; padding:2px 6px; border-radius:5px; background:rgba(var(--veil-rgb),0.08); border:1px solid rgba(var(--veil-rgb),0.16); cursor:text; }
         .pc-ddt > span { font-size:8.5px; font-weight:800; letter-spacing:0.6px; color:var(--text-dim); }
@@ -1977,7 +1994,7 @@
         /* «Un altro uguale» nella finestra riepilogo */
         .su-same { display:block; width:100%; min-height:48px; margin-top:14px; border:none; border-radius:11px; background:var(--v96-bg); color:var(--v96-fg); font-family:'Outfit',sans-serif; font-size:14px; font-weight:800; cursor:pointer; }
 
-        /* ═══ v100 — «Nuovi viaggi» (H2b): 1 trasportatore · 2 tratta (tendina «Tratte più usate») · 3 giorni · «Viaggi pronti» a destra su PC ═══ */
+        /* ═══ v102 — «Nuovi viaggi» a planner: una riga per tratta, una colonna per giorno ═══ */
         .nwr-ov { --nw-ok-bg:rgba(96,165,250,.18); --nw-ok-bd:#5b9be0; --nw-ok-ink:#d4e6fc; --nw-wn-bg:rgba(224,192,90,.17); --nw-wn-bd:#a8913f; --nw-wn-ink:#f2df9f;
                   --nw-sel:#4a8fd4; --nw-selx:#0e1b2b; --nw-wsel:#e0953a; --nw-wselx:#2b1800;
                   --nc:var(--t-default-fill); --nci:var(--t-default-ink); --nct:var(--t-default-bg); --ncb:var(--t-default); }
@@ -1994,94 +2011,19 @@
         .nwr-ib { width:44px; height:44px; flex:none; display:flex; align-items:center; justify-content:center; padding:0; border:1px solid var(--border); border-radius:10px; background:var(--surface-2); color:var(--text-soft); }
         .nwr-ib.sm { width:40px; height:40px; }
         .nwr-ic { flex:none; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
-        .nwr-ctl { display:flex; align-items:center; padding:8px 16px; border-bottom:1px solid var(--border); }
         .nwr-lab { font-size:12px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--text-dim); }
         .nwr-seg { display:flex; padding:3px; gap:3px; border:1px solid var(--border); border-radius:12px; background:rgba(var(--well-rgb),.25); flex:1; }
         .nwr-seg button { flex:1; min-height:40px; padding:0 10px; white-space:nowrap; display:flex; align-items:center; justify-content:center; gap:7px; border:1.5px solid transparent; border-radius:9px; background:transparent; color:var(--text-soft); font-size:14px; font-weight:700; }
         .nwr-seg button.on { background:var(--surface-2); border-color:var(--accent); color:var(--text); }
         .nwr-body { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 18px 18px; }
-        .nwr-cols { display:flex; flex-direction:column; gap:18px; }
-        .nwr-left { display:flex; flex-direction:column; gap:14px; min-width:0; }
-        .nwr-sh { display:flex; align-items:center; gap:10px; font-size:16px; font-weight:800; color:var(--text); }
-        .nwr-sh b { width:28px; height:28px; border-radius:14px; background:var(--text); color:var(--surface-1); display:flex; align-items:center; justify-content:center; font-size:15px; flex:none; }
-        .nwr-wrap { display:flex; flex-wrap:wrap; gap:8px; }
-        .nwr-pill { min-height:44px; padding:0 18px; display:inline-flex; align-items:center; gap:6px; border-radius:22px; background:var(--surface-2); border:2px solid var(--nc); color:var(--text); font-size:15px; font-weight:800; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .nwr-pill.on { background:var(--nc); border-color:var(--nc); color:var(--nci); }
-        .nwr-pill.oth { background:transparent; border:2px dashed var(--text-dim); color:var(--text-soft); }
-        .nwr-pill.oth.on { background:var(--surface-2); border-color:var(--text); color:var(--text); }
-        .nwr-cars.bad .nwr-wrap { outline:2px solid var(--ac-red); outline-offset:4px; border-radius:22px; }
-        .nwr-oth { margin-top:10px; }
         .nwr-in { height:46px; padding:0 12px; border-radius:10px; font-size:16px; width:100%; }
         .nwr-ov .nwr-in.af-mono { font-size:16px; }
-        .nwr-ov .nwr-in.cv, .nwr-ov .nwr-in.cv:focus { background:var(--nc); border-color:var(--nc); color:var(--nci); font-weight:800; }
-        .nwr-ov .nwr-in.cv:focus { box-shadow:0 0 0 2px var(--surface-1), 0 0 0 4px var(--nc); }
-        .nwr-in.cv::placeholder { color:var(--nci); opacity:.75; }
         .nwr-in.bad { border-color:var(--ac-red); box-shadow:0 0 0 3px rgba(var(--ac-red-rgb),.2); }
-        .nwr-rc { background:color-mix(in srgb, var(--nc) 14%, var(--surface-2)); border:2px solid var(--nc); border-left:12px solid var(--nc); border-radius:14px; box-shadow:0 0 0 5px color-mix(in srgb, var(--nc) 30%, transparent); overflow:hidden; }
-        .nwr-rtop { padding:14px 16px; display:flex; flex-direction:column; gap:12px; }
-        .nwr-tag { display:inline-flex; align-items:center; height:26px; padding:0 10px; border-radius:13px; font-size:12px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; background:var(--nc); color:var(--nci); white-space:nowrap; align-self:flex-start; }
-        .nwr-r1 { display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-height:26px; }
-        .nwr-r1 .sp { flex:1; }
-        .nwr-rsum { font-size:19px; font-weight:800; line-height:1.3; color:var(--text); overflow-wrap:anywhere; }
-        .nwr-rsum i { font-style:normal; color:var(--text-dim); font-weight:700; }
-        .nwr-rsum small { display:block; margin-top:3px; font-size:14px; font-weight:600; color:var(--text-soft); }
-        .nwr-rsum.empty { font-size:15px; font-weight:600; color:var(--text-soft); }
-        .nwr-fld { display:flex; flex-direction:column; gap:5px; }
-        .nwr-rbtns { display:flex; gap:8px; }
-        .nwr-tbtn { flex:1; min-height:48px; padding:0 16px; display:flex; align-items:center; justify-content:center; gap:8px; border-radius:11px; border:1.5px solid var(--text-dim); background:var(--surface-1); color:var(--text); font-size:15px; font-weight:800; }
-        .nwr-tbtn .n { font-size:13px; font-weight:700; color:var(--text-soft); }
-        .nwr-tbtn.open { border-color:var(--nc); box-shadow:0 0 0 2px color-mix(in srgb, var(--nc) 40%, transparent); }
-        .nwr-ib2 { width:48px; height:48px; flex:none; display:flex; align-items:center; justify-content:center; padding:0; border-radius:11px; border:1.5px solid var(--text-dim); background:var(--surface-1); color:var(--text); }
-        .nwr-ab { border-top:2px solid var(--nc); padding:10px; background:var(--surface-1); display:flex; flex-direction:column; gap:8px; max-height:38vh; overflow-y:auto; }
-        .nwr-route { width:100%; min-height:50px; padding:6px 14px; display:flex; align-items:center; gap:10px; text-align:left; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--border); color:var(--text); font-size:15px; font-weight:700; }
-        .nwr-route .tx { flex:1; min-width:0; overflow-wrap:anywhere; }
-        .nwr-route .tx i { font-style:normal; color:var(--text-dim); font-weight:600; }
-        .nwr-route .n { flex:none; font-size:13px; font-weight:700; color:var(--text-dim); white-space:nowrap; }
-        .nwr-route.on { background:var(--nw-ok-bg); border-color:var(--nw-sel); color:var(--nw-ok-ink); box-shadow:inset 0 0 0 1px var(--nw-sel); }
-        .nwr-st3 { border:2px solid var(--border); border-radius:14px; padding:12px; background:var(--surface-2); display:flex; flex-direction:column; gap:12px; }
-        .nwr-mode { display:flex; flex-direction:column; gap:10px; padding:12px; border-radius:14px; border:2px solid var(--nw-ok-bd); background:var(--nw-ok-bg); }
-        .nwr-mode.w { border-color:var(--nw-wn-bd); background:var(--nw-wn-bg); }
-        .nwr-mode .lead { font-size:15px; font-weight:700; line-height:1.25; color:var(--nw-ok-ink); }
-        .nwr-mode.w .lead { color:var(--nw-wn-ink); }
-        .nwr-mode .opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-        .nwr-mode .opt { min-height:52px; padding:0 8px; display:flex; align-items:center; justify-content:center; gap:8px; border-radius:11px; border:2px solid var(--text-dim); background:var(--surface-1); color:var(--text-soft); font-size:15.5px; font-weight:800; white-space:nowrap; }
-        .nwr-mode .opt.on { background:var(--nw-sel); border-color:var(--nw-sel); color:var(--nw-selx); box-shadow:0 0 0 3px var(--nw-ok-bg), 0 0 0 5px var(--nw-sel); }
-        .nwr-mode.w .opt.on { background:var(--nw-wsel); border-color:var(--nw-wsel); color:var(--nw-wselx); box-shadow:0 0 0 3px var(--nw-wn-bg), 0 0 0 5px var(--nw-wsel); }
-        .nwr-days { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
-        .nwr-d { min-height:90px; padding:4px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border-radius:11px; min-width:0; background:rgba(var(--well-rgb),.3); border:2px dashed var(--text-dim); color:var(--text-soft); }
-        .nwr-d .w { font-size:13px; font-weight:800; }
-        .nwr-d .cc { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; }
-        .nwr-d.ok { background:var(--nw-ok-bg); border:2px solid var(--nw-ok-bd); color:var(--nw-ok-ink); }
-        .nwr-d.wn { background:var(--nw-wn-bg); border:2px solid var(--nw-wn-bd); color:var(--nw-wn-ink); }
-        .nwr-d.mx { background:var(--surface-1); border:2px solid var(--text-dim); color:var(--text); }
-        .nwr-mc { display:inline-flex; align-items:center; gap:3px; height:26px; padding:0 8px; border-radius:13px; font-size:14px; font-weight:800; background:var(--nw-sel); color:var(--nw-selx); }
-        .nwr-mc.w { background:var(--nw-wsel); color:var(--nw-wselx); }
-        .nwr-xbtn { align-self:flex-start; min-height:40px; padding:0 4px; display:flex; align-items:center; gap:6px; border:0; background:none; color:var(--text-soft); font-size:14px; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
-        .nwr-xtra { display:none; grid-template-columns:1fr 1fr; gap:10px; }
-        .nwr-xtra.xo { display:grid; }
-        .nwr-xtra .full { grid-column:1 / -1; }
-        .nwr-xtra .dt { display:flex; gap:8px; }
-        .nwr-xtra .dt input { flex:1; min-width:0; }
-        .nwr-xtra .dt button { flex:none; min-height:46px; padding:0 14px; border-radius:10px; border:1.5px solid var(--nw-ok-bd); background:var(--nw-ok-bg); color:var(--nw-ok-ink); font-size:14px; font-weight:700; }
-        .nwr-add { min-height:48px; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; border:2px dashed var(--text-dim); border-radius:11px; background:transparent; color:var(--text); font-size:15px; font-weight:800; }
-        .nwr-side { background:var(--surface-2); border:1.5px solid var(--border); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:12px; min-width:0; }
-        .nwr-sidh { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-        .nwr-sidh b { font-size:18px; font-weight:800; flex:1 1 auto; }
-        .nwr-g { background:var(--surface-1); border:1.5px solid var(--border); border-left:6px solid var(--nc); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; }
-        .nwr-g.cur { border-color:var(--nc); box-shadow:0 0 0 2px color-mix(in srgb, var(--nc) 35%, transparent); }
-        .nwr-gh { display:flex; align-items:center; gap:8px; }
-        .nwr-gh .sp { flex:1; }
-        .nwr-cp { display:inline-flex; align-items:center; height:26px; padding:0 10px; border-radius:7px; background:var(--nc); color:var(--nci); font-size:13px; font-weight:800; letter-spacing:.5px; }
-        .nwr-gr { font-size:15px; font-weight:700; line-height:1.3; color:var(--text); overflow-wrap:anywhere; }
-        .nwr-gr i { font-style:normal; color:var(--text-dim); }
-        .nwr-gr small { display:block; font-size:13px; font-weight:600; color:var(--text-soft); }
-        .nwr-tok { display:flex; flex-wrap:wrap; gap:6px; }
         .nwr-tk { display:inline-flex; align-items:stretch; border-radius:18px; overflow:hidden; font-size:14px; font-weight:800; }
         .nwr-tk button { min-height:38px; padding:0 12px; display:inline-flex; align-items:center; gap:6px; border:0; background:transparent; color:inherit; font-size:14px; font-weight:800; }
         .nwr-tk button.x { padding:0 11px; border-left:1px solid color-mix(in srgb, currentColor 35%, transparent); }
         .nwr-tk.ok { background:var(--nw-sel); color:var(--nw-selx); }
         .nwr-tk.wn { background:var(--nw-wsel); color:var(--nw-wselx); }
-        .nwr-none { padding:18px 12px; border:2px dashed var(--text-dim); border-radius:12px; text-align:center; font-size:14px; font-weight:600; color:var(--text-soft); }
         .nwr-foot { display:flex; flex-direction:column; gap:8px; padding:8px 16px 12px; border-top:1px solid var(--border); background:var(--surface-2); }
         .nwr-msg { display:none; padding:8px 12px; border-radius:9px; background:rgba(var(--ac-red-rgb),.14); border:1px solid rgba(var(--ac-red-rgb),.5); color:var(--text); font-size:13.5px; font-weight:700; }
         .nwr-msg.on { display:block; }
@@ -2097,27 +2039,118 @@
         .nwr-ac { position:fixed; z-index:9600; display:none; max-height:220px; overflow-y:auto; background:var(--surface-1); border:1.5px solid var(--border); border-radius:10px; box-shadow:0 10px 28px rgba(var(--shade-rgb),.45); }
         .nwr-ac div { padding:12px 14px; font-size:14px; font-weight:600; color:var(--text); border-bottom:1px solid var(--border); cursor:pointer; }
         .nwr-ac div:last-child { border-bottom:0; }
+        .nwr-head { flex-wrap:wrap; }
+        .nwr-head > .nwr-seg { flex:1 1 100%; order:3; }
+        .pl-card { position:relative; min-height:min(70vh, 640px); min-height:min(70dvh, 640px); }
+        .nwr-fld { display:flex; flex-direction:column; gap:5px; min-width:0; }
+        .pl-bar { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:8px 14px; border-bottom:1px solid var(--border); background:var(--surface-2); }
+        .pl-add { flex:1 1 100%; height:44px; padding:0 16px; display:inline-flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap; border-radius:12px; border:2px solid var(--accent); background:transparent; color:var(--accent); font-size:15px; font-weight:800; }
+        .pl-add[aria-expanded="true"] { background:var(--accent); color:var(--on-accent); }
+        .pl-mode { display:flex; align-items:center; gap:10px; flex:1 1 100%; min-width:0; }
+        .pl-ml { display:none; font-size:13px; font-weight:700; color:var(--text-soft); white-space:nowrap; }
+        .pl-seg { display:flex; flex:1; padding:3px; gap:3px; border:2px solid var(--border); border-radius:12px; background:var(--surface-1); }
+        .pl-seg button { flex:1; min-height:38px; padding:0 12px; white-space:nowrap; display:inline-flex; align-items:center; justify-content:center; gap:6px; border:0; border-radius:9px; background:transparent; color:var(--text-soft); font-size:14px; font-weight:800; }
+        .pl-seg button.on { background:var(--nw-sel); color:var(--nw-selx); }
+        .pl-seg.w button.on { background:var(--nw-wsel); color:var(--nw-wselx); }
+        .pl-body { padding:0 14px 12px; }
+        .pl-grid { display:flex; flex-direction:column; gap:10px; padding-top:10px; }
+        .pl-hd { display:none; }
+        .pl-ln { position:relative; display:flex; flex-direction:column; gap:8px; padding:10px 10px 12px 12px; border:1.5px solid var(--border); border-left:6px solid var(--nc); border-radius:14px; background:var(--surface-2); }
+        .pl-ln.flash { animation:plFlash 1.3s ease; }
+        @keyframes plFlash { 0%, 100% { box-shadow:0 0 0 0 transparent; } 25%, 70% { box-shadow:0 0 0 4px color-mix(in srgb, var(--nc) 55%, transparent); } }
+        .pl-info { display:flex; flex-direction:column; gap:3px; min-width:0; }
+        .pl-r1 { display:flex; min-height:22px; padding-right:96px; }
+        .pl-info .rt { margin-top:12px; }
+        .pl-tag { align-self:flex-start; display:inline-flex; align-items:center; height:22px; max-width:100%; padding:0 10px; border-radius:11px; background:var(--nc); color:var(--nci); font-size:12px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .pl-tag.none { background:transparent; border:1.5px dashed var(--text-dim); color:var(--text-soft); }
+        .pl-info .rt { font-size:15.5px; font-weight:700; line-height:1.3; color:var(--text); overflow-wrap:anywhere; }
+        .pl-info .rt i { font-style:normal; font-weight:600; color:var(--text-dim); padding:0 5px; }
+        .pl-info .rt.empty { font-size:14px; font-weight:600; color:var(--text-soft); }
+        .pl-info .pr { font-size:13px; font-weight:600; color:var(--text-soft); overflow-wrap:anywhere; }
+        .pl-oc { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+        .pl-tools { position:absolute; top:5px; right:6px; display:flex; gap:4px; }
+        .pl-tb { position:relative; width:42px; height:42px; display:flex; align-items:center; justify-content:center; padding:0; border:1.5px solid var(--border); border-radius:10px; background:var(--surface-1); color:var(--text-soft); }
+        .pl-tb.on { border-color:var(--text-dim); color:var(--text); }
+        .pl-tb .dot { position:absolute; top:6px; right:6px; width:9px; height:9px; border-radius:5px; background:var(--accent); }
+        .pl-days { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:6px; }
+        .pl-cell { position:relative; min-width:0; }
+        .pl-c { width:100%; min-height:58px; padding:3px 2px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; border-radius:12px; border:2px dashed var(--text-dim); background:transparent; color:var(--text-soft); font-size:15px; font-weight:800; }
+        .pl-c .dl { font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+        .pl-cc { display:flex; align-items:center; justify-content:center; gap:5px; }
+        .pl-n { display:inline-flex; align-items:center; gap:2px; font-size:15px; font-weight:800; }
+        .pl-c.ok { background:var(--nw-ok-bg); border:2px solid var(--nw-ok-bd); color:var(--nw-ok-ink); }
+        .pl-c.wn { background:var(--nw-wn-bg); border:2px solid var(--nw-wn-bd); color:var(--nw-wn-ink); }
+        .pl-c.mx { background:linear-gradient(135deg, var(--nw-ok-bg) 50%, var(--nw-wn-bg) 50%); border:2px solid var(--nw-ok-bd); color:var(--text); }
+        .pl-m { position:absolute; top:-9px; right:-6px; z-index:1; width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:14px; border:2px solid var(--surface-2); background:var(--text-soft); color:var(--surface-1); }
+        .pl-xr { display:none; padding-top:10px; border-top:1px dashed var(--border); }
+        .pl-ln.xo .pl-xr { display:block; }
+        .pl-xg { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .pl-xg .nwr-fld:nth-child(1), .pl-xg .nwr-fld:nth-child(2), .pl-xg .nwr-fld:nth-child(3), .pl-xg .nwr-fld:nth-child(6), .pl-xg .nwr-fld.full { grid-column:1 / -1; }
+        .pl-xg .dt { display:flex; gap:8px; }
+        .pl-xg .dt input { flex:1; min-width:0; }
+        .pl-xg .dt button { flex:none; min-height:46px; padding:0 14px; display:inline-flex; align-items:center; gap:6px; border-radius:10px; border:1.5px solid var(--nw-ok-bd); background:var(--nw-ok-bg); color:var(--nw-ok-ink); font-size:14px; font-weight:700; }
+        .pl-none { padding:30px 16px; border:2px dashed var(--text-dim); border-radius:14px; text-align:center; font-size:14.5px; font-weight:600; line-height:1.5; color:var(--text-soft); }
+        .pl-none b { display:block; margin-bottom:2px; font-size:16px; color:var(--text); }
+        .pl-hint { padding:2px 2px 0; font-size:12.5px; font-weight:600; line-height:1.4; color:var(--text-soft); }
+        .pl-scrim { position:absolute; inset:0; z-index:4; background:rgba(var(--shade-rgb), .5); border-radius:inherit; }
+        .pl-pn { position:absolute; z-index:5; left:0; right:0; bottom:0; max-height:92%; display:flex; flex-direction:column; gap:10px; padding:12px 14px 14px; border:1.5px solid var(--border); border-radius:20px 20px 0 0; background:var(--surface-1); box-shadow:0 -10px 40px rgba(var(--shade-rgb), .45); }
+        .pl-pnh { display:flex; align-items:center; gap:8px; }
+        .pl-s { flex:1; min-width:0; height:46px; display:flex; align-items:center; gap:8px; padding:0 12px; border-radius:12px; border:1.5px solid var(--border); background:var(--surface-2); color:var(--text-dim); }
+        .pl-s:focus-within { border-color:var(--accent); }
+        .nwr-ov .pl-s input, .nwr-ov .pl-s input:focus { flex:1; min-width:0; height:100%; padding:0; border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; color:var(--text); font-family:inherit; font-size:16px; font-weight:600; }
+        .pl-chips { display:flex; flex-wrap:wrap; gap:6px; }
+        .pl-chip { min-height:38px; max-width:100%; padding:0 13px; display:inline-flex; align-items:center; gap:5px; border-radius:19px; border:2px solid var(--nc); background:transparent; color:var(--text); font-size:13.5px; font-weight:800; white-space:nowrap; }
+        .pl-chip.on { background:var(--nc); color:var(--nci); }
+        .pl-sec { font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-soft); }
+        .pl-rl { display:flex; flex-direction:column; gap:6px; flex:1 1 auto; min-height:0; overflow-y:auto; padding:2px; -webkit-overflow-scrolling:touch; }
+        .pl-r { width:100%; min-height:46px; flex:none; padding:6px 12px; display:flex; align-items:center; gap:10px; text-align:left; border-radius:11px; border:1.5px solid var(--border); background:var(--surface-2); color:var(--text); font-size:14.5px; font-weight:700; }
+        .pl-r .tx { flex:1; min-width:0; line-height:1.3; overflow-wrap:anywhere; }
+        .pl-r .tx i { font-style:normal; font-weight:600; color:var(--text-dim); }
+        .pl-r .tx small { font-size:12.5px; font-weight:600; color:var(--text-soft); }
+        .pl-r .n { flex:none; font-size:13px; font-weight:800; color:var(--text-soft); }
+        .pl-r.on { background:var(--nw-ok-bg); border-color:var(--nw-sel); }
+        .pl-r.new { border-style:dashed; border-color:var(--accent); color:var(--accent); }
+        .pl-tg { flex:none; display:inline-flex; align-items:center; height:20px; padding:0 8px; border-radius:10px; background:var(--nc); color:var(--nci); font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+        .pl-rn { padding:14px 10px; text-align:center; font-size:14px; font-weight:600; color:var(--text-soft); }
+        @media (min-width:600px) and (max-width:999px) { .nwr-btn2 { display:block; } .nwr-go { flex:1 1 200px; } }
         @media (min-width:1000px) {
             .nwr-ov { align-items:center; }
-            .nwr-card { max-width:1060px; max-height:94vh; border-radius:16px; box-shadow:0 36px 90px rgba(var(--shade-rgb),.6); }
-            .nwr-ctl .nwr-seg { flex:0 0 330px; }
-            .nwr-body { padding:18px 24px; }
-            .nwr-cols { display:grid; grid-template-columns:minmax(0,1fr) 400px; gap:28px; align-items:start; }
-            .nwr-side { position:sticky; top:0; max-height:calc(94vh - 190px); overflow-y:auto; }
+            .nwr-card { max-width:1020px; max-height:94vh; min-height:min(600px, 94vh); border-radius:16px; box-shadow:0 36px 90px rgba(var(--shade-rgb),.6); }
+            .nwr-head > .nwr-seg { flex:0 0 330px; order:0; }
+            .pl-bar { flex-wrap:nowrap; padding:10px 18px; }
+            .pl-add { flex:none; }
+            .pl-mode { flex:1 1 auto; justify-content:flex-end; }
+            .pl-ml { display:inline; }
+            .pl-seg { flex:0 0 auto; }
+            .pl-seg button { padding:0 16px; }
+            .pl-body { padding:0 18px 12px; }
+            .pl-grid { gap:0; padding-top:0; }
+            .pl-hd { display:grid; grid-template-columns:minmax(0, 1fr) 474px 92px; column-gap:10px; position:sticky; top:0; z-index:3; padding:10px 0 6px; background:var(--surface-1); border-bottom:1px solid var(--border); }
+            .pl-hd .h0 { padding-left:17px; font-size:11.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--text-soft); align-self:end; }
+            .pl-hd .hdd { display:grid; grid-template-columns:repeat(5, 90px); gap:6px; }
+            .pl-hd .hdd span { text-align:center; font-size:11.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--text-soft); }
+            .pl-hd .hdd b { display:block; margin-top:1px; font-size:15px; letter-spacing:0; color:var(--text); }
+            .pl-ln { display:grid; grid-template-columns:minmax(0, 1fr) 474px 92px; align-items:center; gap:0 10px; padding:8px 0 8px 12px; border:0; border-bottom:1px solid var(--border); border-left:5px solid var(--nc); border-radius:0; background:transparent; }
+            .pl-info { padding-right:0; }
+            .pl-r1 { padding-right:0; }
+            .pl-info .rt { margin-top:0; }
+            .pl-days { grid-template-columns:repeat(5, 90px); }
+            .pl-c { min-height:50px; }
+            .pl-c .dl { display:none; }
+            .pl-tools { position:static; justify-content:flex-end; }
+            .pl-xr { grid-column:1 / -1; margin-top:6px; }
+            .pl-xg { grid-template-columns:repeat(3, 1fr); }
+            .pl-xg .nwr-fld:nth-child(n) { grid-column:auto; }
+            .pl-xg .nwr-fld.full { grid-column:1 / -1; }
             .nwr-foot { padding:12px 24px; }
             .nwr-tot > b { display:inline; }
             .nwr-foot2 { flex-wrap:nowrap; }
             .nwr-tot { flex:1 1 auto; }
             .nwr-btn2 { display:block; }
             .nwr-go { flex:0 0 auto; min-height:46px; }
-            .nwr-d { min-height:96px; }
-            .nwr-mode { flex-direction:row; align-items:center; gap:14px; padding:10px 14px; }
-            .nwr-mode .lead { flex:1; }
-            .nwr-mode .opts { flex:0 0 340px; }
-            .nwr-xtra { grid-template-columns:200px 1fr 1fr; }
-            .nwr-xtra .full { grid-column:auto; }
+            .pl-scrim { background:rgba(var(--shade-rgb), .22); }
+            .pl-pn { left:18px; right:auto; bottom:auto; width:580px; max-height:calc(100% - 140px); border-radius:16px; box-shadow:0 18px 50px rgba(var(--shade-rgb), .5); }
         }
-        @media (min-width:600px) and (max-width:999px) { .nwr-btn2 { display:block; } .nwr-go { flex:1 1 200px; } }
         @media print { .nwr-ov, .nwr-ac { display:none !important; } }
 
         /* «A tocchi»: foglio dal basso */
@@ -2179,6 +2212,18 @@
             background:var(--surface-2); color:var(--text); border:1.5px solid var(--success); box-shadow:0 12px 34px rgba(var(--shade-rgb),0.5);
             font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:600; line-height:1.4; text-align:center; }
         #mailToast.error { border-color:var(--ac-red); }
+        /* v101 — avviso «mail di integrazione» e scelta «Solo i viaggi nuovi / Tutta la mail» */
+        .mwa-ov { align-items:center; padding:16px; }
+        .mwa-box { width:min(600px,100%); max-height:92vh; overflow:auto; }
+        .mwa-lead { font-size:15px; line-height:1.45; color:var(--text); }
+        .mwa-c { display:flex; flex-direction:column; gap:10px; padding:14px 16px; border-radius:14px; border:1px solid color-mix(in srgb, var(--mc, var(--accent)) 55%, transparent); background:linear-gradient(120deg, color-mix(in srgb, var(--mc, var(--accent)) 20%, transparent), color-mix(in srgb, var(--mc, var(--accent)) 5%, transparent) 75%); }
+        .mwa-top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .mwa-top > span { color:var(--text-soft); font-size:13px; font-weight:600; }
+        .mwa-top .mw-pill { display:inline-block; height:34px; line-height:34px; padding:0 16px; font-size:16px; border-radius:9px; letter-spacing:.5px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .mwa-n { font-size:15px; font-weight:800; color:var(--text); }
+        .mwa-mail { padding:12px 16px; border-radius:11px; background:var(--surface-2); border:1px solid var(--border); font-size:14.5px; line-height:1.6; color:var(--text); max-height:30vh; overflow:auto; }
+        .mwa-mail b { font-weight:700; } .mwa-mail u { text-underline-offset:3px; }
+        .mw-modes.mw-scope { align-self:flex-start; }
         /* v100 — «Mail della settimana» rifatta: elenco dei trasportatori a sinistra (stato a colpo d'occhio), mail "su carta" a destra, azioni grandi */
         .mw-ov { position:fixed; inset:0; z-index:9500; background:rgba(var(--shade-rgb),0.66); backdrop-filter:blur(3px); display:flex; align-items:flex-start; justify-content:center; padding:5vh 16px 24px; overflow:auto; }
         .mw-box { width:min(980px,100%); background:var(--surface-1); border:1px solid rgba(var(--veil-rgb),0.16); border-radius:18px; box-shadow:0 28px 80px rgba(var(--shade-rgb),0.6); overflow:hidden; font-family:'Outfit',sans-serif; color:var(--text); }
@@ -2553,7 +2598,8 @@
             /* ---- SCHEDE, livelli diversi da 0: spazi e testi scalati ---- */
             html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-trip td { font-size: calc(16px*var(--pc-f)) !important; }
             html[data-pcmode="cards"][data-pclvl="-1"] #desktopBody .pc-trip td, html[data-pcmode="cards"][data-pclvl="-2"] #desktopBody .pc-trip td, html[data-pcmode="cards"][data-pclvl="-3"] #desktopBody .pc-trip td { line-height: 1.3 !important; }
-            html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-stato .pc-row-actions button { width: calc(26px*var(--pc-f)) !important; height: calc(26px*var(--pc-f)) !important; }
+            html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-stato .pc-ib { width: calc(32px*var(--pc-f)) !important; height: calc(32px*var(--pc-f)) !important; }
+            html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-stato .pc-st { height: calc(30px*var(--pc-f)) !important; font-size: calc(11px*var(--pc-f)) !important; }
             html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-grip   { padding: calc(4px*var(--pc-p)) 3px !important; }
             html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-date   { padding: calc(7px*var(--pc-p)) calc(8px*var(--pc-p)) !important; }
             html[data-pcmode="cards"]:not([data-pclvl="0"]) #desktopBody .pc-c-date [data-dateval] { font-size: calc(14px*var(--pc-f)) !important; padding: calc(6px*var(--pc-p)) 4px !important; }
@@ -2610,7 +2656,10 @@
             html[data-pcmode="excel"] #desktopBody .pc-prod-in:focus { background: rgba(var(--accent-rgb),0.08) !important; border-color: var(--accent) !important; }
             html[data-pcmode="excel"] #desktopBody .pc-ddt      { right: 6px; }
             html[data-pcmode="excel"] #desktopBody .pc-c-stato  { padding: calc(0.5px + 1.5px*var(--pc-p)) 8px !important; }
-            html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-row-actions button { width: calc(21px*var(--pc-f)) !important; height: calc(21px*var(--pc-f)) !important; font-size: calc(11px*var(--pc-f)) !important; }
+            html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-ib { width: calc(23px*var(--pc-f)) !important; height: calc(23px*var(--pc-f)) !important; border-radius: 7px !important; }
+            html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-ib svg { width: calc(14px*var(--pc-f)) !important; height: calc(14px*var(--pc-f)) !important; }
+            html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-st { height: calc(23px*var(--pc-f)) !important; font-size: calc(10px*var(--pc-f)) !important; padding: 0 8px 0 6px !important; }
+            html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-sbar, html[data-pcmode="excel"] #desktopBody .pc-c-stato .pc-row-actions { gap: 4px !important; }
             html[data-pcmode="excel"] #desktopBody .pc-th       { padding: calc(4px*var(--pc-p) + 4px) 10px !important; font-size: 10px !important; }
             html[data-pcmode="excel"] #desktopBody .pc-th-partenza::after, html[data-pcmode="excel"] #desktopBody .pc-th-arrivo::after { margin-left: 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.3px; text-transform: none; color: var(--text-dim); }
             html[data-pcmode="excel"] #desktopBody .pc-th-partenza::after { content: "Fornitore \2502  Località"; }
@@ -5920,6 +5969,14 @@
             return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
         }
 
+        // v103: anno della settimana ISO (= anno del giovedì). Il 1/1/2027 è in settimana 53 del 2026.
+        function getWeekYear(date) {
+            var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            var dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            return d.getUTCFullYear();
+        }
+
         // ── Utility: lunedì della settimana corrente ──
         function getMonday(date) {
             const d = new Date(date);
@@ -6023,11 +6080,25 @@
             }
         };
 
+        // v103: toglie dall'elenco ciò che non è un viaggio (null, numeri, testo) e dà un testo ai campi che servono sempre
+        function _tripsSane(arr) {
+            if (!Array.isArray(arr)) return [];
+            var out = [];
+            for (var i = 0; i < arr.length; i++) {
+                var t = arr[i];
+                if (!t || typeof t !== 'object' || Array.isArray(t)) continue;
+                ['data', 'trasportatore', 'partenza', 'arrivo'].forEach(function (k) { if (typeof t[k] !== 'string') t[k] = (t[k] == null ? '' : String(t[k])); });
+                ['prodotto', 'note', 'ddt'].forEach(function (k) { if (t[k] != null && typeof t[k] !== 'string') t[k] = String(t[k]); });
+                out.push(t);
+            }
+            return out;
+        }
+
         function loadTripsFromLocalStorage() {
             const saved = localStorage.getItem('viaggiLogistica');
             if (saved) {
                 try {
-                    trips = JSON.parse(saved);
+                    trips = _tripsSane(JSON.parse(saved));
                     console.log('📥 Viaggi caricati da localStorage:', trips.length);
                     
                     // Ripristino automatico flag daConfermare dalle note
@@ -6061,6 +6132,7 @@
 
                 } catch (e) {
                     console.error('❌ Errore caricamento localStorage:', e);
+                    try { localStorage.setItem('viaggiLogistica_corrotto', saved); } catch (eB) {}      // v103: copia del testo illeggibile prima che venga sovrascritto
                 }
             } else {
                 console.log('ℹ️ Nessun dato salvato, uso viaggi precaricati');
@@ -6101,7 +6173,7 @@
             
             if (type === 'auto') {
                 const weekNum = getWeekNumber(now);
-                const year = now.getFullYear();
+                const year = getWeekYear(now);
                 const monday = getMonday(now);
                 const friday = new Date(monday);
                 friday.setDate(friday.getDate() + 4);
@@ -6113,7 +6185,7 @@
                 suggestion = `Settimana ${weekNum}/${year} (Lun. ${formatDate(monday)} - Ven. ${formatDate(friday)})`;
             } else if (type === 'week') {
                 const weekNum = getWeekNumber(now);
-                const year = now.getFullYear();
+                const year = getWeekYear(now);
                 suggestion = `Settimana ${weekNum}/${year}`;
             } else if (type === 'dates') {
                 const monday = getMonday(now);
@@ -6198,8 +6270,8 @@
             try {
                 var archive = JSON.parse(localStorage.getItem('weekArchive') || '[]');
                 archive.forEach(function(week) {
-                    (week.trips || []).forEach(function(t) {
-                        if (t.trasportatore && !transportersList.includes(t.trasportatore)) {
+                    (week && Array.isArray(week.trips) ? week.trips : []).forEach(function(t) {
+                        if (t && t.trasportatore && !transportersList.includes(t.trasportatore)) {
                             transportersList.push(t.trasportatore);
                         }
                     });
@@ -6207,7 +6279,7 @@
                 // Aggiungi anche dalla settimana corrente e prossima
                 var curr = JSON.parse(localStorage.getItem('viaggiLogistica') || '[]');
                 var next = JSON.parse(localStorage.getItem('viaggiLogisticaNext') || '[]');
-                curr.concat(next).forEach(function(t) {
+                _tripsSane(curr).concat(_tripsSane(next)).forEach(function(t) {      // v103
                     if (t.trasportatore && !transportersList.includes(t.trasportatore)) {
                         transportersList.push(t.trasportatore);
                     }
@@ -6346,11 +6418,11 @@
             try {
                 var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
                 arch.forEach(function(w) {
-                    if (w.trips && Array.isArray(w.trips)) allTrips = allTrips.concat(w.trips);
+                    if (w && w.trips && Array.isArray(w.trips)) allTrips = allTrips.concat(w.trips);
                 });
             } catch(e) {}
 
-            allTrips.forEach(function(t) {
+            _tripsSane(allTrips).forEach(function(t) {      // v103: salta null / numeri / campi non testo
                 if (t.partenza)      changed = _addToDb(partenzaList,    'partenzaList',    t.partenza)      || changed;
                 if (t.arrivo)        changed = _addToDb(arrivoList,       'arrivoList',       t.arrivo)        || changed;
                 if (t.prodotto)      changed = _addToDb(prodottiList,     'prodottiList',     t.prodotto)      || changed;
@@ -6737,7 +6809,7 @@
             var saved = localStorage.getItem('viaggiLogisticaNext');
             if (saved) {
                 try {
-                    tripsNext = JSON.parse(saved);
+                    tripsNext = _tripsSane(JSON.parse(saved));
                     tripsNext.sort(function(a,b) {
                         var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
                         var db = b.data ? new Date(b.data + 'T12:00:00') : new Date(0);
@@ -7205,7 +7277,7 @@
         function shortName(text, max) {
             if (!text) return '—';
             // Prima prova a usare solo la parte prima della parentesi
-            // Es: "San Felice sul Panaro (CODICE)" → "S.Felice (CODICE)"
+            // Es: "Nome Località Lunga (CODICE)" → "N.Località (CODICE)"
             const parenMatch = text.match(/^(.+?)\s*(\(.*\))$/);
             if (parenMatch) {
                 let location = parenMatch[1].trim();
@@ -8516,34 +8588,8 @@
                     ' onkeydown="' + tabNav + '"></label>' +
                     '</td>' +
 
-                    // STATO/AZIONI — G3: stato come etichetta discreta (il bordo laterale della riga già lo segnala),
-                    // duplica/elimina appaiono nitidi solo al passaggio del mouse (classe .pc-row-actions, vedi CSS)
-                    '<td class="pc-c-stato" style="padding:9px 10px;white-space:nowrap;">' +
-                    '<div style="display:flex;align-items:center;gap:10px;justify-content:space-between;">' +
-                    (isWarn
-                      ? '<span onclick="event.stopPropagation();desktopToggleConf(' + realIdx + ')" title="Clicca per confermare" '
-                        + 'style="font-size:10px;font-weight:800;color:var(--ac-orange);text-transform:uppercase;letter-spacing:0.4px;cursor:pointer;white-space:nowrap;">⚠ Da conf.</span>'
-                      : '<span onclick="event.stopPropagation();desktopSetPending(' + realIdx + ')" title="Clicca per segnare da confermare" '
-                        + 'style="font-size:10px;font-weight:700;color:rgba(var(--veil-rgb),0.18);text-transform:uppercase;letter-spacing:0.4px;cursor:pointer;white-space:nowrap;transition:color 0.15s;"'
-                        + ' onmouseover="this.style.color=\'var(--warning)\'" onmouseout="this.style.color=\'rgba(var(--veil-rgb),0.18)\'">— segna</span>') +
-                    // Nota — niente colonna fissa (serve raramente): icona compatta, piena solo se c'è
-                    // già del testo, altrimenti tenue come il resto delle azioni secondarie
-                    '<span onclick="event.stopPropagation();desktopToggleNotePopover(' + realIdx + ',this)" title="' + ((trip.note||'').replace(/"/g,'&quot;') || 'Aggiungi nota') + '"' +
-                    ' style="font-size:13px;cursor:pointer;opacity:' + (trip.note ? '1' : '0.6') + ';transition:opacity 0.15s;flex-shrink:0;">' + (trip.note ? '📝' : _PC_NOTE_ICO) + '</span>' +
-                    '<div class="pc-row-actions" style="display:flex;gap:4px;opacity:0.35;transition:opacity 0.15s;">' +
-                    '<button onclick="desktopDup(' + realIdx + ',this)" title="Duplica (Ctrl+D)"' +
-                    ' style="width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;transition:all 0.15s;"' +
-                    ' onmouseover="this.style.background=\'rgba(var(--warning-rgb),0.15)\';this.style.color=\'var(--warning)\'"' +
-                    ' onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--text-dim)\'"' +
-                    '>⧉</button>' +
-                    '<button onclick="desktopDel(' + realIdx + ')" title="Elimina"' +
-                    ' style="width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;transition:all 0.15s;"' +
-                    ' onmouseover="this.style.background=\'rgba(var(--accent-rgb),0.18)\';this.style.color=\'var(--accent)\'"' +
-                    ' onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--text-dim)\'"' +
-                    '>🗑</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</td>' +
+                    // STATO/AZIONI — v101: pulsanti sempre visibili (stato · nota · duplica · elimina), un solo costruttore (_pcStatoInner)
+                    '<td class="pc-c-stato" style="padding:9px 10px;white-space:nowrap;">' + _pcStatoInner(realIdx, trip) + '</td>' +
 
                     '</tr>';
             }
@@ -8729,7 +8775,7 @@
                                         const bdr = isActive ? '2px solid var(--accent)' : '2px solid var(--border)';
                                         return '<th class="pc-th pc-th-' + f + '" onclick="desktopSortBy(\'' + f + '\')" style="padding:14px 12px;text-align:left;font-size:11px;font-weight:800;font-family:\'Outfit\',sans-serif;color:' + clr + ';letter-spacing:1px;text-transform:uppercase;' + (widths[f]?'width:'+widths[f]+';':'') + 'cursor:pointer;user-select:none;white-space:nowrap;transition:all 0.15s;border-bottom:' + bdr + ';" title="Ordina per ' + labels[f] + '">' + labels[f] + (arrow ? ' <span style=\"color:var(--accent);font-size:11px;\">' + arrow + '</span>' : '') + '</th>';
                                     }).join('')}
-                                    <th class="pc-th" style="width:170px;padding:11px 8px;text-align:left;font-size:10px;font-weight:800;color:var(--text);border-bottom:2px solid var(--border);letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
+                                    <th class="pc-th" style="width:206px;padding:11px 8px;text-align:left;font-size:10px;font-weight:800;color:var(--text);border-bottom:2px solid var(--border);letter-spacing:1px;white-space:nowrap;">⚠ STATO</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -8869,34 +8915,93 @@
             return _hslToHex(hsl.h, s, l);
         }
 
-        function _locationCodeColor(code) {
-            if (!code) return null;
-            var c = code.toUpperCase().trim();
-            // Palette premium morbida — pallino/sottolineatura (dot). Testo ed "impatto"
-            // (usato sul nome del luogo di arrivo) derivati automaticamente da qui.
-            var dots = {};      // v97: i nomi dei clienti non stanno più nel codice: colore automatico (sotto), sempre lo stesso per lo stesso codice
-            var dot = dots[c];
-            if (!dot) {
-                // Fallback deterministico — evita hue vicini al verde arrivo/bianco partenza
-                var hash = 0;
-                for (var i=0; i<c.length; i++) hash = ((hash<<5)-hash)+c.charCodeAt(i);
-                var hue = Math.abs(hash) % 360;
-                if (hue >= 90 && hue <= 165) hue = (hue + 120) % 360;
-                dot = _hslToHex(hue, 55, 55);
+        // ═══════════════════════════════════════════════════════════════════
+        //  v101 — Colori dei codici fornitore / cliente (Fil: due codici diversi sembravano lo stesso verde e uno non si vedeva nel tema chiaro)
+        //  12 tinte diverse e smorzate, scelte a mano in OKLCH, ognuna con la versione per il tema chiaro e quella per lo scuro
+        //  (contrasto ≥ 4,7:1 nel chiaro e ≥ 5,2:1 nello scuro, sul fondo peggiore dell'app). Ogni ruolo (partenze / arrivi) ha il suo giro: finché i codici
+        //  sono al massimo 14 per ruolo, due codici non hanno mai lo stesso colore. Il colore dipende solo dai codici presenti,
+        //  quindi PC e telefono (stessi dati) mostrano gli stessi colori. ES5.
+        // ═══════════════════════════════════════════════════════════════════
+        var _CODE_PAL = [
+            { n: 'rosso', lt: '#971525', dk: '#e2908d' },
+            { n: 'arancio', lt: '#8d4706', dk: '#ffbb8f' },
+            { n: 'senape', lt: '#604a00', dk: '#cdb05f' },
+            { n: 'oliva', lt: '#4c6300', dk: '#99c031' },
+            { n: 'verde', lt: '#005e27', dk: '#89e19d' },
+            { n: 'smeraldo', lt: '#006558', dk: '#00c4ad' },
+            { n: 'azzurro', lt: '#005879', dk: '#4db8ec' },
+            { n: 'blu', lt: '#214fa9', dk: '#accaff' },
+            { n: 'viola', lt: '#6343b2', dk: '#aa97f6' },
+            { n: 'magenta', lt: '#803d89', dk: '#f7b1ff' },
+            { n: 'rosa', lt: '#9b2666', dk: '#ff7fbc' },
+            { n: 'ardesia', lt: '#405266', dk: '#9bb0c6' }
+        ];
+        var _codeMaps = null, _codeMapsSig = '';
+        function _codeNorm(c) { return String(c || '').toUpperCase().trim(); }
+        function _codeOf(s) { var m = String(s || '').match(/[(]([^)]+)[)]/); return m ? _codeNorm(m[1]) : ''; }
+        function _codeHash(c) { var h = 0; for (var i = 0; i < c.length; i++) h = (((h << 5) - h) + c.charCodeAt(i)) | 0; return h; }
+        function _codeAssign(set, used) {
+            var N = _CODE_PAL.length, list = Object.keys(set), map = {}, i;
+            used = used || {};
+            list.sort(function (a, b) { var ha = _codeHash(a), hb = _codeHash(b); return ha !== hb ? ha - hb : (a < b ? -1 : 1); });
+            for (i = 0; i < list.length; i++) {
+                var s = Math.abs(_codeHash(list[i])) % N, k = 0;
+                while (used[s] && k < N) { s = (s + 5) % N; k++; }      // 5 e 12 sono primi tra loro: il giro tocca tutte le tinte
+                if (k >= N) s = Math.abs(_codeHash(list[i])) % N;      // più codici che tinte: si riusa
+                used[s] = 1; map[list[i]] = s;
             }
-            return {
-                bg: dot,
-                bd: dot,
-                tx: _themeInk(_liftColor(dot, 18, 6))
-            };
+            return map;
+        }
+        function _codeBuild(set) {      // prima i fornitori, poi i clienti (che evitano le tinte dei fornitori finché ce ne sono)
+            var used = {}, f = _codeAssign(set.f, used), a = {}, c, ra = {};
+            for (c in set.a) if (!(c in f)) ra[c] = 1;
+            a = _codeAssign(ra, used);
+            return { f: f, a: a };
+        }
+        function _codeCollect() {
+            var f = {}, a = {}, c;
+            function add(o, arr) { for (var i = 0; i < (arr || []).length; i++) { c = _codeOf(arr[i]); if (c) o[c] = 1; } }
+            add(f, typeof partenzaList !== 'undefined' ? partenzaList : []);
+            add(a, typeof arrivoList !== 'undefined' ? arrivoList : []);
+            var all = [].concat(typeof trips !== 'undefined' ? trips : [], typeof tripsNext !== 'undefined' ? tripsNext : []);
+            for (var i = 0; i < all.length; i++) {
+                c = _codeOf(all[i].partenza); if (c) f[c] = 1;
+                c = _codeOf(all[i].arrivo); if (c) a[c] = 1;
+            }
+            return { f: f, a: a };
+        }
+        function _codeSlot(code) {
+            var c = _codeNorm(code);
+            if (!c) return 0;
+            if (_codeMaps && (c in _codeMaps.f || c in _codeMaps.a)) return (c in _codeMaps.f) ? _codeMaps.f[c] : _codeMaps.a[c];
+            var set = _codeCollect();
+            if (!(c in set.f) && !(c in set.a)) return Math.abs(_codeHash(c)) % _CODE_PAL.length;      // codice non presente in nessun elenco: tinta dal solo nome
+            _codeMaps = _codeBuild(set);
+            return (c in _codeMaps.f) ? _codeMaps.f[c] : _codeMaps.a[c];
+        }
+        function _codeResetMaps() { _codeMaps = null; }
+        function _mixHex(a, b, t) {      // t = quota di b
+            function p(h, i) { return parseInt(h.substr(1 + 2 * i, 2), 16); }
+            function x(n) { n = Math.max(0, Math.min(255, Math.round(n))); var v = n.toString(16); return v.length === 1 ? '0' + v : v; }
+            return '#' + x(p(a, 0) * (1 - t) + p(b, 0) * t) + x(p(a, 1) * (1 - t) + p(b, 1) * t) + x(p(a, 2) * (1 - t) + p(b, 2) * t);
+        }
+        // {bg: tinta per etichette, bd: colore pieno (pallino, sottolineatura, testo), tx: testo su etichetta}
+        function _codePal(code, theme) {
+            var e = _CODE_PAL[_codeSlot(code)], light = (theme || (_isLightTheme() ? 'light' : 'dark')) === 'light';
+            if (light) return { bg: _mixHex(e.lt, '#ffffff', 0.84), bd: e.lt, tx: _mixHex(e.lt, '#000000', 0.18) };
+            return { bg: _mixHex(e.dk, '#25272b', 0.80), bd: e.dk, tx: e.dk };
         }
 
-        // Colore "impatto" per il nome del luogo di arrivo — stessa tinta del codice
-        // cliente ma più acceso, per riconoscerlo a colpo d'occhio senza leggere l'etichetta
+        function _locationCodeColor(code) {
+            if (!code) return null;
+            var p = _codePal(code);
+            return { bg: p.bg, bd: p.bd, tx: p.bd };
+        }
+
+        // Colore "impatto" per il nome del luogo di arrivo — v101: stessa tinta del codice (già piena e leggibile nei due temi)
         function _impactColor(code) {
             var col = _locationCodeColor(code);
-            if (!col) return null;
-            return _themeInk(_liftColor(col.bd, 7, 14));
+            return col ? col.bd : null;
         }
 
         // Accorcia un nome luogo troppo lungo per la colonna PC — preferisce tenere
@@ -8911,21 +9016,10 @@
             return name.substring(0, maxLen - 1) + '…';
         }
 
-        // Colori FISSI codice azienda — Tema G (vista PC, sfondo chiaro/testo scuro)
-        function _locationCodeColorPC(code) {
+        // v101: vista PC — colori dei codici dalla stessa palette (theme: 'light' | 'dark', se omesso il tema in uso; Excel/stampa passano sempre 'light')
+        function _locationCodeColorPC(code, theme) {
             if (!code) return null;
-            var c = code.toUpperCase().trim();
-            var map = {};      // v97: vedi sopra (colore automatico)
-            if (map[c]) return map[c];
-            // Fallback deterministico — colore vivace utilizzabile come sfondo pieno di pillola
-            var hash = 0;
-            for (var i=0; i<c.length; i++) hash = ((hash<<5)-hash)+c.charCodeAt(i);
-            var hue = Math.abs(hash) % 360;
-            return {
-                bg: 'hsl('+hue+',60%,86%)',
-                bd: 'hsl('+hue+',62%,52%)',
-                tx: 'hsl('+hue+',65%,24%)'
-            };
+            return _codePal(code, theme);
         }
 
         // Badge HTML per codice azienda
@@ -8944,6 +9038,24 @@
         }
 
         // v77: dopo aver scritto/cancellato il DDT l'etichetta si accende/spegne e la cella Prodotto fa spazio
+        var _PC_BTN_IC = {
+            warn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4.5M12 17.6v.4"/></svg>',
+            note: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14.5 3v4.5H19M9.5 12.5h6M9.5 16.5h6"/></svg>',
+            dup: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>',
+            del: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>'
+        };
+        // v101 — cella «Stato»: [Segna / ⚠ Da conf.] [nota] [duplica] [elimina]
+        function _pcStatoInner(idx, t) {
+            var note = String(t.note || '').trim(), w = !!t.daConfermare;
+            return '<div class="pc-sbar">'
+                + (w ? '<button type="button" class="pc-st on" onclick="event.stopPropagation();desktopToggleConf(' + idx + ')" title="Da confermare: clicca per confermare">' + _PC_BTN_IC.warn + 'Da conf.</button>'
+                     : '<button type="button" class="pc-st" onclick="event.stopPropagation();desktopSetPending(' + idx + ')" title="Clicca per segnare da confermare">' + _PC_BTN_IC.warn + 'Segna</button>')
+                + '<button type="button" class="pc-ib pc-note' + (note ? ' has' : '') + '" onclick="event.stopPropagation();desktopToggleNotePopover(' + idx + ',this)" title="' + _escH(note || 'Aggiungi nota') + '" aria-label="' + (note ? 'Nota' : 'Aggiungi nota') + '">' + _PC_BTN_IC.note + '</button>'
+                + '<div class="pc-row-actions">'
+                + '<button type="button" class="pc-ib pc-dup" onclick="desktopDup(' + idx + ',this)" title="Duplica (Ctrl+D)" aria-label="Duplica">' + _PC_BTN_IC.dup + '</button>'
+                + '<button type="button" class="pc-ib pc-del" onclick="desktopDel(' + idx + ')" title="Elimina" aria-label="Elimina">' + _PC_BTN_IC.del + '</button>'
+                + '</div></div>';
+        }
         var _PC_NOTE_ICO = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;color:var(--text-dim);"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h6"/></svg>';
         function _pcDdtSync(inp) {
             var lab = inp.parentElement, td = lab.parentElement;
@@ -9062,9 +9174,11 @@
                 if (wm) {
                     var now2 = new Date();
                     var dd2 = parseInt(wm[1]), mm2 = parseInt(wm[2]);
-                    var yyyy2 = now2.getFullYear();
-                    if (mm2 < now2.getMonth()) yyyy2++;
-                    var monday2 = new Date(yyyy2, mm2-1, dd2, 12, 0, 0);
+                    var monday2 = null;      // v103: anno più vicino a oggi
+                    [now2.getFullYear() - 1, now2.getFullYear(), now2.getFullYear() + 1].forEach(function (yy) {
+                        var cd = new Date(yy, mm2 - 1, dd2, 12, 0, 0);
+                        if (monday2 === null || Math.abs(cd - now2) < Math.abs(monday2 - now2)) monday2 = cd;
+                    });
                     if (monday2 >= getMondayOf(now2)) return monday2;
                 }
             }
@@ -9546,7 +9660,7 @@
             // Bottoni trasportatori
             var htmlT = '<button onclick="asSetTrasp(\'\')" data-trasp="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:var(--ac-blue);transition:all 0.15s;">Tutti</button>';
             allT.forEach(function(t) {
-                htmlT += '<button onclick="asSetTrasp(\'' + t.replace(/'/g,"\\'") + '\')" data-trasp="' + t.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + t + '</button>';
+                htmlT += '<button onclick="asSetTrasp(\'' + _escH(t.replace(/\\/g,"\\\\").replace(/'/g,"\\'")) + '\')" data-trasp="' + t.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + t + '</button>';
             });
             container.innerHTML = htmlT;
 
@@ -9554,7 +9668,7 @@
             if (prodContainer) {
                 var htmlP = '<button onclick="asSetProd(\'\')" data-prod="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:var(--ac-blue);transition:all 0.15s;">Tutti</button>';
                 allP.forEach(function(p) {
-                    htmlP += '<button onclick="asSetProd(\'' + p.replace(/'/g,"\\'") + '\')" data-prod="' + p.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + p + '</button>';
+                    htmlP += '<button onclick="asSetProd(\'' + _escH(p.replace(/\\/g,"\\\\").replace(/'/g,"\\'")) + '\')" data-prod="' + p.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + p + '</button>';
                 });
                 prodContainer.innerHTML = htmlP;
             }
@@ -10042,15 +10156,7 @@
             var t = _wt[idx];
             var cell = document.querySelector('#drow-' + idx + ' td:nth-child(7)');
             if (!cell || !t) return;
-            var statoHtml = t.daConfermare
-                ? '<span onclick="event.stopPropagation();desktopToggleConf(' + idx + ')" title="Clicca per confermare" style="font-size:10px;font-weight:800;color:var(--ac-orange);text-transform:uppercase;letter-spacing:0.4px;cursor:pointer;white-space:nowrap;">⚠ Da conf.</span>'
-                : '<span onclick="event.stopPropagation();desktopSetPending(' + idx + ')" title="Clicca per segnare da confermare" style="font-size:10px;font-weight:700;color:rgba(var(--veil-rgb),0.18);text-transform:uppercase;letter-spacing:0.4px;cursor:pointer;white-space:nowrap;transition:color 0.15s;" onmouseover="this.style.color=\'var(--warning)\'" onmouseout="this.style.color=\'rgba(var(--veil-rgb),0.18)\'">— segna</span>';
-            var noteHtml = '<span onclick="event.stopPropagation();desktopToggleNotePopover(' + idx + ',this)" title="' + ((t.note||'').replace(/"/g,'&quot;') || 'Aggiungi nota') + '" style="font-size:13px;cursor:pointer;opacity:' + (t.note ? '1' : '0.6') + ';transition:opacity 0.15s;flex-shrink:0;">' + (t.note ? '📝' : _PC_NOTE_ICO) + '</span>';
-            var actionsHtml = '<div class="pc-row-actions" style="display:flex;gap:4px;opacity:0.35;transition:opacity 0.15s;">'
-                + '<button onclick="desktopDup(' + idx + ',this)" title="Duplica (Ctrl+D)" style="width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background=\'rgba(var(--warning-rgb),0.15)\';this.style.color=\'var(--warning)\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--text-dim)\'">⧉</button>'
-                + '<button onclick="desktopDel(' + idx + ')" title="Elimina" style="width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background=\'rgba(var(--accent-rgb),0.18)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--text-dim)\'">🗑</button>'
-                + '</div>';
-            cell.innerHTML = '<div style="display:flex;align-items:center;gap:10px;justify-content:space-between;">' + statoHtml + noteHtml + actionsHtml + '</div>';
+            cell.innerHTML = _pcStatoInner(idx, t);
             // v75: il pallino "da confermare" segue lo stato (si accende/spegne senza ridisegnare la tabella)
             var _h = document.querySelector('#drow-' + idx + ' td:first-child');
             if (_h) {
@@ -10287,10 +10393,11 @@
                 .map(function(el){ return el.getAttribute('data-dup-day'); });
             _pcDupCancel();
             if (chosenDays.length === 0) { showStatus('Seleziona almeno un giorno', 'info'); return; }
+            var _dupAdded = [];
             chosenDays.forEach(function(iso) {
                 var copy = Object.assign({}, t);
                 copy.data = iso;
-                _wt.push(copy);
+                _wt.push(copy); _dupAdded.push(copy);
             });
             _wt.sort(function(a,b) {
                 var da = a.data ? new Date(a.data + 'T12:00:00') : new Date(0);
@@ -10303,6 +10410,7 @@
             haptic('success');
             showStatus('✅ Viaggio duplicato su ' + chosenDays.length + (chosenDays.length === 1 ? ' giorno' : ' giorni'), 'success');
             if (driveAccessToken) autoSaveDrive();
+            setTimeout(function () { _mwAfterAdd(_dupAdded, _pcWeekMode === 'next'); }, 300);      // v101
         }
 
         // ═══════════════ RUBRICA Fornitori/Clienti/Trasportatori (pannello laterale) ═══════════════
@@ -11027,27 +11135,27 @@
                 + _PCI.mail + '<span class="l">Invia</span><i class="caret">▾</i></button>';
         }
         // ═══════════════════════════════════════════════════════════════════
-        //  v100 — «Nuovi viaggi» (variante H2b scelta da Fil): UNA sola schermata per aggiungere viaggi (PC e telefono)
-        //  1 Trasportatore (pillole) · 2 Tratta (scheda grande; tendina «Tratte più usate» che si apre e si chiude) · 3 Giorni (ogni tocco = un viaggio, Confermato / Da confermare)
-        //  A destra (PC) / sotto (telefono): «Viaggi pronti», raggruppati per tratta, con lo stato di ogni singolo viaggio (tocca per cambiarlo, ✕ per togliere).
-        //  Sostituisce la v99 (righe con campi stretti: Da/A tagliati, «già N», bordino sottile). Stesso modello dati: _nwr.rows = tratte, ognuna con i suoi viaggi (slots).
-        //  Stato in _nwr; DOM con prefisso nwr (classi nwr-*, id nwr*). Tutto in ES5.
+        //  v102 — «Nuovi viaggi» a PLANNER (stile logistica): una riga per tratta, una colonna per giorno (Lun–Ven); un tocco su un giorno = un viaggio
+        //  In alto: settimana · «Aggiungi tratta» · stato dei nuovi viaggi (Confermato / Da confermare). In basso: totali e «Aggiungi N viaggi».
+        //  «Aggiungi tratta» apre un riquadro con ricerca, trasportatori (pillole) e «Tratte più usate»; ogni riga ha «⋯» per Da/A/Prodotto, DDT, note e «altro giorno» (sab, dom, altra data).
+        //  Stesso modello dati della v100/v99: _nwr.rows = tratte, ognuna con i suoi viaggi (slots). Telefono: stesse righe, ma come schede con i cinque giorni sotto.
+        //  Stato in _nwr; DOM con prefisso nwr (classi nwr-* / pl-*, id nwr*). Tutto in ES5.
         // ═══════════════════════════════════════════════════════════════════
         var _nwr = null;
         var _NWR_K = ['lun', 'mar', 'mer', 'gio', 'ven'];
         var _NWR_L = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven'];
         var _NWR_DOW = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
-        var _nwrBandT = 0, _nwrAcT = 0, _nwrAcInp = null;
+        var _nwrInT = 0, _nwrAcT = 0, _nwrAcInp = null, _nwrFlT = 0;
         var _NWR_IC = {
             check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
             warn: '<path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4.5M12 17.6v.4"/>',
             plus: '<path d="M12 5v14M5 12h14"/>',
+            minus: '<path d="M6 12h12"/>',
             x: '<path d="M6 6l12 12M18 6 6 18"/>',
             trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
-            dots: '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+            dots: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
             edit: '<path d="M4 20h4L19 9l-4-4L4 16v4z"/>',
-            down: '<path d="M6 9l6 6 6-6"/>',
-            up: '<path d="M6 15l6-6 6 6"/>'
+            search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'
         };
         function _nwrIc(n, s) {
             s = s || 16;
@@ -11056,7 +11164,6 @@
         function _nwrIsPC() { try { return window.matchMedia('(min-width:1000px)').matches; } catch (e) { return false; } }
         function _nwrCoarse() { try { return window.matchMedia('(pointer:coarse)').matches; } catch (e) { return false; } }
         function _nwrEl(id) { return document.getElementById(id); }
-        function _nwrCur() { return _nwr ? _nwr.rows[_nwr.cur] : null; }
         // colori del trasportatore = quelli dell'app (--t-<chiave>-fill/-ink/-bg e --t-<chiave>); una sola funzione da cambiare quando i colori diventeranno automatici
         function _nwrCarVars(name) {
             var k = getTransporterKey(String(name || ''));
@@ -11091,7 +11198,7 @@
                 try { iso = _nwrDayIso(d, _nwr.wk); } catch (e) {}
                 o[d] = iso;
                 var n = 0;
-                for (var i = 0; i < arr.length; i++) if (iso && arr[i].data === iso) n++;
+                for (var i = 0; i < arr.length; i++) if (iso && arr[i] && arr[i].data === iso) n++;
                 have[d] = n;
             });
             _nwr.dates = o; _nwr.have = have;
@@ -11099,7 +11206,7 @@
         function _nwrDM(iso) { return iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : ''; }
 
         // ── stato ──
-        function _nwrNewRow(car) { return { car: car || '', f: '', a: '', p: '', note: '', ddt: '', x: false, ed: false, slots: [] }; }
+        function _nwrNewRow(car) { return { car: car || '', f: '', a: '', p: '', note: '', ddt: '', x: false, slots: [] }; }
         function _nwrCnt(r, d) {
             var c = 0, w = 0;
             r.slots.forEach(function (s) { if (s.d === d) { if (s.st === 'w') w++; else c++; } });
@@ -11122,16 +11229,14 @@
             var dt = new Date(s.date + 'T12:00:00');
             return _NWR_DOW[dt.getDay()] + ' ' + _nwrDM(s.date);
         }
-        // riga a cui si riferisce un tocco: dal gruppo di «Viaggi pronti» (data-i) oppure, se il tocco è nel costruttore, la tratta in corso
-        function _nwrRowOf(el) {
-            var g = el && el.closest ? el.closest('.nwr-g') : null;
-            if (g) return parseInt(g.getAttribute('data-i'), 10);
-            return _nwr ? _nwr.cur : -1;
-        }
-        function _nwrCarInList(car) {
-            var cn = _srchNorm(String(car || '').trim());
-            if (!cn) return false;
-            return (_nwr.cars || []).some(function (n) { return _srchNorm(n) === cn; });
+        function _nwrLaneEl(i) { return document.querySelector('#nwrGrid .pl-ln[data-i="' + i + '"]'); }
+        function _nwrFindLane(car, f, a, p) {
+            var k = [_srchNorm(car), _srchNorm(f), _srchNorm(a), _srchNorm(p || '')].join('|');
+            for (var i = 0; i < _nwr.rows.length; i++) {
+                var r = _nwr.rows[i];
+                if ([_srchNorm(r.car), _srchNorm(r.f), _srchNorm(r.a), _srchNorm(r.p)].join('|') === k) return i;
+            }
+            return -1;
         }
 
         // ── costruzione della finestra (una sola volta) ──
@@ -11141,24 +11246,23 @@
             o = document.createElement('div');
             o.id = 'nwrOv'; o.className = 'nwr-ov'; o.style.display = 'none';
             o.setAttribute('role', 'dialog'); o.setAttribute('aria-modal', 'true'); o.setAttribute('aria-label', 'Nuovi viaggi');
-            o.innerHTML = '<div class="nwr-card" id="nwrCard">'
-                + '<div class="nwr-head"><div><h2>Nuovi viaggi</h2><p id="nwrSub"></p></div><button type="button" class="nwr-ib" data-a="close" aria-label="Chiudi" title="Chiudi (Esc)">' + _nwrIc('x', 18) + '</button></div>'
-                + '<div class="nwr-ctl"><div class="nwr-seg" id="nwrWk" role="group" aria-label="Settimana"></div></div>'
-                + '<div class="nwr-body" id="nwrBody"><div class="nwr-cols">'
-                +   '<div class="nwr-left" id="nwrBld">'
-                +     '<div class="nwr-sh"><b>1</b>Trasportatore</div>'
-                +     '<div class="nwr-cars" id="nwrCars"><div class="nwr-wrap" id="nwrPills"></div><div class="nwr-oth" id="nwrOth"></div></div>'
-                +     '<div class="nwr-sh"><b>2</b>Tratta</div>'
-                +     '<div class="nwr-rc" id="nwrRc"><div class="nwr-rtop" id="nwrRtop"></div><div class="nwr-ab" id="nwrAb" style="display:none"></div></div>'
-                +     '<div class="nwr-sh"><b>3</b>Giorni</div>'
-                +     '<div class="nwr-st3"><div class="nwr-mode" id="nwrMode"></div><div class="nwr-days" id="nwrDays"></div>'
-                +       '<button type="button" class="nwr-xbtn" id="nwrXb" data-a="xtra" aria-expanded="false" aria-controls="nwrXtra">' + _nwrIc('dots', 18) + ' DDT, note, altra data</button><div class="nwr-xtra" id="nwrXtra"></div></div>'
-                +     '<button type="button" class="nwr-add" data-a="addrow">' + _nwrIc('plus', 18) + ' Aggiungi un\'altra tratta</button>'
-                +   '</div>'
-                +   '<aside class="nwr-side" id="nwrSide" aria-label="Viaggi pronti"></aside>'
-                + '</div></div>'
+            o.innerHTML = '<div class="nwr-card pl-card" id="nwrCard">'
+                + '<div class="nwr-head"><div><h2>Nuovi viaggi</h2><p id="nwrSub"></p></div><div class="nwr-seg" id="nwrWk" role="group" aria-label="Settimana"></div>'
+                +   '<button type="button" class="nwr-ib" data-a="close" aria-label="Chiudi" title="Chiudi (Esc)">' + _nwrIc('x', 18) + '</button></div>'
+                + '<div class="pl-bar" id="nwrBar"><button type="button" class="pl-add" id="nwrAdd" data-a="padd" aria-expanded="false" aria-controls="nwrPn">' + _nwrIc('plus', 17) + ' Aggiungi tratta</button>'
+                +   '<div class="pl-mode"><span class="pl-ml">Ogni tocco aggiunge un viaggio:</span><div class="pl-seg" id="nwrMode" role="group" aria-label="Stato dei nuovi viaggi"></div></div></div>'
+                + '<div class="nwr-body pl-body" id="nwrBody"><div class="pl-grid" id="nwrGrid"></div></div>'
                 + '<div class="nwr-foot"><div id="nwrMsg" class="nwr-msg" role="alert"></div><div class="nwr-foot2"><div class="nwr-tot" id="nwrTot"></div>'
                 +   '<button type="button" class="nwr-btn2" data-a="cancel">Annulla</button><button type="button" class="nwr-go" id="nwrGo" data-a="go"></button></div></div>'
+                + '<div class="pl-scrim" id="nwrScrim" data-a="pclose" style="display:none"></div>'
+                + '<div class="pl-pn" id="nwrPn" role="dialog" aria-label="Aggiungi tratta" style="display:none">'
+                +   '<div class="pl-pnh"><label class="pl-s">' + _nwrIc('search', 18) + '<input type="text" id="nwrQ" data-k="q" placeholder="Cerca trasportatore o tratta…" aria-label="Cerca trasportatore o tratta" autocomplete="off" autocapitalize="off" spellcheck="false"></label>'
+                +     '<button type="button" class="nwr-ib sm" data-a="pclose" aria-label="Chiudi l\'elenco">' + _nwrIc('x', 18) + '</button></div>'
+                +   '<div class="pl-chips" id="nwrPc"></div>'
+                +   '<div class="pl-sec" id="nwrPs"></div>'
+                +   '<div class="pl-rl" id="nwrPr"></div>'
+                +   '<button type="button" class="pl-r new" data-a="pnew">' + _nwrIc('edit', 18) + '<span class="tx">Scrivi una tratta nuova…</span></button>'
+                + '</div>'
                 + '</div>';
             var down = false;
             o.addEventListener('mousedown', function (e) { down = (e.target === o); });
@@ -11170,6 +11274,14 @@
             o.addEventListener('input', _nwrInput);
             o.addEventListener('focusin', _nwrFocusIn);
             o.addEventListener('focusout', function () { clearTimeout(_nwrAcT); _nwrAcT = setTimeout(_nwrAcHide, 160); });
+            o.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter' || !_nwr) return;
+                var t = e.target;
+                if (t && t.getAttribute && t.getAttribute('data-k') === 'q') {      // Invio nella ricerca: se resta una sola tratta, è quella
+                    e.preventDefault();
+                    if (_nwr.pnl && _nwr.pnl.length === 1) _nwrPickRoute(_nwr.pnl[0]);
+                }
+            });
             document.body.appendChild(o);
             var ac = document.createElement('div');
             ac.id = 'nwrAc'; ac.className = 'nwr-ac';
@@ -11185,34 +11297,26 @@
             var o = _nwrBuild();
             if (o.style.display !== 'none' && _nwr) return;      // già aperta (es. tasto N con il fuoco su un pulsante): non si azzera la bozza
             var wk = (currentView === 'desktop') ? (_pcWeekMode === 'next' ? 1 : 0) : (currentView === 'next' ? 1 : 0);
-            _nwr = { wk: wk, mode: 'c', cur: 0, rows: [_nwrNewRow('')], routes: [], cars: [], oth: false, acc: false, dates: {}, have: {} };
+            _nwr = { wk: wk, mode: 'c', rows: [], cars: [], all: [], pnl: [], pn: { open: false, q: '', car: '' }, dates: {}, have: {} };
             if (pre) {
-                var r = _nwr.rows[0];
-                r.car = pre.trasportatore || pre.car || '';
+                var r = _nwrNewRow(pre.trasportatore || pre.car || '');
                 r.f = pre.partenza || pre.f || '';
                 r.a = pre.arrivo || pre.a || '';
                 r.p = pre.prodotto || pre.p || '';
                 r.note = pre.note || ''; r.ddt = pre.ddt || '';
-                if (r.note || r.ddt) r.x = true;
+                if (!String(r.car).trim() || !String(r.f).trim() || !String(r.a).trim()) r.x = true;      // tratta incompleta: i campi sono subito aperti
                 if (pre.daConfermare) _nwr.mode = 'w';
+                _nwr.rows.push(r);
             }
+            try { _nwr.cars = _tqCarList(); } catch (e0) { _nwr.cars = []; }
+            try { _nwr.all = _rfRoutes(''); } catch (e1) { _nwr.all = []; }
             o.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             document.addEventListener('keydown', _nwrKey, true);
-            try { _nwr.cars = _tqCarList(); } catch (e0) { _nwr.cars = []; }
-            _nwr.oth = !_nwr.cars.length || (!!String(_nwr.rows[0].car).trim() && !_nwrCarInList(_nwr.rows[0].car));      // senza storico non ci sono pillole: il campo del nome è subito pronto
             _nwrPaintAll();
             var bd = _nwrEl('nwrBody'); if (bd) bd.scrollTop = 0;
             try { haptic('light'); } catch (e) {}
-            setTimeout(function () {
-                if (!_nwr) return;
-                if (_nwrCoarse() && (_nwr.cars.length || _nwr.routes.length)) return;      // telefono: con pillole o tratte da toccare la tastiera non si apre da sola
-                var r0 = _nwrCur(), el = null;
-                if (!_nwr.cars.length && !String(r0.car).trim()) el = document.querySelector('#nwrOth [data-k="car"]');
-                else if (String(r0.car).trim() && !String(r0.f).trim()) el = document.querySelector('#nwrRtop [data-k="f"]');
-                else if (String(r0.car).trim() && !String(r0.a).trim()) el = document.querySelector('#nwrRtop [data-k="a"]');
-                if (el) el.focus();
-            }, 90);
+            if (!_nwr.rows.length) _nwrPnOpen();      // senza nessuna tratta: si parte subito dalla scelta
         }
         function nwrToggle() {
             var o = document.getElementById('nwrOv');
@@ -11222,6 +11326,7 @@
             var o = document.getElementById('nwrOv');
             if (!o || o.style.display === 'none') return;
             if (ask && _nwr && _nwrTotals().n > 0 && !confirm('Chiudere senza aggiungere i viaggi inseriti?')) return;
+            _nwrPnClose();
             o.style.display = 'none';
             document.body.style.overflow = '';
             document.removeEventListener('keydown', _nwrKey, true);
@@ -11236,34 +11341,17 @@
             var ac = document.getElementById('nwrAc');
             if (ac && ac.style.display === 'block' && _nwrAcInp && _nwrAcInp.value.trim()) { _nwrAcHide(); return; }      // con del testo scritto: il primo Esc chiude solo i suggerimenti
             _nwrAcHide();
+            if (_nwr && _nwr.pn.open) { _nwrPnClose(); return; }      // poi l'elenco «Aggiungi tratta»
             nwrClose(true);
         }
 
         // ── disegno ──
-        // la tratta in corso è sempre _nwr.rows[_nwr.cur]; «Viaggi pronti» elenca tutte le tratte con i loro viaggi
-        function _nwrCalcRoutes() {
-            var r = _nwrCur(), car = String(r.car || '').trim(), rs = [];
-            try { rs = _rfRoutes(car || ''); } catch (e) { rs = []; }
-            _nwr.routes = rs.slice(0, 8);
-        }
-        // scrivere a mano Da / A / Prodotto: lo decide la matita, oppure è obbligato se per questo trasportatore non c'è nessuna tratta già usata
-        function _nwrForcedEd() { return !_nwr.routes.length; }
-        function _nwrEditing() { var r = _nwrCur(); return !!(r && (r.ed || _nwrForcedEd())); }
         function _nwrPaintAll() {
             if (!_nwr) return;
             _nwrDates();
             _nwrPaintCtl();
-            _nwrPaintDeps();
-        }
-        // tutto ciò che dipende dalla tratta in corso
-        function _nwrPaintDeps() {
-            _nwrCalcRoutes();
-            _nwrPaintCars();
-            _nwrPaintRoute();
             _nwrPaintMode();
-            _nwrPaintDays();
-            _nwrPaintXtra();
-            _nwrPaintSide();
+            _nwrPaintGrid();
             _nwrPaintTot();
         }
         function _nwrPaintCtl() {
@@ -11272,136 +11360,130 @@
                 + '<button type="button" class="' + (_nwr.wk ? 'on' : '') + '" data-a="wk" data-v="1" aria-pressed="' + (_nwr.wk ? 'true' : 'false') + '">Prossima</button>';
             if (sub) sub.textContent = (_nwr.wk ? 'Settimana prossima' : 'Questa settimana') + ' · Lun ' + _nwrDM(_nwr.dates.lun) + ' – Ven ' + _nwrDM(_nwr.dates.ven);
         }
-        function _nwrPaintPills() {
-            var host = _nwrEl('nwrPills'); if (!host) return;
-            var r = _nwrCur(), car = String(r.car || '').trim(), cn = _srchNorm(car), h = '';
-            var othOn = !!_nwr.oth || (!!cn && !_nwrCarInList(car));
-            _nwr.cars.forEach(function (n) {
-                var on = !othOn && !!cn && _srchNorm(n) === cn;
-                h += '<button type="button" class="nwr-pill' + (on ? ' on' : '') + '" style="' + _nwrCarVars(n) + '" data-a="car" data-v="' + _escH(n) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + (on ? _nwrIc('check', 15) + ' ' : '') + _escH(n) + '</button>';
-            });
-            h += '<button type="button" class="nwr-pill oth' + (othOn ? ' on' : '') + '" data-a="carother" aria-pressed="' + (othOn ? 'true' : 'false') + '">Altro…</button>';
-            host.innerHTML = h;
-            return othOn;
-        }
-        function _nwrPaintCars() {
-            var box = _nwrEl('nwrCars'), oth = _nwrEl('nwrOth'); if (!box || !oth) return;
-            var r = _nwrCur(), othOn = _nwrPaintPills();
-            var inp = oth.querySelector('[data-k="car"]');
-            if (othOn && !inp) {
-                oth.innerHTML = '<input type="text" class="af-in nwr-in" data-k="car" placeholder="Nome del trasportatore" aria-label="Nome del trasportatore" value="' + _escH(r.car) + '" autocomplete="off" autocapitalize="off" spellcheck="false">';
-            } else if (!othOn && inp) {
-                oth.innerHTML = '';
-            } else if (inp && inp.value !== r.car && document.activeElement !== inp) {
-                inp.value = r.car;
-            }
-        }
-        function _nwrInpHtml(k, lab, ph, val, cls) {
-            return '<div class="nwr-fld"><span class="nwr-lab">' + lab + '</span><input type="text" class="af-in nwr-in' + (cls ? ' ' + cls : '') + '" data-k="' + k + '" placeholder="' + ph + '" aria-label="' + lab + '" value="' + _escH(val) + '" autocomplete="off" autocapitalize="off" spellcheck="false"></div>';
-        }
-        function _nwrPaintRoute() {
-            var rc = _nwrEl('nwrRc'), top = _nwrEl('nwrRtop'), ab = _nwrEl('nwrAb'); if (!rc || !top || !ab) return;
-            var r = _nwrCur(), car = String(r.car || '').trim(), ed = _nwrEditing(), forced = _nwrForcedEd();
-            rc.setAttribute('style', car ? _nwrCarVars(car) : '');
-            var h = '<div class="nwr-r1">';
-            h += car ? '<span class="nwr-tag">' + _escH(car) + '</span>' : '<span class="nwr-lab">Prima scegli il trasportatore</span>';
-            if (_nwr.rows.length > 1) h += '<span class="sp"></span><span class="nwr-lab">Tratta ' + (_nwr.cur + 1) + ' di ' + _nwr.rows.length + '</span>';
-            h += '</div>';
-            if (ed) {
-                h += _nwrInpHtml('f', 'Da', 'Partenza…', r.f) + _nwrInpHtml('a', 'A', 'Arrivo…', r.a) + _nwrInpHtml('p', 'Prodotto', 'Facoltativo', r.p);
-            } else {
-                var f = String(r.f || '').trim(), a = String(r.a || '').trim(), p = String(r.p || '').trim();
-                if (f || a) h += '<div class="nwr-rsum">' + (_escH(f) || '…') + ' <i>→</i> ' + (_escH(a) || '…') + (p ? '<small>' + _escH(p) + '</small>' : '') + '</div>';
-                else h += '<div class="nwr-rsum empty">Nessuna tratta scelta: aprila dalle «Tratte più usate» oppure scrivila con la matita.</div>';
-            }
-            if (_nwr.routes.length || !forced) {
-                h += '<div class="nwr-rbtns">';
-                if (_nwr.routes.length) h += '<button type="button" class="nwr-tbtn' + (_nwr.acc ? ' open' : '') + '" data-a="tacc" aria-expanded="' + (_nwr.acc ? 'true' : 'false') + '" aria-controls="nwrAb">Tratte più usate <span class="n">' + _nwr.routes.length + '</span>' + _nwrIc(_nwr.acc ? 'up' : 'down', 18) + '</button>';
-                if (!forced) h += '<button type="button" class="nwr-ib2" data-a="redit" aria-pressed="' + (ed ? 'true' : 'false') + '" aria-label="Scrivi o modifica la tratta" title="Scrivi o modifica la tratta">' + _nwrIc('edit', 20) + '</button>';
-                h += '</div>';
-            }
-            top.innerHTML = h;
-            ab.style.display = (_nwr.acc && _nwr.routes.length) ? 'flex' : 'none';
-            _nwrPaintAccBody();
-        }
-        function _nwrPaintAccBody() {
-            var ab = _nwrEl('nwrAb'); if (!ab || !_nwr) return;
-            var r = _nwrCur(), car = String(r.car || '').trim(), cn = _srchNorm(car), h = '';
-            _nwr.routes.forEach(function (x, i) {
-                var on = !!cn && _srchNorm(x.t) === cn && _srchNorm(x.f) === _srchNorm(r.f) && _srchNorm(x.a) === _srchNorm(r.a) && _srchNorm(x.p) === _srchNorm(r.p);
-                h += '<button type="button" class="nwr-route' + (on ? ' on' : '') + '" style="' + _nwrCarVars(x.t) + '" data-a="route" data-i="' + i + '" aria-pressed="' + (on ? 'true' : 'false') + '">'
-                    + (on ? _nwrIc('check', 15) : '')
-                    + '<span class="tx"><b>' + _escH(x.f) + '</b> <i>→</i> <b>' + _escH(x.a) + '</b>' + (x.p ? ' <i>· ' + _escH(x.p) + '</i>' : '') + '</span>'
-                    + '<span class="n">' + (car ? '' : _escH(x.t) + ' · ') + x.n + '×</span></button>';
-            });
-            ab.innerHTML = h;
-        }
         function _nwrPaintMode() {
             var md = _nwrEl('nwrMode'); if (!md) return;
             var w = _nwr.mode === 'w';
-            md.className = 'nwr-mode' + (w ? ' w' : '');
-            md.innerHTML = '<div class="lead">' + (w ? 'Ogni tocco aggiunge un viaggio <b>da confermare</b>' : 'Ogni tocco aggiunge un viaggio <b>confermato</b>') + '</div>'
-                + '<div class="opts"><button type="button" class="opt' + (!w ? ' on' : '') + '" data-a="mode" data-v="c" aria-pressed="' + (!w ? 'true' : 'false') + '">' + _nwrIc('check', 18) + ' Confermato</button>'
-                + '<button type="button" class="opt' + (w ? ' on' : '') + '" data-a="mode" data-v="w" aria-pressed="' + (w ? 'true' : 'false') + '">' + _nwrIc('warn', 18) + ' Da confermare</button></div>';
+            md.className = 'pl-seg' + (w ? ' w' : '');
+            md.innerHTML = '<button type="button" class="' + (!w ? 'on' : '') + '" data-a="mode" data-v="c" aria-pressed="' + (!w ? 'true' : 'false') + '">' + _nwrIc('check', 17) + ' Confermato</button>'
+                + '<button type="button" class="' + (w ? 'on' : '') + '" data-a="mode" data-v="w" aria-pressed="' + (w ? 'true' : 'false') + '">' + _nwrIc('warn', 17) + ' Da confermare</button>';
         }
-        function _nwrPaintDays() {
-            var host = _nwrEl('nwrDays'); if (!host) return;
-            var r = _nwrCur(), h = '';
+        // una riga = [tratta] [Lun…Ven] [⋯ 🗑] + (aperta con ⋯) la zona dei dettagli
+        function _nwrInfoHtml(r) {
+            var car = String(r.car || '').trim(), f = String(r.f || '').trim(), a = String(r.a || '').trim(), p = String(r.p || '').trim();
+            var h = '<div class="pl-r1">' + (car ? '<span class="pl-tag">' + _escH(car) + '</span>' : '<span class="pl-tag none">Trasportatore?</span>') + '</div>';
+            h += (f || a) ? '<div class="rt">' + (_escH(f) || '…') + '<i>→</i>' + (_escH(a) || '…') + '</div>'
+                : '<div class="rt empty">Tratta da scrivere: tocca «⋯»</div>';
+            var meta = [];
+            if (p) meta.push(_escH(p));
+            if (String(r.ddt || '').trim()) meta.push('DDT ' + _escH(String(r.ddt).trim()));
+            if (String(r.note || '').trim()) meta.push('Nota: ' + _escH(String(r.note).trim()));
+            if (meta.length) h += '<div class="pr">' + meta.join(' · ') + '</div>';
+            var oc = '';
+            _nwrSlotOrder(r).forEach(function (si) {
+                var s = r.slots[si];
+                if (s.d) return;
+                var w = s.st === 'w', lbl = _nwrSlotLbl(s);
+                oc += '<span class="nwr-tk ' + (w ? 'wn' : 'ok') + '"><button type="button" data-a="flip" data-s="' + si + '" aria-label="' + lbl + ': ' + (w ? 'da confermare' : 'confermato') + '. Tocca per cambiare">'
+                    + _nwrIc(w ? 'warn' : 'check', 15) + ' ' + lbl + '</button>'
+                    + '<button type="button" class="x" data-a="unslot" data-s="' + si + '" aria-label="Togli il viaggio di ' + lbl + '">' + _nwrIc('x', 14) + '</button></span>';
+            });
+            if (oc) h += '<div class="pl-oc">' + oc + '</div>';
+            return h;
+        }
+        function _nwrDaysHtml(r) {
+            var h = '';
             _NWR_K.forEach(function (k, idx) {
                 var c = _nwrCnt(r, k), n = c.c + c.w, dd = (_nwr.dates[k] || '').slice(8, 10);
-                var lbl = _NWR_L[idx] + ' ' + _nwrDM(_nwr.dates[k]);
-                var cls = n === 0 ? '' : (c.c && c.w ? ' mx' : (c.w ? ' wn' : ' ok'));
-                var inner = '<span class="w">' + _NWR_L[idx] + ' ' + dd + '</span>';
-                if (!n) inner += _nwrIc('plus', 22);
+                var lbl = _NWR_L[idx] + ' ' + dd;
+                var cls = 'pl-c' + (n === 0 ? '' : (c.c && c.w ? ' mx' : (c.w ? ' wn' : ' ok')));
+                var inner = '<small class="dl">' + lbl + '</small>';
+                if (!n) inner += '<span class="pl-cc">' + _nwrIc('plus', 20) + '</span>';
                 else {
-                    inner += '<span class="cc">';
-                    if (c.c) inner += '<span class="nwr-mc">' + _nwrIc('check', 14) + c.c + '</span>';
-                    if (c.w) inner += '<span class="nwr-mc w">' + _nwrIc('warn', 14) + c.w + '</span>';
+                    inner += '<span class="pl-cc">';
+                    if (c.c) inner += '<span class="pl-n">' + _nwrIc('check', 15) + c.c + '</span>';
+                    if (c.w) inner += '<span class="pl-n">' + _nwrIc('warn', 15) + c.w + '</span>';
                     inner += '</span>';
                 }
                 var hv = _nwr.have[k] || 0, pg = hv ? 'già ' + hv + ' ' + _pv(hv) + ' in programma' : 'nessun viaggio in programma';
                 var al = lbl + ' — ' + pg + '. ' + (n ? n + ' ' + _pv(n) + ' da aggiungere' + (c.w ? ' (' + c.w + ' da confermare)' : '') + '; tocca per aggiungerne un altro' : 'Tocca per aggiungere un viaggio');
-                h += '<button type="button" class="nwr-d' + cls + '" data-a="day" data-d="' + k + '" aria-label="' + al + '" title="' + al + '">' + inner + '</button>';
+                h += '<div class="pl-cell"><button type="button" class="' + cls + '" data-a="day" data-d="' + k + '" aria-label="' + al + '" title="' + al + '">' + inner + '</button>';
+                if (n) h += '<button type="button" class="pl-m" data-a="dec" data-d="' + k + '" aria-label="Togli un viaggio di ' + lbl + '" title="Togli un viaggio">' + _nwrIc('minus', 14) + '</button>';
+                h += '</div>';
             });
-            host.innerHTML = h;
+            return h;
         }
-        function _nwrPaintXtra() {
-            var xt = _nwrEl('nwrXtra'), xb = _nwrEl('nwrXb'); if (!xt) return;
-            var r = _nwrCur();
-            xt.innerHTML = '<div><span class="nwr-lab">N. DDT</span><input type="text" class="af-in nwr-in af-mono" data-k="ddt" placeholder="Facoltativo" aria-label="N. DDT" value="' + _escH(r.ddt) + '" autocomplete="off" spellcheck="false"></div>'
-                + '<div><span class="nwr-lab">Note</span><input type="text" class="af-in nwr-in" data-k="note" placeholder="Note interne…" aria-label="Note" value="' + _escH(r.note) + '" autocomplete="off" spellcheck="false"></div>'
-                + '<div class="full"><span class="nwr-lab">Altra data — un viaggio in più</span><div class="dt"><input type="date" class="af-in nwr-in" data-k="date" aria-label="Altra data"><button type="button" data-a="xdate">' + _nwrIc('plus', 15) + ' Aggiungi</button></div></div>';
-            xt.classList.toggle('xo', !!r.x);
-            if (xb) xb.setAttribute('aria-expanded', r.x ? 'true' : 'false');
+        function _nwrToolsHtml(r) {
+            var has = !!(String(r.note || '').trim() || String(r.ddt || '').trim());
+            return '<button type="button" class="pl-tb' + (r.x ? ' on' : '') + '" data-a="xtra" aria-expanded="' + (r.x ? 'true' : 'false') + '" aria-label="Dettagli: tratta, DDT, note, altro giorno" title="Dettagli: tratta, DDT, note, altro giorno">' + _nwrIc('dots', 20) + (has ? '<i class="dot"></i>' : '') + '</button>'
+                + '<button type="button" class="pl-tb" data-a="rowdel" aria-label="Togli questa tratta" title="Togli questa tratta">' + _nwrIc('trash', 19) + '</button>';
         }
-        function _nwrTokHtml(r) {
-            var out = '';
-            _nwrSlotOrder(r).forEach(function (si) {
-                var s = r.slots[si], w = s.st === 'w', lbl = _nwrSlotLbl(s);
-                out += '<span class="nwr-tk ' + (w ? 'wn' : 'ok') + '"><button type="button" data-a="flip" data-s="' + si + '" aria-label="' + lbl + ': ' + (w ? 'da confermare' : 'confermato') + '. Tocca per cambiare">'
-                    + _nwrIc(w ? 'warn' : 'check', 15) + ' ' + lbl + '</button>'
-                    + '<button type="button" class="x" data-a="unslot" data-s="' + si + '" aria-label="Togli il viaggio di ' + lbl + '">' + _nwrIc('x', 14) + '</button></span>';
-            });
-            return out;
+        function _nwrInpHtml(k, lab, ph, val, cls) {
+            return '<div class="nwr-fld"><span class="nwr-lab">' + lab + '</span><input type="text" class="af-in nwr-in' + (cls ? ' ' + cls : '') + '" data-k="' + k + '" placeholder="' + ph + '" aria-label="' + lab + '" value="' + _escH(val) + '" autocomplete="off" autocapitalize="off" spellcheck="false"></div>';
         }
-        function _nwrPaintSide() {
-            var host = _nwrEl('nwrSide'); if (!host || !_nwr) return;
-            var t = _nwrTotals(), h = '<div class="nwr-sidh"><b>Viaggi pronti</b>' + (t.n ? '<span class="nwr-lab">' + t.n + ' ' + _pv(t.n) + '</span>' : '') + '</div>', shown = 0;
+        function _nwrXHtml(r) {
+            return '<div class="pl-xg">'
+                + _nwrInpHtml('car', 'Trasportatore', 'Nome del trasportatore', r.car)
+                + _nwrInpHtml('f', 'Da', 'Partenza…', r.f)
+                + _nwrInpHtml('a', 'A', 'Arrivo…', r.a)
+                + _nwrInpHtml('p', 'Prodotto', 'Facoltativo', r.p)
+                + _nwrInpHtml('ddt', 'N. DDT', 'Facoltativo', r.ddt, 'af-mono')
+                + _nwrInpHtml('note', 'Note', 'Note interne…', r.note)
+                + '<div class="nwr-fld full"><span class="nwr-lab">Altro giorno — un viaggio in più (sabato, domenica, un\'altra data)</span><div class="dt"><input type="date" class="af-in nwr-in" data-k="date" aria-label="Altro giorno"><button type="button" data-a="xdate">' + _nwrIc('plus', 15) + ' Aggiungi</button></div></div>'
+                + '</div>';
+        }
+        function _nwrPaintGrid() {
+            var host = _nwrEl('nwrGrid'); if (!host || !_nwr) return;
+            if (!_nwr.rows.length) {
+                host.innerHTML = '<div class="pl-none"><b>Nessuna tratta</b>Tocca «Aggiungi tratta», scegli dove va il camion, poi tocca i giorni.</div>';
+                return;
+            }
+            var h = '<div class="pl-hd" aria-hidden="true"><span class="h0">Tratta</span><span class="hdd">';
+            _NWR_K.forEach(function (k, idx) { h += '<span>' + _NWR_L[idx] + '<b>' + (_nwr.dates[k] || '').slice(8, 10) + '</b></span>'; });
+            h += '</span><span></span></div>';
             _nwr.rows.forEach(function (r, i) {
-                var cur = i === _nwr.cur;
-                if (!r.slots.length && !(cur && (String(r.car).trim() || String(r.f).trim() || String(r.a).trim()))) return;
-                shown++;
-                var car = String(r.car || '').trim(), f = String(r.f || '').trim(), a = String(r.a || '').trim(), p = String(r.p || '').trim();
-                h += '<div class="nwr-g' + (cur ? ' cur' : '') + '" data-i="' + i + '" style="' + (car ? _nwrCarVars(car) : '') + '">'
-                    + '<div class="nwr-gh"><span class="nwr-cp">' + (car ? _escH(car) : 'Trasportatore?') + '</span><span class="sp"></span>'
-                    + (cur ? '<span class="nwr-lab">in corso</span>' : '<button type="button" class="nwr-ib sm" data-a="rowedit" aria-label="Modifica questa tratta" title="Modifica questa tratta">' + _nwrIc('edit', 17) + '</button>')
-                    + '<button type="button" class="nwr-ib sm" data-a="rowdel" aria-label="Togli questa tratta" title="Togli questa tratta">' + _nwrIc('trash', 17) + '</button></div>'
-                    + '<div class="nwr-gr">' + (_escH(f) || '…') + ' <i>→</i> ' + (_escH(a) || '…') + (p ? '<small>' + _escH(p) + '</small>' : '') + '</div>'
-                    + '<div class="nwr-tok">' + (r.slots.length ? _nwrTokHtml(r) : '<span class="nwr-lab">Tocca i giorni</span>') + '</div>'
-                    + '</div>';
+                var car = String(r.car || '').trim();
+                h += '<div class="pl-ln' + (r.x ? ' xo' : '') + '" data-i="' + i + '" style="' + (car ? _nwrCarVars(car) : '') + '">'
+                    + '<div class="pl-info">' + _nwrInfoHtml(r) + '</div>'
+                    + '<div class="pl-days">' + _nwrDaysHtml(r) + '</div>'
+                    + '<div class="pl-tools">' + _nwrToolsHtml(r) + '</div>'
+                    + '<div class="pl-xr">' + (r.x ? _nwrXHtml(r) : '') + '</div></div>';
             });
-            if (!shown) h += '<div class="nwr-none">Qui compaiono i viaggi che aggiungi.<br>Scegli il trasportatore, la tratta e tocca i giorni.</div>';
+            h += '<div class="pl-hint">Tocca un giorno per aggiungere un viaggio (con lo stato scelto in alto). Tocca ancora per aggiungerne un altro; con il segno − ne togli uno.</div>';
             host.innerHTML = h;
+        }
+        function _nwrRefCells(i) {      // dopo un tocco su un giorno: solo i giorni e il riepilogo di quella riga (le caselle di testo non si toccano)
+            var ln = _nwrLaneEl(i), r = _nwr.rows[i]; if (!ln || !r) return;
+            var d = ln.querySelector('.pl-days'), inf = ln.querySelector('.pl-info');
+            if (d) d.innerHTML = _nwrDaysHtml(r);
+            if (inf) inf.innerHTML = _nwrInfoHtml(r);
+        }
+        function _nwrRefInfo(i) {      // mentre si scrive: solo il riepilogo (e il colore) di quella riga
+            var ln = _nwrLaneEl(i), r = _nwr.rows[i]; if (!ln || !r) return;
+            var inf = ln.querySelector('.pl-info'), tl = ln.querySelector('.pl-tools'), car = String(r.car || '').trim();
+            if (inf) inf.innerHTML = _nwrInfoHtml(r);
+            if (tl) tl.innerHTML = _nwrToolsHtml(r);
+            ln.setAttribute('style', car ? _nwrCarVars(car) : '');
+        }
+        function _nwrOpenX(i) {
+            var ln = _nwrLaneEl(i), r = _nwr.rows[i]; if (!ln || !r) return;
+            r.x = true;
+            ln.classList.add('xo');
+            var xr = ln.querySelector('.pl-xr'); if (xr && !xr.firstChild) xr.innerHTML = _nwrXHtml(r);
+            var tl = ln.querySelector('.pl-tools'); if (tl) tl.innerHTML = _nwrToolsHtml(r);
+            try { ln.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+        }
+        function _nwrFocusFirstEmpty(i) {
+            var r = _nwr.rows[i], ln = _nwrLaneEl(i); if (!r || !ln) return;
+            var k = !String(r.car).trim() ? 'car' : (!String(r.f).trim() ? 'f' : (!String(r.a).trim() ? 'a' : 'ddt'));
+            var el = ln.querySelector('.pl-xr [data-k="' + k + '"]');
+            if (el) { try { el.scrollIntoView({ block: 'nearest' }); } catch (e) {} el.focus(); }
+        }
+        function _nwrFlash(i) {
+            var ln = _nwrLaneEl(i); if (!ln) return;
+            try { ln.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+            ln.classList.add('flash');
+            clearTimeout(_nwrFlT);
+            _nwrFlT = setTimeout(function () { var l2 = _nwrLaneEl(i); if (l2) l2.classList.remove('flash'); }, 1400);
         }
         function _nwrPaintTot() {
             var t = _nwrTotals();
@@ -11419,32 +11501,93 @@
             var m = _nwrEl('nwrMsg'); if (!m) return;
             m.textContent = txt; m.classList.add('on');
         }
-        function _nwrFocusFirstEmpty() {
-            if (_nwrCoarse()) return;
-            var r = _nwrCur(), k = !String(r.f).trim() ? 'f' : (!String(r.a).trim() ? 'a' : 'p');
-            var el = document.querySelector('#nwrRtop [data-k="' + k + '"]');
-            if (el) el.focus();
+
+        // ── «Aggiungi tratta»: ricerca + trasportatori + tratte più usate ──
+        function _nwrPnOpen() {
+            if (!_nwr) return;
+            var pn = _nwrEl('nwrPn'), sc = _nwrEl('nwrScrim'), bar = _nwrEl('nwrBar'), add = _nwrEl('nwrAdd'), qi = _nwrEl('nwrQ');
+            if (!pn || !sc) return;
+            _nwr.pn.open = true;
+            _nwr.pn.q = ''; if (qi) qi.value = '';
+            var last = _nwr.rows.length ? String(_nwr.rows[_nwr.rows.length - 1].car || '').trim() : '';
+            _nwr.pn.car = last;      // di solito si aggiungono altre tratte dello stesso trasportatore: parte da quello (un tocco sulla pillola lo toglie)
+            sc.style.display = 'block'; pn.style.display = 'flex';
+            var cd = _nwrEl('nwrCard');
+            if (_nwrIsPC() && bar && cd) {      // su PC è un riquadro sotto la barra, mai più alto della finestra
+                var tp = bar.offsetTop + bar.offsetHeight + 6;
+                pn.style.top = tp + 'px'; pn.style.maxHeight = Math.max(260, cd.clientHeight - tp - 12) + 'px';
+            } else { pn.style.top = ''; pn.style.maxHeight = ''; }
+            if (add) add.setAttribute('aria-expanded', 'true');
+            _nwrPaintPn();
+            if (qi && !_nwrCoarse()) qi.focus();
+        }
+        function _nwrPnClose() {
+            var pn = _nwrEl('nwrPn'), sc = _nwrEl('nwrScrim'), add = _nwrEl('nwrAdd');
+            if (pn) pn.style.display = 'none';
+            if (sc) sc.style.display = 'none';
+            if (add) add.setAttribute('aria-expanded', 'false');
+            if (_nwr) _nwr.pn.open = false;
+        }
+        function _nwrPnList() {
+            var pn = _nwr.pn, car = pn.car ? _srchNorm(pn.car) : '', terms = _srchTerms(pn.q), out = [], lim = (terms.length || car) ? 40 : 12;
+            for (var i = 0; i < _nwr.all.length && out.length < lim; i++) {
+                var x = _nwr.all[i];
+                if (car && _srchNorm(x.t) !== car) continue;
+                if (terms.length && !_srchAllIn(_srchNorm(x.t + ' ' + x.f + ' ' + x.a + ' ' + (x.p || '')), terms)) continue;
+                out.push(x);
+            }
+            return out;
+        }
+        function _nwrPaintPn() {
+            if (!_nwr) return;
+            var pn = _nwr.pn, cn = pn.car ? _srchNorm(pn.car) : '', terms = _srchTerms(pn.q);
+            var ch = '';
+            _nwr.cars.forEach(function (n) {
+                var on = !!cn && _srchNorm(n) === cn;
+                if (terms.length && !on && !_srchAllIn(_srchNorm(n), terms)) return;
+                ch += '<button type="button" class="pl-chip' + (on ? ' on' : '') + '" style="' + _nwrCarVars(n) + '" data-a="pcar" data-v="' + _escH(n) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + (on ? _nwrIc('check', 15) + ' ' : '') + _escH(n) + '</button>';
+            });
+            var pc = _nwrEl('nwrPc'); if (pc) { pc.innerHTML = ch; pc.style.display = ch ? 'flex' : 'none'; }
+            var list = _nwrPnList(); _nwr.pnl = list;
+            var ps = _nwrEl('nwrPs');
+            if (ps) ps.textContent = terms.length ? 'Risultati' + (pn.car ? ' · ' + pn.car : '') : 'Tratte più usate' + (pn.car ? ' di ' + pn.car : '');
+            var rh = '';
+            list.forEach(function (x, idx) {
+                var inl = _nwrFindLane(x.t, x.f, x.a, x.p || '') >= 0;
+                rh += '<button type="button" class="pl-r' + (inl ? ' on' : '') + '" style="' + _nwrCarVars(x.t) + '" data-a="proute" data-i="' + idx + '"' + (inl ? ' title="Già nell\'elenco: tocca per andarci"' : '') + '>'
+                    + (inl ? _nwrIc('check', 16) : '')
+                    + (cn ? '' : '<span class="pl-tg">' + _escH(x.t) + '</span>')
+                    + '<span class="tx"><b>' + _escH(x.f) + '</b> <i>→</i> <b>' + _escH(x.a) + '</b>' + (x.p ? ' <small>· ' + _escH(x.p) + '</small>' : '') + '</span>'
+                    + '<span class="n">' + x.n + '×</span></button>';
+            });
+            if (!list.length) rh = '<div class="pl-rn">Nessuna tratta trovata' + (pn.car ? ' per ' + _escH(pn.car) : '') + '. Usa «Scrivi una tratta nuova…».</div>';
+            var pr = _nwrEl('nwrPr'); if (pr) pr.innerHTML = rh;
+        }
+        function _nwrAddLane(o, openX) {
+            var r = _nwrNewRow(o.car || '');
+            r.f = o.f || ''; r.a = o.a || ''; r.p = o.p || '';
+            _nwr.rows.push(r);
+            var i = _nwr.rows.length - 1;
+            if (openX) r.x = true;
+            _nwrPaintGrid(); _nwrPaintTot();
+            _nwrFlash(i);
+            return i;
+        }
+        function _nwrPickRoute(x) {
+            _nwrPnClose();
+            var i = _nwrFindLane(x.t, x.f, x.a, x.p || '');
+            if (i >= 0) { _nwrFlash(i); return; }      // la stessa tratta c'è già: ci si porta lì, non se ne fa una seconda
+            _nwrAddLane({ car: x.t, f: x.f, a: x.a, p: x.p || '' }, false);
+            try { haptic('light'); } catch (e) {}
+        }
+        function _nwrNewLane() {
+            var car = _nwr.pn.car || '';
+            _nwrPnClose();
+            var i = _nwrAddLane({ car: car }, true);
+            _nwrFocusFirstEmpty(i);
         }
 
         // ── azioni ──
-        function _nwrSetField(k, v) {
-            var r = _nwrCur(); if (!r) return;
-            r[k] = v;
-        }
-        function _nwrPickCar(name) {
-            var r = _nwrCur();
-            r.car = name;
-            _nwr.oth = !_nwrCarInList(name);
-            _nwrCalcRoutes();
-            if (!String(r.f).trim() && !String(r.a).trim() && _nwr.routes.length === 1) {      // una sola tratta usata per questo trasportatore: già scelta
-                var x1 = _nwr.routes[0];
-                r.f = x1.f; r.a = x1.a; r.p = x1.p || '';
-            }
-        }
-        function _nwrScrollTo(id) {
-            var el = _nwrEl(id);
-            if (el && el.scrollIntoView && !_nwrIsPC()) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
         function _nwrClick(e) {
             if (!_nwr) return;
             var t = e.target.closest ? e.target.closest('[data-a]') : null;
@@ -11455,95 +11598,65 @@
             if (a === 'go') { nwrConfirm(); return; }
             if (a === 'wk') {
                 _nwr.wk = parseInt(t.getAttribute('data-v'), 10) ? 1 : 0;
-                _nwrDates(); _nwrPaintCtl(); _nwrPaintDays(); _nwrPaintSide();
+                _nwrDates(); _nwrPaintCtl(); _nwrPaintGrid();
                 return;
             }
             if (a === 'mode') { _nwr.mode = t.getAttribute('data-v') === 'w' ? 'w' : 'c'; _nwrPaintMode(); try { haptic('light'); } catch (e0) {} return; }
-            var r = _nwrCur(); if (!r) return;
-            if (a === 'car') {
-                _nwrPickCar(t.getAttribute('data-v') || '');
-                _nwrPaintCars(); _nwrPaintRoute(); _nwrPaintSide();
-                try { haptic('light'); } catch (e1) {}
+            if (a === 'padd') { if (_nwr.pn.open) _nwrPnClose(); else _nwrPnOpen(); return; }
+            if (a === 'pclose') { _nwrPnClose(); return; }
+            if (a === 'pcar') {
+                var v = t.getAttribute('data-v') || '';
+                _nwr.pn.car = (_srchNorm(_nwr.pn.car) === _srchNorm(v)) ? '' : v;
+                _nwrPaintPn();
                 return;
             }
-            if (a === 'carother') {
-                if (_nwrCarInList(r.car)) r.car = '';
-                _nwr.oth = true;
-                _nwrCalcRoutes(); _nwrPaintCars(); _nwrPaintRoute(); _nwrPaintSide();
-                var ce = document.querySelector('#nwrOth [data-k="car"]');
-                if (ce) { ce.focus(); try { ce.select(); } catch (e2) {} }
-                return;
-            }
-            if (a === 'tacc') {
-                _nwr.acc = !_nwr.acc;
-                _nwrPaintRoute();
-                return;
-            }
-            if (a === 'redit') {
-                r.ed = !_nwrEditing();
-                _nwrPaintRoute();
-                if (r.ed) _nwrFocusFirstEmpty();
-                return;
-            }
-            if (a === 'route') {
-                var x = _nwr.routes[parseInt(t.getAttribute('data-i'), 10)]; if (!x) return;
-                r.car = x.t; r.f = x.f; r.a = x.a; r.p = x.p || '';
-                _nwr.oth = !_nwrCarInList(x.t);
-                r.ed = false; _nwr.acc = false;      // scelta fatta: la tendina si richiude
-                _nwrPaintCars(); _nwrPaintRoute(); _nwrPaintSide();
-                try { haptic('light'); } catch (e3) {}
-                setTimeout(function () { _nwrScrollTo('nwrDays'); }, 80);
-                return;
-            }
-            if (a === 'addrow') {
-                if (!r.slots.length) { _nwrMsg('Scegli almeno un giorno per questa tratta, poi aggiungi la prossima.'); return; }
-                _nwr.rows.push(_nwrNewRow(r.car));
-                _nwr.cur = _nwr.rows.length - 1;
-                _nwrPaintDeps();
-                var bd = _nwrEl('nwrBody'); if (bd && !_nwrIsPC()) bd.scrollTop = 0;
-                _nwrFocusFirstEmpty();
-                return;
-            }
-            if (a === 'xtra') {
-                r.x = !r.x;
-                _nwrPaintXtra();
-                if (r.x && !_nwrCoarse()) { var di = document.querySelector('#nwrXtra [data-k="ddt"]'); if (di) di.focus(); }
-                return;
-            }
+            if (a === 'proute') { var x = (_nwr.pnl || [])[parseInt(t.getAttribute('data-i'), 10)]; if (x) _nwrPickRoute(x); return; }
+            if (a === 'pnew') { _nwrNewLane(); return; }
+            var ln = t.closest ? t.closest('.pl-ln') : null;
+            var i = ln ? parseInt(ln.getAttribute('data-i'), 10) : -1, r = _nwr.rows[i];
+            if (!r) return;
+            var d = t.getAttribute('data-d'), kb = (t === document.activeElement);
             if (a === 'day') {
-                r.slots.push({ d: t.getAttribute('data-d'), date: '', st: _nwr.mode });
-                _nwrPaintDays(); _nwrPaintSide(); _nwrPaintTot();
+                r.slots.push({ d: d, date: '', st: _nwr.mode });
+                _nwrRefCells(i); _nwrPaintTot();
+                if (kb) { var nb = ln.querySelector('[data-a="day"][data-d="' + d + '"]'); if (nb) nb.focus(); }
                 try { haptic('light'); } catch (e4) {}
                 return;
             }
-            if (a === 'xdate') {
-                var de = document.querySelector('#nwrXtra [data-k="date"]');
-                if (!de || !de.value) { _nwrMsg('Scegli prima la data.'); return; }
-                r.slots.push({ d: '', date: de.value, st: _nwr.mode });
-                de.value = '';
-                _nwrPaintSide(); _nwrPaintTot();
+            if (a === 'dec') {
+                for (var j = r.slots.length - 1; j >= 0; j--) { if (r.slots[j].d === d) { r.slots.splice(j, 1); break; } }      // toglie l'ultimo aggiunto di quel giorno
+                _nwrRefCells(i); _nwrPaintTot();
+                if (kb) { var nb2 = ln.querySelector('[data-a="dec"][data-d="' + d + '"]') || ln.querySelector('[data-a="day"][data-d="' + d + '"]'); if (nb2) nb2.focus(); }
                 return;
             }
-            // dal pannello «Viaggi pronti»: la riga è quella del gruppo toccato
-            var i = _nwrRowOf(t), g = _nwr.rows[i]; if (!g) return;
-            var si = parseInt(t.getAttribute('data-s'), 10);
-            if (a === 'flip' && g.slots[si]) { g.slots[si].st = (g.slots[si].st === 'w') ? 'c' : 'w'; _nwrPaintDays(); _nwrPaintSide(); _nwrPaintTot(); return; }
-            if (a === 'unslot' && g.slots[si]) { g.slots.splice(si, 1); _nwrPaintDays(); _nwrPaintSide(); _nwrPaintTot(); return; }
-            if (a === 'rowedit') {
-                _nwr.cur = i;
-                _nwrPaintDeps();
-                var bd2 = _nwrEl('nwrBody'); if (bd2) bd2.scrollTop = 0;
-                return;
-            }
-            if (a === 'rowdel') {
-                if (_nwr.rows.length === 1) { _nwr.rows[0] = _nwrNewRow(g.car); _nwr.cur = 0; }
-                else {
-                    _nwr.rows.splice(i, 1);
-                    if (_nwr.cur >= _nwr.rows.length) _nwr.cur = _nwr.rows.length - 1;
-                    else if (_nwr.cur > i) _nwr.cur--;
-                    else if (_nwr.cur === i) _nwr.cur = Math.min(i, _nwr.rows.length - 1);
+            if (a === 'xtra') {
+                if (r.x) {
+                    r.x = false; ln.classList.remove('xo');
+                    var xr = ln.querySelector('.pl-xr'); if (xr) xr.innerHTML = '';
+                    var tl = ln.querySelector('.pl-tools'); if (tl) tl.innerHTML = _nwrToolsHtml(r);
+                    var tb = ln.querySelector('[data-a="xtra"]'); if (tb) tb.focus();
+                } else {
+                    _nwrOpenX(i);
+                    if (!_nwrCoarse()) _nwrFocusFirstEmpty(i);
                 }
-                _nwrPaintDeps();
+                return;
+            }
+            if (a === 'xdate') {
+                var de = ln.querySelector('.pl-xr [data-k="date"]');
+                if (!de || !de.value) { _nwrMsg('Scegli prima la data.'); return; }
+                var kk = '';
+                _NWR_K.forEach(function (k) { if (_nwr.dates[k] === de.value) kk = k; });      // se cade in uno dei cinque giorni mostrati, è quello
+                r.slots.push(kk ? { d: kk, date: '', st: _nwr.mode } : { d: '', date: de.value, st: _nwr.mode });
+                de.value = '';
+                _nwrRefCells(i); _nwrPaintTot();
+                return;
+            }
+            var si = parseInt(t.getAttribute('data-s'), 10);
+            if (a === 'flip' && r.slots[si]) { r.slots[si].st = (r.slots[si].st === 'w') ? 'c' : 'w'; _nwrRefCells(i); _nwrPaintTot(); return; }
+            if (a === 'unslot' && r.slots[si]) { r.slots.splice(si, 1); _nwrRefCells(i); _nwrPaintTot(); return; }
+            if (a === 'rowdel') {
+                _nwr.rows.splice(i, 1);
+                _nwrPaintGrid(); _nwrPaintTot();
                 return;
             }
         }
@@ -11558,23 +11671,13 @@
             if (!_nwr) return;
             var t = e.target, k = t && t.getAttribute ? t.getAttribute('data-k') : '';
             if (!k || k === 'date') return;
-            var r = _nwrCur(); if (!r) return;
+            if (k === 'q') { _nwr.pn.q = t.value; _nwrPaintPn(); return; }
+            var ln = t.closest ? t.closest('.pl-ln') : null; if (!ln) return;
+            var i = parseInt(ln.getAttribute('data-i'), 10), r = _nwr.rows[i]; if (!r) return;
             r[k] = t.value;
             t.classList.remove('bad');
-            if (k === 'car') { var cb = _nwrEl('nwrCars'); if (cb) cb.classList.remove('bad'); }
-            clearTimeout(_nwrBandT);
-            _nwrBandT = setTimeout(function () {
-                if (!_nwr) return;
-                if (k === 'car') {
-                    _nwrCalcRoutes(); _nwrPaintPills();
-                    var rc = _nwrEl('nwrRc'), car = String(r.car || '').trim();
-                    if (rc) rc.setAttribute('style', car ? _nwrCarVars(car) : '');
-                    _nwrPaintRoute();      // il fuoco è nel campo del trasportatore: ridisegnare la tratta non lo disturba
-                } else if (k === 'f' || k === 'a' || k === 'p') {
-                    _nwrPaintAccBody();
-                }
-                _nwrPaintSide();
-            }, 140);
+            clearTimeout(_nwrInT);
+            _nwrInT = setTimeout(function () { if (_nwr && _nwr.rows[i] === r) _nwrRefInfo(i); }, 140);
             if (k === 'car' || k === 'f' || k === 'a' || k === 'p') _nwrAcShow(t);
         }
 
@@ -11589,8 +11692,8 @@
         function _nwrAcShow(inp) {
             var box = _nwrEl('nwrAc'); if (!box) return;
             clearTimeout(_nwrAcT);
-            var k = inp.getAttribute('data-k'), q = inp.value.trim().toLowerCase(), list = _nwrAcList(k) || [], m = [], exact = false;
-            if (!q && k !== 'p') { _nwrAcHide(); return; }      // senza testo: il trasportatore si sceglie dalle pillole, Da/A dalle tratte; solo il prodotto (elenco corto) si propone subito
+            var k = inp.getAttribute('data-k'), q = inp.value.trim().toLowerCase(), list = (k === 'car' && !q && _nwr && _nwr.cars.length) ? _nwr.cars : (_nwrAcList(k) || []), m = [], exact = false;
+            if (!q && k !== 'p' && k !== 'car') { _nwrAcHide(); return; }      // Da/A: si propongono solo dopo qualche lettera; trasportatore e prodotto (elenchi corti) anche subito
             for (var j = 0; j < list.length && m.length < 8; j++) {
                 var v = String(list[j]), lv = v.toLowerCase();
                 if (q && lv === q) { exact = true; break; }
@@ -11616,43 +11719,37 @@
             var inp = _nwrAcInp, k = inp.getAttribute('data-k');
             var v = it.getAttribute('data-v') || '';
             _nwrAcHide();
-            if (k === 'car') { _nwrPickCar(v); _nwrPaintCars(); _nwrPaintRoute(); _nwrPaintSide(); return; }
-            _nwrSetField(k, v);
-            inp.value = v;
-            _nwrPaintAccBody(); _nwrPaintSide();
+            var ln = inp.closest ? inp.closest('.pl-ln') : null; if (!ln) return;
+            var i = parseInt(ln.getAttribute('data-i'), 10), r = _nwr.rows[i]; if (!r) return;
+            r[k] = v; inp.value = v;
+            _nwrRefInfo(i);
         }
 
         // ── conferma ──
         function nwrConfirm() {
             if (!_nwr) return;
-            var bad = [], first = -1;
+            var bad = [];
             _nwr.rows.forEach(function (r, i) {
                 if (!r.slots.length) return;
                 var miss = [];
                 if (!String(r.car).trim()) miss.push('car');
                 if (!String(r.f).trim()) miss.push('f');
                 if (!String(r.a).trim()) miss.push('a');
-                if (miss.length) { bad.push({ i: i, miss: miss }); if (first < 0) first = i; }
+                if (miss.length) bad.push({ i: i, miss: miss });
             });
             if (_nwrTotals().n === 0) { _nwrMsg('Tocca almeno un giorno per aggiungere un viaggio.'); return; }
             if (bad.length) {
                 var NM = { car: 'il trasportatore', f: 'la partenza', a: "l'arrivo" };
                 _nwrMsg(bad.map(function (b) { return 'Tratta ' + (b.i + 1) + ': manca ' + b.miss.map(function (m) { return NM[m]; }).join(' e '); }).join(' · '));
-                var fb = bad[0], fr = _nwr.rows[fb.i];
-                _nwr.cur = fb.i;
-                if (fb.miss.indexOf('f') >= 0 || fb.miss.indexOf('a') >= 0) fr.ed = true;      // per scrivere Da / A i campi devono essere aperti
-                _nwrPaintDeps();
-                if (fb.miss.indexOf('car') >= 0) {
-                    var cb = _nwrEl('nwrCars'); if (cb) cb.classList.add('bad');
-                    var ci = document.querySelector('#nwrOth [data-k="car"]'); if (ci) ci.classList.add('bad');
-                }
-                fb.miss.forEach(function (m) {
-                    if (m === 'car') return;
-                    var inp = document.querySelector('#nwrRtop [data-k="' + m + '"]'); if (inp) inp.classList.add('bad');
+                bad.forEach(function (b) {
+                    _nwrOpenX(b.i);
+                    var ln = _nwrLaneEl(b.i);
+                    b.miss.forEach(function (m) { var inp = ln ? ln.querySelector('.pl-xr [data-k="' + m + '"]') : null; if (inp) inp.classList.add('bad'); });
                 });
-                var fi = document.querySelector('#nwrBld .bad input, #nwrBld input.bad');
+                var fb = bad[0], fln = _nwrLaneEl(fb.i);
+                var fi = fln ? fln.querySelector('.pl-xr .bad') : null;
+                if (fln) { try { fln.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e0) {} }
                 if (fi && !_nwrCoarse()) fi.focus();
-                var bd = _nwrEl('nwrBody'); if (bd) bd.scrollTop = 0;
                 return;
             }
             var wk = _nwr.wk, newTrips = [];
@@ -11707,10 +11804,11 @@
                 showSummaryModal(newTrips);
                 if (newTrips.length) setTimeout(function () { _scrollToTrip(newTrips[0]); }, 120);
             }
+            setTimeout(function () { _mwAfterAdd(newTrips, !!toNext); }, 300);      // v101: la mail a questo trasportatore era già partita?
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v100';
+        var APP_VERSION = 'v103';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
@@ -11850,13 +11948,14 @@
             return '<span class="nv-pill mw-pill" style="' + st + '" title="' + _escH(name) + '">' + _escH(name) + '</span>';
         }
         function _mwWeekInfo() {
-            var wt = _pcRubricaWeekTrips(), mon = _srchMonday(wt);
+            var next = (_mwWkOv === null || _mwWkOv === undefined) ? (_pcWeekMode === 'next') : !!_mwWkOv;      // v101: l'avviso dopo un'aggiunta forza la settimana in cui si è aggiunto
+            var wt = next ? tripsNext : trips, mon = _srchMonday(wt);
             return {
                 wt: wt, mon: mon,
                 key: mon ? (mon.getFullYear() + '-' + _mwPad(mon.getMonth() + 1) + '-' + _mwPad(mon.getDate())) : 'x',
                 wn: mon ? getWeekNumber(mon) : null,
                 label: mon ? _srchWeekLabel(mon, '').toLowerCase() : '',
-                next: (_pcWeekMode === 'next')
+                next: next
             };
         }
         function _mwSnap(tratte) {
@@ -11921,7 +12020,7 @@
             var e = (_mwStoreGet()[wi.key] || {})[c.k];
             if (!e) return { s: 'todo' };
             if (e.sig === c.sig) return { s: 'sent', t: e.t };
-            return { s: 'changed', t: e.t, diff: _mwDiff(e.snap || [], c.snap, c.tratte.length) };
+            return { s: 'changed', t: e.t, diff: _mwDiff(e.snap || [], c.snap, c.tratte.length), add: _mwAdded(e, c) };
         }
         var _MW_DOW = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
         function _mwWhen(ms) {
@@ -13243,7 +13342,125 @@
             _commitNewTrips(list);
         }
 
-        function mwOpen() {
+        // ═══════════════════════════════════════════════════════════════════
+        //  v101 — MAIL DI INTEGRAZIONE (Fil: «se aggiungo un viaggio dopo aver mandato la mail, un avviso e la mail solo con quel viaggio»)
+        //  · lo «snap» salvato al momento dell'invio (per tratta e giorno) viene confrontato con i viaggi di adesso: dove ce ne sono di più, sono i nuovi
+        //  · dopo l'aggiunta di viaggi per un trasportatore la cui mail era già partita compare un avviso con il tasto «Prepara la mail con solo questi»
+        //  · nella schermata «Mail della settimana», quando la mail risulta «cambiata dopo l'invio» e ci sono viaggi nuovi, si sceglie fra «Solo i viaggi nuovi» e «Tutta la mail aggiornata»
+        //  · dopo l'invio («Fatto») la mail risulta di nuovo mandata (stessa logica di prima: si salva lo snap di adesso)
+        // ═══════════════════════════════════════════════════════════════════
+        var _mwScope = 'new', _mwScopeKey = '', _mwWkOv = null;
+        var _MAIL_INT_HEAD_DEF = 'Buongiorno,\n\nAd integrazione del programma già inviato, aggiungo questi viaggi:';
+        function _mwAdded(entry, c) {
+            var oldN = {}, newN = {}, list = [], n = 0, nW = 0;
+            ((entry && entry.snap) || []).forEach(function(x) { oldN[x.k] = x.n; });
+            (c.snap || []).forEach(function(x) { newN[x.k] = x.n; });
+            c.tratte.forEach(function(g) {
+                var ng = { k: g.k, f: g.f, c: g.c, days: {}, daysW: {}, n: 0 };
+                [1, 2, 3, 4, 5, 6, 0, -1].forEach(function(d) {
+                    var key = g.k + '|' + d, dt = (newN[key] || 0) - (oldN[key] || 0);
+                    if (dt <= 0) return;
+                    var dw = (newN[key + '~w'] || 0) - (oldN[key + '~w'] || 0);
+                    dw = Math.max(0, Math.min(dt, dw));
+                    ng.days[d] = dt; if (dw) ng.daysW[d] = dw;
+                    ng.n += dt; n += dt; nW += dw;
+                });
+                if (ng.n) list.push(ng);
+            });
+            return { tratte: list, n: n, nW: nW };
+        }
+        function _mailIntText(list) {
+            var body = _srchTratteMailText(list); if (!body) return '';
+            var t = _mailTplGet(), h = _mailClean(t.ihead), f = _mailClean(t.foot), out = [];
+            if (h) out.push(h);
+            out.push(body);
+            if (f) out.push(f);
+            return out.join('\n\n');
+        }
+        function _mailIntHtml(list) {
+            if (!list || !list.length) return '';
+            var t = _mailTplGet(), h = _mailClean(t.ihead), f = _mailClean(t.foot), out = [];
+            if (h) out.push(_escH(h).replace(/\n/g, '<br>'));
+            out.push(_srchTratteMailInner(list));
+            if (f) out.push(_escH(f).replace(/\n/g, '<br>'));
+            return '<div>' + out.join('<br><br>') + '</div>';
+        }
+        function _mailIntSubject(name) {
+            var s = _mailSubject(name);
+            return /programma/i.test(s) ? s.replace(/programma/i, 'Integrazione programma') : s + ' - integrazione';
+        }
+        // «solo i nuovi» è la scelta di partenza ogni volta che si cambia trasportatore
+        function _mwScopeVal(k) {
+            if (_mwScopeKey !== k) { _mwScopeKey = k; _mwScope = 'new'; }
+            return _mwScope;
+        }
+        function mwSetScope(v) { _mwScope = (v === 'all') ? 'all' : 'new'; _mwHint = ''; _mwRender(true); }
+        // cosa va nella mail di questo trasportatore: { inc: true → solo i nuovi, text, html, subj }
+        function _mwMailFor(c, st) {
+            var sc = _mwScopeVal(c.k);      // anche se questo trasportatore non è «cambiato»: così, cambiando scheda, si riparte sempre da «solo i nuovi»
+            var inc = (st.s === 'changed' && st.add && st.add.n > 0 && sc === 'new');
+            if (inc) return { inc: true, text: _mailIntText(st.add.tratte), html: _mailIntHtml(st.add.tratte), subj: _mailIntSubject(c.name) };
+            return { inc: false, text: _mailFullText(c.tratte), html: _mailFullHtml(c.tratte), subj: _mailSubject(c.name) + (st.s === 'changed' ? ' (aggiornato)' : '') };
+        }
+
+        // ── avviso dopo l'aggiunta di viaggi ──
+        function _mwAfterAdd(newTrips, toNext) {
+            try {
+                if (currentView !== 'desktop' || !newTrips || !newTrips.length) return;
+                var sv = _mwWkOv, wi, cs;
+                _mwWkOv = toNext ? 1 : 0;
+                try { wi = _mwWeekInfo(); cs = _mwCarriers(wi); } finally { _mwWkOv = sv; }
+                var names = {}, hits = [], store = _mwStoreGet()[wi.key] || {};
+                newTrips.forEach(function(t) { var nm = (t.trasportatore || '').trim(); if (nm) names[_srchNorm(nm)] = 1; });
+                cs.forEach(function(c) {
+                    var e = store[c.k];
+                    if (!names[c.k] || !e || e.sig === c.sig) return;
+                    var ad = _mwAdded(e, c);
+                    if (ad.n > 0) hits.push({ c: c, ad: ad, t: e.t });
+                });
+                if (hits.length) _mwAlertShow(hits, !!toNext);
+            } catch (e) {}
+        }
+        var _mwaNext = false;
+        function _mwAlertShow(hits, nx) {
+            mwaClose();
+            _mwaNext = nx;
+            var isPC = !!(document.body && document.body.classList.contains('desktop-view-active'));
+            var cards = hits.map(function(h) {
+                var key = 'default'; try { key = getTransporterKey(String(h.c.name || '')); } catch (e) {}
+                var mc = '--mc:var(--t-' + key + (isPC ? '-pill' : '-fill') + ');';
+                return '<div class="mwa-c" style="' + mc + '"><div class="mwa-top">' + _mwNameHtml(h.c.name) + '<span>mail già mandata ' + _escH(_mwWhen(h.t)) + '</span></div>'
+                    + '<div class="mwa-n">' + h.ad.n + ' ' + (h.ad.n === 1 ? 'viaggio nuovo' : 'viaggi nuovi') + (h.ad.nW ? ' · ' + h.ad.nW + ' da confermare' : '') + ' da comunicare</div>'
+                    + '<div class="mwa-mail">' + _srchTratteMailInner(h.ad.tratte) + '</div>'
+                    + '<div class="mw-btns"><button type="button" class="mw-btn pri" data-k="' + _escH(h.c.k) + '" onclick="mwaGo(this.getAttribute(\'data-k\'))">' + _PCI.mail + ' Prepara la mail con solo questi</button></div></div>';
+            }).join('');
+            var o = document.createElement('div');
+            o.id = 'mwaOv'; o.className = 'mw-ov mwa-ov';
+            o.addEventListener('mousedown', function(e) { if (e.target === o) mwaClose(); });
+            o.innerHTML = '<div class="mw-box mwa-box" role="alertdialog" aria-modal="true" aria-label="Mail da mandare">'
+                + '<div class="mw-h"><h3>' + (hits.length === 1 ? 'C’è una mail da mandare' : 'Ci sono ' + hits.length + ' mail da mandare') + '</h3>'
+                + '<button type="button" class="mw-x" onclick="mwaClose()" aria-label="Chiudi" title="Chiudi (Esc)">×</button></div>'
+                + '<div class="mw-b"><div class="mwa-lead">Hai aggiunto viaggi dopo aver già mandato la mail ' + (hits.length === 1 ? 'a questo trasportatore' : 'a questi trasportatori') + '. La mail con i soli viaggi nuovi è già pronta.</div>'
+                + cards
+                + '<div class="mw-btns"><button type="button" id="mwaLater" class="mw-btn gh" onclick="mwaClose()">Più tardi</button></div>'
+                + '<div class="mw-note">Se rimandi, il pulsante «Mail» in alto resta col numero delle mail ancora da mandare.</div></div></div>';
+            document.body.appendChild(o);
+            var b = o.querySelector('.mw-btn.pri'); if (b) { try { b.focus(); } catch (e2) {} }
+        }
+        function mwaClose() { var o = document.getElementById('mwaOv'); if (o) o.remove(); }
+        function mwaGo(k) {
+            var nx = _mwaNext;
+            mwaClose();
+            mwOpen({ next: nx, key: k });
+            _mwScope = 'new'; _mwScopeKey = k;
+            mwOpenMail();
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('mwaOv')) { e.preventDefault(); e.stopPropagation(); mwaClose(); }
+        }, true);
+
+        function mwOpen(opts) {
+            _mwWkOv = (opts && typeof opts === 'object' && opts.next !== undefined) ? (opts.next ? 1 : 0) : null;      // v101
             try { _srchSendClose(true); } catch (e0) {}
             try { var mm = document.getElementById('pcMoreMenu'); if (mm) mm.remove(); } catch (e1) {}
             var wi = _mwWeekInfo(), cs = _mwCarriers(wi);
@@ -13251,6 +13468,7 @@
             var first = _mwStep(wi, cs, cs.length - 1, 1);       // il primo da mandare
             _mwView = (cs.length && !first) ? 'done' : 'card';
             _mwKey = first ? first.k : (cs.length ? cs[0].k : '');
+            if (opts && typeof opts === 'object' && opts.key) { for (var ki = 0; ki < cs.length; ki++) if (cs[ki].k === opts.key) { _mwKey = opts.key; _mwView = 'card'; } }
             var o = document.getElementById('mwOverlay');
             if (!o) {
                 o = document.createElement('div');
@@ -13262,7 +13480,7 @@
             _mwRender();
         }
         function mwClose() {
-            _mwOpenFlag = false;
+            _mwOpenFlag = false; _mwWkOv = null;
             var o = document.getElementById('mwOverlay'); if (o) o.remove();
             try { _pcMailProgRefresh(); } catch (e) {}
         }
@@ -13276,8 +13494,8 @@
         function mwOpenMail() {
             var wi = _mwWeekInfo(), cs = _mwCarriers(wi); if (!cs.length) return;
             var c = cs[_mwIdx(cs)], st = _mwStatus(wi, c);
-            var subj = _mailSubject(c.name) + (st.s === 'changed' ? ' (aggiornato)' : '');
-            _mailOpenFlow(_mailFullText(c.tratte), _mailFullHtml(c.tratte), subj, function(ok, kind) {
+            var mf = _mwMailFor(c, st);
+            _mailOpenFlow(mf.text, mf.html, mf.subj, function(ok, kind) {
                 _mwHint = ok ? (kind === 'inline' ? 'Mail aperta con il testo già scritto. Controllala, invia, poi torna qui e premi «Fatto».' : 'Mail aperta. Incolla il testo con Ctrl+V, invia, poi torna qui e premi «Fatto».') : 'Non sono riuscito ad aprire la mail.';
                 if (_mwOpenFlag) _mwRender(true);
             });
@@ -13304,7 +13522,8 @@
         function mwEditSave() {
             var a = document.getElementById('mwTplSubj'), b = document.getElementById('mwTplHead'), c = document.getElementById('mwTplFoot');
             if (!a || !b || !c) return;
-            _mailTplSet(a.value, b.value, c.value);
+            var d = document.getElementById('mwTplIHead');
+            _mailTplSet(a.value, b.value, c.value, d ? d.value : undefined);
             _mwView = 'card'; _mwRender();
             _mailToast('Oggetto, saluto e chiusura salvati', 'success');
         }
@@ -13330,6 +13549,8 @@
                     + '<div class="mw-note">Dove scrivi <b>{trasportatore}</b> compare il nome del trasportatore.</div>'
                     + '<label class="mw-lb" for="mwTplHead">Inizio della mail (prima dei viaggi)</label>'
                     + '<textarea id="mwTplHead" class="mw-in" rows="3">' + _escH(t.head) + '</textarea>'
+                    + '<label class="mw-lb" for="mwTplIHead">Inizio della mail di integrazione (solo i viaggi nuovi)</label>'
+                    + '<textarea id="mwTplIHead" class="mw-in" rows="3">' + _escH(t.ihead) + '</textarea>'
                     + '<label class="mw-lb" for="mwTplFoot">Fine della mail (dopo i viaggi)</label>'
                     + '<textarea id="mwTplFoot" class="mw-in" rows="2">' + _escH(t.foot) + '</textarea>'
                     + '<div class="mw-note">Lascia vuoto un campo per non scriverlo. Restano salvati su questo browser.</div>'
@@ -13363,9 +13584,14 @@
                 var stLine = st.s === 'sent' ? '<div id="mwStatus" class="mw-st ok"><span class="mw-ic">✓</span> Mandata ' + _escH(_mwWhen(st.t)) + '</div>'
                     : st.s === 'changed' ? '<div id="mwStatus" class="mw-st wr"><span class="mw-ic">⚠</span> Cambiata dopo l’invio (' + _escH(_mwWhen(st.t)) + '): ' + _escH(st.diff) + '</div>'
                     : '<div id="mwStatus" class="mw-st">Da mandare</div>';
-                var subj = _mailSubject(c.name) + (st.s === 'changed' ? ' (aggiornato)' : '');
+                var mf = _mwMailFor(c, st), subj = mf.subj;
                 var warn = _mailWeekWarn();
-                var priLabel = st.s === 'sent' ? 'Rimanda la mail' : (st.s === 'changed' ? 'Rimanda aggiornata' : 'Apri la mail');
+                var priLabel = st.s === 'sent' ? 'Rimanda la mail' : (st.s === 'changed' ? (mf.inc ? 'Apri la mail con i viaggi nuovi' : 'Rimanda aggiornata') : 'Apri la mail');
+                var scopeHtml = (st.s === 'changed' && st.add && st.add.n > 0)
+                    ? '<div class="mw-modes mw-scope" id="mwScope" role="group" aria-label="Cosa mandare"><span>Cosa mandare:</span>'
+                      + '<button type="button" class="' + (mf.inc ? 'on' : '') + '" onclick="mwSetScope(\'new\')" aria-pressed="' + (mf.inc ? 'true' : 'false') + '">Solo i viaggi nuovi (' + st.add.n + ')</button>'
+                      + '<button type="button" class="' + (mf.inc ? '' : 'on') + '" onclick="mwSetScope(\'all\')" aria-pressed="' + (mf.inc ? 'false' : 'true') + '">Tutta la mail aggiornata</button></div>'
+                    : '';
                 var otherPending = sts.some(function(x, j) { return j !== i && x.s !== 'sent'; });
                 var btns;
                 if (st.s === 'sent') btns = '<button type="button" id="mwPri" class="mw-btn" onclick="mwOpenMail()">' + _PCI.mail + ' ' + priLabel + '</button>'
@@ -13392,7 +13618,7 @@
                     +   '<div class="mw-cnt" id="mwCount">Mail ' + (i + 1) + ' di ' + cs.length + ' · ' + c.n + ' ' + _pv(c.n) + ' · ' + c.tratte.length + ' ' + (c.tratte.length === 1 ? 'tratta' : 'tratte')
                     +     (c.unconf ? ' · ' + c.unconf + ' da confermare' : '') + ' · ancora da mandare: ' + pend + '</div>' + stLine + '</div>'
                     +   '<button type="button" class="mw-nav" id="mwNextBtn" onclick="mwNext()" aria-label="Successivo" title="Successivo (→)">›</button></div>'
-                    + '<div class="mw-sheet"><div class="mw-subj" id="mwSubj"><b>Oggetto:</b> ' + _escH(subj) + '</div><div class="mw-mail" id="mwMail">' + _mailFullHtml(c.tratte) + '</div></div>'
+                    + scopeHtml + '<div class="mw-sheet"><div class="mw-subj" id="mwSubj"><b>Oggetto:</b> ' + _escH(subj) + '</div><div class="mw-mail" id="mwMail">' + mf.html + '</div></div>'
                     + '<div class="mw-btns c">' + btns + '</div>'
                     + '<div class="mw-note c" id="mwHint">' + _escH(_mwHint || hintDef) + '</div>'
                     + foot + '</div></div>';
@@ -13845,10 +14071,11 @@
             return {
                 subj: (typeof o.subj === 'string') ? o.subj : _MAIL_SUBJ_DEF,
                 head: (typeof o.head === 'string' && o.head !== _MAIL_HEAD_OLD) ? o.head : _MAIL_HEAD_DEF,
-                foot: (typeof o.foot === 'string') ? o.foot : _MAIL_FOOT_DEF
+                foot: (typeof o.foot === 'string') ? o.foot : _MAIL_FOOT_DEF,
+                ihead: (typeof o.ihead === 'string') ? o.ihead : _MAIL_INT_HEAD_DEF
             };
         }
-        function _mailTplSet(subj, head, foot) { _srchLsSet('mailTpl', JSON.stringify({ subj: subj, head: head, foot: foot })); }
+        function _mailTplSet(subj, head, foot, ihead) { if (ihead === undefined) ihead = _mailTplGet().ihead; _srchLsSet('mailTpl', JSON.stringify({ subj: subj, head: head, foot: foot, ihead: ihead })); }
         function _mailTplReset() { try { localStorage.removeItem('mailTpl'); } catch (e) {} }
         function _mailClean(x) { return String(x == null ? '' : x).replace(/\r\n?/g, '\n').replace(/^\s+|\s+$/g, ''); }
         // oggetto: {trasportatore} → nome; senza nome (più trasportatori) si toglie anche il trattino iniziale
@@ -14716,7 +14943,7 @@
             if (_pcWeekMode !== 'next') {
                 const lun = dates[0]; const ven = dates[4];
                 const fmtShort = d => { const dt = new Date(d+'T12:00:00'); return String(dt.getDate()).padStart(2,'0')+'/'+String(dt.getMonth()+1).padStart(2,'0'); };
-                const newTitle = 'Settimana ' + getWeekNumber(new Date(lun+'T12:00:00')) + '/' + new Date(lun+'T12:00:00').getFullYear() + ' (Lun.' + fmtShort(lun) + ' - Ven. ' + fmtShort(ven) + ')';
+                const newTitle = 'Settimana ' + getWeekNumber(new Date(lun+'T12:00:00')) + '/' + getWeekYear(new Date(lun+'T12:00:00')) + ' (Lun.' + fmtShort(lun) + ' - Ven. ' + fmtShort(ven) + ')';
                 weekTitle = newTitle;
                 localStorage.setItem('weekTitle', newTitle);
                 setText('weekInfo', newTitle);
@@ -14798,9 +15025,11 @@
                 if (wm) {
                     var now2 = new Date();
                     var dd2 = parseInt(wm[1]), mm2 = parseInt(wm[2]);
-                    var yyyy2 = now2.getFullYear();
-                    if (mm2 < now2.getMonth()) yyyy2++;
-                    var monday2 = new Date(yyyy2, mm2-1, dd2, 12, 0, 0);
+                    var monday2 = null;      // v103: anno più vicino a oggi
+                    [now2.getFullYear() - 1, now2.getFullYear(), now2.getFullYear() + 1].forEach(function (yy) {
+                        var cd = new Date(yy, mm2 - 1, dd2, 12, 0, 0);
+                        if (monday2 === null || Math.abs(cd - now2) < Math.abs(monday2 - now2)) monday2 = cd;
+                    });
                     // Usa solo se la settimana è quella corrente o futura
                     if (monday2 >= getMondayOf(now2)) {
                         return getTargetDay(monday2, target);
@@ -15242,6 +15471,7 @@
         let editingIndex = null;
 
         function editTrip(index) {
+            if (!trips[index]) return;      // v103
             editingIndex = index;
             const trip = trips[index];
             
@@ -15267,6 +15497,7 @@
             var nextIdx = parseInt(modal.getAttribute('data-next-idx'), 10);
             var isNext  = !isNaN(nextIdx) && nextIdx >= 0;
             if (!isNext && editingIndex === null) return; // nessuna modifica in corso
+            if (isNext ? !tripsNext[nextIdx] : !trips[editingIndex]) return;      // v103: il viaggio non c'è più (elenco cambiato nel frattempo): non scrivere in una posizione vuota
 
             var updatedTrip = {
                 data: document.getElementById('editData').value,
@@ -15448,7 +15679,7 @@
             lc.alignment = { vertical:'center', horizontal:'left', indent:1 };
             const cc = wr.getCell(colIdx+1);
             if (code) {
-                const col = _locationCodeColorPC(code);
+                const col = _locationCodeColorPC(code, 'light');
                 const bgHex = 'FF'+_toHex6(col.bg), bdHex = 'FF'+_toHex6(col.bd), txHex = 'FF'+_toHex6(col.tx);
                 cc.value = code;
                 cc.font = { bold:true, size:8, color:{argb:txHex}, name:'Calibri' };
@@ -15610,7 +15841,7 @@
                         if (m) { place = m[1].trim(); code = m[2].trim(); }
                         const cc = wr.getCell(pair[0]);
                         if (code) {
-                            const col = _locationCodeColorPC(code);
+                            const col = _locationCodeColorPC(code, 'light');
                             cc.value = code;
                             cc.font = { bold:true, size:10.5, color:{argb:'FF'+_toHex6(col.tx)}, name:FONT };
                             cc.fill = solid('FF'+_toHex6(col.bg));
@@ -16763,7 +16994,7 @@
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 driveData = await res.json();
             }
-            var driveTrips = (driveData && driveData.trips) || [];
+            var driveTrips = _tripsSane((driveData && driveData.trips) || []);
             var m = _mergeState(trips, _tombs, driveTrips, driveData && driveData.tombs);
             var changedLocal = !_sameTripSet(trips, m.trips);
             _tombs = m.tombs;
@@ -16855,7 +17086,7 @@
         async function driveSave(silent) { if (_syncTimer) { clearTimeout(_syncTimer); _syncTimer = null; } return _runSync(true); }
         async function driveSmartSync() { return _runSync(false); }
         async function _applyDriveData(data, silent) {            // compatibilità: ora unisce, non sovrascrive
-            var m = _mergeState(trips, _tombs, data.trips || [], data.tombs);
+            var m = _mergeState(trips, _tombs, _tripsSane(data.trips || []), data.tombs);
             trips = m.trips; _tombs = m.tombs;
             if (data.weekTitle) { weekTitle = data.weekTitle; setText('weekInfo', weekTitle); localStorage.setItem('weekTitle', weekTitle); }
             if (Array.isArray(data.weekArchive)) { saveArchive(data.weekArchive); try { renderArchive(); } catch(e) {} }
@@ -17228,7 +17459,21 @@
 
         // Carica archivio da localStorage
         function loadArchive() {
-            return JSON.parse(localStorage.getItem('weekArchive') || '[]');
+            var raw = localStorage.getItem('weekArchive') || '[]', a;
+            try { a = JSON.parse(raw); } catch (e) {
+                try { localStorage.setItem('weekArchive_corrotto', raw); } catch (eB) {}      // v103: copia prima che venga sovrascritto
+                return [];
+            }
+            if (!Array.isArray(a)) return [];
+            var out = [];
+            for (var i = 0; i < a.length; i++) {
+                var w = a[i];
+                if (!w || typeof w !== 'object') continue;
+                w.trips = _tripsSane(w.trips);
+                if (typeof w.title !== 'string') w.title = '';
+                out.push(w);
+            }
+            return out;
         }
 
         // Salva archivio su localStorage
@@ -17317,7 +17562,7 @@
             var nextFri = new Date(nextMon); nextFri.setDate(nextMon.getDate() + 4);
             var fmt = function(d) { return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'); };
             var nextWeekNum = getWeekNumber(nextMon);
-            var autoTitle = 'Settimana ' + nextWeekNum + '/' + nextMon.getFullYear() + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
+            var autoTitle = 'Settimana ' + nextWeekNum + '/' + getWeekYear(nextMon) + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
 
             var elTitle = document.getElementById('nwv2CurrentTitle');
             var elCount = document.getElementById('nwv2CurrentCount');
@@ -17360,7 +17605,7 @@
             var fmt = function(d) { return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0'); };
             var nextWeekNum = getWeekNumber(nextMon);
             document.getElementById('nwv2NewTitle').value =
-                'Settimana ' + nextWeekNum + '/' + nextMon.getFullYear() + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
+                'Settimana ' + nextWeekNum + '/' + getWeekYear(nextMon) + ' (Lun. ' + fmt(nextMon) + ' - Ven. ' + fmt(nextFri) + ')';
         }
 
         function nwv2CopyPrev() {
