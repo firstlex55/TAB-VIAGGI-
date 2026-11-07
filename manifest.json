@@ -2,6 +2,7 @@
   "name": "Planning Viaggi",
   "short_name": "Viaggi",
   "description": "App logistica planning viaggi settimanale",
+  "id": "./index.html?app=2",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
@@ -33,6 +34,9 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["productivity", "business"],
+  "categories": [
+    "productivity",
+    "business"
+  ],
   "lang": "it"
 }
