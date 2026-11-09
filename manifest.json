@@ -1,42 +1,18 @@
 {
+  "id": "app-viaggi-protrasporti-2026",
   "name": "Planning Viaggi",
   "short_name": "Viaggi",
-  "description": "App logistica planning viaggi settimanale",
-  "id": "./index.html?app=2",
+  "description": "Planning viaggi settimanale - Pro Trasporti",
+  "lang": "it",
+  "dir": "ltr",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#070a10",
+  "orientation": "any",
+  "background_color": "#25272b",
+  "theme_color": "#25272b",
   "icons": [
-    {
-      "src": "logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "logo-maskable.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "logo-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "categories": [
-    "productivity",
-    "business"
-  ],
-  "lang": "it"
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
 }
