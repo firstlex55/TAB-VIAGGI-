@@ -916,7 +916,6 @@
             opacity: 0;
             pointer-events: none;
         }
-        .filter-panel.collapsed > #archSearchBtn, .filter-panel.collapsed #archSearchBtn { display:none; }
         /* v66: header più compatto + stato Drive che non copre il titolo */
         @media (max-width: 600px) {
             .top-bar-titles { min-width: 0; }
@@ -4762,6 +4761,94 @@
                 border-top: 2px solid var(--accent);
             }
         }
+
+        /* ═══ v104 — Look "P2" della tabella PC (Schede): riquadri Fornitore/Cliente a «tasto» con zoccolo, pillola Trasportatore scura con nome colorato,
+           sfondo riga che segue il selettore di luminosità, fascia ambra per «Da conf.». Tutti i colori sono già calcolati (OKLCH → esadecimale):
+           i codici più frequenti per ruolo prendono una tinta (classi vc0…vc11 messe da _vvCls), gli altri restano neutri.
+           Solo schermo · modalità Excel: invariata (solo pallino colorato per i codici frequenti) ═══ */
+        @media screen {
+        html { --k4-fr:#091018; --k4-fr2:#010309; --k4-hi:rgba(255,255,255,.08); --k4-hla:.15; --k4-pa:#3f4955; --k4-pb:#2a3440; --k4-pbd:#060c13; --k4-ring:rgba(255,255,255,.10); --k4-psh:rgba(0,0,0,.55); }
+        html[data-theme="light"] { --k4-fr:#3d4958; --k4-fr2:#1f2a38; --k4-hi:rgba(255,255,255,.65); --k4-hla:.62; --k4-pa:#586474; --k4-pb:#3d4958; --k4-pbd:#1c2735; --k4-ring:rgba(255,255,255,.20); --k4-psh:rgba(20,26,38,.5); }
+        .pc-loc { --k4-sep:color-mix(in srgb, var(--text) 28%, transparent); }
+        html[data-theme="light"] .pc-loc.vc0{--k4-fill:#9de8e1;--k4-b1:#00b0a4;--k4-b2:#00968c;--k4-pl:#004b46;--k4-sep:rgba(0,111,104,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc0{--k4-fill:#155855;--k4-b1:#3bdfd6;--k4-b2:#00c4bc;--k4-pl:#001e1c;--k4-sep:rgba(65,188,181,.45)}
+        html[data-theme="light"] .pc-loc.vc1{--k4-fill:#c2d7ff;--k4-b1:#688bf3;--k4-b2:#5272d8;--k4-pl:#29396c;--k4-sep:rgba(69,90,150,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc1{--k4-fill:#404b71;--k4-b1:#a5bfff;--k4-b2:#8ca5fd;--k4-pl:#0c1331;--k4-sep:rgba(102,127,227,.45)}
+        html[data-theme="light"] .pc-loc.vc2{--k4-fill:#ffc9af;--k4-b1:#df6c33;--k4-b2:#c45311;--k4-pl:#622a0e;--k4-sep:rgba(139,73,42,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc2{--k4-fill:#69422b;--k4-b1:#ffaa74;--k4-b2:#eb915b;--k4-pl:#2a0b00;--k4-sep:rgba(249,136,62,.45)}
+        html[data-theme="light"] .pc-loc.vc3{--k4-fill:#c9e1ad;--k4-b1:#76a321;--k4-b2:#5f8a00;--k4-pl:#2f4505;--k4-sep:rgba(77,104,36,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc3{--k4-fill:#45532a;--k4-b1:#b1d371;--k4-b2:#99b958;--k4-pl:#101a00;--k4-sep:rgba(158,200,56,.45)}
+        html[data-theme="light"] .pc-loc.vc4{--k4-fill:#b8e5bb;--k4-b1:#41ab52;--k4-b2:#22923a;--k4-pl:#15491e;--k4-sep:rgba(51,108,58,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc4{--k4-fill:#335739;--k4-b1:#86db94;--k4-b2:#6dc17b;--k4-pl:#001d05;--k4-sep:rgba(93,179,109,.45)}
+        html[data-theme="light"] .pc-loc.vc5{--k4-fill:#d4d0ff;--k4-b1:#8f7fed;--k4-b2:#7866d2;--k4-pl:#3c3469;--k4-sep:rgba(91,83,147,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc5{--k4-fill:#4e466e;--k4-b1:#c6b4ff;--k4-b2:#ad9bf6;--k4-pl:#170f2e;--k4-sep:rgba(143,112,237,.45)}
+        html[data-theme="light"] .pc-loc.vc6{--k4-fill:#fbc5e6;--k4-b1:#d266ae;--k4-b2:#b74d95;--k4-pl:#5c274a;--k4-sep:rgba(131,69,109,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc6{--k4-fill:#653f58;--k4-b1:#fca2df;--k4-b2:#e189c5;--k4-pl:#27091e;--k4-sep:rgba(207,101,176,.45)}
+        html[data-theme="light"] .pc-loc.vc7{--k4-fill:#eed59f;--k4-b1:#be8800;--k4-b2:#a46f00;--k4-pl:#523800;--k4-sep:rgba(119,88,0,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc7{--k4-fill:#5b4b1f;--k4-b1:#e5c057;--k4-b2:#cba63a;--k4-pl:#211400;--k4-sep:rgba(237,193,56,.45)}
+        html[data-theme="light"] .pc-loc.vc8{--k4-fill:#ffc5bd;--k4-b1:#e3655b;--k4-b2:#c74b44;--k4-pl:#642722;--k4-sep:rgba(141,69,62,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc8{--k4-fill:#6c3e3c;--k4-b1:#ffa19c;--k4-b2:#f28884;--k4-pl:#2c0808;--k4-sep:rgba(231,94,94,.45)}
+        html[data-theme="light"] .pc-loc.vc9{--k4-fill:#b1ddff;--k4-b1:#2997ee;--k4-b2:#007ed3;--k4-pl:#084069;--k4-sep:rgba(40,97,147,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc9{--k4-fill:#2c516e;--k4-b1:#75cdff;--k4-b2:#5bb3f7;--k4-pl:#00182f;--k4-sep:rgba(78,165,231,.45)}
+        html[data-theme="light"] .pc-loc.vc10{--k4-fill:#ffc3d2;--k4-b1:#df6288;--k4-b2:#c34971;--k4-pl:#622538;--k4-sep:rgba(139,67,88,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc10{--k4-fill:#6a3e4c;--k4-b1:#ff9fc1;--k4-b2:#ed86a8;--k4-pl:#2a0715;--k4-sep:rgba(236,113,156,.45)}
+        html[data-theme="light"] .pc-loc.vc11{--k4-fill:#fecca7;--k4-b1:#d87500;--k4-b2:#bd5c00;--k4-pl:#5f2f00;--k4-sep:rgba(134,78,25,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc11{--k4-fill:#664525;--k4-b1:#ffb066;--k4-b2:#e5974c;--k4-pl:#280e00;--k4-sep:rgba(176,127,83,.45)}
+        html[data-theme="light"] .pc-c-trasp.tk-cevolo{--k4-tx:#f6b83d;--k4-b1:#ffcf77;--k4-b2:#e1a51f;--k4-pl:#4f3100}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-cevolo{--k4-tx:#e8ac2b;--k4-b1:#ffcf77;--k4-b2:#e1a51f;--k4-pl:#2b1500}
+        html[data-theme="light"] .pc-c-trasp.tk-coap{--k4-tx:#61ceff;--k4-b1:#8fe1ff;--k4-b2:#4cbaff;--k4-pl:#003b62}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-coap{--k4-tx:#53c1ff;--k4-b1:#8fe1ff;--k4-b2:#4cbaff;--k4-pl:#001c38}
+        html[data-theme="light"] .pc-c-trasp.tk-coneco{--k4-tx:#c7b1ff;--k4-b1:#dac9ff;--k4-b2:#b59dff;--k4-pl:#3a2d62}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-coneco{--k4-tx:#bba4ff;--k4-b1:#dac9ff;--k4-b2:#b59dff;--k4-pl:#1c1238}
+        html[data-theme="light"] .pc-c-trasp.tk-consar{--k4-tx:#ff99a2;--k4-b1:#ffb7bc;--k4-b2:#ff868f;--k4-pl:#5e2027}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-consar{--k4-tx:#ff8c96;--k4-b1:#ffb7bc;--k4-b2:#ff868f;--k4-pl:#34080f}
+        html[data-theme="light"] .pc-c-trasp.tk-avio{--k4-tx:#bad156;--k4-b1:#cfe386;--k4-b2:#a8be41;--k4-pl:#343e00}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-avio{--k4-tx:#aec448;--k4-b1:#cfe386;--k4-b2:#a8be41;--k4-pl:#181e00}
+        html[data-theme="light"] .pc-c-trasp.tk-alb{--k4-tx:#6fe093;--k4-b1:#99efb0;--k4-b2:#5bcc80;--k4-pl:#00441f}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-alb{--k4-tx:#62d287;--k4-b1:#99efb0;--k4-b2:#5bcc80;--k4-pl:#002308}
+        html[data-theme="light"] .pc-c-trasp.tk-lino{--k4-tx:#ff99d2;--k4-b1:#ffb7e3;--k4-b2:#f687bf;--k4-pl:#58213f}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-lino{--k4-tx:#fd8dc6;--k4-b1:#ffb7e3;--k4-b2:#f687bf;--k4-pl:#31091f}
+        html[data-theme="light"] .pc-c-trasp.tk-stegagno{--k4-tx:#00ddf9;--k4-b1:#67edff;--k4-b2:#00cae5;--k4-pl:#004351}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-stegagno{--k4-tx:#00d0eb;--k4-b1:#67edff;--k4-b2:#00cae5;--k4-pl:#00222c}
+        html[data-theme="light"] .pc-c-trasp.tk-cirioni{--k4-tx:#93db77;--k4-b1:#b1ea9c;--k4-b2:#80c765;--k4-pl:#1e420d}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-cirioni{--k4-tx:#86cd6b;--k4-b1:#b1ea9c;--k4-b2:#80c765;--k4-pl:#072100}
+        html[data-theme="light"] .pc-c-trasp.tk-clp{--k4-tx:#e3a7ff;--k4-b1:#f1c1ff;--k4-b2:#d094f7;--k4-pl:#47285a}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-clp{--k4-tx:#d69afd;--k4-b1:#f1c1ff;--k4-b2:#d094f7;--k4-pl:#250f32}
+        html[data-theme="light"] .pc-c-trasp.tk-default{--k4-tx:#99c0ff;--k4-b1:#b4d5ff;--k4-b2:#86acff;--k4-pl:#233466}
+        html:not([data-theme="light"]) .pc-c-trasp.tk-default{--k4-tx:#8db3ff;--k4-b1:#b4d5ff;--k4-b2:#86acff;--k4-pl:#0c173b}
+
+        /* riquadri Fornitore / Cliente */
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-loc { position:relative; border:1px solid var(--k4-fr) !important; border-bottom:4px solid var(--k4-fr2) !important; border-radius:12px !important; box-shadow:inset 0 1px 0 var(--k4-hi), 0 7px 12px -8px rgba(20,26,38,.5) !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-loc-code { width:110px !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-loc.vv { padding-left:23px !important; background:linear-gradient(180deg, rgba(255,255,255,var(--k4-hla)) 0%, rgba(255,255,255,0) 55%), var(--k4-fill) !important; border-bottom-color:var(--k4-pl) !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-loc.vv::before { content:""; position:absolute; left:9px; top:9px; bottom:6px; width:5px; border-radius:5px; background:linear-gradient(180deg, var(--k4-b1), var(--k4-b2)); pointer-events:none; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-lab { letter-spacing:.9px !important; font-size:9.5px !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-loc-sep { width:1px !important; background:linear-gradient(180deg, transparent, var(--k4-sep) 28%, var(--k4-sep) 72%, transparent) !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-dot { display:none !important; }
+        html:not([data-theme="light"]) body #desktopBody .pc-loc.vv .pc-lab { color:var(--text-soft) !important; }      /* scuro: etichette un po' più chiare sul fondo colorato (contrasto ≥ 3) */
+
+        /* pillola Trasportatore */
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-c-trasp { position:relative; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-c-trasp::before { content:""; position:absolute; left:calc(8px*var(--pc-p,1) + 8px); top:50%; height:calc(16px*var(--pc-f,1)); margin-top:calc(-8px*var(--pc-f,1)); width:5px; border-radius:5px; background:linear-gradient(180deg, var(--k4-b1), var(--k4-b2)); pointer-events:none; z-index:1; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-trasp-in { box-sizing:border-box; height:calc(34px*var(--pc-f,1)); border-radius:10px !important; padding:0 calc(10px*var(--pc-f,1)) 0 calc(28px*var(--pc-f,1)) !important; font-size:calc(13px*var(--pc-f,1)) !important; font-weight:800 !important; letter-spacing:.25px !important; border:2px solid var(--k4-pbd) !important; border-bottom:4px solid var(--k4-pl) !important; background:linear-gradient(180deg, var(--k4-pa), var(--k4-pb)) !important; color:var(--k4-tx) !important; box-shadow:inset 0 0 0 2px var(--k4-ring), 0 2px 6px -3px var(--k4-psh) !important; }
+
+        /* sfondo riga (segue «Più chiaro / Medio / Più scuro») e fascia «Da conf.» */
+        html[data-theme="light"] #desktopBody tr.pc-trip { background:color-mix(in oklab, var(--surface-1) 55%, #c8d2de) !important; }
+        html[data-theme="light"] #desktopBody tr.pc-trip.pc-today { background:color-mix(in oklab, var(--surface-2) 55%, #c8d2de) !important; }
+        html:not([data-theme="light"]) #desktopBody tr.pc-trip { background:color-mix(in oklab, var(--surface-1) 55%, #161b22) !important; }
+        html:not([data-theme="light"]) #desktopBody tr.pc-trip.pc-today { background:color-mix(in oklab, var(--surface-2) 55%, #161b22) !important; }
+        html #desktopBody tr.pc-trip:has(.pc-st.on) { background:color-mix(in srgb, var(--warning) 12%, transparent) !important; }
+        html #desktopBody tr.pc-trip:has(.pc-st.on) > td:first-child { box-shadow:inset 6px 0 0 var(--warning); }
+
+        /* «Segna» appare solo passando sul rigo; «Da conf.» resta sempre visibile */
+        html #desktopBody .pc-c-stato .pc-st:not(.on):not(.k4x) { opacity:0 !important; border-color:transparent !important; background:transparent !important; font-size:0 !important; gap:0 !important; transition:opacity .15s; }
+        html #desktopBody tr:hover .pc-c-stato .pc-st:not(.on):not(.k4x), html #desktopBody tr:focus-within .pc-c-stato .pc-st:not(.on):not(.k4x) { opacity:.65 !important; }
+        html #desktopBody .pc-c-stato .pc-st:not(.on):not(.k4x):hover, html #desktopBody .pc-c-stato .pc-st:not(.on):not(.k4x):focus-visible { opacity:1 !important; border-style:solid !important; border-color:var(--warning) !important; background:rgba(var(--warning-rgb),.14) !important; }
+
+        /* modalità Excel: solo il pallino (colorato per i codici frequenti, nascosto per gli altri) */
+        html[data-pcmode="excel"] #desktopBody .pc-loc.vv .pc-dot { background:var(--k4-b2) !important; }
+        html[data-pcmode="excel"] #desktopBody .pc-loc:not(.vv) .pc-dot { visibility:hidden; }
+        }
     </style>
     <style id="noPinchRapida">
         html, body { touch-action: pan-x pan-y; }
@@ -4952,6 +5039,116 @@
         .sxd-act button.pri { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 4px 14px rgba(232,98,63,0.35); }
         .sxd-act button:disabled { opacity:0.4; cursor:not-allowed; }
     </style>
+    <style id="phone105">
+        .section.ph-tools, .week-seg .w-date { display:none; }
+        /* v105 — TELEFONO (< 1000px, fuori dalla vista PC): testata Compatta, giorni azzurri, schede leggibili, strumenti colorati */
+        @media (max-width: 999px) {
+            :root { --dh:108,164,222; --dhl:190,216,244; --tcx:96,196,152; --tci:112,170,238; --tcn:244,142,86; --tca:172,150,230; --dlc:236,112,112; }
+            html[data-theme="light"] { --dh:62,120,190; --dhl:22,60,110; --tcx:22,112,76; --tci:30,88,166; --tcn:160,62,12; --tca:98,66,176; --dlc:156,36,36; }
+            body:not(.desktop-view-active) .mobile-bottom-nav {left:10px !important; right:10px !important; bottom:max(8px, env(safe-area-inset-bottom)) !important; border-radius:26px; border:1px solid rgba(var(--veil-rgb),.09); background:rgba(var(--surface-rgb),.8) !important; -webkit-backdrop-filter:blur(24px) saturate(1.3); backdrop-filter:blur(24px) saturate(1.3); box-shadow:0 16px 36px -10px rgba(var(--shade-rgb),.6), inset 0 1px 0 rgba(255,255,255,.05) !important; padding:6px 6px !important;}
+            body:not(.desktop-view-active) .mobile-bottom-nav .view-btn.active::before {display:none;}
+            body:not(.desktop-view-active) .mobile-bottom-nav .view-btn {border-radius:18px; padding:7px 0 5px;}
+            body:not(.desktop-view-active) .mobile-bottom-nav .view-btn.active {background:color-mix(in srgb, currentColor 14%, transparent);}
+            body:not(.desktop-view-active) .mobile-bottom-nav .view-btn .nav-label,
+            body:not(.desktop-view-active) .nav-btn-add .nav-label {letter-spacing:.4px;}
+            body:not(.desktop-view-active) .nav-btn-add .nav-add-shape {width:38px; height:38px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 60%), var(--accent); border:0; box-shadow:0 8px 18px -6px rgba(var(--accent-rgb),.65), inset 0 1px 0 rgba(255,255,255,.35);}
+            body:not(.desktop-view-active) .nav-btn-add .nav-add-shape svg {width:17px; height:17px;}
+            body:not(.desktop-view-active) .logo-badge,
+            body:not(.desktop-view-active) .logo-planning-text,
+            body:not(.desktop-view-active) .logo > div {display:none !important;}
+            body:not(.desktop-view-active) .top-bar {padding:7px 12px; border-bottom:0; box-shadow:0 1px 0 rgba(var(--veil-rgb),.06), 0 10px 22px -16px rgba(var(--shade-rgb),.6);}
+            body:not(.desktop-view-active) .top-bar-logo-img {width:34px; height:34px; border-radius:10px; border:1px solid rgba(var(--accent-rgb),.35); box-shadow:none;}
+            body:not(.desktop-view-active) .top-bar-titles {gap:2px; min-width:0;}
+            body:not(.desktop-view-active) .logo-viaggi {font-size:19px !important; letter-spacing:.07em !important; line-height:1 !important;}
+            body:not(.desktop-view-active) .week-info {font:600 12px/1.2 'Outfit',sans-serif !important; color:var(--text-soft) !important; letter-spacing:0 !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:56vw;}
+            body:not(.desktop-view-active) .top-bar-right {flex-direction:row !important; align-items:center !important;}
+            body:not(.desktop-view-active) .hdr-btn,
+            body:not(.desktop-view-active) .theme-toggle-btn {width:38px !important; height:38px !important; border-radius:50% !important; background:none !important; border:0 !important;}
+            body:not(.desktop-view-active) .hdr-save {color:var(--success);}
+            body:not(.desktop-view-active) .hdr-load {color:var(--ac-cyan);}
+            body:not(.desktop-view-active) .drive-strip {margin:5px 14px 0; padding:0; background:none; border:0; max-width:none !important; text-align:left !important;}
+            body:not(.desktop-view-active) .drive-strip > div {justify-content:flex-start !important; gap:7px !important;}
+            body:not(.desktop-view-active) .drive-strip #driveStatusText {white-space:normal !important; font:600 11px/1.2 'Outfit',sans-serif !important; letter-spacing:0 !important; color:var(--text-dim) !important;}
+            body:not(.desktop-view-active) .week-progress-bar {height:58px; padding:0 3px;}
+            body:not(.desktop-view-active) .week-seg {display:grid !important; grid-template-rows:auto auto; justify-items:center; align-content:center; gap:3px !important; margin:5px 2px; border-radius:14px; border-bottom:0 !important; background:rgba(var(--dh),.13) !important; box-shadow:inset 0 0 0 1px rgba(var(--dh),.30) !important; opacity:1 !important;}
+            body:not(.desktop-view-active) .week-seg-label {font-size:11px !important; letter-spacing:.5px !important; color:rgb(var(--dhl)) !important;}
+            body:not(.desktop-view-active) .week-seg .w-date {display:block; font:800 18px/1 'Outfit',sans-serif; color:rgb(var(--dhl));}
+            body:not(.desktop-view-active) .week-seg div[id^="wseg-dots"] {display:none !important;}
+            body:not(.desktop-view-active) .week-seg-count:not(:empty) {position:absolute; top:-5px; right:-3px; min-width:18px; height:18px; padding:0 5px; border-radius:9px; display:flex !important; align-items:center; justify-content:center; font:800 11px/1 'Outfit',sans-serif !important; opacity:1 !important; box-sizing:border-box; border:2px solid rgb(var(--surface-rgb)); background:rgba(var(--dh),.55) !important; color:var(--text) !important;}
+            body:not(.desktop-view-active) .week-seg.day-filtered {background:rgba(var(--dh),.32) !important; box-shadow:inset 0 0 0 1.5px rgb(var(--dhl)) !important;}
+            body:not(.desktop-view-active) .week-seg.active {background:rgba(var(--accent-rgb),.16) !important; box-shadow:inset 0 0 0 1.5px var(--accent) !important;}
+            body:not(.desktop-view-active) .week-seg.active .week-seg-label {color:var(--accent) !important;}
+            body:not(.desktop-view-active) .week-seg.active .w-date {color:var(--text);}
+            body:not(.desktop-view-active) .week-seg.active .week-seg-count:not(:empty) {background:var(--accent) !important; color:var(--ink) !important;}
+            body:not(.desktop-view-active) .filter-panel {border:1px solid rgba(var(--veil-rgb),.09) !important; border-radius:18px !important; box-shadow:none !important; margin-bottom:8px !important;}
+            body:not(.desktop-view-active) .filter-panel-header {padding-top:10px !important; padding-bottom:8px !important;}
+            body:not(.desktop-view-active) .filter-panel-title {color:var(--text-soft) !important; letter-spacing:.12em !important; font-size:11px !important;}
+            body:not(.desktop-view-active) .filter-panel-icon {filter:grayscale(1); opacity:.75;}
+            body:not(.desktop-view-active) .filter-search-input,
+            body:not(.desktop-view-active) .filter-search-row input {background:rgba(var(--veil-rgb),.05) !important; border:1px solid rgba(var(--veil-rgb),.10) !important; border-radius:13px !important;}
+            body:not(.desktop-view-active) .section-divider {justify-content:flex-start !important; gap:6px !important; margin:8px 4px 8px !important;}
+            body:not(.desktop-view-active) .section-divider-line,
+            body:not(.desktop-view-active) .section-divider-dot {display:none !important;}
+            body:not(.desktop-view-active) .section-divider-count {font:800 14px/1 'Outfit',sans-serif !important; color:var(--text) !important;}
+            body:not(.desktop-view-active) .section-divider-text {font:600 12px/1 'Outfit',sans-serif !important; letter-spacing:0 !important; text-transform:none !important; color:var(--text-dim) !important;}
+            body:not(.desktop-view-active) .trips-toolbar {display:none !important;}
+            body:not(.desktop-view-active) #compactBody {padding-top:0 !important;}
+            body:not(.desktop-view-active) #daConfBanner {border-radius:14px !important; margin-bottom:8px !important;}
+            body:not(.desktop-view-active) .dc-hd {display:flex; align-items:center; gap:8px; padding:8px 8px 8px 13px; cursor:pointer;}
+            body:not(.desktop-view-active) .dc-hd .dc-t {flex:1; min-width:0; font-size:12px; font-weight:800; color:var(--warning);}
+            body:not(.desktop-view-active) .dc-btn {flex:none; padding:6px 11px; border-radius:10px; background:rgba(var(--success-rgb),.12); border:1px solid rgba(var(--success-rgb),.38); color:var(--success); font:800 11px/1 'Outfit',sans-serif; cursor:pointer;}
+            body:not(.desktop-view-active) .dc-hd .dc-arr {color:rgba(var(--warning-rgb),.6); font-size:12px; padding:2px 4px;}
+            body:not(.desktop-view-active) .day-group-header {display:block !important; margin:24px 0 10px !important;}
+            body:not(.desktop-view-active) .g-band {position:relative; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px 10px 20px; border-radius:16px; background:linear-gradient(90deg, rgba(var(--dh),.20), rgba(var(--dh),.07)); border:1px solid rgba(var(--dh),.38);}
+            body:not(.desktop-view-active) .g-band::before {content:""; position:absolute; left:8px; top:10px; bottom:10px; width:4px; border-radius:4px; background:rgba(var(--dh),.9);}
+            body:not(.desktop-view-active) .g-l {display:flex; align-items:baseline; gap:10px; min-width:0;}
+            body:not(.desktop-view-active) .g-l b {font:800 18px/1 'Outfit',sans-serif; color:rgb(var(--dhl));}
+            body:not(.desktop-view-active) .g-date {font:600 13px/1 'Outfit',sans-serif; color:rgba(var(--dhl),.88);}
+            body:not(.desktop-view-active) .g-chip {flex:none; font-style:normal; font:800 12px/1 'Outfit',sans-serif; padding:6px 11px; border-radius:12px; background:rgba(var(--dh),.30); color:rgb(var(--dhl));}
+            body:not(.desktop-view-active) .day-group-header.oggi .g-band {background:linear-gradient(90deg, rgba(var(--accent-rgb),.18), rgba(var(--accent-rgb),.06)); border-color:rgba(var(--accent-rgb),.5);}
+            body:not(.desktop-view-active) .day-group-header.oggi .g-band::before {background:var(--accent);}
+            body:not(.desktop-view-active) .day-group-header.oggi .g-l b,
+            body:not(.desktop-view-active) .day-group-header.oggi .g-date {color:var(--text);}
+            body:not(.desktop-view-active) .day-group-header.oggi .g-chip {background:var(--accent); color:var(--ink);}
+            body:not(.desktop-view-active) .swipe-row-wrap {margin-bottom:10px !important; border-radius:18px !important;}
+            body:not(.desktop-view-active) .swipe-row-wrap .swipe-delete-bg {border-radius:18px !important;}
+            body:not(.desktop-view-active) .swipe-row {position:relative; display:flex !important; align-items:center; gap:4px !important; padding:12px 7px 12px 20px !important; border-radius:18px !important; border-left:0 !important; border:1px solid color-mix(in srgb, var(--rc) 20%, rgba(var(--veil-rgb),.06)) !important; background:linear-gradient(100deg, color-mix(in srgb, var(--rc) 14%, var(--secondary)) 0%, color-mix(in srgb, var(--rc) 3%, var(--secondary)) 58%, var(--secondary) 100%) !important; box-shadow:0 10px 20px -14px rgba(var(--shade-rgb),.6), inset 0 1px 0 rgba(255,255,255,.05);}
+            body:not(.desktop-view-active) .swipe-row::before {content:""; position:absolute; left:8px; top:12px; bottom:12px; width:4px; border-radius:4px; background:var(--rc);}
+            body:not(.desktop-view-active) .swipe-row .f-pill {flex:none; width:82px; display:flex; flex-direction:column; align-items:stretch; gap:4px;}
+            body:not(.desktop-view-active) .swipe-row .compact-transporter {display:block; text-align:center; box-sizing:border-box; padding:7px 2px; border-radius:11px; font-size:10px; letter-spacing:.2px; box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 6px 12px -8px var(--rc);}
+            body:not(.desktop-view-active) .swipe-row .compact-transporter::before {display:none !important;}
+            body:not(.desktop-view-active) .swipe-row .f-ddt {font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:700; color:var(--text-dim); text-align:center;}
+            body:not(.desktop-view-active) .swipe-row > button {flex:none; width:30px !important; height:30px !important; border-radius:11px !important; border:0 !important; background:rgba(var(--shade-rgb),.25) !important;}
+            body:not(.desktop-view-active) .f5-col {flex:1; min-width:0;}
+            body:not(.desktop-view-active) .f5-col.t {padding-left:4px;}
+            body:not(.desktop-view-active) .f5-col b {display:flex; align-items:center; gap:4px; font-size:13px; font-weight:700; color:var(--text); line-height:1.15; overflow:hidden;}
+            body:not(.desktop-view-active) .f5-col b::before {content:""; flex:none; width:10px; height:10px; border-radius:50%; box-sizing:border-box; border:3px solid var(--accent); background:var(--secondary);}
+            body:not(.desktop-view-active) .f5-col.t b::before {border-color:var(--success); background:var(--success);}
+            body:not(.desktop-view-active) .f5-col em {display:block; max-width:100%; margin-top:4px; font-style:normal; font-size:11px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+            body:not(.desktop-view-active) .f5-col.f em {color:var(--accent);}
+            body:not(.desktop-view-active) .f5-col.t em {color:var(--success);}
+            body:not(.desktop-view-active) .f5-sep {flex:none; width:1px; align-self:stretch; margin:2px 0; background:rgba(var(--veil-rgb),.1);}
+            body:not(.desktop-view-active) .section.ph-old {display:none !important;}
+            body:not(.desktop-view-active) .section.ph-tools {display:block; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important;}
+            body:not(.desktop-view-active) .ic-row {display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:12px 6px 10px; border-radius:20px; background:var(--secondary); border:1px solid rgba(var(--veil-rgb),.09);}
+            body:not(.desktop-view-active) .ic {display:flex; flex-direction:column; align-items:center; gap:7px; background:none; border:0; font:700 11px/1.15 'Outfit',sans-serif; text-align:center; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+            body:not(.desktop-view-active) .ic i {width:46px; height:46px; border-radius:15px; display:flex; align-items:center; justify-content:center; font-style:normal; background:rgba(var(--tc),.20); color:rgb(var(--tc)); box-shadow:inset 0 0 0 1px rgba(var(--tc),.35);}
+            body:not(.desktop-view-active) .ic {color:rgb(var(--tc));}
+            body:not(.desktop-view-active) .ic svg {width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
+            body:not(.desktop-view-active) .ic.c-ex {--tc:var(--tcx);}
+            body:not(.desktop-view-active) .ic.c-im {--tc:var(--tci);}
+            body:not(.desktop-view-active) .ic.c-nw {--tc:var(--tcn);}
+            body:not(.desktop-view-active) .ic.c-ar {--tc:var(--tca);}
+            body:not(.desktop-view-active) .del-link {display:flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 2px; padding:8px 12px; background:none; border:0; color:rgb(var(--dlc)); font:700 12px 'Outfit',sans-serif; cursor:pointer;}
+            body:not(.desktop-view-active) .del-link svg {width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
+            body:not(.desktop-view-active) .section.ph-imp {display:none;}
+            body:not(.desktop-view-active) .section.ph-imp.ph-open {display:block;}
+            body:not(.desktop-view-active) .container {padding-bottom:14px !important;}
+            body:not(.desktop-view-active) .archive-section {margin:0 12px 18px !important; background:none !important; border:0 !important; box-shadow:none !important; padding:0 !important;}
+            body:not(.desktop-view-active) .archive-section #arcOpenBtn {display:none !important;}
+            body:not(.desktop-view-active) .archive-section #archiveToggleBtn {border-radius:16px !important; padding:13px 16px !important; background:var(--secondary) !important; border:1px solid rgba(var(--veil-rgb),.09) !important;}
+        }
+    </style>
 </head>
 <body>
 
@@ -5054,12 +5251,6 @@
                     placeholder="Cerca trasportatore, data, luogo..."
                     oninput="handleSearch()">
                 <button class="clear-search" id="clearSearch" onclick="clearSearch()">✕</button>
-                <!-- BOTTONE RICERCA ARCHIVIO -->
-                <button id="archSearchBtn" onclick="toggleArchiveSearch()"
-                    title="Ricerca avanzata nell'archivio"
-                    style="flex-shrink:0;padding:6px 10px;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:8px;color:var(--ac-blue);font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.15s;margin-left:4px;">
-                    🗂
-                </button>
             </div>
 
             <div class="filter-search-row filter-client-row" id="srchRowM">
@@ -5069,74 +5260,6 @@
                 <button class="clear-search" style="display:block;" onclick="srchClearTyped()">✕</button>
             </div>
 
-            <!-- PANNELLO RICERCA ARCHIVIO -->
-            <div id="archiveSearchPanel" style="display:none;border-top:1px solid rgba(96,165,250,0.15);background:rgba(96,165,250,0.03);padding:14px 12px;display:none;flex-direction:column;gap:12px;">
-
-                <!-- Dove cercare -->
-                <div>
-                    <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(var(--veil-rgb),0.25);margin-bottom:7px;">Dove cercare</div>
-                    <div style="display:flex;gap:6px;">
-                        <button id="ascopeCurrent" onclick="asToggleScope('current')"
-                            style="flex:1;padding:7px 8px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid rgba(96,165,250,0.4);background:rgba(96,165,250,0.12);color:var(--ac-blue);transition:all 0.15s;">
-                            ✓ Settimana corrente
-                        </button>
-                        <button id="ascopeArchive" onclick="asToggleScope('archive')"
-                            style="flex:1;padding:7px 8px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid rgba(96,165,250,0.4);background:rgba(96,165,250,0.12);color:var(--ac-blue);transition:all 0.15s;">
-                            ✓ Archivio storico
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Periodo rapido -->
-                <div>
-                    <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(var(--veil-rgb),0.25);margin-bottom:7px;">Periodo</div>
-                    <div style="display:flex;gap:5px;flex-wrap:wrap;" id="asPeriodBtns">
-                        <button onclick="asSetPeriod('all')"     data-period="all"      style="padding:4px 11px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all 0.15s;">Tutto</button>
-                        <button onclick="asSetPeriod('week')"    data-period="week"     style="padding:4px 11px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all 0.15s;">Ultima sett.</button>
-                        <button onclick="asSetPeriod('month')"   data-period="month"    style="padding:4px 11px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all 0.15s;">Ultimo mese</button>
-                        <button onclick="asSetPeriod('3months')" data-period="3months"  style="padding:4px 11px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all 0.15s;">Ultimi 3 mesi</button>
-                        <button onclick="asSetPeriod('custom')"  data-period="custom"   style="padding:4px 11px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all 0.15s;">Personalizzato</button>
-                    </div>
-                </div>
-
-                <!-- Date personalizzate -->
-                <div id="asCustomDates" style="display:none;gap:8px;align-items:center;">
-                    <div style="flex:1;">
-                        <div style="font-size:8px;font-weight:700;color:rgba(var(--veil-rgb),0.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Da</div>
-                        <input type="date" id="asDateFrom" style="width:100%;padding:7px 10px;background:rgba(var(--veil-rgb),0.04);border:1px solid rgba(var(--veil-rgb),0.1);border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;outline:none;">
-                    </div>
-                    <div style="color:rgba(var(--veil-rgb),0.2);font-size:16px;flex-shrink:0;padding-top:18px;">→</div>
-                    <div style="flex:1;">
-                        <div style="font-size:8px;font-weight:700;color:rgba(var(--veil-rgb),0.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">A</div>
-                        <input type="date" id="asDateTo" style="width:100%;padding:7px 10px;background:rgba(var(--veil-rgb),0.04);border:1px solid rgba(var(--veil-rgb),0.1);border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;outline:none;">
-                    </div>
-                </div>
-
-                <!-- Filtro trasportatore -->
-                <div>
-                    <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(var(--veil-rgb),0.25);margin-bottom:7px;">Trasportatore (opzionale)</div>
-                    <div id="asTraspBtns" style="display:flex;gap:5px;flex-wrap:wrap;">
-                        <button onclick="asSetTrasp('')" data-trasp="" style="padding:4px 10px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">Tutti</button>
-                    </div>
-                </div>
-
-                <!-- Filtro prodotto -->
-                <div>
-                    <div style="font-size:8px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(var(--veil-rgb),0.25);margin-bottom:7px;">Prodotto (opzionale)</div>
-                    <div id="asProdBtns" style="display:flex;gap:5px;flex-wrap:wrap;">
-                        <button onclick="asSetProd('')" data-prod="" style="padding:4px 10px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:var(--ac-blue);transition:all 0.15s;">Tutti</button>
-                    </div>
-                </div>
-
-                <!-- Bottone cerca -->
-                <button onclick="runArchiveSearch()"
-                    style="width:100%;padding:11px;background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;border-radius:10px;color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,0.3);">
-                    🔍 Cerca nell'archivio
-                </button>
-            </div>
-
-            <!-- RISULTATI RICERCA ARCHIVIO -->
-            <div id="archiveSearchResults" style="display:none;border-top:1px solid rgba(var(--veil-rgb),0.05);max-height:60vh;overflow-y:auto;"></div>
 
             <div class="filter-panel-row">
                 <button id="btnFilterToday" onclick="filterToggleToday()" class="filter-btn-today">📅 Solo Oggi</button>
@@ -5336,8 +5459,18 @@
                 </div>
             </form>
         </div>
+        <!-- v105: strumenti del telefono (sugli schermi larghi restano i pulsanti di sempre qui sotto) -->
+        <div class="section ph-tools" id="phTools">
+            <div class="ic-row">
+                <button type="button" class="ic c-ex" onclick="downloadExcel()"><i><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg></i>Esporta<br>Excel</button>
+                <button type="button" class="ic c-im" id="phImpBtn" onclick="phToggleImport()" aria-expanded="false" aria-controls="importSection"><i><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L8 7m4-4l4 4M4 20h16"/></svg></i>Importa<br>Excel</button>
+                <button type="button" class="ic c-nw" onclick="showNewWeekModalV2()"><i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 13v5M9.5 15.5h5"/></svg></i>Nuova<br>settimana</button>
+                <button type="button" class="ic c-ar" onclick="arcOpen()"><i><svg viewBox="0 0 24 24"><path d="M3 7h18v4H3zM5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8M10 15h4"/></svg></i>Archivio<br>viaggi</button>
+            </div>
+            <button type="button" class="del-link" onclick="clearData()"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg> Cancella tutti i viaggi</button>
+        </div>
         <!-- Actions -->
-        <div class="section" style="padding:16px 18px;">
+        <div class="section ph-old" style="padding:16px 18px;">
             <!-- Salva / Carica: ora nell'header (v80) -->
             <!-- Seconda riga: Excel + Nuova sett -->
             <div style="display:flex;gap:8px;margin-bottom:10px;">
@@ -5370,7 +5503,7 @@
         </div>
 
         <!-- Import Excel -->
-        <div class="section">
+        <div class="section ph-imp" id="importSection">
             <div class="section-title">📤 Importa da Excel</div>
 
             <div class="import-mode-row">
@@ -5834,7 +5967,16 @@
         };
         let importMode = 'add';
         // Helper sicuro: imposta textContent solo se l'elemento esiste
-        function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
+        function _weekShort105(t) {
+            var M = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'], s = String(t || '');
+            var m = s.match(/(?:Settimana\s+(\d{1,2})(?:\s*\/\s*\d{4})?\s*)?\(?\s*Lun\.?\s*(\d{1,2})\/(\d{1,2})\s*(?:-|\u2013|\u2014)\s*Ven\.?\s*(\d{1,2})\/(\d{1,2})\s*\)?/i);
+            if (!m) return s;
+            var d1 = +m[2], m1 = +m[3], d2 = +m[4], m2 = +m[5];
+            if (m1 < 1 || m1 > 12 || m2 < 1 || m2 > 12) return s;
+            var range = (m1 === m2) ? (d1 + '\u2013' + d2 + ' ' + M[m2 - 1]) : (d1 + ' ' + M[m1 - 1] + ' \u2013 ' + d2 + ' ' + M[m2 - 1]);
+            return (m[1] ? 'Sett. ' + m[1] + ' \u00b7 ' : '') + range;
+        }
+        function setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = (id === 'weekInfo' && _phoneUi()) ? _weekShort105(value) : value; }
         let weekTitle = 'Lun 23/03 — Ven 27/03';
         
         
@@ -7135,6 +7277,14 @@
                 var dotsEl = document.getElementById('wseg-dots-' + i);
                 if (!seg) continue;
 
+                // v105: numero del giorno nella tessera (visibile solo sul telefono)
+                try {
+                    var wd = seg.querySelector('.w-date');
+                    if (!wd) { wd = document.createElement('span'); wd.className = 'w-date'; seg.insertBefore(wd, cntEl || null); }
+                    var mon = _mtCurrentWeekMonday();
+                    wd.textContent = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i - 1).getDate();
+                } catch (eW) {}
+
                 // Contatore
                 if (cntEl) { var n = countByDay[i] || 0; cntEl.textContent = n > 0 ? n : ''; }
 
@@ -7863,6 +8013,67 @@
             return card;
         }
 
+        // ═══ v105 — telefono: nuovo aspetto di Rapida (< 1000px). Sopra i 1000px resta il markup di sempre. ═══
+        function _phoneUi() {
+            try { return window.matchMedia('(max-width: 999px)').matches; } catch (e) { return (window.innerWidth || 0) < 1000; }
+        }
+        var _daConfOpen105 = false;
+        var _MESI105 = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+        function _daConfBannerPhone(n, rows) {
+            return '<div id="daConfBanner" style="background:rgba(224,192,90,0.07);border:1px solid rgba(224,192,90,0.28);overflow:hidden;">'
+                + '<div class="dc-hd" onclick="_toggleDaConfBanner()">'
+                + '<span style="font-size:15px;">⚠️</span>'
+                + '<span class="dc-t">' + n + ' da confermare</span>'
+                + '<button type="button" class="dc-btn" onclick="event.stopPropagation();_confirmAllCompact()">✓ Conferma tutti</button>'
+                + '<span id="daConfArr" class="dc-arr" style="display:inline-block;transition:transform 0.2s;' + (_daConfOpen105 ? '' : 'transform:rotate(-90deg);') + '">▾</span>'
+                + '</div>'
+                + '<div id="daConfBody" style="padding:0 8px 8px;' + (_daConfOpen105 ? '' : 'display:none;') + '">' + rows + '</div>'
+                + '</div>';
+        }
+        function _rowPhone105(trip, idx, colorClass, conf) {
+            var key = colorClass.replace('transporter-', '');
+            var pa = String(trip.partenza || ''), ar = String(trip.arrivo || '');
+            var fromName = pa.split('(')[0].trim(), fromCode = (pa.match(/\(([^)]+)\)/) || [])[1] || '';
+            var toName = ar.split('(')[0].trim(), toCode = (ar.match(/\(([^)]+)\)/) || [])[1] || '';
+            var label = String(trip.trasportatore || '').replace(/CIRIONI\s*(TRASP\.?)?/gi, 'CIRIONI').trim();
+            return '<div class="swipe-row-wrap" style="position:relative;margin-bottom:6px;border-radius:10px;overflow:hidden;">'
+                + '<div class="swipe-delete-bg" style="position:absolute;inset:0;background:linear-gradient(90deg,#dc2626,#ef4444);display:flex;align-items:center;padding-left:18px;border-radius:10px;"><span style="font-size:13px;font-weight:800;color:white;">🗑 Elimina</span></div>'
+                + '<div class="swipe-row" data-idx="' + idx + '" onclick="editTrip(' + idx + ')" style="--rc:var(--t-' + key + '-fill);cursor:pointer;z-index:1;transform:translateX(0);transition:transform 0.28s cubic-bezier(0.25,1.0,0.5,1);">'
+                + '<div class="f-pill"><span class="compact-transporter ' + colorClass + '">' + _escH(label) + '</span>' + conf + (trip.ddt ? '<div class="f-ddt">DDT ' + _escH(trip.ddt) + '</div>' : '') + '</div>'
+                + '<div class="f5-col f"><b title="' + _escH(pa) + '">' + _escH(fromName) + '</b>' + (fromCode ? '<em>' + _escH(fromCode) + '</em>' : '') + '</div>'
+                + '<span class="f5-sep"></span>'
+                + '<div class="f5-col t"><b title="' + _escH(ar) + '">' + _escH(toName) + '</b>' + (toCode ? '<em>' + _escH(toCode) + '</em>' : '') + '</div>'
+                + '<button type="button" onclick="mobileDup(' + idx + ', event)" title="Duplica su altri giorni" style="flex-shrink:0;cursor:pointer;color:var(--text-soft);font-size:17px;line-height:1;">⧉</button>'
+                + '</div></div>';
+        }
+        // Stato Drive: sul telefono sta in una riga sotto la testata, sugli schermi larghi resta dov'era
+        function _placeDriveStatus() {
+            var ds = document.getElementById('driveStatus'), tb = document.querySelector('.top-bar'), tr = document.querySelector('.top-bar-right');
+            if (!ds || !tb || !tr || !tb.parentNode) return;
+            if (_phoneUi()) {
+                if (ds.parentNode !== tb.parentNode) { ds.className = 'drive-strip'; tb.parentNode.insertBefore(ds, tb.nextSibling); }
+            } else if (ds.parentNode !== tr) { ds.className = ''; tr.appendChild(ds); }
+        }
+        // Importa Excel: il pannello si apre dal pulsante «Importa Excel» degli strumenti
+        function phToggleImport() {
+            var sec = document.getElementById('importSection'), btn = document.getElementById('phImpBtn');
+            if (!sec) return;
+            var open = sec.classList.toggle('ph-open');
+            if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) { try { sec.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }
+        }
+        (function () {
+            var mq; try { mq = window.matchMedia('(max-width: 999px)'); } catch (e) { return; }
+            function onChange() {
+                _placeDriveStatus();
+                try { setText('weekInfo', weekTitle); } catch (e0) {}
+                try { var cv = document.getElementById('compactView'); if (cv && cv.classList.contains('active')) renderCompactView(); } catch (e1) {}
+                try { updateWeekProgress(); } catch (e2) {}
+            }
+            if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _placeDriveStatus); else _placeDriveStatus();
+        })();
+
         // Toggle banner "Da confermare"
         function _toggleDaConfBanner() {
             var body = document.getElementById('daConfBody');
@@ -7870,6 +8081,7 @@
             if (!body) return;
             var isOpen = body.style.display !== 'none';
             body.style.display = isOpen ? 'none' : '';
+            _daConfOpen105 = !isOpen;
             if (arr) arr.style.transform = isOpen ? 'rotate(-90deg)' : '';
         }
 
@@ -7922,7 +8134,7 @@
         function renderCompactView() {
             const container = document.getElementById('compactBody');
             if (!container) return;
-            const hasFilters = searchQuery || (_srchTypedQ || '').trim() || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo;
+            const hasFilters = searchQuery || (_srchTypedQ || '').trim() || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo || filterState.giorno;
             const displayTrips = hasFilters ? filteredTrips : trips;
 
             if (displayTrips.length === 0) {
@@ -7947,6 +8159,7 @@
             // ── Banner "Da confermare" — cerca sempre in trips[], non nel subset filtrato
             const toConfirm = trips.filter(t => t.daConfermare);
             let html = '';
+            var PH = _phoneUi(), todayIso = _isoDate(new Date());
 
             if (toConfirm.length > 0) {
                 var dayNames2 = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
@@ -7993,6 +8206,7 @@
                         + '</div>';
                 }).join('');
 
+                if (PH) { html += _daConfBannerPhone(toConfirm.length, confRows); } else
                 html += '<div id="daConfBanner" style="background:rgba(224,192,90,0.07);'
                     + 'border:1px solid rgba(224,192,90,0.28);border-radius:13px;'
                     + 'overflow:hidden;margin-bottom:14px;">'
@@ -8027,6 +8241,11 @@
                 const dl = dayFull[d.getDay()];
 
                 // Header giorno
+                if (PH) {
+                    html += '<div class="day-group-header ' + dk + (date === todayIso ? ' oggi' : '') + '" style="margin-top:' + (html === '' ? '4px' : '18px') + ';">'
+                        + '<div class="g-band"><div class="g-l"><b>' + dl + '</b><span class="g-date">' + d.getDate() + ' ' + _MESI105[d.getMonth()] + '</span><span class="day-badge-num" style="display:none;">' + d.getDate() + '</span></div>'
+                        + '<em class="g-chip">' + dayTrips.length + ' ' + _pv(dayTrips.length) + '</em></div></div>';
+                } else {
                 html += '<div class="day-group-header ' + dk + '" style="margin-top:' + (html === '' ? '4px' : '18px') + ';">';
                 html += '<div class="day-group-left">';
                 html += '<div class="day-badge">';
@@ -8038,6 +8257,7 @@
                 html += '<div class="day-group-separator"></div>';
                 html += '<div class="day-group-count">' + dayTrips.length + ' ' + _pv(dayTrips.length) + '</div>';
                 html += '</div></div></div>';
+                }
 
                 // Righe viaggi
                 dayTrips.forEach(trip => {
@@ -8060,6 +8280,7 @@
                           + 'title="Tocca per confermare">⚠ conf.</span>'
                         : '';
 
+                    if (PH) { html += _rowPhone105(trip, actualIndex, colorClass, conf); return; }
                     // Wrapper swipe-to-delete
                     html += '<div class="swipe-row-wrap" style="position:relative;margin-bottom:6px;border-radius:10px;overflow:hidden;">';
                     html += '<div class="swipe-delete-bg" style="position:absolute;inset:0;background:linear-gradient(90deg,#dc2626,#ef4444);display:flex;align-items:center;padding-left:18px;border-radius:10px;">';
@@ -8407,6 +8628,7 @@
         function renderDesktopView() {
             const container = document.getElementById('desktopBody');
             if (!container) return;
+            _vvReset();      // v104: classifica codici più frequenti ricalcolata a ogni disegno
             const _srchPrevFocus = _srchCaptureFocus();   // v74: la ricerca non perde il cursore se la tabella si ridisegna
             _srchRefreshLists();
 
@@ -8488,7 +8710,7 @@
 
                 var cardBg = isToday ? 'var(--surface-2)' : 'var(--surface-1)';                 // v75: niente più riga gialla per "da confermare"
                 var statusBorder = 'rgba(var(--veil-rgb),0.06)';
-                return '<tr class="pc-trip" style="background:' + cardBg + ';border-left:4px solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
+                return '<tr class="pc-trip' + (isToday ? ' pc-today' : '') + '" style="background:' + cardBg + ';border-left:4px solid ' + statusBorder + ';transition:background 0.1s;" id="drow-' + realIdx + '"' +
                     ' onfocusin="this.style.outline=\'1px solid rgba(232,98,63,0.35)\'"' +
                     ' onfocusout="this.style.outline=\'\'">' +
 
@@ -8509,7 +8731,7 @@
                     '</td>' +
 
                     // TRASPORTATORE — pillola piena colorata, editabile
-                    '<td class="pc-c-trasp" style="padding:9px 8px;width:150px;">' +
+                    '<td class="pc-c-trasp tk-' + transporterKey + '" style="padding:9px 8px;width:150px;">' +
                     '<input type="text" value="' + _escH(trip.trasportatore||'') + '" list="dtransp"' +
                     ' onchange="desktopSetField(' + realIdx + ',\'trasportatore\',this.value);"' +
                     ' placeholder="Trasp."' +
@@ -8521,12 +8743,12 @@
 
                     // PARTENZA — sotto-etichette "Fornitore" / "Località" (opzione C + E1)
                     '<td class="pc-c-from" style="padding:5px 6px;">' +
-                    '<div class="pc-loc" style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div class="pc-loc' + _vvCls(fromCode) + '" style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
                     '<div class="pc-loc-code" style="flex-shrink:0;width:118px;overflow:hidden;">' +
                     '<div class="pc-lab" style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-dim);text-transform:uppercase;">Fornitore</div>' +
                     '<div class="pc-loc-coderow" style="display:flex;align-items:flex-start;gap:6px;margin-top:4px;">' +
-                    '<span class="pc-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;background:' + (fromCode ? _locationCodeColorPC(fromCode).bd : 'var(--text-muted)') + ';"></span>' +
-                    '<span class="pc-code" title="' + (fromCode||'').replace(/"/g,'&quot;') + '" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;word-break:break-word;color:' + (fromCode ? _locationCodeColorPC(fromCode).bd : 'var(--text-dim)') + ';">' + (fromCode ? (fromCode.length > 22 ? _pcShortName(fromCode, 22) : fromCode) : '—') + '</span>' +
+                    '<span class="pc-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;background:transparent;"></span>' +
+                    '<span class="pc-code" title="' + (fromCode||'').replace(/"/g,'&quot;') + '" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;word-break:break-word;color:' + (fromCode ? 'var(--text)' : 'var(--text-dim)') + ';">' + (fromCode ? (fromCode.length > 22 ? _pcShortName(fromCode, 22) : fromCode) : '—') + '</span>' +
                     '</div>' +
                     '</div>' +
                     '<div class="pc-loc-sep" style="width:2px;background:rgba(90,126,232,0.4);flex-shrink:0;border-radius:1px;"></div>' +
@@ -8548,12 +8770,12 @@
 
                     // ARRIVO — sotto-etichette "Cliente" / "Località" (opzione C + E1)
                     '<td class="pc-c-to" style="padding:5px 6px;">' +
-                    '<div class="pc-loc" style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
+                    '<div class="pc-loc' + _vvCls(toCode) + '" style="display:flex;align-items:stretch;gap:10px;background:rgba(var(--veil-rgb),0.03);border:1px solid rgba(var(--veil-rgb),0.08);border-radius:6px;padding:7px 11px;min-width:220px;">' +
                     '<div class="pc-loc-code" style="flex-shrink:0;width:118px;overflow:hidden;">' +
                     '<div class="pc-lab" style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--text-dim);text-transform:uppercase;">Cliente</div>' +
                     '<div class="pc-loc-coderow" style="display:flex;align-items:flex-start;gap:6px;margin-top:4px;">' +
-                    '<span class="pc-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;background:' + (toCode ? _locationCodeColorPC(toCode).bd : 'var(--text-muted)') + ';"></span>' +
-                    '<span class="pc-code" title="' + (toCode||'').replace(/"/g,'&quot;') + '" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;word-break:break-word;color:' + (toCode ? _locationCodeColorPC(toCode).bd : 'var(--text-dim)') + ';">' + (toCode ? (toCode.length > 22 ? _pcShortName(toCode, 22) : toCode) : '—') + '</span>' +
+                    '<span class="pc-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;background:transparent;"></span>' +
+                    '<span class="pc-code" title="' + (toCode||'').replace(/"/g,'&quot;') + '" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;word-break:break-word;color:' + (toCode ? 'var(--text)' : 'var(--text-dim)') + ';">' + (toCode ? (toCode.length > 22 ? _pcShortName(toCode, 22) : toCode) : '—') + '</span>' +
                     '</div>' +
                     '</div>' +
                     '<div class="pc-loc-sep" style="width:2px;background:rgba(217,113,61,0.4);flex-shrink:0;border-radius:1px;"></div>' +
@@ -8565,7 +8787,7 @@
                     ' title="' + toName.replace(/"/g,'&quot;') + '"' +
                     ' onchange="var full=this.value;desktopSetField(' + realIdx + ',\'arrivo\',full);"' +
                     ' placeholder="Arrivo..."' +
-                    ' class="pc-loc-in" style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:var(--success);font-size:16px;"' +
+                    ' class="pc-loc-in" style="border:none;background:transparent;padding:0;margin-top:2px;outline:none;width:100%;font-family:\'Outfit\',sans-serif;font-weight:700;color:var(--text);font-size:16px;"' +
                     ' onfocus="this.value=this.dataset.fullname||this.value;this.closest(\'tr\').style.outline=\'1px solid rgba(232,98,63,0.4)\';"' +
                     ' onblur="this.value=_pcShortName(this.value);this.closest(\'tr\').style.outline=\'\';"' +
                     ' onkeydown="' + tabNav + '">' +
@@ -9020,6 +9242,57 @@
         function _locationCodeColorPC(code, theme) {
             if (!code) return null;
             return _codePal(code, theme);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        //  v104 — Identità visiva dei codici (vista PC): solo i fornitori / clienti più frequenti hanno una tinta, tutti gli altri restano neutri.
+        //  Si contano i viaggi per codice (settimana, prossima settimana e archivio), separatamente per ruolo (partenza = fornitore, arrivo = cliente);
+        //  i primi 6 per ruolo (almeno 2 viaggi) prendono le tinte nell'ordine di classifica. «ROSSI» e «ROSSI Srl» contano come lo stesso codice. ES5.
+        // ═══════════════════════════════════════════════════════════════════
+        var _VV_TOPN = 6, _VV_MINN = 2, _VV_SLOTS = 12, _vvMap = null, _vvArcSig = -1, _vvArcCnt = null;
+        function _vvNorm(c) { return String(c || '').toUpperCase().replace(/\s+(S\.?R\.?L\.?|S\.?P\.?A\.?|S\.?A\.?S\.?|S\.?N\.?C\.?)\s*$/, '').replace(/^\s+|\s+$/g, ''); }
+        function _vvArchCounts() {      // l'archivio si rilegge solo se è cambiato (lunghezza del testo salvato)
+            var raw = '', arc = [], i, j, c, tr, cnt = { f: {}, a: {} };
+            try { raw = localStorage.getItem('weekArchive') || ''; } catch (e) { raw = ''; }
+            if (_vvArcCnt && _vvArcSig === raw.length) return _vvArcCnt;
+            try { arc = raw ? JSON.parse(raw) : []; } catch (e2) { arc = []; }
+            if (!Array.isArray(arc)) arc = [];
+            for (i = 0; i < arc.length; i++) {
+                tr = arc[i] && arc[i].trips;
+                if (!Array.isArray(tr)) continue;
+                for (j = 0; j < tr.length; j++) {
+                    if (!tr[j]) continue;
+                    c = _vvNorm(_codeOf(tr[j].partenza)); if (c) cnt.f[c] = (cnt.f[c] || 0) + 1;
+                    c = _vvNorm(_codeOf(tr[j].arrivo)); if (c) cnt.a[c] = (cnt.a[c] || 0) + 1;
+                }
+            }
+            _vvArcSig = raw.length; _vvArcCnt = cnt;
+            return cnt;
+        }
+        function _vvBuild() {
+            var arc = _vvArchCounts(), cnt = { f: {}, a: {} }, role, k, i, c;
+            for (role in arc) for (k in arc[role]) cnt[role][k] = arc[role][k];
+            var all = [].concat(typeof trips !== 'undefined' ? trips : [], typeof tripsNext !== 'undefined' ? tripsNext : []);
+            for (i = 0; i < all.length; i++) {
+                if (!all[i]) continue;
+                c = _vvNorm(_codeOf(all[i].partenza)); if (c) cnt.f[c] = (cnt.f[c] || 0) + 1;
+                c = _vvNorm(_codeOf(all[i].arrivo)); if (c) cnt.a[c] = (cnt.a[c] || 0) + 1;
+            }
+            var list = [], map = {}, taken = { f: 0, a: 0 }, idx = 0, j;
+            for (role in cnt) for (k in cnt[role]) if (cnt[role][k] >= _VV_MINN) list.push({ r: role, c: k, n: cnt[role][k] });
+            list.sort(function (x, y) { return y.n - x.n || (x.r < y.r ? -1 : x.r > y.r ? 1 : 0) || (x.c < y.c ? -1 : 1); });
+            for (j = 0; j < list.length; j++) {
+                if (taken[list[j].r] >= _VV_TOPN || (list[j].c in map)) continue;
+                map[list[j].c] = idx % _VV_SLOTS; idx++; taken[list[j].r]++;
+            }
+            return map;
+        }
+        function _vvReset() { _vvMap = null; }
+        function _vvCls(code) {      // ' vv vcN' se il codice è tra i più frequenti, altrimenti ''
+            if (!code) return '';
+            if (!_vvMap) _vvMap = _vvBuild();
+            var n = _vvMap[_vvNorm(code)];
+            return (n === undefined) ? '' : ' vv vc' + n;
         }
 
         // Badge HTML per codice azienda
@@ -9538,310 +9811,6 @@
             });
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  RICERCA AVANZATA ARCHIVIO
-        // ═══════════════════════════════════════════════════════════════
-
-        var _asOpen        = false;
-        var _asScope       = {current: true, archive: true};
-        var _asPeriod      = 'all';
-        var _asTrasp       = '';
-        var _asProd        = '';
-
-        function toggleArchiveSearch() {
-            _asOpen = !_asOpen;
-            var panel  = document.getElementById('archiveSearchPanel');
-            var btn    = document.getElementById('archSearchBtn');
-            var resEl  = document.getElementById('archiveSearchResults');
-            if (!panel) return;
-            if (_asOpen) {
-                panel.style.display  = 'flex';
-                btn.style.background = 'rgba(96,165,250,0.2)';
-                btn.style.borderColor= 'rgba(96,165,250,0.55)';
-                btn.textContent      = '🗂 ▲';
-                _asTrasp = '';
-                _asProd  = '';
-                _asRenderTraspBtns();
-                _asApplyPeriodStyle('all');
-            } else {
-                panel.style.display  = 'none';
-                if (resEl) resEl.style.display = 'none';
-                btn.style.background = 'rgba(96,165,250,0.08)';
-                btn.style.borderColor= 'rgba(96,165,250,0.2)';
-                btn.textContent      = '🗂';
-            }
-        }
-
-        function asToggleScope(which) {
-            _asScope[which] = !_asScope[which];
-            var btn = document.getElementById('ascope' + (which === 'current' ? 'Current' : 'Archive'));
-            if (!btn) return;
-            if (_asScope[which]) {
-                btn.style.background   = 'rgba(96,165,250,0.12)';
-                btn.style.borderColor  = 'rgba(96,165,250,0.4)';
-                btn.style.color        = 'var(--ac-blue)';
-                btn.textContent        = '✓ ' + (which === 'current' ? 'Settimana corrente' : 'Archivio storico');
-            } else {
-                btn.style.background  = 'transparent';
-                btn.style.borderColor = 'rgba(var(--veil-rgb),0.08)';
-                btn.style.color       = 'rgba(var(--veil-rgb),0.3)';
-                btn.textContent       = (which === 'current' ? 'Settimana corrente' : 'Archivio storico');
-            }
-        }
-
-        function asSetPeriod(period) {
-            _asPeriod = period;
-            _asApplyPeriodStyle(period);
-            var customEl = document.getElementById('asCustomDates');
-            if (customEl) customEl.style.display = (period === 'custom') ? 'flex' : 'none';
-        }
-
-        function _asApplyPeriodStyle(active) {
-            var container = document.getElementById('asPeriodBtns');
-            if (!container) return;
-            container.querySelectorAll('button').forEach(function(b) {
-                if (b.dataset.period === active) {
-                    b.style.background   = 'rgba(167,139,250,0.15)';
-                    b.style.borderColor  = 'rgba(167,139,250,0.4)';
-                    b.style.color        = 'var(--ac-violet)';
-                } else {
-                    b.style.background  = 'transparent';
-                    b.style.borderColor = 'rgba(var(--veil-rgb),0.08)';
-                    b.style.color       = 'rgba(var(--veil-rgb),0.3)';
-                }
-            });
-        }
-
-        function asSetTrasp(name) {
-            _asTrasp = name;
-            var container = document.getElementById('asTraspBtns');
-            if (!container) return;
-            container.querySelectorAll('button').forEach(function(b) {
-                var isActive = b.dataset.trasp === name;
-                b.style.background  = isActive ? 'rgba(96,165,250,0.15)'  : 'rgba(var(--veil-rgb),0.05)';
-                b.style.borderColor = isActive ? 'rgba(96,165,250,0.45)'   : 'rgba(var(--veil-rgb),0.1)';
-                b.style.color       = isActive ? 'var(--ac-blue)'                  : 'rgba(var(--veil-rgb),0.5)';
-            });
-        }
-
-        function asSetProd(name) {
-            _asProd = name;
-            var container = document.getElementById('asProdBtns');
-            if (!container) return;
-            container.querySelectorAll('button').forEach(function(b) {
-                var isActive = b.dataset.prod === name;
-                b.style.background  = isActive ? 'rgba(167,139,250,0.15)'  : 'rgba(var(--veil-rgb),0.05)';
-                b.style.borderColor = isActive ? 'rgba(167,139,250,0.45)'   : 'rgba(var(--veil-rgb),0.1)';
-                b.style.color       = isActive ? 'var(--ac-violet)'                   : 'rgba(var(--veil-rgb),0.5)';
-            });
-        }
-
-        function _asRenderTraspBtns() {
-            var container = document.getElementById('asTraspBtns');
-            var prodContainer = document.getElementById('asProdBtns');
-            if (!container) return;
-            // Raccoglie tutti i trasportatori e prodotti da archivio + correnti
-            var allT = [], allP = [];
-            trips.forEach(function(t) {
-                if (t.trasportatore && allT.indexOf(t.trasportatore) === -1) allT.push(t.trasportatore);
-                if (t.prodotto && allP.indexOf(t.prodotto) === -1) allP.push(t.prodotto);
-            });
-            try {
-                var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
-                arch.forEach(function(w) {
-                    if (w.trips) w.trips.forEach(function(t) {
-                        if (t.trasportatore && allT.indexOf(t.trasportatore) === -1) allT.push(t.trasportatore);
-                        if (t.prodotto && allP.indexOf(t.prodotto) === -1) allP.push(t.prodotto);
-                    });
-                });
-            } catch(e) {}
-            allT.sort(); allP.sort();
-
-            // Bottoni trasportatori
-            var htmlT = '<button onclick="asSetTrasp(\'\')" data-trasp="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:var(--ac-blue);transition:all 0.15s;">Tutti</button>';
-            allT.forEach(function(t) {
-                htmlT += '<button onclick="asSetTrasp(\'' + _escH(t.replace(/\\/g,"\\\\").replace(/'/g,"\\'")) + '\')" data-trasp="' + t.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + t + '</button>';
-            });
-            container.innerHTML = htmlT;
-
-            // Bottoni prodotti
-            if (prodContainer) {
-                var htmlP = '<button onclick="asSetProd(\'\')" data-prod="" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(96,165,250,0.45);background:rgba(96,165,250,0.15);color:var(--ac-blue);transition:all 0.15s;">Tutti</button>';
-                allP.forEach(function(p) {
-                    htmlP += '<button onclick="asSetProd(\'' + _escH(p.replace(/\\/g,"\\\\").replace(/'/g,"\\'")) + '\')" data-prod="' + p.replace(/"/g,'&quot;') + '" style="padding:4px 10px;border-radius:20px;font-family:\'Outfit\',sans-serif;font-size:10px;font-weight:800;cursor:pointer;border:1px solid rgba(var(--veil-rgb),0.1);background:rgba(var(--veil-rgb),0.05);color:rgba(var(--veil-rgb),0.5);transition:all 0.15s;">' + p + '</button>';
-                });
-                prodContainer.innerHTML = htmlP;
-            }
-        }
-
-        function _asGetDateRange() {
-            var now = new Date();
-            var from = null, to = null;
-            if (_asPeriod === 'week') {
-                from = new Date(now); from.setDate(now.getDate() - 7);
-            } else if (_asPeriod === 'month') {
-                from = new Date(now); from.setMonth(now.getMonth() - 1);
-            } else if (_asPeriod === '3months') {
-                from = new Date(now); from.setMonth(now.getMonth() - 3);
-            } else if (_asPeriod === 'custom') {
-                var df = document.getElementById('asDateFrom');
-                var dt = document.getElementById('asDateTo');
-                if (df && df.value) from = new Date(df.value + 'T00:00:00');
-                if (dt && dt.value) to   = new Date(dt.value + 'T23:59:59');
-            }
-            return {from: from, to: to || new Date()};
-        }
-
-        function runArchiveSearch() {
-            var query = (document.getElementById('searchInput') || {value:''}).value.trim().toLowerCase();
-            if (!query && !_asTrasp) { showStatus('⚠️ Inserisci un termine di ricerca', 'warning'); return; }
-
-            var range  = _asGetDateRange();
-            var results = []; // [{weekLabel, weekNum, trip}]
-
-            // Cerca nella settimana corrente
-            if (_asScope.current) {
-                trips.forEach(function(t) {
-                    if (_asMatchTrip(t, query, range)) {
-                        results.push({weekLabel: weekTitle || 'Settimana corrente', weekKey: 'current', trip: t});
-                    }
-                });
-            }
-
-            // Cerca nell'archivio
-            if (_asScope.archive) {
-                try {
-                    var arch = JSON.parse(localStorage.getItem('weekArchive') || '[]');
-                    arch.forEach(function(w) {
-                        if (!w.trips) return;
-                        w.trips.forEach(function(t) {
-                            if (_asMatchTrip(t, query, range)) {
-                                results.push({weekLabel: w.title || 'Settimana archiviata', weekKey: 'archive_' + (w.title||''), trip: t});
-                            }
-                        });
-                    });
-                } catch(e) {}
-            }
-
-            // Ordina per data discendente
-            results.sort(function(a,b) { return (b.trip.data||'') > (a.trip.data||'') ? 1 : -1; });
-
-            _asRenderResults(results, query);
-        }
-
-        function _asMatchTrip(t, query, range) {
-            // Filtro trasportatore
-            if (_asTrasp && (t.trasportatore||'').toLowerCase() !== _asTrasp.toLowerCase()) return false;
-            // Filtro prodotto
-            if (_asProd && (t.prodotto||'').toLowerCase() !== _asProd.toLowerCase()) return false;
-            // Filtro periodo
-            if (range.from && t.data) {
-                var d = new Date(t.data + 'T12:00:00');
-                if (d < range.from || d > range.to) return false;
-            }
-            // Filtro testo
-            if (!query) return true;
-            var haystack = [t.trasportatore, t.partenza, t.arrivo, t.prodotto, t.data, t.note, t.ddt ? 'ddt ' + t.ddt : ''].join(' ').toLowerCase();   // v74: anche il DDT
-            return haystack.indexOf(query) !== -1;
-        }
-
-        function _asRenderResults(results, query) {
-            var el = document.getElementById('archiveSearchResults');
-            if (!el) return;
-            el.style.display = 'block';
-
-            if (results.length === 0) {
-                el.innerHTML = '<div style="padding:36px 20px;text-align:center;color:rgba(var(--veil-rgb),0.2);">'
-                    + '<div style="font-size:32px;margin-bottom:10px;">🔍</div>'
-                    + '<div style="font-size:14px;font-weight:700;">Nessun viaggio trovato</div>'
-                    + '<div style="font-size:11px;margin-top:6px;color:rgba(var(--veil-rgb),0.12);">'
-                    + (query ? '"' + query + '"' : '') + ' nel periodo selezionato</div>'
-                    + '</div>';
-                return;
-            }
-
-            // Raggruppa per settimana
-            var groups = {};
-            var groupOrder = [];
-            results.forEach(function(r) {
-                if (!groups[r.weekKey]) {
-                    groups[r.weekKey] = {label: r.weekLabel, key: r.weekKey, items: []};
-                    groupOrder.push(r.weekKey);
-                }
-                groups[r.weekKey].items.push(r.trip);
-            });
-
-            var html = '<div style="padding:10px 14px 6px;display:flex;align-items:center;justify-content:space-between;">'
-                + '<span style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(var(--veil-rgb),0.3);">Risultati</span>'
-                + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;font-weight:800;color:var(--ac-blue);background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2);padding:2px 10px;border-radius:20px;">' + results.length + ' trovati</span>'
-                + '</div>';
-
-            groupOrder.forEach(function(key) {
-                var g = groups[key];
-                var isCurrent = key === 'current';
-                html += '<div style="border-top:1px solid rgba(var(--veil-rgb),0.05);">';
-                html += '<div style="padding:7px 14px;background:rgba(var(--veil-rgb),0.02);display:flex;align-items:center;gap:8px;">';
-                html += '<span style="font-size:10px;font-weight:700;color:rgba(var(--veil-rgb),0.3);">' + g.label + '</span>';
-                if (isCurrent) {
-                    html += '<span style="font-size:9px;font-weight:800;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);color:var(--ac-orange);padding:1px 7px;border-radius:10px;">● Corrente</span>';
-                } else {
-                    html += '<span style="font-size:9px;font-weight:800;background:rgba(var(--veil-rgb),0.04);border:1px solid rgba(var(--veil-rgb),0.08);color:rgba(var(--veil-rgb),0.25);padding:1px 7px;border-radius:10px;">Archivio</span>';
-                }
-                html += '</div>';
-
-                g.items.forEach(function(t) {
-                    var tColor = getTransporterColorVar(t.trasportatore);
-                    var fromName = (t.partenza||'').split('(')[0].trim();
-                    var fromCode = ((t.partenza||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
-                    var toName   = (t.arrivo||'').split('(')[0].trim();
-                    var toCode   = ((t.arrivo||'').match(/[(]([^)]+)[)]/)||[])[1]||'';
-                    var toImpact = toCode ? _impactColor(toCode) : null;
-
-                    // Evidenzia testo trovato
-                    function hl(str) {
-                        if (!query || !str) return str || '';
-                        var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
-                        return str.replace(re, '<span style="background:rgba(96,165,250,0.25);border-radius:2px;color:var(--ac-blue);font-weight:800;padding:0 1px;">$1</span>');
-                    }
-
-                    var dd = t.data ? t.data.split('-').reverse().join('/').substring(0,5) : '—';
-                    var dow = '';
-                    if (t.data) {
-                        var dObj = new Date(t.data + 'T12:00:00');
-                        dow = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][dObj.getDay()];
-                    }
-
-                    html += '<div style="padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(var(--veil-rgb),0.04);border-left:3px solid ' + tColor + ';cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background=\'rgba(var(--veil-rgb),0.025)\'" onmouseout="this.style.background=\'transparent\'">';
-                    html += '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:800;color:rgba(var(--veil-rgb),0.35);flex-shrink:0;width:54px;">' + dow + ' ' + dd + '</div>';
-                    html += '<div style="flex:1;min-width:0;">';
-                    html += '<div style="font-size:11px;font-weight:900;color:' + tColor + ';margin-bottom:3px;">' + hl(t.trasportatore||'') + '</div>';
-                    html += '<div style="display:flex;align-items:center;gap:5px;">';
-                    html += '<span style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(fromName) + '</span>';
-                    html += '<span style="color:rgba(var(--accent-rgb),0.4);font-size:11px;flex-shrink:0;">→</span>';
-                    html += '<span style="font-size:13px;font-weight:700;color:' + (toImpact || '#7fc49a') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">' + hl(toName) + '</span>';
-                    html += '</div>';
-                    if (fromCode || toCode) {
-                        var fcObj = fromCode ? _locationCodeColor(fromCode) : null;
-                        var tcObj = toCode   ? _locationCodeColor(toCode)   : null;
-                        html += '<div style="margin-top:2px;display:flex;gap:6px;">';
-                        if (fcObj) html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:8px;font-weight:800;letter-spacing:1px;color:' + fcObj.tx + ';box-shadow:inset 0 -2px 0 0 ' + fcObj.bd + ';padding-bottom:2px;">' + hl(fromCode) + '</span>';
-                        if (tcObj) html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:8px;font-weight:800;letter-spacing:1px;color:' + tcObj.tx + ';box-shadow:inset 0 -2px 0 0 ' + tcObj.bd + ';padding-bottom:2px;">' + hl(toCode) + '</span>';
-                        html += '</div>';
-                    }
-                    if (t.prodotto) html += '<div style="font-size:10px;color:var(--text-soft);font-style:italic;margin-top:2px;">' + hl(t.prodotto) + '</div>';
-                    html += '</div>';
-                    html += '<span style="color:rgba(var(--veil-rgb),0.15);font-size:13px;flex-shrink:0;">›</span>';
-                    html += '</div>';
-                });
-                html += '</div>';
-            });
-
-            el.innerHTML = html;
-        }
-
-        // ═══════════════════════════════════════════════════════════════
-        //  FINE RICERCA AVANZATA ARCHIVIO
-        // ═══════════════════════════════════════════════════════════════
 
         // ═══════════════════════════════════════════════════════════════
         //  STATISTICHE RAPIDE
@@ -11808,7 +11777,7 @@
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v103';
+        var APP_VERSION = 'v105';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
