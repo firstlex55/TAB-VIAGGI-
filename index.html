@@ -2150,6 +2150,16 @@
             .pl-scrim { background:rgba(var(--shade-rgb), .22); }
             .pl-pn { left:18px; right:auto; bottom:auto; width:580px; max-height:calc(100% - 140px); border-radius:16px; box-shadow:0 18px 50px rgba(var(--shade-rgb), .5); }
         }
+
+        /* v106 — TELEFONO, «Aggiungi tratta»: niente elenco di pillole; la ricerca sta in alto (sopra la tastiera) e dà i suggerimenti con il colore del trasportatore */
+        @media (max-width:999px) {
+            .nwr-ov .pl-pn { position:fixed; top:0; left:0; right:0; bottom:auto; max-height:62vh; gap:8px; padding:calc(env(safe-area-inset-top, 0px) + 10px) 12px 12px; border:0; border-bottom:3px solid var(--accent); border-radius:0 0 20px 20px; box-shadow:0 16px 40px rgba(var(--shade-rgb), .5); }
+            .nwr-ov .pl-chips { display:none !important; }
+            .nwr-ov .pl-rl { gap:5px; }
+            .nwr-ov .pl-r { min-height:44px; padding:6px 10px; gap:8px; font-size:14px; }
+            .nwr-ov .pl-r.new { min-height:42px; }
+            .nwr-ov .pl-tg { height:18px; padding:0 7px; font-size:10px; max-width:104px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        }
         @media print { .nwr-ov, .nwr-ac { display:none !important; } }
 
         /* «A tocchi»: foglio dal basso */
@@ -4848,6 +4858,14 @@
         /* modalità Excel: solo il pallino (colorato per i codici frequenti, nascosto per gli altri) */
         html[data-pcmode="excel"] #desktopBody .pc-loc.vv .pc-dot { background:var(--k4-b2) !important; }
         html[data-pcmode="excel"] #desktopBody .pc-loc:not(.vv) .pc-dot { visibility:hidden; }
+
+        /* v106 — prodotto: riquadro piatto, neutro, con l'etichetta PRODOTTO (nessun colore) */
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-c-prod { position:relative; padding:calc(7px*var(--pc-p,1)) calc(8px*var(--pc-p,1)) !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-c-prod::before { content:"PRODOTTO"; position:absolute; left:calc(8px*var(--pc-p,1) + 12px); top:calc(5px + 9px*var(--pc-p,1)); font-size:calc(9.5px*var(--pc-f,1)); font-weight:800; letter-spacing:.9px; color:var(--text-dim); pointer-events:none; z-index:2; font-family:'Outfit',sans-serif; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-prod-in { height:calc(34px*var(--pc-f,1) + 24px*var(--pc-p,1)); box-sizing:border-box; border-radius:12px !important; padding-top:calc(19px*var(--pc-p,1)) !important; padding-bottom:0 !important; padding-left:12px !important; font-size:var(--pc-fit, calc(18px*var(--pc-f,1))) !important; font-weight:700 !important; color:var(--text) !important; background:rgba(var(--veil-rgb),.045) !important; border:1px solid rgba(var(--veil-rgb),.22) !important; box-shadow:none !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"]) body #desktopBody .pc-prod-in:focus { border-color:var(--accent) !important; background:rgba(var(--accent-rgb),.08) !important; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"])[data-pclvl="-3"] body #desktopBody .pc-c-prod::before { display:none; }
+        html:not([data-pcmode="excel"]):not([data-pcmode="none"])[data-pclvl="-3"] body #desktopBody .pc-prod-in { padding-top:0 !important; }
         }
     </style>
     <style id="noPinchRapida">
@@ -5920,6 +5938,7 @@
             h.setAttribute('data-pcmode', m);
             h.setAttribute('data-pclvl', String(lv));
             try { localStorage.setItem('pcDensMode', m); localStorage.setItem('pcDensCards', String(_pcDens.cards)); localStorage.setItem('pcDensExcel', String(_pcDens.excel)); } catch (e) {}
+            _pcFitSoon();   // v106
             var ctl = document.getElementById('pcDensCtl');
             if (!ctl) return;
             ctl.querySelectorAll('.pcd-seg button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-m') === m); });
@@ -8625,6 +8644,31 @@
 
             container.innerHTML = html;
         }
+        // v106 — prodotto: se il nome è lungo il carattere si riduce da solo (min 14px) finché il testo entra
+        var _pcFitT = 0;
+        function _pcFitNames() {
+            var root = document.getElementById('desktopBody');
+            if (!root) return;
+            var h = document.documentElement, mode = h.getAttribute('data-pcmode');
+            var els = root.querySelectorAll('.pc-prod-in'), i, e, f, mn, n;
+            for (i = 0; i < els.length; i++) els[i].style.removeProperty('--pc-fit');
+            if (mode === 'excel' || mode === 'none') return;
+            var k = parseFloat(getComputedStyle(h).getPropertyValue('--pc-f')) || 1;
+            mn = 14 * k;
+            for (i = 0; i < els.length; i++) {
+                e = els[i];
+                if (e === document.activeElement || !e.clientWidth || e.scrollWidth <= e.clientWidth) continue;
+                f = parseFloat(getComputedStyle(e).fontSize);
+                n = 0;
+                while (e.scrollWidth > e.clientWidth && f > mn && n++ < 40) { f -= 0.5; e.style.setProperty('--pc-fit', f + 'px'); }
+            }
+        }
+        function _pcFitSoon() {
+            if (_pcFitT) clearTimeout(_pcFitT);
+            _pcFitT = setTimeout(function () { _pcFitT = 0; try { _pcFitNames(); } catch (err) {} }, 60);
+        }
+        window.addEventListener('resize', _pcFitSoon);
+        try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(_pcFitSoon); } catch (err) {}
         function renderDesktopView() {
             const container = document.getElementById('desktopBody');
             if (!container) return;
@@ -9055,6 +9099,7 @@
             }, 50);
 
             srchAfterRender(_srchPrevFocus);   // v74: rimette testo, filtri e focus della ricerca
+            _pcFitSoon();                      // v106
         }
 
         // ── DESKTOP HELPERS ──────────────────────────────────────
@@ -11225,7 +11270,7 @@
                 +   '<button type="button" class="nwr-btn2" data-a="cancel">Annulla</button><button type="button" class="nwr-go" id="nwrGo" data-a="go"></button></div></div>'
                 + '<div class="pl-scrim" id="nwrScrim" data-a="pclose" style="display:none"></div>'
                 + '<div class="pl-pn" id="nwrPn" role="dialog" aria-label="Aggiungi tratta" style="display:none">'
-                +   '<div class="pl-pnh"><label class="pl-s">' + _nwrIc('search', 18) + '<input type="text" id="nwrQ" data-k="q" placeholder="Cerca trasportatore o tratta…" aria-label="Cerca trasportatore o tratta" autocomplete="off" autocapitalize="off" spellcheck="false"></label>'
+                +   '<div class="pl-pnh"><label class="pl-s">' + _nwrIc('search', 18) + '<input type="text" id="nwrQ" data-k="q" placeholder="Scrivi trasportatore o tratta…" aria-label="Cerca trasportatore o tratta" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"></label>'
                 +     '<button type="button" class="nwr-ib sm" data-a="pclose" aria-label="Chiudi l\'elenco">' + _nwrIc('x', 18) + '</button></div>'
                 +   '<div class="pl-chips" id="nwrPc"></div>'
                 +   '<div class="pl-sec" id="nwrPs"></div>'
@@ -11479,7 +11524,8 @@
             _nwr.pn.open = true;
             _nwr.pn.q = ''; if (qi) qi.value = '';
             var last = _nwr.rows.length ? String(_nwr.rows[_nwr.rows.length - 1].car || '').trim() : '';
-            _nwr.pn.car = last;      // di solito si aggiungono altre tratte dello stesso trasportatore: parte da quello (un tocco sulla pillola lo toglie)
+            _nwr.pn.last = last;
+            _nwr.pn.car = _nwrIsPC() ? last : '';      // PC: parte dal trasportatore dell'ultima tratta (un tocco sulla pillola lo toglie); telefono (v106): niente pillole, si scrive e basta
             sc.style.display = 'block'; pn.style.display = 'flex';
             var cd = _nwrEl('nwrCard');
             if (_nwrIsPC() && bar && cd) {      // su PC è un riquadro sotto la barra, mai più alto della finestra
@@ -11488,8 +11534,19 @@
             } else { pn.style.top = ''; pn.style.maxHeight = ''; }
             if (add) add.setAttribute('aria-expanded', 'true');
             _nwrPaintPn();
-            if (qi && !_nwrCoarse()) qi.focus();
+            _nwrVv();
+            if (qi && (!_nwrCoarse() || !_nwrIsPC())) qi.focus();      // v106: anche sul telefono (la tastiera si apre da sola)
         }
+        // v106 — telefono: il pannello sta in alto e non supera mai la parte di schermo libera dalla tastiera
+        function _nwrVv() {
+            try {
+                var pn = _nwrEl('nwrPn');
+                if (!pn || _nwrIsPC() || pn.style.display === 'none') return;
+                var vv = window.visualViewport, h = (vv && vv.height) || window.innerHeight || 0;
+                pn.style.maxHeight = h ? Math.max(200, (h > 600 ? Math.round(h * 0.62) : Math.round(h - 10))) + 'px' : '';      // tastiera aperta (schermo libero basso): tutto lo spazio; chiusa: al massimo il 62%
+            } catch (e) {}
+        }
+        try { if (window.visualViewport) window.visualViewport.addEventListener('resize', _nwrVv); } catch (e) {}
         function _nwrPnClose() {
             var pn = _nwrEl('nwrPn'), sc = _nwrEl('nwrScrim'), add = _nwrEl('nwrAdd');
             if (pn) pn.style.display = 'none';
@@ -11498,7 +11555,7 @@
             if (_nwr) _nwr.pn.open = false;
         }
         function _nwrPnList() {
-            var pn = _nwr.pn, car = pn.car ? _srchNorm(pn.car) : '', terms = _srchTerms(pn.q), out = [], lim = (terms.length || car) ? 40 : 12;
+            var pn = _nwr.pn, car = pn.car ? _srchNorm(pn.car) : '', terms = _srchTerms(pn.q), out = [], lim = (terms.length || car) ? 40 : (_nwrIsPC() ? 12 : 4);
             for (var i = 0; i < _nwr.all.length && out.length < lim; i++) {
                 var x = _nwr.all[i];
                 if (car && _srchNorm(x.t) !== car) continue;
@@ -11550,7 +11607,7 @@
             try { haptic('light'); } catch (e) {}
         }
         function _nwrNewLane() {
-            var car = _nwr.pn.car || '';
+            var car = _nwr.pn.car || (_nwrIsPC() ? '' : _nwr.pn.last) || '';      // v106: telefono, senza pillole → quello dell'ultima tratta (PC invariato)
             _nwrPnClose();
             var i = _nwrAddLane({ car: car }, true);
             _nwrFocusFirstEmpty(i);
@@ -11777,7 +11834,7 @@
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v105';
+        var APP_VERSION = 'v106';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
