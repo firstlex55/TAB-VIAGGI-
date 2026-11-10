@@ -5148,13 +5148,16 @@
             body:not(.desktop-view-active) .f5-sep {flex:none; width:1px; align-self:stretch; margin:2px 0; background:rgba(var(--veil-rgb),.1);}
             body:not(.desktop-view-active) .section.ph-old {display:none !important;}
             body:not(.desktop-view-active) .section.ph-tools {display:block; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important;}
-            body:not(.desktop-view-active) .ic-row {display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:12px 6px 10px; border-radius:20px; background:var(--secondary); border:1px solid rgba(var(--veil-rgb),.09);}
+            body:not(.desktop-view-active) .ic-row {display:grid; grid-template-columns:repeat(5,1fr); gap:4px; padding:12px 4px 10px; border-radius:20px; background:var(--secondary); border:1px solid rgba(var(--veil-rgb),.09);}
             body:not(.desktop-view-active) .ic {display:flex; flex-direction:column; align-items:center; gap:7px; background:none; border:0; font:700 11px/1.15 'Outfit',sans-serif; text-align:center; cursor:pointer; -webkit-tap-highlight-color:transparent;}
             body:not(.desktop-view-active) .ic i {width:46px; height:46px; border-radius:15px; display:flex; align-items:center; justify-content:center; font-style:normal; background:rgba(var(--tc),.20); color:rgb(var(--tc)); box-shadow:inset 0 0 0 1px rgba(var(--tc),.35);}
             body:not(.desktop-view-active) .ic {color:rgb(var(--tc));}
             body:not(.desktop-view-active) .ic svg {width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
             body:not(.desktop-view-active) .ic.c-ex {--tc:var(--tcx);}
             body:not(.desktop-view-active) .ic.c-im {--tc:var(--tci);}
+            body:not(.desktop-view-active) .ic.c-pr {--tc:150,162,182;}
+            html[data-theme="light"] body:not(.desktop-view-active) .ic.c-pr {--tc:84,96,118;}
+            body:not(.desktop-view-active) .ic {font-size:10.5px;}
             body:not(.desktop-view-active) .ic.c-nw {--tc:var(--tcn);}
             body:not(.desktop-view-active) .ic.c-ar {--tc:var(--tca);}
             body:not(.desktop-view-active) .del-link {display:flex; align-items:center; justify-content:center; gap:6px; margin:12px auto 2px; padding:8px 12px; background:none; border:0; color:rgb(var(--dlc)); font:700 12px 'Outfit',sans-serif; cursor:pointer;}
@@ -5481,6 +5484,7 @@
         <div class="section ph-tools" id="phTools">
             <div class="ic-row">
                 <button type="button" class="ic c-ex" onclick="downloadExcel()"><i><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg></i>Esporta<br>Excel</button>
+                <button type="button" class="ic c-pr" onclick="printPlanning()"><i><svg viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a2 2 0 01-2-2v-4a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2h-2M7 14h10v6H7z"/></svg></i>Stampa<br>/ PDF</button>
                 <button type="button" class="ic c-im" id="phImpBtn" onclick="phToggleImport()" aria-expanded="false" aria-controls="importSection"><i><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L8 7m4-4l4 4M4 20h16"/></svg></i>Importa<br>Excel</button>
                 <button type="button" class="ic c-nw" onclick="showNewWeekModalV2()"><i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 13v5M9.5 15.5h5"/></svg></i>Nuova<br>settimana</button>
                 <button type="button" class="ic c-ar" onclick="arcOpen()"><i><svg viewBox="0 0 24 24"><path d="M3 7h18v4H3zM5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8M10 15h4"/></svg></i>Archivio<br>viaggi</button>
@@ -11834,7 +11838,7 @@
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v106';
+        var APP_VERSION = 'v107';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
@@ -14598,164 +14602,84 @@
             return {bg:'#f1f5f9', txt:'#334155', acc:'#94a3b8'};
         }
 
-        // Stampa planning — stessi colori dell'Excel, con filtri attivi
-        window.printPlanning = function(tripsData) {
-            var data   = tripsData || _getVisibleTrips();
-            var sorted = data.slice().sort(function(a,b){ return new Date(a.data) - new Date(b.data); });
-            var byDay  = {};
-            sorted.forEach(function(t){ if (!byDay[t.data]) byDay[t.data]=[]; byDay[t.data].push(t); });
-            var days = Object.keys(byDay).sort();
-
-            var dayNamesFull  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-            var dayNamesShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
-            var monthNames    = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-
-            // Colori giorno per stampa (chiari su bianco)
-            var dayBg   = {0:'#f1f5f9',1:'#dbeafe',2:'#dcfce7',3:'#f3e8ff',4:'#fef3c7',5:'#fce7f3',6:'#f1f5f9'};
-            var dayFg   = {0:'#475569',1:'#1e3a8a',2:'#14532d',3:'#4c1d95',4:'#78350f',5:'#831843',6:'#475569'};
-            var dayAccent={0:'#94a3b8',1:'#1d4ed8',2:'#15803d',3:'#7e22ce',4:'#b45309',5:'#be185d',6:'#94a3b8'};
-
-            function fmtShort(ds) {
-                if (!ds) return '';
-                var d = new Date(ds + 'T12:00:00');
-                return dayNamesShort[d.getDay()] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+        // v107 — Stampa planning: stessa tabella e stessi colori della vista PC (tema chiaro). A4 orizzontale, una settimana = una pagina.
+        function _xpPrintHtml(list, label) {
+            var DN = ['DOMENICA', 'LUNEDÌ', 'MARTEDÌ', 'MERCOLEDÌ', 'GIOVEDÌ', 'VENERDÌ', 'SABATO'];
+            var rows = '', last = null, i, t, d, dow, chip, stripe, n, p, sp, dot, byDay = {}, pend = {}, counts = {}, names, chips = '', nConf = 0;
+            for (i = 0; i < list.length; i++) { t = list[i]; byDay[t.data || ''] = (byDay[t.data || ''] || 0) + 1; if (t.daConfermare) { pend[t.data || ''] = (pend[t.data || ''] || 0) + 1; nConf++; } n = String(t.trasportatore || '?').trim(); counts[n] = (counts[n] || 0) + 1; }
+            function loc(v) {
+                sp = _xpSplit(v); dot = sp.code ? _xpDot(sp.code) : '';
+                return '<td class="c"><i' + (dot ? ' style="background:#' + dot + '"' : '') + '></i>' + _escH(sp.code) + '</td><td class="l">' + _escH(sp.place) + '</td>';
             }
-
-            // Costruisce righe tabella — stile D
-            var rows = days.map(function(day) {
-                var d   = new Date(day + 'T12:00:00');
-                var dow = d.getDay();
-                var cnt = byDay[day].length;
-                var bg  = dayBg[dow]    || '#f1f5f9';
-                var fg  = dayFg[dow]    || '#475569';
-                var acc = dayAccent[dow] || '#94a3b8';
-                var dd  = String(d.getDate()).padStart(2,'0');
-                var mm  = monthNames[d.getMonth()];
-                var yy  = d.getFullYear();
-
-                // Separatore stile D: blocco numero colorato + sfondo pastello
-                var sep = '<tr class="day-sep-row"><td colspan="6" style="padding:0;border-top:2px solid ' + acc + ';">'
-                    + '<div style="display:flex;align-items:stretch;">'
-                    + '<div style="background:' + acc + ';padding:8px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;">'
-                    + '<div style="font-family:\'Barlow Condensed\',\'Arial Narrow\',Arial,sans-serif;font-size:32px;font-weight:900;color:#fff;line-height:1;">' + cnt + '</div>'
-                    + '<div style="font-size:7px;color:rgba(255,255,255,0.7);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-top:1px;">' + _pv(cnt) + '</div>'
-                    + '</div>'
-                    + '<div style="background:' + bg + ';flex:1;padding:8px 16px;display:flex;align-items:center;">'
-                    + '<div>'
-                    + '<div style="font-family:\'Arial Narrow\',Arial,sans-serif;font-size:20px;font-weight:900;color:' + fg + ';text-transform:uppercase;line-height:1;letter-spacing:0.5px;">' + dayNamesFull[dow].toUpperCase() + '</div>'
-                    + '<div style="font-family:monospace;font-size:10px;font-weight:700;color:' + acc + ';margin-top:2px;">' + dd + ' ' + mm + ' ' + yy + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '</td></tr>';
-
-                var tripRows = byDay[day].map(function(t) {
-                    var c        = _printColor(t.trasportatore);
-                    var fromName = (t.partenza||'').split('(')[0].trim();
-                    var fromCode = ((t.partenza||'').match(/\(([^)]+)\)/)||[])[1]||'';
-                    var toName   = (t.arrivo||'').split('(')[0].trim();
-                    var toCode   = ((t.arrivo||'').match(/\(([^)]+)\)/)||[])[1]||'';
-                    var isWarn   = t.daConfermare;
-                    var rowStyle = isWarn ? 'background:#fffbeb;' : '';
-                    var leftBorder = isWarn ? 'border-left:3px solid #f59e0b;' : '';
-                    var statoCell = isWarn
-                        ? '<span style="background:#fef3c7;color:#92400e;font-size:8px;font-weight:800;padding:2px 6px;border-radius:3px;white-space:nowrap;">⚠ DA CONF.</span>'
-                        : (t.confermato ? '<span style="color:#065f46;font-weight:900;font-size:14px;">✓</span>' : '<span style="color:#cbd5e1;">—</span>');
-
-                    return '<tr style="' + rowStyle + 'border-bottom:1px solid #f1f5f9;">'
-                        + '<td style="padding:8px 10px;' + leftBorder + 'font-family:monospace;font-size:11px;font-weight:700;color:#64748b;white-space:nowrap;">' + fmtShort(t.data) + '</td>'
-                        + '<td style="padding:8px 10px;"><span style="display:inline-block;padding:3px 10px;border-radius:5px;font-size:10px;font-weight:800;white-space:nowrap;border-left:3px solid ' + c.acc + ';background:' + c.bg + ';color:' + c.txt + ';">' + (t.trasportatore||'') + '</span></td>'
-                        + '<td style="padding:8px 10px;"><div style="font-size:12px;font-weight:700;color:#1e293b;line-height:1.2;">' + _escH(fromName) + '</div>' + (fromCode ? '<div style="font-family:monospace;font-size:8px;color:#94a3b8;margin-top:2px;letter-spacing:1px;text-transform:uppercase;">' + _escH(fromCode) + '</div>' : '') + '</td>'
-                        + '<td style="padding:8px 10px;"><div style="font-size:12px;font-weight:700;color:#065f46;line-height:1.2;">' + _escH(toName) + '</div>' + (toCode ? '<div style="font-family:monospace;font-size:8px;color:#94a3b8;margin-top:2px;letter-spacing:1px;text-transform:uppercase;">' + _escH(toCode) + '</div>' : '') + '</td>'
-                        + '<td style="padding:8px 10px;font-size:11px;color:#64748b;font-style:italic;">' + (t.prodotto ? _escH(t.prodotto) : '<span style="color:#cbd5e1;">—</span>') + '</td>'
-                        + '<td style="padding:8px 10px;text-align:center;">' + statoCell + '</td>'
-                        + '</tr>';
-                }).join('');
-
-                return sep + tripRows;
-            }).join('');
-
-            // Riepilogo trasportatori
-            var counts = {};
-            sorted.forEach(function(t){ var k=t.trasportatore||'?'; counts[k]=(counts[k]||0)+1; });
-            var trasp_summary = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).map(function(n) {
-                var c = _printColor(n);
-                return '<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:' + c.bg + ';border:1px solid ' + c.acc + ';font-size:10px;font-weight:800;color:' + c.txt + ';white-space:nowrap;">'
-                    + n + ' <strong style="font-size:12px;">' + counts[n] + '</strong>'
-                    + '</span>';
-            }).join('');
-
-            var totals_footer = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a]; }).map(function(n) {
-                var c = _printColor(n);
-                return '<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:4px;border:1px solid ' + c.acc + ';font-size:10px;font-weight:800;color:' + c.txt + ';">'
-                    + n + ' <strong>' + counts[n] + '</strong>'
-                    + '</span>';
-            }).join('');
-
-            var filterLabel = data.length < trips.length ? ' (filtrati: ' + data.length + ' su ' + trips.length + ')' : '';
-            var printDate   = new Date().toLocaleDateString('it-IT', {weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+            for (i = 0; i < list.length; i++) {
+                t = list[i];
+                d = t.data ? new Date(t.data + 'T12:00:00') : null; dow = d ? d.getDay() : 1;
+                chip = _DAY_CHIP[dow] || _DAY_CHIP[1]; stripe = _DAY_STRIPE[dow] || _DAY_STRIPE[1];
+                if ((t.data || '') !== last) {
+                    last = t.data || ''; n = byDay[last]; p = pend[last] || 0;
+                    rows += '<tr class="day"><td colspan="10" style="background:#' + chip.bg + ';color:#' + chip.tx + ';border-top:2px solid #' + stripe + '"><b style="background:#' + stripe + '"></b>'
+                        + (d ? DN[dow] + ' ' + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) : 'SENZA DATA')
+                        + '<u style="border-color:#' + stripe + '">' + n + (n === 1 ? ' viaggio' : ' viaggi') + '</u>' + (p ? '<s>' + p + ' da confermare</s>' : '') + '</td></tr>';
+                }
+                rows += '<tr' + (t.daConfermare ? ' class="w"' : '') + '><td class="d">' + (d ? _xlsFmtDate(t.data) : '') + '</td>'
+                    + '<td class="t"><span style="background:#' + _xpT(t.trasportatore) + '">' + _escH(String(t.trasportatore || '').toUpperCase()) + '</span></td>'
+                    + loc(t.partenza) + loc(t.arrivo)
+                    + '<td class="p">' + _escH(String(t.prodotto || '').trim()) + '</td>'
+                    + '<td class="n">' + (t.ddt ? _escH(String(t.ddt)) : '') + '</td>'
+                    + '<td class="s">' + (t.daConfermare ? '<em>⚠ DA CONF.</em>' : (t.confermato ? '<strong>✓</strong>' : '')) + '</td>'
+                    + '<td class="o">' + _escH(String(t.note || '').trim()) + '</td></tr>';
+            }
+            names = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b); });
+            for (i = 0; i < names.length; i++) chips += '<span style="background:#' + _xpT(names[i]) + '">' + _escH(names[i]) + ' · ' + counts[names[i]] + '</span>';
+            var now = new Date(), stamp = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            return '<!DOCTYPE html>\n<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Planning Viaggi ' + _escH(label || '') + '</title>\n<style>\n'
+                + '*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}\n'
+                + 'body{font-family:Outfit,Calibri,"Segoe UI",Roboto,Arial,sans-serif;font-size:11px;color:#2e2e2c;background:#fff;padding:10px}\n'
+                + '.bar{margin:0 0 12px}.bar button{padding:11px 24px;background:#e8623f;color:#fff;border:0;border-radius:9px;font:700 15px inherit;font-family:inherit;cursor:pointer}\n'
+                + '.hd{display:flex;align-items:flex-end;gap:16px;border-bottom:3px solid #e8623f;padding-bottom:5px}\n'
+                + '.hd h1{font-size:22px;font-weight:800;color:#111827;letter-spacing:.2px}.hd h1 b{color:#e8623f}.hd small{display:block;font-size:10.5px;color:#6b7280;font-weight:500;margin-top:1px}\n'
+                + '.hd .k{margin-left:auto;display:flex;gap:6px}.hd .k div{border:1px solid #e5e7eb;border-radius:6px;padding:2px 10px;text-align:center;font-size:7.5px;font-weight:800;color:#6b7280;letter-spacing:.5px}.hd .k b{display:block;font-size:16px;color:#111827;line-height:1.1}.hd .k .a b{color:#b45309}\n'
+                + '.ch{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 7px}.ch span{padding:3px 9px;border-radius:5px;font-size:9px;font-weight:800;color:#26282b;white-space:nowrap}\n'
+                + 'table{width:100%;border-collapse:collapse;table-layout:fixed}\n'
+                + 'thead th{background:#e9eaec;color:#2e2e2c;padding:6px 7px;text-align:left;font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.9px;border-bottom:2px solid #8a8f98;white-space:nowrap;overflow:hidden}\n'
+                + 'thead th:first-child{color:#e8623f}thead th small{font-size:8px;font-weight:600;color:#6b7280;text-transform:none;letter-spacing:0;margin-left:5px}\n'
+                + 'td{padding:0 7px;height:23px;border-bottom:1px solid #dfe1e5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}\n'
+                + 'tr.day td{height:25px;font-size:11.5px;font-weight:800;letter-spacing:.4px;border-bottom:0}\n'
+                + 'tr.day b{display:inline-block;width:4px;height:14px;border-radius:2px;vertical-align:-2px;margin-right:9px}\n'
+                + 'tr.day u{text-decoration:none;display:inline-block;margin-left:12px;padding:1px 9px;border:1px solid;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:0;vertical-align:1px}\n'
+                + 'tr.day s{text-decoration:none;margin-left:10px;font-size:9px;font-weight:700;color:#b45309}\n'
+                + 'td.d{font-family:Consolas,"JetBrains Mono","Roboto Mono",monospace;font-size:10.5px;color:#4a6a9e}\n'
+                + 'td.t{padding:2px 5px}td.t span{display:block;padding:3px 9px;border-radius:5px;font-size:10.5px;font-weight:800;color:#26282b;overflow:hidden;text-overflow:ellipsis}\n'
+                + 'td.c,td.l,td.p{border-left:1px solid #dfe1e5;font-weight:700;font-size:11px}td.p{color:#4d4d49;font-size:10.5px}\n'
+                + 'td.c i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:7px;vertical-align:1px}\n'
+                + 'td.n{font-family:Consolas,monospace;font-size:10px;font-weight:700;text-align:center}td.s{text-align:center}td.s em{font-style:normal;background:#fef3c7;color:#b45309;font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px}td.s strong{color:#15803d;font-size:12px}\n'
+                + 'td.o{font-size:9px;white-space:normal;line-height:1.15}tr.w td{background:#fffbeb}\n'
+                + 'tr{break-inside:avoid;page-break-inside:avoid}tr.day{break-after:avoid;page-break-after:avoid}thead{display:table-header-group}\n'
+                + '.ft{margin-top:6px;font-size:8px;color:#8a8f98;display:flex;justify-content:space-between}\n'
+                + '@media screen and (max-width:900px){body{padding:8px}.wrap{overflow-x:auto}.wrap>div{width:1040px}}\n'
+                + '@media print{.bar{display:none!important}body{padding:0}.wrap{overflow:visible}.wrap>div{width:auto}}\n'
+                + '@page{size:A4 landscape;margin:8mm}\n'
+                + '</style></head><body>\n'
+                + '<div class="bar"><button onclick="window.print()">🖨️ Stampa / Salva PDF</button></div>\n'
+                + '<div class="wrap"><div>\n'
+                + '<div class="hd"><div><h1>PLANNING <b>VIAGGI</b></h1><small>' + _escH(label || '') + '</small></div>'
+                + '<div class="k"><div><b>' + list.length + '</b>VIAGGI</div><div class="a"><b>' + nConf + '</b>DA CONF.</div><div><b>' + names.length + '</b>TRASPORTATORI</div></div></div>\n'
+                + '<div class="ch">' + chips + '</div>\n'
+                + '<table><colgroup><col style="width:7.6%"><col style="width:11.4%"><col style="width:12.2%"><col style="width:12.6%"><col style="width:12.2%"><col style="width:12.6%"><col style="width:11.6%"><col style="width:5.4%"><col style="width:6.4%"><col style="width:8%"></colgroup>\n'
+                + '<thead><tr><th>Data</th><th>Trasp.</th><th>Partenza<small>Fornitore</small></th><th>Località</th><th>Arrivo<small>Cliente</small></th><th>Località</th><th>Prodotto</th><th style="text-align:center">DDT</th><th style="text-align:center">Stato</th><th>Note</th></tr></thead>\n'
+                + '<tbody>' + rows + '</tbody></table>\n'
+                + '<div class="ft"><span>Planning Viaggi</span><span>Generato il ' + stamp + '</span></div>\n'
+                + '</div></div></body></html>';
+        }
+        window.printPlanning = function(tripsData) {
+            var list = tripsData ? tripsData.slice().sort(function (a, b) { return new Date(a.data || 0) - new Date(b.data || 0); }) : _xpSelection();
+            if (!list.length) { showStatus('Nessun viaggio da stampare', 'info'); return; }
+            var label = '';
+            try { label = _xlsWeekRange(list); } catch (e) { label = weekTitle || ''; }
+            if (list.length < trips.length && !tripsData) label += '  ·  filtrati: ' + list.length + ' su ' + trips.length;
             var win = window.open('', '_blank');
             if (!win) { showStatus('⚠️ Pop-up bloccato — consenti i pop-up per la stampa', 'warning'); return; }
-
-            win.document.write('<!DOCTYPE html>\n<html lang="it"><head><meta charset="UTF-8">\n'
-                + '<title>Planning Viaggi ' + (weekTitle||'') + '</title>\n'
-                + '<style>\n'
-                + '*{margin:0;padding:0;box-sizing:border-box}\n'
-                + 'body{font-family:Inter,Arial,sans-serif;font-size:11px;color:#1e293b;background:#fff}\n'
-                + 'table{width:100%;border-collapse:collapse}\n'
-                + 'thead th{background:#1e293b;color:rgba(255,255,255,0.55);padding:9px 10px;text-align:left;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:2px;}\n'
-                + '.day-sep-row td{padding:0;}\n'
-                + '.no-print{display:block;margin:16px;}\n'
-                + '@media print{\n'
-                + '  .no-print{display:none!important}\n'
-                + '  body{}\n'
-                + '  tr.day-sep-row { page-break-before: auto; }\n'
-                + '}\n'
-                + '@page{size:A4 landscape;margin:0.6cm 0.8cm}\n'
-                + '</style></head><body>\n'
-
-                // Bottone stampa
-                + '<div class="no-print"><button onclick="window.print()" style="padding:9px 22px;background:#ff6b35;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(255,107,53,0.3);">🖨️ Stampa / Salva PDF</button></div>\n'
-
-                // HEADER
-                + '<div style="background:#0f172a;padding:18px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;">\n'
-                + '  <div style="display:flex;align-items:center;gap:14px;">\n'
-                + '    <div style="width:42px;height:42px;background:linear-gradient(135deg,#ff6b35,#e8501a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚛</div>\n'
-                + '    <div>\n'
-                + '      <div style="font-size:8px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,107,53,0.8);margin-bottom:3px;">Planning Logistica</div>\n'
-                + '      <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;line-height:1;">VIAGGI SETTIMANALI</div>\n'
-                + '      <div style="font-family:monospace;font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;">' + (weekTitle||'') + '</div>\n'
-                + '    </div>\n'
-                + '  </div>\n'
-                + '  <div style="text-align:right;">\n'
-                + '    <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-bottom:8px;">Stampato il ' + printDate + '</div>\n'
-                + '    <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' + trasp_summary + '</div>\n'
-                + '  </div>\n'
-                + '</div>\n'
-
-                // TABELLA
-                + '<table>\n'
-                + '<thead><tr>'
-                + '<th style="width:82px;">Data</th>'
-                + '<th style="width:108px;">Trasportatore</th>'
-                + '<th>Partenza</th>'
-                + '<th>Arrivo</th>'
-                + '<th style="width:88px;">Prodotto</th>'
-                + '<th style="width:72px;text-align:center;">Stato</th>'
-                + '</tr></thead>\n'
-                + '<tbody>' + rows + '</tbody>\n'
-                + '</table>\n'
-
-                // FOOTER
-                + '<div style="background:#f8fafc;border-top:2px solid #e2e8f0;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">\n'
-                + '  <div style="font-size:8px;color:#94a3b8;font-weight:600;">App Viaggi · ' + (weekTitle||'') + ' · ' + printDate + '</div>\n'
-                + '  <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">' + totals_footer
-                + '    <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:4px;background:#0f172a;color:#fff;font-size:10px;font-weight:800;">'
-                + '      <strong style="font-size:14px;">' + sorted.length + '</strong> viaggi totali'
-                + '    </span>'
-                + '  </div>\n'
-                + '</div>\n'
-                + '</body></html>');
+            win.document.write(_xpPrintHtml(list, label));
             win.document.close();
         };
 
@@ -15718,6 +15642,24 @@
             cc.alignment = { vertical:'center', horizontal:'center' };
         }
 
+        // ═══ v107 — Excel e Stampa con i colori della vista PC (tema chiaro). Valori = quelli calcolati a video (test s35 li confronta). ═══
+        var _XP_T = { cevolo: 'CD9723', coap: '609ECE', coneco: '8D75DA', consar: 'D25764', avio: 'A3B937', alb: '3FA362', lino: 'D25699', stegagno: '50B3C3', cirioni: '7CC360', clp: 'AF75D4', 'default': '8590AA' };
+        var _XP_TINK = '26282B';
+        var _XP_DOT = ['00968C', '5272D8', 'C45311', '5F8A00', '22923A', '7866D2', 'B74D95', 'A46F00', 'C74B44', '007ED3', 'C34971', 'BD5C00'];
+        function _xpT(name) { var k = 'default'; try { k = getTransporterKey(String(name || '')); } catch (e) {} return _XP_T[k] || _XP_T['default']; }
+        function _xpDot(code) { var m = null; try { m = /vc(\d+)/.exec(_vvCls(code) || ''); } catch (e) {} return m ? (_XP_DOT[+m[1]] || '') : ''; }
+        function _xpSplit(v) { var place = String(v || '').trim(), code = '', m = place.match(/^(.*?)\s*\(([^)]+)\)\s*$/); if (m) { place = m[1].trim(); code = m[2].trim(); } return { place: place, code: code }; }
+        // gli stessi viaggi che esporterebbe «Excel»: vista PC = quelli visibili; altre viste = filtri attivi
+        function _xpSelection() {
+            var list, hasF;
+            if (currentView === 'desktop') list = _getVisibleTrips();
+            else {
+                hasF = searchQuery || filterState.today || filterState.date || filterState.transporter || filterState.partenza || filterState.arrivo || filterState.giorno;
+                list = hasF ? filteredTrips.slice() : trips.slice();
+            }
+            return list.slice().sort(function (a, b) { return new Date(a.data || 0) - new Date(b.data || 0); });
+        }
+
         async function _buildAndDownloadExcel(tripsData, title, filenameSuffix, opts) {
             try {
                 showStatus('Preparazione Excel...', 'info');
@@ -15730,7 +15672,7 @@
                 // ── v70: layout "B" — righe alte, fascia tenue per giorno, pronto per la stampa ──
                 // Colonne: A barra colore | B Giorno | C Trasportatore | D Fornitore(cod) | E Partenza | F Cliente(cod) | G Arrivo | H Prodotto | I DDT | J Stato | K Note
                 ws.columns = [
-                    {width:1.6},{width:16},{width:19},{width:16},{width:22},{width:16},{width:22},{width:17},{width:10},{width:17},{width:26}
+                    {width:1.2},{width:11.5},{width:15},{width:16},{width:16.5},{width:16},{width:16.5},{width:14.5},{width:7},{width:10},{width:9}      // v107: in tutto ≈ un foglio A4 orizzontale al 100%
                 ];
                 const LAST = 11;
                 const INK='FF111827', GREY='FF6B7280', LINE='FFE5E7EB', WHITE='FFFFFFFF', ORANGE='FFE8623F';
@@ -15743,7 +15685,7 @@
                 const daconf = sorted.filter(t => t.daConfermare).length;
                 const nTransp = new Set(sorted.map(t => t.trasportatore||'?')).size;
                 const r1 = ws.getRow(1), r2 = ws.getRow(2);
-                r1.height = 34; r2.height = 20;
+                r1.height = 30; r2.height = 16;
                 ws.mergeCells(1, 2, 1, 6); ws.mergeCells(2, 2, 2, 6);
                 const tcell = r1.getCell(2);
                 tcell.value = { richText: [
@@ -15756,7 +15698,7 @@
                 scell.value = (opts && opts.subtitle) ? (opts.subtitle + '  ·  ' + _xlsWeekRange(sorted)) : _xlsWeekRange(sorted);
                 scell.font = { size: (String(scell.value).length > 70 ? 9.5 : 11), color:{argb:GREY}, name:FONT };
                 scell.alignment = { vertical:'top', horizontal:'left', indent:1 };
-                [ {c:8, v:tot, l:'VIAGGI', color:INK}, {c:9, v:daconf, l:'DA CONF.', color:AMBER}, {c:10, v:nTransp, l:'TRASPORTATORI', color:INK} ].forEach(function(k) {
+                [ {c:8, v:tot, l:'VIAGGI', color:INK}, {c:9, v:daconf, l:'DA CONF.', color:AMBER}, {c:10, v:nTransp, l:'TRASP.', color:INK} ].forEach(function(k) {
                     const nc = r1.getCell(k.c), lc = r2.getCell(k.c);
                     nc.value = k.v; nc.font = { bold:true, size:20, color:{argb:k.color}, name:FONT };
                     nc.alignment = { horizontal:'center', vertical:'center' };
@@ -15778,36 +15720,36 @@
                 const names = Object.keys(counts).sort((a,b) => counts[b]-counts[a] || a.localeCompare(b));
                 let chipRow = 4;
                 const lab = ws.getRow(chipRow).getCell(2);
-                lab.value = 'PER TRASPORTATORE'; lab.font = { bold:true, size:8, color:{argb:GREY}, name:FONT };
+                lab.value = 'TOTALI'; lab.font = { bold:true, size:8, color:{argb:GREY}, name:FONT };
                 lab.alignment = { vertical:'center', horizontal:'left', indent:1 };
                 names.forEach(function(name, i) {
                     const col = 3 + (i % 9), rr = chipRow + Math.floor(i / 9);
-                    ws.getRow(rr).height = 24;
-                    const tc = _transporterColorPC(name);
+                    ws.getRow(rr).height = 19;
                     const cell = ws.getRow(rr).getCell(col);
                     cell.value = name + '  ·  ' + counts[name];
-                    cell.font = { bold:true, size:10, color:{argb:'FF'+_toHex6(tc.tx)}, name:FONT };
-                    cell.fill = solid('FF'+_toHex6(tc.bg));
+                    cell.font = { bold:true, size:9, color:{argb:'FF'+_XP_TINK}, name:FONT };
+                    cell.fill = solid('FF'+_xpT(name));
                     cell.alignment = { vertical:'center', horizontal:'center' };
                     const w = { style:'thick', color:{argb:WHITE} };
                     cell.border = { top:w, bottom:w, left:w, right:w };
                 });
                 const chipRows = Math.max(1, Math.ceil(names.length / 9));
                 const spacer = chipRow + chipRows;       // riga vuota
-                ws.getRow(spacer).height = 10;
+                ws.getRow(spacer).height = 6;
 
                 // Intestazione tabella
                 const headerRow = spacer + 1;
-                const headers = ['','GIORNO','TRASPORTATORE','FORNITORE','PARTENZA','CLIENTE','ARRIVO','PRODOTTO','DDT','STATO','NOTE'];
+                const headers = ['','DATA','TRASP.','PARTENZA · Fornitore','Località','ARRIVO · Cliente','Località','PRODOTTO','DDT','STATO','NOTE'];      // v107: come la vista PC
                 const hRow = ws.getRow(headerRow);
                 headers.forEach((h, i) => {
                     const cell = hRow.getCell(i+1);
                     cell.value = h;
-                    cell.font = { bold:true, size:9.5, color:{argb:GREY}, name:FONT };
-                    cell.border = { bottom:{style:'medium',color:{argb:INK}} };
+                    cell.font = { bold:true, size:9, color:{argb:(i === 1 ? ORANGE : 'FF2E2E2C')}, name:FONT };
+                    cell.fill = solid('FFE9EAEC');
+                    cell.border = { bottom:{style:'medium',color:{argb:'FF8A8F98'}} };
                     cell.alignment = { horizontal: (i === 8 || i === 9) ? 'center' : 'left', vertical:'center', indent: (i === 8 || i === 9) ? 0 : 1 };
                 });
-                hRow.height = 24;
+                hRow.height = 20;
                 ws.views = [{ showGridLines:false, state:'frozen', xSplit:0, ySplit:headerRow }];
 
                 // Righe: fascia tenue per giorno + viaggi
@@ -15828,86 +15770,87 @@
                     if ((t.data||'') !== lastDay) {
                         lastDay = t.data || '';
                         const br = ws.getRow(row);
-                        br.height = 28;
+                        br.height = 20;
                         ws.mergeCells(row, 2, row, LAST);
                         br.getCell(1).fill = solid(stripe);
                         const bc = br.getCell(2);
                         const n = byDay[lastDay], p = pendByDay[lastDay] || 0;
                         let txt = d ? (DAYNAMES[dow] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0')) : 'SENZA DATA';
-                        txt += '     ·     ' + n + (n === 1 ? ' viaggio' : ' viaggi') + (p ? '     ·     ' + p + ' da confermare' : '');
+                        txt += '      ' + n + (n === 1 ? ' viaggio' : ' viaggi') + (p ? '     ·     ' + p + ' da confermare' : '');
+                        br.getCell(2).border = { top:{style:'medium', color:{argb:stripe}} };
                         bc.value = txt;
-                        bc.font = { bold:true, size:12, color:{argb:'FF'+chip.tx}, name:FONT };
+                        bc.font = { bold:true, size:11, color:{argb:'FF'+chip.tx}, name:FONT };
                         bc.fill = solid('FF'+chip.bg);
                         bc.alignment = { vertical:'center', horizontal:'left', indent:1 };
                         row++;
                     }
 
                     const wr = ws.getRow(row);
-                    wr.height = 31;
-                    wr.getCell(1).fill = solid(stripe);
+                    wr.height = 18;
 
                     const gc = wr.getCell(2);
                     gc.value = d ? _xlsFmtDate(t.data) : '';
-                    gc.font = { size:11, color:{argb:GREY}, name:FONT };
+                    gc.font = { size:9, color:{argb:'FF4A6A9E'}, name:'Consolas' };
                     gc.alignment = { vertical:'center', horizontal:'left', indent:1 };
 
-                    const tCol = _transporterColorPC(t.trasportatore);
+                    // trasportatore: riquadro pieno col colore della vista PC
                     const tc = wr.getCell(3);
-                    tc.value = t.trasportatore || '';
-                    tc.font = { bold:true, size:11.5, color:{argb:'FF'+_toHex6(tCol.tx)}, name:FONT };
-                    tc.fill = solid('FF'+_toHex6(tCol.bg));
-                    tc.alignment = { vertical:'center', horizontal:'center' };
+                    tc.value = String(t.trasportatore || '').toUpperCase();
+                    tc.font = { bold:true, size:10.5, color:{argb:'FF'+_XP_TINK}, name:FONT };
+                    tc.fill = solid('FF'+_xpT(t.trasportatore));
+                    tc.alignment = { vertical:'center', horizontal:'left', indent:1 };
                     const wb3 = { style:'thick', color:{argb:WHITE} };
                     tc.border = { top:wb3, bottom:wb3, left:wb3, right:wb3 };
 
-                    // codice (colorato) + luogo, per fornitore e cliente
+                    // fornitore / cliente: pallino colorato + nome in grassetto, poi la località (come la vista PC)
                     [[4, t.partenza],[6, t.arrivo]].forEach(function(pair) {
-                        let place = (pair[1]||'').trim(), code = '';
-                        const m = place.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
-                        if (m) { place = m[1].trim(); code = m[2].trim(); }
+                        const sp = _xpSplit(pair[1]), dot = sp.code ? _xpDot(sp.code) : '';
                         const cc = wr.getCell(pair[0]);
-                        if (code) {
-                            const col = _locationCodeColorPC(code, 'light');
-                            cc.value = code;
-                            cc.font = { bold:true, size:10.5, color:{argb:'FF'+_toHex6(col.tx)}, name:FONT };
-                            cc.fill = solid('FF'+_toHex6(col.bg));
-                            cc.border = { top:wb3, bottom:wb3, left:wb3, right:wb3 };
+                        if (sp.code) {
+                            cc.value = { richText: [
+                                { text:'●  ', font:{ size:8, color:{argb: dot ? 'FF'+dot : WHITE}, name:FONT } },
+                                { text:sp.code, font:{ bold:true, size:10.5, color:{argb:'FF2E2E2C'}, name:FONT } }
+                            ] };
                         }
-                        cc.alignment = { vertical:'center', horizontal:'center' };
+                        cc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                        cc.border = { left:{ style:'thin', color:{argb:LINE} } };
                         const lc = wr.getCell(pair[0]+1);
-                        lc.value = place;
-                        lc.font = { size:12, color:{argb:INK}, name:FONT };
+                        lc.value = sp.place;
+                        lc.font = { bold:true, size:10.5, color:{argb:'FF2E2E2C'}, name:FONT };
                         lc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                        lc.border = { left:{ style:'thin', color:{argb:LINE} } };
                     });
 
                     const pc = wr.getCell(8);
                     pc.value = (t.prodotto||'').trim();
-                    pc.font = { size:12, color:{argb:INK}, name:FONT };
+                    pc.font = { bold:true, size:10, color:{argb:'FF4D4D49'}, name:FONT };
                     pc.alignment = { vertical:'center', horizontal:'left', indent:1 };
+                    pc.border = { left:{ style:'thin', color:{argb:LINE} } };
 
                     const ddtCell = wr.getCell(9);
-                    if (t.ddt) { ddtCell.value = t.ddt; ddtCell.font = { name:'Consolas', size:11, bold:true, color:{argb:INK} }; }
-                    else       { ddtCell.value = '—';   ddtCell.font = { size:11, color:{argb:'FFB0B7C3'}, name:FONT }; }
+                    if (t.ddt) { ddtCell.value = t.ddt; ddtCell.font = { name:'Consolas', size:9.5, bold:true, color:{argb:INK} }; }
+                    else       { ddtCell.value = '—';   ddtCell.font = { size:10, color:{argb:'FFB0B7C3'}, name:FONT }; }
                     ddtCell.alignment = { vertical:'center', horizontal:'center' };
 
                     const st = wr.getCell(10);
                     if (t.daConfermare) {
-                        st.value = '⚠ DA CONFERMARE';
-                        st.font = { bold:true, size:9.5, color:{argb:AMBER}, name:FONT };
+                        st.value = '⚠ DA CONF.';
+                        st.font = { bold:true, size:8.5, color:{argb:AMBER}, name:FONT };
                         st.fill = solid(AMBERBG);
                     } else if (t.confermato) {
-                        st.value = '✓ Confermato';
-                        st.font = { bold:true, size:10.5, color:{argb:GREEN}, name:FONT };
+                        st.value = '✓ Conferm.';
+                        st.font = { bold:true, size:9, color:{argb:GREEN}, name:FONT };
                     } else {
                         st.value = '—';
-                        st.font = { size:11, color:{argb:'FFB0B7C3'}, name:FONT };
+                        st.font = { size:10, color:{argb:'FFB0B7C3'}, name:FONT };
                     }
                     st.alignment = { horizontal:'center', vertical:'center' };
 
                     const nc2 = wr.getCell(11);
                     nc2.value = (t.note||'').trim();
-                    nc2.font = { size:11, color:{argb:INK}, name:FONT };
+                    nc2.font = { size:9, color:{argb:INK}, name:FONT };
                     nc2.alignment = { vertical:'center', horizontal:'left', indent:1, wrapText:true };
+                    if (nc2.value.length > 12) wr.height = Math.min(52, 4 + 12 * Math.ceil(nc2.value.length / 12));
 
                     for (let cc = 2; cc <= LAST; cc++) {
                         const cell = wr.getCell(cc), ex = cell.border || {};
@@ -15917,8 +15860,10 @@
                 });
 
                 // ── Stampa (v70): A4 orizzontale, larghezza = 1 pagina, intestazione ripetuta, piè di pagina ──
-                ws.pageSetup = { orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:0,
-                    horizontalCentered:true, margins:{left:0.35,right:0.35,top:0.5,bottom:0.65,header:0.25,footer:0.3} };
+                // v107: una settimana normale sta in UNA pagina (anche in altezza); colonne strette quanto un A4 orizzontale, per i programmi che ignorano «adatta alla pagina»
+                ws.pageSetup = { orientation:'landscape', paperSize:9, fitToPage:true, fitToWidth:1, fitToHeight:(row <= 46 ? 1 : 0),
+                    horizontalCentered:true, margins:{left:0.25,right:0.25,top:0.4,bottom:0.55,header:0.2,footer:0.25} };
+                try { ws.pageSetup.printArea = 'A1:K' + (row - 1); } catch(e) {}
                 try { ws.pageSetup.printTitlesRow = headerRow + ':' + headerRow; } catch(e) {}
                 try {
                     const now = new Date();
