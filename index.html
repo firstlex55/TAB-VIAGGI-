@@ -2641,15 +2641,15 @@
             /* ---- controllo nella barra (riga filtri) ---- */
             .pcd-ctl { display:flex; align-items:center; gap:8px; flex-shrink:0; }
             .pcd-seg { display:flex; padding:2px; gap:2px; border-radius:8px; background:rgba(var(--veil-rgb),0.06); border:1px solid rgba(var(--veil-rgb),0.12); }
-            .pcd-seg button { height:26px; padding:0 11px; border:none; border-radius:6px; background:transparent; color:var(--text-dim); font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; cursor:pointer; }
+            .pcd-seg button { height:26px; padding:0 8px; border:none; border-radius:6px; background:transparent; color:var(--text-dim); font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; cursor:pointer; }
             .pcd-seg button:hover { color:var(--text); }
             .pcd-seg button.on { background:var(--accent); color:#fff; box-shadow:0 2px 6px rgba(232,98,63,0.3); }
             .pcd-step { display:flex; align-items:center; gap:3px; padding:2px; border-radius:8px; background:rgba(var(--veil-rgb),0.04); border:1px solid rgba(var(--veil-rgb),0.10); }
-            .pcd-step > button { width:26px; height:26px; border:none; border-radius:6px; background:transparent; color:var(--text-soft); font-family:'Outfit',sans-serif; font-size:17px; font-weight:700; line-height:1; cursor:pointer; padding:0; }
+            .pcd-step > button { width:24px; height:26px; border:none; border-radius:6px; background:transparent; color:var(--text-soft); font-family:'Outfit',sans-serif; font-size:17px; font-weight:700; line-height:1; cursor:pointer; padding:0; }
             .pcd-step > button:hover:not(:disabled) { background:rgba(var(--veil-rgb),0.10); color:var(--text); }
             .pcd-step > button:disabled { opacity:0.28; cursor:default; }
-            .pcd-ticks { display:flex; align-items:flex-end; gap:3px; height:20px; padding:0 2px; }
-            .pcd-ticks i { display:block; width:5px; border-radius:1.5px; background:rgba(var(--veil-rgb),0.22); cursor:pointer; }
+            .pcd-ticks { display:flex; align-items:flex-end; gap:2px; height:20px; padding:0 2px; }
+            .pcd-ticks i { display:block; width:4px; border-radius:1.5px; background:rgba(var(--veil-rgb),0.22); cursor:pointer; }
             .pcd-ticks i:hover { background:rgba(var(--veil-rgb),0.40); }
             .pcd-ticks i.on { background:var(--accent); }
 
@@ -4821,6 +4821,35 @@
             }
         }
 
+        /* ═══ v109 — modalità «Colonne» (solo schermo): interruttore, pulsante Esporta, finestra di modifica ═══ */
+        @media screen {
+        #pcBoard { display:none; }
+        html[data-pcmode="board"] #pcBoard { display:block; }
+        html[data-pcmode="board"] #desktopTableScroll > table { display:none; }
+        .bd-bar { display:flex; align-items:center; gap:12px; margin:0 0 10px; min-height:32px; }
+        .bd-hint { flex:1; min-width:0; font-size:12.5px; font-weight:500; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .bd-exp { flex:none; display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 13px; border-radius:8px; border:1px solid rgba(var(--veil-rgb),.14); background:rgba(var(--veil-rgb),.06); color:var(--text); font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+        .bd-exp:hover { background:rgba(var(--veil-rgb),.12); }
+        .bd-exp svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .bd-ov { position:fixed; inset:0; z-index:3500; display:none; align-items:center; justify-content:center; background:rgba(var(--shade-rgb),.66); backdrop-filter:blur(4px); font-family:'Outfit',sans-serif; color:var(--text); }
+        .bd-card { width:min(620px,94vw); max-height:92vh; overflow:auto; background:var(--primary); border:1px solid rgba(var(--veil-rgb),.14); border-radius:16px; padding:18px 20px 16px; box-shadow:0 24px 60px rgba(var(--shade-rgb),.55); }
+        .bd-eh { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+        .bd-eh h2 { margin:0; font-size:19px; font-weight:800; }
+        .bd-eh .x { margin-left:auto; width:32px; height:32px; border-radius:9px; border:0; background:rgba(var(--veil-rgb),.08); color:var(--text); font-size:15px; cursor:pointer; }
+        .bd-fg { display:grid; grid-template-columns:1fr 1fr; gap:11px 12px; }
+        .bd-fl { display:flex; flex-direction:column; gap:4px; min-width:0; }
+        .bd-fl.w2 { grid-column:1 / -1; }
+        .bd-fl > span { font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dim); }
+        .bd-fl input { font:600 15px 'Outfit',sans-serif; color:var(--text); background:rgba(var(--veil-rgb),.05); border:1px solid rgba(var(--veil-rgb),.14); border-radius:9px; padding:9px 11px; outline:none; min-width:0; }
+        .bd-fl input:focus { border-color:var(--accent); background:rgba(232,98,63,.07); }
+        .bd-ea { display:flex; align-items:center; gap:8px; margin-top:16px; flex-wrap:wrap; }
+        .bd-ea button { height:36px; padding:0 14px; border-radius:9px; border:1px solid rgba(var(--veil-rgb),.16); background:rgba(var(--veil-rgb),.06); color:var(--text); font:700 13px 'Outfit',sans-serif; cursor:pointer; }
+        .bd-ea button:hover { background:rgba(var(--veil-rgb),.12); }
+        .bd-ea button.on { background:rgba(240,176,48,.16); border-color:rgba(240,176,48,.5); }
+        .bd-ea button.del { color:#e0606a; }
+        .bd-ea button.pri { background:var(--accent); border-color:var(--accent); color:#fff; padding:0 22px; }
+        }
+
         /* ═══ v104 — Look "P2" della tabella PC (Schede): riquadri Fornitore/Cliente a «tasto» con zoccolo, pillola Trasportatore scura con nome colorato,
            sfondo riga che segue il selettore di luminosità, fascia ambra per «Da conf.». Tutti i colori sono già calcolati (OKLCH → esadecimale):
            i codici più frequenti per ruolo prendono una tinta (classi vc0…vc11 messe da _vvCls), gli altri restano neutri.
@@ -4839,14 +4868,14 @@
         html:not([data-theme="light"]) .pc-loc.vc3{--k4-fill:#45532a;--k4-b1:#b1d371;--k4-b2:#99b958;--k4-pl:#101a00;--k4-sep:rgba(158,200,56,.45)}
         html[data-theme="light"] .pc-loc.vc4{--k4-fill:#b8e5bb;--k4-b1:#41ab52;--k4-b2:#22923a;--k4-pl:#15491e;--k4-sep:rgba(51,108,58,0.6)}
         html:not([data-theme="light"]) .pc-loc.vc4{--k4-fill:#335739;--k4-b1:#86db94;--k4-b2:#6dc17b;--k4-pl:#001d05;--k4-sep:rgba(93,179,109,.45)}
-        html[data-theme="light"] .pc-loc.vc5{--k4-fill:#d4d0ff;--k4-b1:#8f7fed;--k4-b2:#7866d2;--k4-pl:#3c3469;--k4-sep:rgba(91,83,147,0.6)}
-        html:not([data-theme="light"]) .pc-loc.vc5{--k4-fill:#4e466e;--k4-b1:#c6b4ff;--k4-b2:#ad9bf6;--k4-pl:#170f2e;--k4-sep:rgba(143,112,237,.45)}
+        html[data-theme="light"] .pc-loc.vc5{--k4-fill:#d9c0f3;--k4-b1:#9b59e0;--k4-b2:#874dc3;--k4-pl:#462865;--k4-sep:rgba(102,58,148,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc5{--k4-fill:#4d3c64;--k4-b1:#c58bff;--k4-b2:#ad7ae0;--k4-pl:#18111f;--k4-sep:rgba(130,92,168,.45)}
         html[data-theme="light"] .pc-loc.vc6{--k4-fill:#fbc5e6;--k4-b1:#d266ae;--k4-b2:#b74d95;--k4-pl:#5c274a;--k4-sep:rgba(131,69,109,0.6)}
         html:not([data-theme="light"]) .pc-loc.vc6{--k4-fill:#653f58;--k4-b1:#fca2df;--k4-b2:#e189c5;--k4-pl:#27091e;--k4-sep:rgba(207,101,176,.45)}
         html[data-theme="light"] .pc-loc.vc7{--k4-fill:#eed59f;--k4-b1:#be8800;--k4-b2:#a46f00;--k4-pl:#523800;--k4-sep:rgba(119,88,0,0.6)}
         html:not([data-theme="light"]) .pc-loc.vc7{--k4-fill:#5b4b1f;--k4-b1:#e5c057;--k4-b2:#cba63a;--k4-pl:#211400;--k4-sep:rgba(237,193,56,.45)}
-        html[data-theme="light"] .pc-loc.vc8{--k4-fill:#ffc5bd;--k4-b1:#e3655b;--k4-b2:#c74b44;--k4-pl:#642722;--k4-sep:rgba(141,69,62,0.6)}
-        html:not([data-theme="light"]) .pc-loc.vc8{--k4-fill:#6c3e3c;--k4-b1:#ffa19c;--k4-b2:#f28884;--k4-pl:#2c0808;--k4-sep:rgba(231,94,94,.45)}
+        html[data-theme="light"] .pc-loc.vc8{--k4-fill:#f1b8ba;--k4-b1:#d9434a;--k4-b2:#bd3a40;--k4-pl:#621e21;--k4-sep:rgba(144,44,48,0.6)}
+        html:not([data-theme="light"]) .pc-loc.vc8{--k4-fill:#602e35;--k4-b1:#ff5f6d;--k4-b2:#e05460;--k4-pl:#1f0b0d;--k4-sep:rgba(168,63,72,.45)}
         html[data-theme="light"] .pc-loc.vc9{--k4-fill:#b1ddff;--k4-b1:#2997ee;--k4-b2:#007ed3;--k4-pl:#084069;--k4-sep:rgba(40,97,147,0.6)}
         html:not([data-theme="light"]) .pc-loc.vc9{--k4-fill:#2c516e;--k4-b1:#75cdff;--k4-b2:#5bb3f7;--k4-pl:#00182f;--k4-sep:rgba(78,165,231,.45)}
         html[data-theme="light"] .pc-loc.vc10{--k4-fill:#ffc3d2;--k4-b1:#df6288;--k4-b2:#c34971;--k4-pl:#622538;--k4-sep:rgba(139,67,88,0.6)}
@@ -5219,6 +5248,105 @@
             body:not(.desktop-view-active) .archive-section #archiveToggleBtn {border-radius:16px !important; padding:13px 16px !important; background:var(--secondary) !important; border:1px solid rgba(var(--veil-rgb),.09) !important;}
         }
     </style>
+<style id="bdCss">
+/* v109 — modalità «Colonne»: stile condiviso (vista PC e pagina di stampa). La pagina di stampa legge questo blocco da #bdCss. */
+.bd { font-family:'Outfit',sans-serif; color:var(--text); padding:12px 14px 28px; box-sizing:border-box; }
+.bd *, .bd *::before, .bd *::after { box-sizing:border-box; }
+.bd-fb { display:none; flex:1; min-width:0; align-items:center; gap:10px; margin:0; padding:7px 12px; border-radius:10px; background:rgba(var(--veil-rgb),.07); border:1px solid rgba(var(--veil-rgb),.14); font-size:13px; font-weight:600; color:var(--text-soft); }
+.bd-fb b { font-weight:800; color:var(--text); font-size:14px; }
+.bd-fb button { margin-left:auto; border:0; background:rgba(var(--veil-rgb),.10); color:var(--text); border-radius:7px; padding:5px 11px; font:700 12px 'Outfit',sans-serif; cursor:pointer; }
+.bd-fb button:hover { background:rgba(var(--veil-rgb),.18); }
+.bd-grid { zoom:var(--bd-z,1); display:grid; grid-template-columns:repeat(var(--bd-n,5), minmax(258px,1fr)); gap:12px; align-items:start; }
+.bd-col { min-width:0; background:rgba(var(--veil-rgb),.045); border-radius:16px; padding:8px; }
+.bd-col.today { background:rgba(var(--veil-rgb),.09); box-shadow:inset 0 0 0 1.5px rgba(var(--veil-rgb),.20); }
+.bd-dh { position:sticky; top:0; z-index:3; display:flex; align-items:center; gap:9px; padding:11px 12px; border-radius:12px; margin-bottom:9px; color:#f8f5ef; text-shadow:0 1px 1px rgba(0,0,0,.22); box-shadow:0 1px 2px rgba(20,20,30,.28); }
+.bd-dn { white-space:nowrap; font-size:18px; font-weight:800; letter-spacing:.06em; }
+.bd-dd { font-size:13.5px; font-weight:700; padding:2px 9px; border-radius:999px; background:rgba(0,0,0,.14); }
+.bd-td { position:absolute; left:14px; top:-8px; font-size:9.5px; line-height:1; font-weight:800; letter-spacing:.12em; padding:3px 8px; border-radius:999px; background:#f8f5ef; color:#2b2d30; text-shadow:none; box-shadow:0 1px 2px rgba(20,20,30,.35); }
+.bd-pw { position:absolute; right:-3px; top:-8px; white-space:nowrap; font-size:10.5px; line-height:1; font-weight:800; padding:3px 6px; border-radius:999px; background:#f5b53b; color:#3a2600; text-shadow:none; box-shadow:0 1px 2px rgba(20,20,30,.35); }
+.bd-cnt { margin-left:auto; flex:none; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.22); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45); display:grid; place-items:center; font-weight:800; font-size:15px; }
+.bd-gr { display:grid; grid-template-columns:104px minmax(0,1fr); margin-bottom:9px; background:var(--surface-1); border:1px solid rgba(var(--veil-rgb),.10); border-radius:13px; overflow:hidden; box-shadow:0 1px 2px rgba(var(--shade-rgb),.12); }
+.bd-band { --bd-b1:#e4e2dd; --bd-b2:#d9d7d2; --bd-bar:#8a8d94; padding:9px 8px 9px 13px; display:flex; flex-direction:column; gap:3px; min-width:0; background:linear-gradient(170deg,var(--bd-b1),var(--bd-b2)); box-shadow:inset 5px 0 0 var(--bd-bar); color:var(--text); cursor:pointer; }
+.bd-bt { display:flex; align-items:center; font-size:0; gap:0; margin-bottom:1px; }
+.bd-bt i { display:grid; place-items:center; width:15px; height:15px; border-radius:50%; background:rgba(32,34,42,.72); color:#f6f5f2; }
+.bd-bt svg { width:9px; height:9px; }
+.bd-band b { font-size:12px; line-height:1.2; font-weight:800; margin-top:2px; overflow-wrap:anywhere; }
+.bd-bl { font-size:11.5px; color:var(--text-soft); }
+.bd-band em { font-style:normal; font-size:10.5px; margin-top:auto; border-radius:7px; padding:1px 7px; align-self:flex-start; font-weight:700; background:rgba(255,255,255,.6); color:#2b2d30; }
+.bd-rs { display:flex; flex-direction:column; min-width:0; }
+.bd-r { display:flex; flex-direction:column; justify-content:center; gap:5px; padding:7px 7px 7px 8px; }
+.bd-r + .bd-r { border-top:1px solid rgba(var(--veil-rgb),.09); }
+.bd-cb { --bd-c1:#5f636b; --bd-c2:#474a51; position:relative; display:flex; align-items:center; gap:6px; padding:6px 8px 6px 9px; border-radius:11px; background:var(--bd-c1); border:1px solid var(--bd-c2); color:#f8f5ef; cursor:pointer; }
+.bd-pn { flex:none; display:grid; place-items:center; width:16px; height:16px; border-radius:50%; background:rgba(255,255,255,.2); }
+.bd-pn svg { width:10px; height:10px; }
+.bd-cn { flex:1; min-width:0; font-size:16.5px; font-weight:800; line-height:1.1; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow-wrap:anywhere; }
+.bd-ed { position:absolute; right:5px; top:50%; transform:translateY(-50%); border:0; background:rgba(0,0,0,.34); color:#f8f5ef; width:22px; height:22px; border-radius:7px; font-size:12px; line-height:1; cursor:pointer; opacity:0; transition:opacity .12s; padding:0; }
+.bd-r:hover .bd-ed, .bd-ed:focus { opacity:1; }
+.bd-l2 { display:flex; flex-wrap:wrap; align-items:center; gap:3px 7px; font-size:12.5px; color:var(--text-soft); font-weight:600; padding-left:2px; }
+.bd-pl { display:inline-flex; align-items:center; gap:6px; height:21px; padding:0 9px 0 7px; border-radius:8px; background:rgba(var(--veil-rgb),.08); border:1px solid rgba(var(--veil-rgb),.14); font-weight:800; font-size:10px; letter-spacing:.05em; color:var(--text); white-space:nowrap; }
+.bd-pl i { width:9px; height:9px; border-radius:50%; background:var(--bd-tc,#8590aa); box-shadow:0 0 0 1px rgba(0,0,0,.14); }
+.bd-pd { color:var(--text-dim); }
+.bd-ddt { font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700; padding:1px 7px; border-radius:6px; background:rgba(var(--veil-rgb),.07); color:var(--text-soft); white-space:nowrap; }
+.bd-nt { display:inline-grid; place-items:center; width:18px; height:18px; color:var(--text-dim); }
+.bd-nt svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.bd-w { display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; color:#8e5f06; background:#f6e3b4; border:1px solid #e6c874; border-radius:8px; padding:2px 9px; align-self:flex-start; }
+.bd-w i { width:8px; height:8px; border-radius:50%; background:#e0a42b; }
+.bd-empty { border:1.5px dashed rgba(var(--veil-rgb),.18); border-radius:12px; padding:18px 10px; text-align:center; color:var(--text-dim); font-size:12.5px; font-weight:600; }
+.bd-r.bd-dim, .bd-gr.bd-dim { opacity:.36; }
+.bd-r, .bd-gr { transition:opacity .12s; }
+/* versione compatta (livelli −2 e −3) */
+.bd-c .bd-dh { padding:7px 10px; margin-bottom:6px; border-radius:10px; }
+.bd-c .bd-dn { font-size:15px; } .bd-c .bd-dd { font-size:12px; padding:1px 8px; } .bd-c .bd-cnt { width:26px; height:26px; font-size:13px; }
+.bd-c .bd-gr { margin-bottom:6px; grid-template-columns:98px minmax(0,1fr); border-radius:12px; }
+.bd-c .bd-band { padding:6px 7px 6px 12px; gap:2px; } .bd-c .bd-band b { font-size:11.5px; margin-top:0; } .bd-c .bd-bl { font-size:10.5px; } .bd-c .bd-band em { font-size:9.5px; padding:0 6px; }
+.bd-c .bd-r { padding:4px 6px 4px 7px; gap:3px; }
+.bd-c .bd-cb { padding:4px 8px; border-radius:9px; } .bd-c .bd-cn { font-size:15.5px; } .bd-c .bd-pn { display:none; }
+.bd-c .bd-l2 { font-size:11.5px; } .bd-c .bd-pl { height:18px; font-size:9px; padding:0 7px 0 6px; } .bd-c .bd-w { font-size:10.5px; padding:1px 7px; }
+/* tema scuro */
+html:not([data-theme="light"]) .bd-band { --bd-b1:rgba(var(--veil-rgb),.07); --bd-b2:rgba(var(--veil-rgb),.04); --bd-bar:#7d8087; }
+html:not([data-theme="light"]) .bd-band em { background:rgba(255,255,255,.12); color:var(--text); }
+html:not([data-theme="light"]) .bd-bt i { background:rgba(255,255,255,.18); color:var(--text); }
+html:not([data-theme="light"]) .bd-cb { border-color:rgba(255,255,255,.14); }
+html:not([data-theme="light"]) .bd-w { color:#f0c261; background:rgba(240,176,48,.14); border-color:rgba(240,176,48,.4); }
+html:not([data-theme="light"]) .bd-gr { box-shadow:0 1px 2px rgba(0,0,0,.35); }
+/* colori fissi per nome: stesse tinte vc0…vc11 della tabella (fascia = fornitore, blocco = cliente) */
+html[data-theme="light"] .bd-band.vc0{--bd-b1:#a7dfd9;--bd-b2:#bbdeda;--bd-bar:#00968c}
+html:not([data-theme="light"]) .bd-band.vc0{--bd-b1:#155855;--bd-b2:#134f4c;--bd-bar:#00c4bc}
+.bd-cb.vc0{--bd-c1:#0c7a76;--bd-c2:#0c6c69}
+html[data-theme="light"] .bd-band.vc1{--bd-b1:#c9d3f2;--bd-b2:#cfd6ec;--bd-bar:#5272d8}
+html:not([data-theme="light"]) .bd-band.vc1{--bd-b1:#404b71;--bd-b2:#3a4466;--bd-bar:#8ca5fd}
+.bd-cb.vc1{--bd-c1:#5169b3;--bd-c2:#4258a0}
+html[data-theme="light"] .bd-band.vc2{--bd-b1:#efc9b5;--bd-b2:#eacebc;--bd-bar:#c45311}
+html:not([data-theme="light"]) .bd-band.vc2{--bd-b1:#69422b;--bd-b2:#5e3b27;--bd-bar:#eb915b}
+.bd-cb.vc2{--bd-c1:#a65630;--bd-c2:#904319}
+html[data-theme="light"] .bd-band.vc3{--bd-b1:#cddbaf;--bd-b2:#d2dbb8;--bd-bar:#5f8a00}
+html:not([data-theme="light"]) .bd-band.vc3{--bd-b1:#45532a;--bd-b2:#3e4b26;--bd-bar:#99b958}
+.bd-cb.vc3{--bd-c1:#597724;--bd-c2:#4b690d}
+html[data-theme="light"] .bd-band.vc4{--bd-b1:#bcddbf;--bd-b2:#c3ddc6;--bd-bar:#22923a}
+html:not([data-theme="light"]) .bd-band.vc4{--bd-b1:#335739;--bd-b2:#2e4e33;--bd-bar:#6dc17b}
+.bd-cb.vc4{--bd-c1:#357a44;--bd-c2:#216e35}
+html[data-theme="light"] .bd-band.vc5{--bd-b1:#d9c3ec;--bd-b2:#dbcde7;--bd-bar:#874dc3}
+html:not([data-theme="light"]) .bd-band.vc5{--bd-b1:#4d3c64;--bd-b2:#45365a;--bd-bar:#ad7ae0}
+.bd-cb.vc5{--bd-c1:#824ebc;--bd-c2:#663f92}
+html[data-theme="light"] .bd-band.vc6{--bd-b1:#eac7dc;--bd-b2:#e7cddc;--bd-bar:#b74d95}
+html:not([data-theme="light"]) .bd-band.vc6{--bd-b1:#653f58;--bd-b2:#5b394f;--bd-bar:#e189c5}
+.bd-cb.vc6{--bd-c1:#a05389;--bd-c2:#873f73}
+html[data-theme="light"] .bd-band.vc7{--bd-b1:#e4d2a5;--bd-b2:#e2d5b8;--bd-bar:#a46f00}
+html:not([data-theme="light"]) .bd-band.vc7{--bd-b1:#5b4b1f;--bd-b2:#52441c;--bd-bar:#cba63a}
+.bd-cb.vc7{--bd-c1:#8b670d;--bd-c2:#7a560d}
+html[data-theme="light"] .bd-band.vc8{--bd-b1:#edbcbc;--bd-b2:#e8c8c7;--bd-bar:#bd3a40}
+html:not([data-theme="light"]) .bd-band.vc8{--bd-b1:#602e35;--bd-b2:#562930;--bd-bar:#e05460}
+.bd-cb.vc8{--bd-c1:#b43c44;--bd-c2:#8b3239}
+html[data-theme="light"] .bd-band.vc9{--bd-b1:#b4d7f1;--bd-b2:#bbd8eb;--bd-bar:#007ed3}
+html:not([data-theme="light"]) .bd-band.vc9{--bd-b1:#2c516e;--bd-b2:#284963;--bd-bar:#5bb3f7}
+.bd-cb.vc9{--bd-c1:#266fab;--bd-c2:#0a619d}
+html[data-theme="light"] .bd-band.vc10{--bd-b1:#efc6d0;--bd-b2:#eaccd3;--bd-bar:#c34971}
+html:not([data-theme="light"]) .bd-band.vc10{--bd-b1:#6a3e4c;--bd-b2:#5f3844;--bd-bar:#ed86a8}
+.bd-cb.vc10{--bd-c1:#aa506e;--bd-c2:#8f3d5a}
+html[data-theme="light"] .bd-band.vc11{--bd-b1:#eccca5;--bd-b2:#e8d0b8;--bd-bar:#bd5c00}
+html:not([data-theme="light"]) .bd-band.vc11{--bd-b1:#664525;--bd-b2:#5c3e21;--bd-bar:#e5974c}
+.bd-cb.vc11{--bd-c1:#a15c0d;--bd-c2:#8b490d}
+</style>
 </head>
 <body>
 
@@ -5962,11 +6090,12 @@
         // Ogni modalità ricorda il proprio livello. Livello 0 delle Schede = identico alla v80.
         function _pcDensClamp(n) { n = parseInt(n, 10); return isNaN(n) ? 0 : Math.max(-3, Math.min(3, n)); }
         var _pcDens = (function () {
-            var d = { mode: 'cards', cards: 0, excel: 0 };
+            var d = { mode: 'cards', cards: 0, excel: 0, board: 0 };
             try {
-                d.mode  = localStorage.getItem('pcDensMode') === 'excel' ? 'excel' : 'cards';
+                d.mode  = localStorage.getItem('pcDensMode') === 'excel' ? 'excel' : (localStorage.getItem('pcDensMode') === 'board' ? 'board' : 'cards');
                 d.cards = _pcDensClamp(localStorage.getItem('pcDensCards'));
                 d.excel = _pcDensClamp(localStorage.getItem('pcDensExcel'));
+                d.board = _pcDensClamp(localStorage.getItem('pcDensBoard'));
             } catch (e) {}
             return d;
         })();
@@ -5979,19 +6108,21 @@
                 '<div class="pcd-seg">' +
                 '<button type="button" data-m="cards" class="' + (m === 'cards' ? 'on' : '') + '" onclick="pcDensMode(\'cards\')" title="Schede: righe con i riquadri (come prima)">Schede</button>' +
                 '<button type="button" data-m="excel" class="' + (m === 'excel' ? 'on' : '') + '" onclick="pcDensMode(\'excel\')" title="Excel: una riga sola per viaggio, per avere la panoramica">Excel</button>' +
+                '<button type="button" data-m="board" class="' + (m === 'board' ? 'on' : '') + '" onclick="pcDensMode(\'board\')" title="Colonne: una colonna per giorno, viaggi raggruppati per fornitore, cliente in evidenza">Colonne</button>' +
                 '</div>' +
-                '<div class="pcd-step" title="Dimensione delle righe">' +
-                '<button type="button" data-d="-1" onclick="pcDensStep(-1)"' + (lv <= -3 ? ' disabled' : '') + ' title="Righe più piccole">\u2212</button>' +
+                '<div class="pcd-step" title="' + (m === 'board' ? 'Zoom delle colonne (da \u22122 versione compatta)' : 'Dimensione delle righe') + '">' +
+                '<button type="button" data-d="-1" onclick="pcDensStep(-1)"' + (lv <= -3 ? ' disabled' : '') + ' title="' + (m === 'board' ? 'Più piccolo' : 'Righe più piccole') + '">\u2212</button>' +
                 '<div class="pcd-ticks">' + ticks + '</div>' +
-                '<button type="button" data-d="1" onclick="pcDensStep(1)"' + (lv >= 3 ? ' disabled' : '') + ' title="Righe più grandi">+</button>' +
+                '<button type="button" data-d="1" onclick="pcDensStep(1)"' + (lv >= 3 ? ' disabled' : '') + ' title="' + (m === 'board' ? 'Più grande' : 'Righe più grandi') + '">+</button>' +
                 '</div></div>';
         }
         function _pcDensApply() {
             var h = document.documentElement, m = _pcDens.mode, lv = _pcDens[m];
             h.setAttribute('data-pcmode', m);
             h.setAttribute('data-pclvl', String(lv));
-            try { localStorage.setItem('pcDensMode', m); localStorage.setItem('pcDensCards', String(_pcDens.cards)); localStorage.setItem('pcDensExcel', String(_pcDens.excel)); } catch (e) {}
+            try { localStorage.setItem('pcDensMode', m); localStorage.setItem('pcDensCards', String(_pcDens.cards)); localStorage.setItem('pcDensExcel', String(_pcDens.excel)); localStorage.setItem('pcDensBoard', String(_pcDens.board)); } catch (e) {}
             _pcFitSoon();   // v106
+            try { _bdApply(); } catch (e) {}   // v109: zoom e compatta delle colonne
             var ctl = document.getElementById('pcDensCtl');
             if (!ctl) return;
             ctl.querySelectorAll('.pcd-seg button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-m') === m); });
@@ -6000,7 +6131,13 @@
             if (mi) mi.disabled = lv <= -3;
             if (pl) pl.disabled = lv >= 3;
         }
-        function pcDensMode(m) { _pcDens.mode = (m === 'excel') ? 'excel' : 'cards'; _pcDensApply(); }
+        function pcDensMode(m) {
+            var was = _pcDens.mode;
+            _pcDens.mode = (m === 'excel') ? 'excel' : (m === 'board') ? 'board' : 'cards';
+            if (_pcDens.mode === 'board' && was !== 'board') _bdTodayPending = true;
+            _pcDensApply();
+            if (_pcDens.mode === 'board' && was !== 'board') setTimeout(function () { if (_bdTodayPending) _bdScrollToday(); }, 0);
+        }
         function pcDensStep(d) { var k = _pcDens.mode; _pcDens[k] = _pcDensClamp(_pcDens[k] + d); _pcDensApply(); }
         function pcDensSet(n) { _pcDens[_pcDens.mode] = _pcDensClamp(n); _pcDensApply(); }
         _pcDensApply();
@@ -8697,6 +8834,325 @@
 
             container.innerHTML = html;
         }
+        // ═══════════════════════════════════════════════════════════════════
+        //  v109 — Vista PC «Colonne»: una colonna per giorno; dentro ogni giorno i viaggi raggruppati per FORNITORE (fascia a sinistra)
+        //  e, per ogni viaggio, il CLIENTE in evidenza (blocco colorato). Colori fissi per nome (le stesse tinte vc0…vc11 della tabella).
+        //  Zoom = i livelli −3…+3 già presenti (da −2 in giù passa anche alla versione compatta). Clic su cliente/fornitore = evidenzia
+        //  tutti i suoi viaggi; doppio clic (o ✎) = modifica. «Esporta» apre una pagina di stampa A4/A3 (PDF dal browser). ES5.
+        // ═══════════════════════════════════════════════════════════════════
+        var _BD_Z = [0.80, 0.94, 0.84, 1, 1.14, 1.30, 1.50];      // livello −3 … +3
+        var _BD_PAL = [['a7dfd9', 'bbdeda', '00968c', '0c7a76', '0c6c69'], ['c9d3f2', 'cfd6ec', '5272d8', '5169b3', '4258a0'], ['efc9b5', 'eacebc', 'c45311', 'a65630', '904319'], ['cddbaf', 'd2dbb8', '5f8a00', '597724', '4b690d'], ['bcddbf', 'c3ddc6', '22923a', '357a44', '216e35'], ['d9c3ec', 'dbcde7', '874dc3', '824ebc', '663f92'], ['eac7dc', 'e7cddc', 'b74d95', 'a05389', '873f73'], ['e4d2a5', 'e2d5b8', 'a46f00', '8b670d', '7a560d'], ['edbcbc', 'e8c8c7', 'bd3a40', 'b43c44', '8b3239'], ['b4d7f1', 'bbd8eb', '007ed3', '266fab', '0a619d'], ['efc6d0', 'eaccd3', 'c34971', 'aa506e', '8f3d5a'], ['eccca5', 'e8d0b8', 'bd5c00', 'a15c0d', '8b490d']];                                  // tema chiaro, per la stampa: [fascia 1, fascia 2, barra, blocco 1, blocco 2]
+        var _bdFocus = null, _bdEditIdx = -1, _bdDirty = false, _bdTodayPending = true;
+        var _BD_IC_F = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V10l6 3V10l6 3V5h3v16z" fill="currentColor"/></svg>';
+        var _BD_IC_P = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>';
+        var _BD_DN = ['DOMENICA', 'LUNEDÌ', 'MARTEDÌ', 'MERCOLEDÌ', 'GIOVEDÌ', 'VENERDÌ', 'SABATO'];
+        function _bdWT() { return (_pcWeekMode === 'next') ? tripsNext : trips; }
+        function _bdZoom() { return _BD_Z[_pcDensClamp(_pcDens.board) + 3]; }
+        function _bdMix(a, b, t) { var o = '', i, x; for (i = 0; i < 6; i += 2) { x = Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t); o += (x < 16 ? '0' : '') + x.toString(16); } return o; }
+        function _bdVc(code) { var m = /vc(\d+)/.exec(_vvCls(code) || ''); return m ? ' vc' + m[1] : ''; }
+        function _bdKey(code, place) { return _vvNorm(code || place || ''); }
+        function _bdApply() {      // zoom e densità: si legge dal livello (−3…+3) della modalità Colonne
+            var b = document.getElementById('pcBoard');
+            if (!b || !_BD_Z) return;
+            b.style.setProperty('--bd-z', String(_bdZoom()));
+            b.classList.toggle('bd-c', _pcDensClamp(_pcDens.board) <= -2);
+        }
+        // gli stessi viaggi che mostra la ricerca: giorno + tipo + testo + tratta
+        function _bdList() {
+            var lensQ = (_srchScope === 'week') ? _srchLensQ : '';
+            return _bdWT().slice().filter(function (t) { return _srchDayOk(t) && _srchTypedMatch(t, _srchKind, _srchTypedQ) && _srchGenMatch(t, lensQ) && _srchRouteMatch(t); })
+                .sort(function (a, b) { return new Date(a.data || 0) - new Date(b.data || 0); });
+        }
+        // giorni da mostrare: lun–ven della settimana (anche vuoti) + gli altri giorni in cui c'è qualcosa; con un filtro giorno/«Oggi» solo quelli con viaggi
+        function _bdDays(list) {
+            var set = {}, out = [], first = '', i, k, mon, dt, p = _desktopDayFilter, filt = (_pcWeekMode === 'oggi') || (p && p !== 'Tutti');
+            for (i = 0; i < list.length; i++) { set[list[i].data || ''] = 1; if (list[i].data && (!first || list[i].data < first)) first = list[i].data; }
+            if (!filt) {
+                mon = getMonday(first ? first + 'T12:00:00' : new Date());
+                if (!first && _pcWeekMode === 'next') mon.setDate(mon.getDate() + 7);
+                for (k = 0; k < 5; k++) { dt = new Date(mon.getTime()); dt.setDate(mon.getDate() + k); set[_isoDate(dt)] = 1; }
+            }
+            for (k in set) if (Object.prototype.hasOwnProperty.call(set, k)) out.push(k);
+            out.sort();
+            if (out.length > 1 && out[0] === '') out.push(out.shift());
+            return out;
+        }
+        function _bdRowHtml(t, idx, uniq) {
+            var a = _xpSplit(t.arrivo), tk = getTransporterKey(t.trasportatore || ''), cn = a.code || a.place || '—', note = String(t.note || '').trim(), prod = String(t.prodotto || '').trim(), l2;
+            l2 = '<span class="bd-pl" style="--bd-tc:var(--t-' + tk + '-pill)"><i></i>' + _escH(String(t.trasportatore || '—').toUpperCase()) + '</span>';
+            if (a.code && a.place) l2 += '<span class="bd-lo">' + _escH(a.place) + '</span>';
+            if (!uniq && prod) l2 += '<span class="bd-pd">' + _escH(prod) + '</span>';
+            if (t.ddt) l2 += '<span class="bd-ddt">DDT ' + _escH(String(t.ddt)) + '</span>';
+            if (note) l2 += '<span class="bd-nt" title="' + _escH(note) + '">' + _PC_BTN_IC.note + '</span>';
+            return '<div class="bd-r" data-i="' + idx + '" data-ck="' + _escH(_bdKey(a.code, a.place)) + '" ondblclick="bdEdit(' + idx + ')">'
+                + '<div class="bd-cb' + _bdVc(a.code) + '" data-k="c" title="Clic: evidenzia tutti i viaggi di ' + _escH(cn) + ' · doppio clic: modifica"><span class="bd-pn">' + _BD_IC_P + '</span><span class="bd-cn">' + _escH(cn) + '</span>'
+                + '<button type="button" class="bd-ed" data-k="e" title="Modifica il viaggio" aria-label="Modifica il viaggio">✎</button></div>'
+                + '<div class="bd-l2">' + l2 + '</div>'
+                + (t.daConfermare ? '<div class="bd-w"><i></i>Da confermare</div>' : '') + '</div>';
+        }
+        function _bdGroupHtml(g) {
+            var f = _xpSplit(g.items[0].t.partenza), prods = {}, np = 0, one = '', i, p, k, fname = f.code || f.place || '—', rows = '';
+            for (i = 0; i < g.items.length; i++) {
+                p = String(g.items[i].t.prodotto || '').trim(); k = p.toUpperCase();
+                if (p && !Object.prototype.hasOwnProperty.call(prods, k)) { prods[k] = 1; np++; one = p; }
+            }
+            for (i = 0; i < g.items.length; i++) rows += _bdRowHtml(g.items[i].t, g.items[i].i, np === 1);
+            return '<div class="bd-gr" data-fk="' + _escH(g.k) + '"><div class="bd-band' + _bdVc(f.code) + '" data-k="f" title="Clic: evidenzia tutti i viaggi da ' + _escH(fname) + '">'
+                + '<div class="bd-bt"><i>' + _BD_IC_F + '</i>FORNITORE</div><b>' + _escH(fname) + '</b>' + (f.code && f.place ? '<span class="bd-bl">' + _escH(f.place) + '</span>' : '')
+                + (np ? '<em>' + (np === 1 ? _escH(one) : np + ' prodotti') + '</em>' : '') + '</div><div class="bd-rs">' + rows + '</div></div>';
+        }
+        function _bdColHtml(iso, list, wt, todayStr) {
+            var d = iso ? new Date(iso + 'T12:00:00') : null, dow = d ? d.getDay() : 1, st = (_DAY_STRIPE[dow] || '64748B').toLowerCase(), groups = [], gmap = {}, i, t, f, k, nw = 0, h = '';
+            for (i = 0; i < list.length; i++) {
+                t = list[i]; f = _xpSplit(t.partenza); k = _bdKey(f.code, f.place) || '?';
+                if (!Object.prototype.hasOwnProperty.call(gmap, k)) { gmap[k] = groups.length; groups.push({ k: k, items: [] }); }
+                groups[gmap[k]].items.push({ t: t, i: wt.indexOf(t) });
+                if (t.daConfermare) nw++;
+            }
+            h = '<div class="bd-col' + (iso && iso === todayStr ? ' today' : '') + '" data-d="' + _escH(iso) + '" data-n="' + list.length + '">'
+                + '<div class="bd-dh" style="background:linear-gradient(135deg,#' + _bdMix(st, '20222a', 0.10) + ',#' + _bdMix(st, '20222a', 0.30) + ')">'
+                + '<span class="bd-dn">' + (d ? _BD_DN[dow] : 'SENZA DATA') + '</span>' + (d ? '<span class="bd-dd">' + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '</span>' : '')
+                + (iso && iso === todayStr ? '<span class="bd-td">OGGI</span>' : '')
+                + (nw ? '<span class="bd-pw" title="' + nw + ' da confermare">⚠' + nw + '</span>' : '') + '<span class="bd-cnt">' + list.length + '</span></div>';
+            for (i = 0; i < groups.length; i++) h += _bdGroupHtml(groups[i]);
+            return h + '<div class="bd-empty" style="display:' + (list.length ? 'none' : 'block') + '">Nessun viaggio</div></div>';
+        }
+        function _bdColsHtml(list, wt, todayStr) {
+            var days = _bdDays(list), by = {}, i, k, h = '';
+            for (i = 0; i < list.length; i++) { k = list[i].data || ''; (by[k] = by[k] || []).push(list[i]); }
+            for (i = 0; i < days.length; i++) h += _bdColHtml(days[i], by[days[i]] || [], wt, todayStr);
+            return { html: h, n: days.length };
+        }
+        function _bdHtml(sorted, wt, todayStr) {
+            var c = _bdColsHtml(sorted, wt, todayStr);
+            return '<div id="pcBoard" class="bd' + (_pcDensClamp(_pcDens.board) <= -2 ? ' bd-c' : '') + '" style="--bd-z:' + _bdZoom() + '" onclick="_bdClick(event)">'
+                + '<div class="bd-bar"><span class="bd-hint" id="bdHint">Clic su un cliente o su un fornitore per evidenziarne i viaggi · doppio clic o ✎ per modificare</span><div class="bd-fb" id="bdFb"></div>'
+                + '<button type="button" class="bd-exp" onclick="bdExport()" title="Esporta la settimana in A4 o A3 (stampa o PDF)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>Esporta</button></div>'
+                + '<div class="bd-grid" style="--bd-n:' + c.n + '">' + c.html + '</div></div>';
+        }
+        // ricerca / filtri: stesso criterio della tabella (si richiama da desktopQuickFilter)
+        function _bdFilter(hasFilter, lensQ, wt) {
+            var b = document.getElementById('pcBoard'), cols, c, rows, gs, i, j, k, r, t, show, n, w, vis, el;
+            if (!b) return;
+            cols = b.querySelectorAll('.bd-col');
+            for (i = 0; i < cols.length; i++) {
+                c = cols[i]; rows = c.querySelectorAll('.bd-r'); n = 0; w = 0;
+                for (j = 0; j < rows.length; j++) {
+                    r = rows[j]; t = wt[parseInt(r.getAttribute('data-i'), 10)];
+                    show = !hasFilter || (!!t && _srchTypedMatch(t, _srchKind, _srchTypedQ) && _srchGenMatch(t, lensQ) && _srchRouteMatch(t));
+                    r.style.display = show ? '' : 'none';
+                    if (show) { n++; if (t && t.daConfermare) w++; }
+                }
+                gs = c.querySelectorAll('.bd-gr');
+                for (k = 0; k < gs.length; k++) {
+                    rows = gs[k].querySelectorAll('.bd-r'); vis = 0;
+                    for (j = 0; j < rows.length; j++) if (rows[j].style.display !== 'none') vis++;
+                    gs[k].style.display = vis ? '' : 'none';
+                }
+                el = c.querySelector('.bd-cnt'); if (el) el.textContent = String(n);
+                el = c.querySelector('.bd-pw'); if (el) { el.style.display = w ? '' : 'none'; el.textContent = '⚠' + w; el.title = w + ' da confermare'; }
+                el = c.querySelector('.bd-empty');
+                if (el) { el.style.display = n ? 'none' : 'block'; el.textContent = (hasFilter && parseInt(c.getAttribute('data-n'), 10) > 0) ? 'Nessun viaggio con i filtri' : 'Nessun viaggio'; }
+            }
+            _bdApplyFocus();
+        }
+        // evidenziazione: clic su un cliente (blocco) o su un fornitore (fascia)
+        function _bdSetFocus(kind, key, label) {
+            if (!kind || (_bdFocus && _bdFocus.k === kind && _bdFocus.key === key)) _bdFocus = null;
+            else _bdFocus = { k: kind, key: key, label: label || key };
+            _bdApplyFocus();
+        }
+        function _bdApplyFocus() {
+            var b = document.getElementById('pcBoard'), fb = document.getElementById('bdFb'), rows, gs, i, j, r, g, m, any, n = 0, F = _bdFocus, ht = document.getElementById('bdHint');
+            if (!b) return;
+            rows = b.querySelectorAll('.bd-r');
+            for (i = 0; i < rows.length; i++) {
+                r = rows[i]; g = r.closest('.bd-gr');
+                m = !F || (F.k === 'c' ? r.getAttribute('data-ck') === F.key : g.getAttribute('data-fk') === F.key);
+                r.classList.toggle('bd-dim', !m);
+                if (m && F && r.style.display !== 'none') n++;
+            }
+            gs = b.querySelectorAll('.bd-gr');
+            for (i = 0; i < gs.length; i++) {
+                rows = gs[i].querySelectorAll('.bd-r'); any = false;
+                for (j = 0; j < rows.length; j++) if (!rows[j].classList.contains('bd-dim')) { any = true; break; }
+                gs[i].classList.toggle('bd-dim', !any);
+            }
+            if (ht) ht.style.display = F ? 'none' : '';
+            if (fb) {
+                if (F) { fb.style.display = 'flex'; fb.innerHTML = '<span>Evidenziato · ' + (F.k === 'c' ? 'cliente' : 'fornitore') + '</span><b>' + _escH(F.label) + '</b><span>' + n + ' ' + _pv(n) + ' in questa vista</span><button type="button" onclick="_bdSetFocus(null)">✕ Togli</button>'; }
+                else { fb.style.display = 'none'; fb.innerHTML = ''; }
+            }
+        }
+        function _bdClick(ev) {
+            var el = ev.target, ed, cb, band, r;
+            if (!el || !el.closest) return;
+            ed = el.closest('.bd-ed');
+            if (ed) { r = ed.closest('.bd-r'); if (r) bdEdit(parseInt(r.getAttribute('data-i'), 10)); return; }
+            cb = el.closest('.bd-cb');
+            if (cb) { r = cb.closest('.bd-r'); _bdSetFocus('c', r.getAttribute('data-ck'), cb.querySelector('.bd-cn').textContent); return; }
+            band = el.closest('.bd-band');
+            if (band) { _bdSetFocus('f', band.parentNode.getAttribute('data-fk'), band.querySelector('b').textContent); return; }
+            if (_bdFocus && !el.closest('.bd-r') && !el.closest('.bd-fb')) _bdSetFocus(null);
+        }
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape' || !_bdFocus || document.getElementById('bdEditOv') && document.getElementById('bdEditOv').style.display === 'flex') return;
+            var a = document.activeElement;
+            if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+            _bdSetFocus(null);
+        });
+        function _bdScrollToday() {
+            var c = document.querySelector('#pcBoard .bd-col.today');
+            _bdTodayPending = false;
+            if (c && c.scrollIntoView) { try { c.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
+        }
+        function _bdAfter(sc) {      // dopo ogni disegno della vista PC
+            var s = document.getElementById('desktopTableScroll');
+            _bdApply();
+            if (sc && s) { s.scrollTop = sc[0]; s.scrollLeft = sc[1]; }
+            _bdApplyFocus();
+            if (_pcDens.mode === 'board' && _bdTodayPending && !sc) _bdScrollToday();
+        }
+        // ── modifica di un viaggio dalla colonna ──
+        function _bdEditHtml(t) {
+            var w = !!t.daConfermare;
+            function fld(label, id, field, val, list, cls) {
+                return '<label class="bd-fl' + (cls || '') + '"><span>' + label + '</span><input id="' + id + '" type="' + (field === 'data' ? 'date' : 'text') + '" value="' + _escH(val || '') + '"' + (list ? ' list="' + list + '"' : '') + ' autocomplete="off" onchange="_bdSet(\'' + field + '\',this.value)"></label>';
+            }
+            return '<div class="bd-card"><div class="bd-eh"><h2>Modifica viaggio</h2><button type="button" class="x" onclick="bdEditClose()" aria-label="Chiudi" title="Chiudi (Esc)">✕</button></div>'
+                + '<div class="bd-fg">'
+                + fld('Data', 'bdE_data', 'data', t.data, '', '') + fld('Trasportatore', 'bdE_tr', 'trasportatore', t.trasportatore, 'dtransp', '')
+                + fld('Fornitore — partenza', 'bdE_p', 'partenza', t.partenza, 'dfrom', ' w2') + fld('Cliente — arrivo', 'bdE_a', 'arrivo', t.arrivo, 'dto', ' w2')
+                + fld('Prodotto', 'bdE_pr', 'prodotto', t.prodotto, 'dprod', '') + fld('N. DDT', 'bdE_dd', 'ddt', t.ddt, '', '')
+                + fld('Note', 'bdE_nt', 'note', t.note, '', ' w2')
+                + '</div><div class="bd-ea"><button type="button" id="bdEConf" class="' + (w ? 'on' : '') + '" onclick="bdEditConf()">' + (w ? '✓ Segna confermato' : '⚠ Segna da confermare') + '</button>'
+                + '<button type="button" onclick="desktopDup(_bdEditIdx, this)">Duplica…</button>'
+                + '<button type="button" class="del" onclick="bdEditDel()">Elimina</button><span style="flex:1"></span>'
+                + '<button type="button" class="pri" onclick="bdEditClose()">Fatto</button></div></div>';
+        }
+        function bdEdit(idx) {
+            var t = _bdWT()[idx], o = document.getElementById('bdEditOv');
+            if (!t) return;
+            _bdEditIdx = idx; _bdDirty = false;
+            if (!o) {
+                o = document.createElement('div'); o.id = 'bdEditOv'; o.className = 'bd-ov';
+                o.setAttribute('role', 'dialog'); o.setAttribute('aria-modal', 'true'); o.setAttribute('aria-label', 'Modifica viaggio');
+                o.addEventListener('mousedown', function (e) { if (e.target === o) bdEditClose(); });
+                o.addEventListener('keydown', function (e) { e.stopPropagation(); if (e.key === 'Escape') { e.preventDefault(); bdEditClose(); } });
+                document.body.appendChild(o);
+            }
+            o.innerHTML = _bdEditHtml(t);
+            o.style.display = 'flex';
+            setTimeout(function () { var i = document.getElementById('bdE_tr'); if (i) i.focus(); }, 30);
+        }
+        function _bdSet(field, val) {
+            if (_bdEditIdx < 0) return;
+            desktopSetField(_bdEditIdx, field, (field === 'ddt') ? String(val).trim() : val);
+            _bdDirty = true;
+        }
+        function bdEditConf() {
+            var t = _bdWT()[_bdEditIdx], b = document.getElementById('bdEConf');
+            if (!t) return;
+            if (t.daConfermare) desktopToggleConf(_bdEditIdx); else desktopSetPending(_bdEditIdx);
+            _bdDirty = true;
+            if (b) { b.className = t.daConfermare ? 'on' : ''; b.textContent = t.daConfermare ? '✓ Segna confermato' : '⚠ Segna da confermare'; }
+        }
+        function bdEditDel() {
+            var n = _bdWT().length, i = _bdEditIdx;
+            desktopDel(i);                                  // chiede conferma e ridisegna da sola
+            if (_bdWT().length !== n) bdEditClose(true);
+        }
+        function bdEditClose(skip) {
+            var o = document.getElementById('bdEditOv'), pop = document.getElementById('pcDupPopover');
+            if (pop) { try { _pcDupCancel(); } catch (e) {} }
+            if (o) o.style.display = 'none';
+            _bdEditIdx = -1;
+            if (_bdDirty && !skip) { _bdDirty = false; renderDesktopView(); }
+            _bdDirty = false;
+        }
+        // ── esporta: pagina di stampa A4 / A3, orizzontale o verticale, adattata a 1 pagina o a tutta larghezza ──
+        function _bdPrintBoot(cols) {      // gira dentro la finestra di stampa
+            var FM = { A4: [297, 210], A3: [420, 297] }, st = { f: 'A4', o: 'L', s: 'fit' };
+            function px(m) { return m * 96 / 25.4; }
+            function el(i) { return document.getElementById(i); }
+            function apply() {
+                var d = FM[st.f], w = st.o === 'L' ? d[0] : d[1], h = st.o === 'L' ? d[1] : d[0], mg = 8, aw = px(w - 2 * mg), ah = px(h - 2 * mg) - 4;
+                var sheet = el('sheet'), fit = el('fit'), page = el('page'), stage = el('stage'), nw, nh, s;
+                el('pgst').textContent = '@page{size:' + st.f + ' ' + (st.o === 'L' ? 'landscape' : 'portrait') + ';margin:' + mg + 'mm}';
+                fit.style.zoom = '1'; fit.style.width = (cols * 282 + (cols - 1) * 12 + 16) + 'px';
+                sheet.style.width = aw + 'px';
+                nw = fit.offsetWidth; nh = fit.offsetHeight;
+                if (st.s === 'fit') { s = Math.min(aw / nw, ah / nh, 2); sheet.style.height = ah + 'px'; sheet.style.overflow = 'hidden'; }
+                else { s = Math.min(aw / nw, 2); sheet.style.height = 'auto'; sheet.style.overflow = 'visible'; }
+                fit.style.zoom = String(s);
+                page.style.width = px(w) + 'px'; page.style.minHeight = px(h) + 'px'; page.style.padding = mg + 'mm';
+                stage.style.zoom = String(Math.min(1, (window.innerWidth - 40) / px(w)));
+                el('info').textContent = st.f + ' ' + (st.o === 'L' ? 'orizzontale' : 'verticale') + ' · scala ' + Math.round(s * 100) + '%';
+            }
+            function pick(grp, key, val) {
+                st[key] = val;
+                var bs = document.querySelectorAll('#' + grp + ' button'), i;
+                for (i = 0; i < bs.length; i++) bs[i].className = bs[i].getAttribute('data-v') === val ? 'on' : '';
+                apply();
+            }
+            var gs = [['gF', 'f'], ['gO', 'o'], ['gS', 's']], i, j, bs;
+            for (i = 0; i < gs.length; i++) {
+                bs = document.querySelectorAll('#' + gs[i][0] + ' button');
+                for (j = 0; j < bs.length; j++) (function (b, g, k) { b.addEventListener('click', function () { pick(g, k, b.getAttribute('data-v')); }); })(bs[j], gs[i][0], gs[i][1]);
+            }
+            el('go').addEventListener('click', function () { window.print(); });
+            window.addEventListener('resize', apply);
+            apply();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+            setTimeout(apply, 300);
+        }
+        function _bdPrintHtml(list, label, wt) {
+            var css = (document.getElementById('bdCss') || {}).textContent || '', vars = '', k, i, n, c, names = {}, order, chips = '', nConf = 0, now = new Date(), stamp, cols;
+            for (k in _XP_T) if (Object.prototype.hasOwnProperty.call(_XP_T, k)) vars += '--t-' + k + '-pill:#' + _XP_T[k] + ';';
+            for (i = 0; i < list.length; i++) { n = String(list[i].trasportatore || '?').trim(); names[n] = (names[n] || 0) + 1; if (list[i].daConfermare) nConf++; }
+            order = Object.keys(names).sort(function (a, b) { return names[b] - names[a] || a.localeCompare(b); });
+            for (i = 0; i < order.length; i++) chips += '<span style="background:#' + _xpT(order[i]) + '">' + _escH(order[i]) + ' · ' + names[order[i]] + '</span>';
+            c = _bdColsHtml(list, wt, _isoDate(now)); cols = c.n;
+            stamp = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            return '<!DOCTYPE html>\n<html lang="it" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Planning Viaggi ' + _escH(label || '') + '</title>\n'
+                + '<style id="pgst">@page{size:A4 landscape;margin:8mm}</style>\n<style>\n' + css + '\n'
+                + 'html{' + vars + '--surface-1:#f7f6f3;--text:#2b2d30;--text-soft:#4a4d52;--text-dim:#7c7d80;--veil-rgb:32,34,42;--shade-rgb:20,20,30;--primary:#ffffff;--accent:#e8623f}\n'
+                + '*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}\n'
+                + 'body{font-family:Outfit,Calibri,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;color:#2b2d30;background:#d9d8d4}\n'
+                + '.bar{position:sticky;top:0;z-index:9;display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:10px 18px;background:#2b2d30;color:#f1efe9;font-size:13px;font-weight:600}\n'
+                + '.bar .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-right:6px}.bar .g{display:flex;gap:2px;padding:2px;border-radius:8px;background:rgba(255,255,255,.12)}\n'
+                + '.bar .g button{border:0;border-radius:6px;padding:6px 13px;background:transparent;color:#f1efe9;font:700 13px inherit;font-family:inherit;cursor:pointer}.bar .g button.on{background:#e8623f;color:#fff}\n'
+                + '.bar .info{opacity:.75;font-weight:500}.bar .go{margin-left:auto;padding:10px 24px;background:#e8623f;color:#fff;border:0;border-radius:9px;font:800 15px inherit;font-family:inherit;cursor:pointer}\n'
+                + '.stage{display:flex;justify-content:center;padding:18px 0 40px}.page{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.28)}.sheet{position:relative}.fit{background:#fff}\n'
+                + '.hd{display:flex;align-items:flex-end;gap:16px;border-bottom:3px solid #e8623f;padding-bottom:6px;margin-bottom:8px}.hd h1{font-size:24px;font-weight:800;color:#111827;letter-spacing:.2px}.hd h1 b{color:#e8623f}\n'
+                + '.hd small{display:block;font-size:12px;color:#6b7280;font-weight:600;margin-top:1px}.hd .k{margin-left:auto;display:flex;gap:6px}.hd .k div{border:1px solid #e5e7eb;border-radius:6px;padding:3px 11px;text-align:center;font-size:8.5px;font-weight:800;color:#6b7280;letter-spacing:.5px}.hd .k b{display:block;font-size:18px;color:#111827;line-height:1.1}.hd .k .a b{color:#b45309}\n'
+                + '.ch{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 9px}.ch span{padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800;color:#26282b;white-space:nowrap}\n'
+                + '.ft{margin-top:8px;font-size:9px;color:#8a8f98;display:flex;justify-content:space-between}\n'
+                + '.bd{padding:0}.bd-grid{zoom:1!important}.bd-dh{position:relative}.bd-td{display:none}.bd-col.today{background:rgba(var(--veil-rgb),.045);box-shadow:none}.bd-gr,.bd-r{break-inside:avoid;page-break-inside:avoid}.bd-cb,.bd-band{cursor:default}.bd-ed{display:none!important}\n'
+                + '@media print{.bar{display:none!important}body{background:#fff}.stage{display:block!important;padding:0;zoom:1!important}.page{box-shadow:none;padding:0!important;width:auto!important;min-height:0!important}}\n'
+                + '</style></head><body>\n'
+                + '<div class="bar"><span><span class="l">Formato</span><span class="g" id="gF"><button data-v="A4" class="on">A4</button><button data-v="A3">A3</button></span></span>'
+                + '<span><span class="l">Pagina</span><span class="g" id="gO"><button data-v="L" class="on">Orizzontale</button><button data-v="P">Verticale</button></span></span>'
+                + '<span><span class="l">Adatta</span><span class="g" id="gS"><button data-v="fit" class="on">A 1 pagina</button><button data-v="w">A tutta larghezza</button></span></span>'
+                + '<span class="info" id="info"></span><button class="go" id="go">🖨️ Stampa / Salva PDF</button></div>\n'
+                + '<div class="stage" id="stage"><div class="page" id="page"><div class="sheet" id="sheet"><div id="fit" class="fit">\n'
+                + '<div class="hd"><div><h1>PLANNING <b>VIAGGI</b></h1><small>' + _escH(label || '') + '</small></div><div class="k"><div><b>' + list.length + '</b>VIAGGI</div><div class="a"><b>' + nConf + '</b>DA CONF.</div><div><b>' + order.length + '</b>TRASPORTATORI</div></div></div>\n'
+                + '<div class="ch">' + chips + '</div>\n'
+                + '<div class="bd"><div class="bd-grid" style="--bd-n:' + c.n + '">' + c.html + '</div></div>\n'
+                + '<div class="ft"><span>Planning Viaggi ' + _escH(APP_VERSION) + ' · fascia a sinistra = fornitore · blocco colorato = cliente · pallino = trasportatore</span><span>Generato il ' + _escH(stamp) + '</span></div>\n'
+                + '</div></div></div></div>\n<script>(' + _bdPrintBoot.toString() + ')(' + cols + ');<' + '/script></body></html>';
+        }
+        function bdExport() {
+            var list = _bdList(), wt = _bdWT(), label = '', win;
+            if (!list.length) { showStatus('Nessun viaggio da esportare', 'info'); return; }
+            try { label = _xlsWeekRange(list); } catch (e) { label = weekTitle || ''; }
+            if (list.length < wt.length) label += '  ·  filtrati: ' + list.length + ' su ' + wt.length;
+            win = window.open('', '_blank');
+            if (!win) { showStatus('⚠️ Pop-up bloccato — consenti i pop-up per esportare', 'warning'); return; }
+            win.document.write(_bdPrintHtml(list, label, wt));
+            win.document.close();
+        }
+
         // v106 — prodotto: se il nome è lungo il carattere si riduce da solo (min 14px) finché il testo entra
         var _pcFitT = 0;
         function _pcFitNames() {
@@ -8705,7 +9161,7 @@
             var h = document.documentElement, mode = h.getAttribute('data-pcmode');
             var els = root.querySelectorAll('.pc-prod-in'), i, e, f, mn, n;
             for (i = 0; i < els.length; i++) els[i].style.removeProperty('--pc-fit');
-            if (mode === 'excel' || mode === 'none') return;
+            if (mode === 'excel' || mode === 'none' || mode === 'board') return;
             var k = parseFloat(getComputedStyle(h).getPropertyValue('--pc-f')) || 1;
             mn = 14 * k;
             for (i = 0; i < els.length; i++) {
@@ -8913,6 +9369,8 @@
                     '</tr>';
             }
 
+            var _bdSc = null;   // v109: in modalità Colonne il ridisegno non fa saltare lo scorrimento
+            if (_pcDens.mode === 'board') { var _bdS0 = document.getElementById('desktopTableScroll'); if (_bdS0 && document.getElementById('pcBoard')) _bdSc = [_bdS0.scrollTop, _bdS0.scrollLeft]; }
             container.innerHTML = `
             <datalist id="dtransp">${allT.map(v=>`<option value="${_escH(v)}">`).join('')}</datalist>
             <datalist id="dfrom">${allF.map(v=>`<option value="${_escH(v)}">`).join('')}</datalist>
@@ -9135,6 +9593,7 @@
                                 })()}
                             </tbody>
                         </table>
+                        ${_bdHtml(sorted, _workingTrips, todayStr)}
                         <div id="srchEmpty" style="display:none;text-align:center;padding:48px 20px;color:var(--text-dim);font-size:14px;"><div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;">Nessun viaggio corrisponde ai filtri</div>Togli un filtro con la ✕ nelle etichette qui sopra.</div>
                         ${sorted.length === 0 ? '<div style="text-align:center;padding:60px;color:var(--text-dim);"><div style="font-size:48px;opacity:0.3;margin-bottom:12px;">📋</div><div>Nessun viaggio. Usa le rotte rapide a sinistra.</div></div>' : ''}
                     </div>
@@ -9152,6 +9611,7 @@
             }, 50);
 
             srchAfterRender(_srchPrevFocus);   // v74: rimette testo, filtri e focus della ricerca
+            _bdAfter(_bdSc);                   // v109
             _pcFitSoon();                      // v106
         }
 
@@ -11903,7 +12363,7 @@
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v108';
+        var APP_VERSION = 'v109';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
@@ -14621,6 +15081,7 @@
                 row.style.display = show ? '' : 'none';
                 if (show) visible++;
             });
+            try { _bdFilter(hasFilter, lensQ, wt); } catch (e) {}   // v109: stesso filtro sulle colonne
 
             // separatori di giorno: visibili solo se nel loro gruppo c'è almeno una riga visibile
             tbody.querySelectorAll('tr.day-sep-row').forEach(sep => {
@@ -15710,7 +16171,7 @@
         // ═══ v107 — Excel e Stampa con i colori della vista PC (tema chiaro). Valori = quelli calcolati a video (test s35 li confronta). ═══
         var _XP_T = { cevolo: 'CD9723', coap: '609ECE', coneco: '8D75DA', consar: 'D25764', avio: 'A3B937', alb: '3FA362', lino: 'D25699', stegagno: '50B3C3', cirioni: '7CC360', clp: 'AF75D4', 'default': '8590AA' };
         var _XP_TINK = '26282B';
-        var _XP_DOT = ['00968C', '5272D8', 'C45311', '5F8A00', '22923A', '7866D2', 'B74D95', 'A46F00', 'C74B44', '007ED3', 'C34971', 'BD5C00'];
+        var _XP_DOT = ['00968C', '5272D8', 'C45311', '5F8A00', '22923A', '874DC3', 'B74D95', 'A46F00', 'BD3A40', '007ED3', 'C34971', 'BD5C00'];
         function _xpT(name) { var k = 'default'; try { k = getTransporterKey(String(name || '')); } catch (e) {} return _XP_T[k] || _XP_T['default']; }
         function _xpDot(code) { var m = null; try { m = /vc(\d+)/.exec(_vvCls(code) || ''); } catch (e) {} return m ? (_XP_DOT[+m[1]] || '') : ''; }
         function _xpSplit(v) { var place = String(v || '').trim(), code = '', m = place.match(/^(.*?)\s*\(([^)]+)\)\s*$/); if (m) { place = m[1].trim(); code = m[2].trim(); } return { place: place, code: code }; }
