@@ -9637,6 +9637,22 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             }
             return '<div class="p2-g5" style="--p2-n:' + days.length + '">' + h + '</div>';
         }
+        // v119 — Colonne su carta = la vista COM'È sullo schermo: si copia la griglia viva (#pcBoard), quindi stesso disegno, stessi colori,
+        // stessi numeri «#N» e gli stessi filtri/giorni scelti. Si tolgono solo le cose che su carta non servono: «OGGI», l'evidenziazione, il tasto ✎.
+        function _bdPrintBoard() {
+            var g = document.querySelector('#pcBoard .bd-grid'), cl, live, a, i, x, q;
+            if (!g) return null;
+            cl = g.cloneNode(true);
+            live = g.querySelectorAll('.bd-pl'); a = cl.querySelectorAll('.bd-pl');
+            for (i = 0; i < a.length && i < live.length; i++) {      // il puntino del trasportatore usa variabili dell'app: si scrive il colore già risolto
+                try { x = getComputedStyle(live[i]).getPropertyValue('--bd-tc'); if (x && x.replace(/\s/g, '')) a[i].style.setProperty('--bd-tc', x.replace(/^\s+|\s+$/g, '')); } catch (e) {}
+            }
+            q = cl.querySelectorAll('.bd-td, .bd-ed'); for (i = 0; i < q.length; i++) q[i].parentNode.removeChild(q[i]);
+            q = cl.querySelectorAll('.today'); for (i = 0; i < q.length; i++) q[i].classList.remove('today');
+            q = cl.querySelectorAll('.bd-dim'); for (i = 0; i < q.length; i++) q[i].classList.remove('bd-dim');
+            cl.style.zoom = '';
+            return { html: cl.outerHTML, n: g.querySelectorAll('.bd-col').length || 1 };
+        }
         var _PZ_CSS = [
             '*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}',
             'body{font-family:Outfit,"Inter",Calibri,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;color:#24272c;background:#d9d8d4}',
@@ -9661,6 +9677,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             '.p2-r{padding:6px 7px}.p2-r + .p2-r{border-top:1px solid var(--hair)}.p2-r.cf{background:#fbf3de}.p2-cb{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;padding:5px 8px 5px 10px;border-radius:7px;background:var(--bt);box-shadow:inset 4px 0 0 var(--bc)}.p2-cb b{font-size:15px;font-weight:800;color:var(--bd);line-height:1.1}.p2-lo{font-size:10.5px;text-transform:uppercase;letter-spacing:.045em;font-weight:700;color:var(--ink)}',
             '.p2-l2{display:flex;flex-wrap:wrap;align-items:center;gap:3px 6px;margin-top:5px;font-size:11px}.p2-chip{display:inline-flex;align-items:center;height:17px;padding:0 6px;border-radius:5px;font-weight:800;font-size:9.5px;letter-spacing:.03em;white-space:nowrap}.p2-pr{color:var(--soft)}.p2-dd{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:600;color:var(--soft)}.p2-tg{font-size:9px;font-weight:800;letter-spacing:.06em;color:#8e5a05;background:#f3dfae;border-radius:4px;padding:2px 6px}',
             '.p2-none{border:1.5px dashed #d6d3cc;border-radius:9px;padding:14px;text-align:center;color:var(--dim);font-size:11.5px}',
+            '.bd-print .bd-grid{zoom:1;grid-template-columns:repeat(var(--bd-n,5),minmax(0,1fr));gap:12px;align-items:start}.vert .bd-print .bd-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.bd-print .bd-dh{position:relative}.bd-print .bd-r{break-inside:avoid}.bd.bd-print{padding:9px 0 0!important}',
             '.tb-r,.p2-r{break-inside:avoid;page-break-inside:avoid}',
             '@media print{.bar{display:none!important}body{background:#fff}.stage{display:block!important;padding:0;zoom:1!important}.page{box-shadow:none;padding:0!important;width:auto!important;min-height:0!important}}'
         ].join('\n');
@@ -9670,20 +9687,22 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             function el(i) { return document.getElementById(i); }
             function apply() {
                 var d = FM[st.f], w = st.o === 'L' ? d[0] : d[1], h = st.o === 'L' ? d[1] : d[0], mg = 9, aw = px(w - 2 * mg), ah = px(h - 2 * mg) - 3,
-                    sheet = el('sheet'), fit = el('fit'), bw = el('bodyw'), page = el('page'), stage = el('stage'), pg = el('pg'), lo = 0.3, hi = 1.2, mid, i, s = 1, bh, bwid, txt;
+                    sheet = el('sheet'), fit = el('fit'), bw = el('bodyw'), page = el('page'), stage = el('stage'), pg = el('pg'), lo = 0.3, hi = 1.2, mid, i, s = 1, bh, bwid, txt, nc;
                 el('pgst').textContent = '@page{size:' + st.f + ' ' + (st.o === 'L' ? 'landscape' : 'portrait') + ';margin:' + mg + 'mm}';
                 pg.className = 'pg' + (st.o === 'P' ? ' vert' : '');
                 if (info.kind === 'tab') fit.className = 'fit tb' + (st.r === 'c' ? ' tb-c' : '');
                 sheet.style.width = aw + 'px';
-                fit.style.transform = 'none'; fit.style.width = '100%';
+                fit.style.transform = 'none'; fit.style.width = '100%'; fit.style.zoom = '';
                 if (st.s === 'fit') {
                     sheet.style.height = ah + 'px'; sheet.style.overflow = 'hidden'; pg.style.height = '100%'; bw.style.flex = '1 1 0'; bw.style.overflow = 'hidden';
                     bh = bw.clientHeight; bwid = bw.clientWidth;
+                    if (info.cols) { nc = st.o === 'P' ? Math.min(3, info.cols) : info.cols; hi = Math.min(hi, bwid / (nc * 272 + (nc - 1) * 12)); }   // v119: colonne com'è a schermo
                     for (i = 0; i < 14; i++) { mid = (lo + hi) / 2; fit.style.width = (bwid / mid) + 'px'; fit.style.transform = 'scale(' + mid + ')'; if (fit.offsetHeight * mid <= bh) lo = mid; else hi = mid; }
                     s = lo * 0.995; fit.style.width = (bwid / s) + 'px'; fit.style.transform = 'scale(' + s + ')';
                     txt = ' · scala ' + Math.round(s * 100) + '%';
                 } else {
                     sheet.style.height = 'auto'; sheet.style.overflow = 'visible'; pg.style.height = 'auto'; bw.style.flex = 'none'; bw.style.overflow = 'visible';
+                    if (info.cols) { nc = st.o === 'P' ? Math.min(3, info.cols) : info.cols; fit.style.width = '100%'; fit.style.zoom = '1'; s = Math.min(1, aw / (nc * 272 + (nc - 1) * 12)); if (s < 1) { fit.style.zoom = String(s); fit.style.width = (aw / s) + 'px'; } }
                     txt = ' · a tutta larghezza';
                 }
                 page.style.width = px(w) + 'px'; page.style.minHeight = px(h) + 'px'; page.style.padding = mg + 'mm';
@@ -9709,12 +9728,13 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             setTimeout(apply, 350);
         }
         function _pzPrintHtml(list, wt, kind, cp) {
-            var css = (document.getElementById('bdCss') || {}).textContent || '', days = _bdDays(list), by = _tbBy(list), rg = _pzRange(days), names = {}, order, chips = '', i, n, bg, nConf = 0, now = new Date(), stamp, body, filt = '', grpR = '';
+            var css = (document.getElementById('bdCss') || {}).textContent || '', days = _bdDays(list), by = _tbBy(list), rg = _pzRange(days), names = {}, order, chips = '', i, n, bg, nConf = 0, now = new Date(), stamp, body, filt = '', grpR = '', pb = null;
             for (i = 0; i < list.length; i++) { n = String(list[i].trasportatore || '?').trim(); names[n] = (names[n] || 0) + 1; if (list[i].daConfermare) nConf++; }
             order = Object.keys(names).sort(function (a, b) { return names[b] - names[a] || a.localeCompare(b); });
             for (i = 0; i < order.length; i++) { bg = _xpT(order[i]); chips += '<span class="c" style="background:#' + bg + ';color:' + _tbInk(bg) + '">' + _escH(order[i].toUpperCase()) + ' · ' + names[order[i]] + '</span>'; }
             stamp = now.toLocaleDateString('it-IT') + ' ' + now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-            body = (kind === 'tab') ? _tbGridHtml(list, wt, '', false) : _pzP2(days, by);
+            if (kind !== 'tab') { try { pb = _bdPrintBoard(); } catch (e) { pb = null; } }
+            body = (kind === 'tab') ? _tbGridHtml(list, wt, '', false) : (pb ? '<div class="bd bd-print">' + pb.html + '</div>' : _pzP2(days, by));
             if (list.length < wt.length) filt = '<div class="fl">Filtro attivo · ' + list.length + ' viaggi su ' + wt.length + '</div>';
             if (kind === 'tab') grpR = '<span><span class="l">Righe</span><span class="g" id="gR"><button data-v="n"' + (cp ? '' : ' class="on"') + '>Normali</button><button data-v="c"' + (cp ? ' class="on"' : '') + '>Compatte</button></span></span>';
             return '<!DOCTYPE html>\n<html lang="it" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Planning Viaggi ' + _escH(rg.wk + ' ' + rg.sub) + '</title>\n'
@@ -9731,7 +9751,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
                 + '<div class="lg"><span class="l">TRASPORTATORI</span>' + chips + '</div>\n'
                 + '<div class="bodyw" id="bodyw"><div class="fit' + (kind === 'tab' ? ' tb' + (cp ? ' tb-c' : '') : '') + '" id="fit">' + body + '</div></div>\n'
                 + '<div class="ft"><span>Planning Viaggi ' + _escH(APP_VERSION) + '</span><span>Generato il ' + _escH(stamp) + '</span></div>\n'
-                + '</div></div></div></div>\n<script>(' + _pzBoot.toString() + ')(' + JSON.stringify({ kind: kind, cp: !!cp }) + ');<' + '/script></body></html>';
+                + '</div></div></div></div>\n<script>(' + _pzBoot.toString() + ')(' + JSON.stringify({ kind: kind, cp: !!cp, cols: pb ? pb.n : 0 }) + ');<' + '/script></body></html>';
         }
         function bdExport() {
             var list = _bdList(), wt = _bdWT(), win, kind = (_pcDens.mode === 'tab') ? 'tab' : 'board';
@@ -13527,7 +13547,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v118';
+        var APP_VERSION = 'v119';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
