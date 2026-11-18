@@ -5522,19 +5522,37 @@
 .bd-pw { position:absolute; right:-3px; top:-8px; white-space:nowrap; font-size:10.5px; line-height:1; font-weight:800; padding:3px 6px; border-radius:999px; background:#f5b53b; color:#3a2600; text-shadow:none; box-shadow:0 1px 2px rgba(20,20,30,.35); }
 .bd-cnt { margin-left:auto; flex:none; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.22); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45); display:grid; place-items:center; font-weight:800; font-size:15px; }
 .bd-gr { display:grid; grid-template-columns:114px minmax(0,1fr); margin-bottom:9px; background:var(--surface-1); border:1px solid rgba(var(--veil-rgb),.10); border-radius:13px; overflow:hidden; box-shadow:0 1px 2px rgba(var(--shade-rgb),.12); }
-.bd-band { --bd-b1:#e4e2dd; --bd-b2:#d9d7d2; --bd-bar:#8a8d94; padding:9px 8px 9px 13px; display:flex; flex-direction:column; gap:3px; min-width:0; background:linear-gradient(170deg,var(--bd-b1),var(--bd-b2)); box-shadow:inset 5px 0 0 var(--bd-bar); color:var(--text); cursor:pointer; }
+.bd-band { --bd-b1:#e4e2dd; --bd-b2:#d9d7d2; --bd-bar:#8a8d94; --bd-pill:var(--bd-bar); padding:8px 5px 8px 11px; display:flex; flex-direction:column; gap:3px; min-width:0; background:linear-gradient(170deg,var(--bd-b1),var(--bd-b2)); box-shadow:inset 5px 0 0 var(--bd-bar); color:var(--text); cursor:pointer; }
 .bd-bt { display:flex; align-items:center; font-size:0; gap:0; margin-bottom:1px; }
 .bd-bt i { display:grid; place-items:center; width:15px; height:15px; border-radius:50%; background:rgba(32,34,42,.72); color:#f6f5f2; }
 .bd-bt svg { width:9px; height:9px; }
-.bd-band b { font-size:11.5px; line-height:1.2; font-weight:800; margin-top:2px; overflow-wrap:break-word; hyphens:none; }
-.bd-bl { font-size:11.5px; color:var(--text-soft); }
-.bd-band em { font-style:normal; font-size:10.5px; margin-top:auto; border-radius:7px; padding:1px 7px; align-self:flex-start; font-weight:700; background:rgba(255,255,255,.6); color:#2b2d30; }
+.bd-band b { font-size:13px; line-height:1.15; font-weight:900; letter-spacing:0; text-transform:uppercase; margin-top:2px; overflow-wrap:break-word; hyphens:none; }
+.bd-bl { font-size:17px; font-weight:800; line-height:1.15; color:var(--text-soft); overflow-wrap:anywhere; }
+.bd-band em { font-style:normal; font-size:12px; margin-top:4px; border-radius:8px; padding:2px 8px; align-self:flex-start; font-weight:800; background:var(--bd-pill); color:#f6f5f2; }
+/* v114: tinta della pillola un po' più scura (il testo chiaro si legge meglio); fornitori senza colore = grigio scuro */
+@supports (background:color-mix(in srgb,red,blue)) { .bd-band { --bd-pill:color-mix(in srgb,var(--bd-bar) 80%,#20222a); } }
+html[data-theme="light"] .bd-band:not([class*="vc"]) { --bd-pill:#62656c; }
+/* v115: gruppo con 2+ viaggi nel giorno (classe bd-multi) = c'è più spazio: scritte centrate in verticale, località e prodotto più grandi */
+.bd-multi .bd-band { justify-content:center; gap:5px; }
+.bd-multi .bd-bl { font-size:18px; }
+.bd-multi .bd-band em { font-size:14.5px; padding:3px 11px; margin-top:6px; border-radius:9px; }
 .bd-rs { display:flex; flex-direction:column; min-width:0; }
 .bd-r { display:flex; flex-direction:column; justify-content:center; gap:5px; padding:7px 7px 7px 8px; }
 .bd-r + .bd-r { border-top:1px solid rgba(var(--veil-rgb),.09); }
 .bd-cb { --bd-c1:#5f636b; --bd-c2:#474a51; position:relative; display:flex; align-items:center; gap:6px; padding:6px 8px 6px 9px; border-radius:11px; background:var(--bd-c1); border:1px solid var(--bd-c2); color:#f8f5ef; cursor:pointer; }
 .bd-pn { flex:none; display:grid; place-items:center; width:16px; height:16px; border-radius:50%; background:rgba(255,255,255,.2); }
 .bd-pn svg { width:10px; height:10px; }
+/* v118: progressivo del mese = «#39» semplice. Colonne strette → a destra sulla riga del trasportatore (per i nomi lunghi, es. ALBA TRASP, la pillola si stringe un po' così «#119» ci sta senza andare a capo);
+   colonne larghe (≥168px) e vista compatta → a destra nella pillola del cliente. Mai una riga in più: l'altezza della settimana resta quella della v117. */
+.bd-r { container-type:inline-size; }
+.bd-no { flex:none; margin-left:auto; font-size:10.5px; font-weight:800; letter-spacing:.01em; color:var(--text-soft); opacity:.85; white-space:nowrap; cursor:help; }
+.bd-l2.bd-lt { column-gap:3px; } .bd-lt .bd-pl { padding:0 5px 0 5px; gap:4px; letter-spacing:.02em; }
+.bd-nc { display:none; }
+.bd-c .bd-no { display:none; } .bd-c .bd-nc { display:block; flex:none; margin-left:auto; font-size:10px; font-weight:800; opacity:.8; letter-spacing:.01em; white-space:nowrap; }
+@container (min-width:168px) {
+    .bd-no { display:none; } .bd-nc { display:block; flex:none; margin-left:auto; font-size:10.5px; font-weight:800; opacity:.8; letter-spacing:.01em; white-space:nowrap; }
+    .bd-l2.bd-lt { column-gap:7px; } .bd-lt .bd-pl { padding:0 9px 0 7px; gap:6px; letter-spacing:.05em; }
+}
 .bd-cn { flex:1; min-width:0; font-size:16.5px; font-weight:800; line-height:1.1; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow-wrap:anywhere; }
 .bd-ed { position:absolute; right:5px; top:50%; transform:translateY(-50%); border:0; background:rgba(0,0,0,.34); color:#f8f5ef; width:22px; height:22px; border-radius:7px; font-size:12px; line-height:1; cursor:pointer; opacity:0; transition:opacity .12s; padding:0; }
 .bd-r:hover .bd-ed, .bd-ed:focus { opacity:1; }
@@ -5554,13 +5572,14 @@
 .bd-c .bd-dh { padding:7px 10px; margin-bottom:6px; border-radius:10px; }
 .bd-c .bd-dn { font-size:15px; } .bd-c .bd-dd { font-size:12px; padding:1px 8px; } .bd-c .bd-cnt { width:26px; height:26px; font-size:13px; }
 .bd-c .bd-gr { margin-bottom:6px; grid-template-columns:108px minmax(0,1fr); border-radius:12px; }
-.bd-c .bd-band { padding:6px 7px 6px 12px; gap:2px; } .bd-c .bd-band b { font-size:11px; margin-top:0; } .bd-c .bd-bl { font-size:10.5px; } .bd-c .bd-band em { font-size:9.5px; padding:0 6px; }
+.bd-c .bd-band { padding:5px 5px 5px 11px; gap:2px; } .bd-c .bd-band b { font-size:11.5px; margin-top:0; } .bd-c .bd-bl { font-size:13.5px; } .bd-c .bd-band em { font-size:10.5px; padding:0 6px; margin-top:3px; }
 .bd-c .bd-r { padding:4px 6px 4px 7px; gap:3px; }
 .bd-c .bd-cb { padding:4px 8px; border-radius:9px; } .bd-c .bd-cn { font-size:15.5px; } .bd-c .bd-pn { display:none; }
 .bd-c .bd-l2 { font-size:11.5px; } .bd-c .bd-pl { height:18px; font-size:9px; padding:0 7px 0 6px; } .bd-c .bd-w { font-size:10.5px; padding:1px 7px; }
 /* tema scuro */
 html:not([data-theme="light"]) .bd-band { --bd-b1:rgba(var(--veil-rgb),.07); --bd-b2:rgba(var(--veil-rgb),.04); --bd-bar:#7d8087; }
-html:not([data-theme="light"]) .bd-band em { background:rgba(255,255,255,.12); color:var(--text); }
+html:not([data-theme="light"]) .bd-band { --bd-pill:var(--bd-bar); }
+html:not([data-theme="light"]) .bd-band em { background:var(--bd-pill); color:#1c1e24; }
 html:not([data-theme="light"]) .bd-bt i { background:rgba(255,255,255,.18); color:var(--text); }
 html:not([data-theme="light"]) .bd-cb { border-color:rgba(255,255,255,.14); }
 html:not([data-theme="light"]) .bd-w { color:#f0c261; background:rgba(240,176,48,.14); border-color:rgba(240,176,48,.4); }
@@ -6395,9 +6414,9 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
         // Ogni modalità ricorda il proprio livello. Livello 0 delle Schede = identico alla v80.
         function _pcDensClamp(n) { n = parseInt(n, 10); return isNaN(n) ? 0 : Math.max(-3, Math.min(3, n)); }
         var _pcDens = (function () {
-            var d = { mode: 'cards', cards: 0, excel: 0, board: 0, tabC: false };
+            var d = { mode: 'excel', cards: 0, excel: 0, board: 0, tabC: false };   // v113: «Schede» tolta dal menu, la vista di partenza è Excel
             try {
-                d.mode  = (function (v) { return v === 'excel' || v === 'board' || v === 'tab' ? v : 'cards'; })(localStorage.getItem('pcDensMode'));
+                d.mode  = (function (v) { return v === 'board' || v === 'tab' ? v : 'excel'; })(localStorage.getItem('pcDensMode'));   // v113: anche chi aveva salvato «Schede» passa a Excel
                 d.cards = _pcDensClamp(localStorage.getItem('pcDensCards'));
                 d.excel = _pcDensClamp(localStorage.getItem('pcDensExcel'));
                 d.board = _pcDensClamp(localStorage.getItem('pcDensBoard'));
@@ -6439,7 +6458,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
         }
         function pcDensMode(m) {
             var was = _pcDens.mode;
-            _pcDens.mode = (m === 'excel' || m === 'board' || m === 'tab') ? m : 'cards';
+            _pcDens.mode = (m === 'board' || m === 'tab') ? m : 'excel';
             if (_pcDens.mode === 'board' && was !== 'board') _bdTodayPending = true;
             _pcDensApply();
             if (_pcDens.mode === 'board' && was !== 'board') setTimeout(function () { if (_bdTodayPending) _bdScrollToday(); }, 0);
@@ -9183,17 +9202,55 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             if (out.length > 1 && out[0] === '') out.push(out.shift());
             return out;
         }
-        function _bdRowHtml(t, idx, uniq) {
+        // v118 — progressivo dei viaggi del MESE: ogni viaggio ha il suo numero d'ordine nel mese della sua data (1° = primo viaggio del mese).
+        // Ordine: per data; nello stesso giorno dall'alto in basso come si vede in Colonne. Si conta tutto quello che l'app conosce:
+        // settimane archiviate + settimana corrente + prossima, senza doppioni (stesso id + data, come l'Archivio viaggi). Non dipende dai filtri.
+        var _BD_MESI18 = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+        function _bdOkDate(s) { return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T12:00:00').getTime()); }
+        function _bdPoolCounts() {   // si rilegge l'archivio a ogni disegno: costa pochi ms e i numeri non restano mai vecchi
+            var cnt = {}, seen = {}, arcKeys = {}, a = [], i, j, w, t, k;
+            try { a = loadArchive(); } catch (e) { a = []; }
+            for (i = 0; i < a.length; i++) {
+                w = (a[i] && a[i].trips) || [];
+                for (j = 0; j < w.length; j++) {
+                    t = w[j];
+                    if (!t || !_bdOkDate(t.data)) continue;
+                    if (t.id != null) { k = t.id + '|' + t.data; if (arcKeys[k]) continue; arcKeys[k] = 1; }
+                    cnt[t.data] = (cnt[t.data] || 0) + 1;
+                }
+            }
+            function addLive(arr) {
+                var x, y, key;
+                if (!arr || !arr.length) return;
+                for (x = 0; x < arr.length; x++) {
+                    y = arr[x];
+                    if (!y || !_bdOkDate(y.data)) continue;
+                    if (y.id != null) { key = y.id + '|' + y.data; if (arcKeys[key] || seen[key]) continue; seen[key] = 1; }
+                    cnt[y.data] = (cnt[y.data] || 0) + 1;
+                }
+            }
+            addLive(trips);
+            addLive(typeof tripsNext !== 'undefined' ? tripsNext : null);
+            return cnt;
+        }
+        // quanti viaggi ci sono già, nello stesso mese, nei giorni PRIMA di iso
+        function _bdPoolBefore(cnt, iso) {
+            var ym = iso.slice(0, 7), n = 0, d;
+            for (d in cnt) if (Object.prototype.hasOwnProperty.call(cnt, d) && d < iso && d.slice(0, 7) === ym) n += cnt[d];
+            return n;
+        }
+        function _bdRowHtml(t, idx, uniq, num, ntitle) {
             var a = _xpSplit(t.arrivo), tk = getTransporterKey(t.trasportatore || ''), cn = a.code || a.place || '—', note = String(t.note || '').trim(), prod = String(t.prodotto || '').trim(), l2;
             l2 = '<span class="bd-pl" style="--bd-tc:var(--t-' + tk + '-pill)"><i></i>' + _escH(String(t.trasportatore || '—').toUpperCase()) + '</span>';
+            if (num) l2 += '<span class="bd-no" title="' + _escH(ntitle) + '">#' + num + '</span>';
             if (a.code && a.place) l2 += '<span class="bd-lo">' + _escH(a.place) + '</span>';
             if (!uniq && prod) l2 += '<span class="bd-pd">' + _escH(prod) + '</span>';
             if (t.ddt) l2 += '<span class="bd-ddt">DDT ' + _escH(String(t.ddt)) + '</span>';
             if (note) l2 += '<span class="bd-nt" title="' + _escH(note) + '">' + _PC_BTN_IC.note + '</span>';
             return '<div class="bd-r" data-i="' + idx + '" data-ck="' + _escH(_bdKey(a.code, a.place)) + '" ondblclick="bdEdit(' + idx + ')">'
-                + '<div class="bd-cb' + _bdVc(a.code) + '" data-k="c" title="Clic: evidenzia tutti i viaggi di ' + _escH(cn) + ' · doppio clic: modifica"><span class="bd-pn">' + _BD_IC_P + '</span><span class="bd-cn">' + _escH(cn) + '</span>'
+                + '<div class="bd-cb' + _bdVc(a.code) + '" data-k="c" title="Clic: evidenzia tutti i viaggi di ' + _escH(cn) + ' · doppio clic: modifica"><span class="bd-pn">' + _BD_IC_P + '</span><span class="bd-cn">' + _escH(cn) + '</span>' + (num ? '<span class="bd-nc" title="' + _escH(ntitle) + '">#' + num + '</span>' : '')
                 + '<button type="button" class="bd-ed" data-k="e" title="Modifica il viaggio" aria-label="Modifica il viaggio">✎</button></div>'
-                + '<div class="bd-l2">' + l2 + '</div>'
+                + '<div class="bd-l2' + (num && String(t.trasportatore || '').length >= 9 ? ' bd-lt' : '') + '">' + l2 + '</div>'
                 + (t.daConfermare ? '<div class="bd-w"><i></i>Da confermare</div>' : '') + '</div>';
         }
         function _bdGroupHtml(g) {
@@ -9202,18 +9259,23 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
                 p = String(g.items[i].t.prodotto || '').trim(); k = p.toUpperCase();
                 if (p && !Object.prototype.hasOwnProperty.call(prods, k)) { prods[k] = 1; np++; one = p; }
             }
-            for (i = 0; i < g.items.length; i++) rows += _bdRowHtml(g.items[i].t, g.items[i].i, np === 1);
-            return '<div class="bd-gr" data-fk="' + _escH(g.k) + '"><div class="bd-band' + _bdVc(f.code) + '" data-k="f" title="Clic: evidenzia tutti i viaggi da ' + _escH(fname) + '">'
-                + '<div class="bd-bt"><i>' + _BD_IC_F + '</i>FORNITORE</div><b>' + _escH(fname) + '</b>' + (f.code && f.place ? '<span class="bd-bl">' + _escH(f.place) + '</span>' : '')
+            for (i = 0; i < g.items.length; i++) rows += _bdRowHtml(g.items[i].t, g.items[i].i, np === 1, g.items[i].n, g.items[i].nt);
+            return '<div class="bd-gr' + (g.items.length >= 2 ? ' bd-multi' : '') + '" data-fk="' + _escH(g.k) + '"><div class="bd-band' + _bdVc(f.code) + '" data-k="f" title="Clic: evidenzia tutti i viaggi da ' + _escH(fname) + '">'
+                + (f.code && f.place ? '' : '<div class="bd-bt"><i>' + _BD_IC_F + '</i>FORNITORE</div>') + '<b>' + _escH(fname) + '</b>'
+                + (f.code && f.place ? '<span class="bd-bl">' + _escH(f.place) + '</span>' : '')
                 + (np ? '<em>' + (np === 1 ? _escH(one) : np + ' prodotti') + '</em>' : '') + '</div><div class="bd-rs">' + rows + '</div></div>';
         }
-        function _bdColHtml(iso, list, wt, todayStr) {
+        function _bdColHtml(iso, list, wt, todayStr, pool) {
             var d = iso ? new Date(iso + 'T12:00:00') : null, dow = d ? d.getDay() : 1, st = (_DAY_STRIPE[dow] || '64748B').toLowerCase(), groups = [], gmap = {}, i, t, f, k, nw = 0, h = '';
             for (i = 0; i < list.length; i++) {
                 t = list[i]; f = _xpSplit(t.partenza); k = _bdKey(f.code, f.place) || '?';
                 if (!Object.prototype.hasOwnProperty.call(gmap, k)) { gmap[k] = groups.length; groups.push({ k: k, items: [] }); }
                 groups[gmap[k]].items.push({ t: t, i: wt.indexOf(t) });
                 if (t.daConfermare) nw++;
+            }
+            if (iso && pool) {   // v118: progressivo del mese (calcolato qui, dopo il raggruppamento, così segue l'ordine in cui si vedono i viaggi)
+                var pBase = _bdPoolBefore(pool, iso), pN = 0, pJ, pMese = _BD_MESI18[parseInt(iso.slice(5, 7), 10) - 1] || '';
+                for (i = 0; i < groups.length; i++) for (pJ = 0; pJ < groups[i].items.length; pJ++) { pN++; groups[i].items[pJ].n = pBase + pN; groups[i].items[pJ].nt = 'Viaggio n. ' + (pBase + pN) + ' di ' + pMese; }
             }
             h = '<div class="bd-col' + (iso && iso === todayStr ? ' today' : '') + '" data-d="' + _escH(iso) + '" data-n="' + list.length + '">'
                 + '<div class="bd-dh" style="background:linear-gradient(135deg,#' + _bdMix(st, '20222a', 0.10) + ',#' + _bdMix(st, '20222a', 0.30) + ')">'
@@ -9224,9 +9286,10 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             return h + '<div class="bd-empty" style="display:' + (list.length ? 'none' : 'block') + '">Nessun viaggio</div></div>';
         }
         function _bdColsHtml(list, wt, todayStr) {
-            var days = _bdDays(list), by = {}, i, k, h = '';
+            var days = _bdDays(list), by = {}, i, k, h = '', pool = null;
+            try { pool = _bdPoolCounts(); } catch (e) { pool = null; }   // v118: se i dati sono rovinati, niente numeri (resta la puntina)
             for (i = 0; i < list.length; i++) { k = list[i].data || ''; (by[k] = by[k] || []).push(list[i]); }
-            for (i = 0; i < days.length; i++) h += _bdColHtml(days[i], by[days[i]] || [], wt, todayStr);
+            for (i = 0; i < days.length; i++) h += _bdColHtml(days[i], by[days[i]] || [], wt, todayStr, pool);
             return { html: h, n: days.length };
         }
         function _bdHtml(sorted, wt, todayStr) {
@@ -9254,6 +9317,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
                     rows = gs[k].querySelectorAll('.bd-r'); vis = 0;
                     for (j = 0; j < rows.length; j++) if (rows[j].style.display !== 'none') vis++;
                     gs[k].style.display = vis ? '' : 'none';
+                    gs[k].classList.toggle('bd-multi', vis >= 2);   // v115
                 }
                 el = c.querySelector('.bd-cnt'); if (el) el.textContent = String(n);
                 el = c.querySelector('.bd-pw'); if (el) { el.style.display = w ? '' : 'none'; el.textContent = '⚠' + w; el.title = w + ' da confermare'; }
@@ -9508,7 +9572,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
             if (old) { old.remove(); return; }
             old = document.getElementById('pcMoreMenu'); if (old) old.remove();
             cur = (_pcDens.mode === 'tab') ? (_pcDens.tabC ? 'tabc' : 'tabn') : _pcDens.mode;
-            items = [['cards', 'Schede', 'Le righe con i riquadri, come prima'], ['board', 'Colonne', 'Una colonna per giorno, fornitori raggruppati'],
+            items = [['board', 'Colonne', 'Una colonna per giorno, fornitori raggruppati'],
                 ['tabn', 'Tabellone', '«Da → a» a due metà, due righe per viaggio'], ['tabc', 'Tabellone compatto', 'Una riga per viaggio, per averne tanti in vista'], ['excel', 'Excel', 'Una riga sola per viaggio, a tabella']];
             for (i = 0; i < items.length; i++) {
                 on = items[i][0] === cur;
@@ -13463,7 +13527,7 @@ html:not([data-theme="light"]) .tb-day { color:var(--ddk); }
         }
 
         // v89 — "Invia ▾": i viaggi trovati dalla ricerca (settimana mostrata) → testo (formato v87) → mail già scritta / solo copia / per tratta
-        var APP_VERSION = 'v112';
+        var APP_VERSION = 'v118';
         var _srchSendOpen;
         function _srchTratteFromTrips(items) {
             var map = {}, order = [];
